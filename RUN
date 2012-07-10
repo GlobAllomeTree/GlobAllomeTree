@@ -1,0 +1,1 @@
+PYTHONPATH=/home/fantallometrik/django-fantallometrik:. python manage.py runserver --settings=settings 127.0.0.1:62015 --adminmedia=/home/fantallometrik/fantallometrik/media/admin

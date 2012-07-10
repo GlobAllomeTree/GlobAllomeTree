@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Fantallometrik{% endblock %}
+
+{% block script %}
+
+	
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1', {packages: ['geochart']});
+
+    function drawVisualization() {
+      var data = new google.visualization.DataTable();
+      data.addRows(6);
+      data.addColumn('string', 'continents');
+      data.addColumn('string', 'Continents');
+      data.setValue(0, 0, '002');
+      data.setValue(0, 1, 'Africa');
+      data.setValue(1, 0, '142');
+      data.setValue(1, 1, 'Asia');
+      data.setValue(2, 0, '150');
+      data.setValue(2, 1, 'Europe');
+      data.setValue(3, 0, '019');
+      data.setValue(3, 1, 'America');
+      data.setValue(4, 0, '009');
+      data.setValue(4, 1, 'Australia');
+
+      var data2 = new google.visualization.DataTable();
+      data2.addRows({{ country_list|length }});
+      data2.addColumn('string', 'Country');
+		{% for country in country_list %}
+	      data2.setValue({{ forloop.counter0 }}, 0, '{{ country }}');
+	   	{% endfor %}	
+
+
+      var geochart = new google.visualization.GeoChart(
+          document.getElementById('visualization'));
+
+ 		var options = {region: 'world', resolution: 'continents', height: 550}; 
+
+		google.visualization.events.addListener(geochart, 'regionClick', function(
+eventData) {
+
+		 	var options = {region: eventData['region'] }; 
+
+			 geochart.draw(data2, options);
+
+		google.visualization.events.addListener(geochart, 'regionClick', function(
+eventData) {
+
+ 	      window.location =  ("/geo_map_"+eventData['region']); 
+
+  }); 
+
+  }); 
+
+      geochart.draw(data, options);
+    }
+    
+
+    google.setOnLoadCallback(drawVisualization);
+  </script>
+{% endblock %}
+
+
+    {% block content %}
+<div id="map">
+	<div id="visualization">
+	</div>
+</div>
+{% endblock %}
+

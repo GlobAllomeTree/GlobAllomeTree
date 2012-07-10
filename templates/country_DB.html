@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Fantallometrik{% endblock %}
+
+{% block script %}
+
+	<script type="text/javascript" language="javascript" src="/media/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="/media/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/media/js/TableTools.min.js"></script>
+
+
+
+
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			$('#example').dataTable( {
+				"iDisplayLength": 50,
+				"aLengthMenu": [[50, 100, 200, 300, -1], [50, 100, 200, 300, "All"]],
+				"sDom": 'T<"clear">lfrtip',
+				"oTableTools": {
+					"sSwfPath": "/media/swf/copy_cvs_xls.swf",
+           			"aButtons": [
+						"copy",
+               			{
+                  		 	"sExtends": "csv",
+                  			"sFieldBoundary": '"'
+              			}
+           			]
+				} 
+				} );
+			} );
+	</script>
+
+
+	<script type="text/javascript">
+
+		jQuery(document).ready(function(){
+		    $('table tr').mouseover(function(){
+    			$(this).addClass("hover");
+   				 }).mouseout(function(){
+    			$(this).removeClass("hover");		
+   		 	});
+		});
+
+    </script>
+
+
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div id="page">
+	<div id="content_fantaDB">
+				<div id="demo">
+				<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Ecosystem</th>
+							<th>Country</th>
+							<th>Biome</th>							
+							<th>Species</th>
+							<th>Output</th>																				
+						</tr>
+					</thead>
+
+					<tbody>
+        			{% for object in country_DB %}
+						<tr onclick="location.href='http://fantallometrik.sites.djangohosting.ch/fantaDB_{{ object.id }}'" >
+				            <td>{{ object.id }}</td>
+							<td>{{ object.ecosystem }}</td>						
+							<td>{{ object.country.common_name }}</td>
+							<td>{{ object.biome_FAO }}</td>
+							<td>{{ object.genus }} {{ object.species }}</td>
+							<td>{{ object.output }}</td>																				
+						</tr>
+        			{% endfor %}
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>Population</th>
+							<th>Ecosystem</th>
+							<th>Country</th>
+							<th>Species</th>
+							<th>Genus</th>
+						</tr>
+					</tfoot>
+				</table>
+				</div>
+			</div>
+			<div class="meta">
+
+			</div>
+
+	<!-- end #content -->
+
+
+</div>
+
+
+{% endblock %}
+
+
+

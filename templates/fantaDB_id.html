@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Fantallometrik{% endblock %}
+
+{% block script %}	
+  <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+  <script type='text/javascript'>
+   google.load('visualization', '1', {'packages': ['geochart']});
+   google.setOnLoadCallback(drawRegionsMap);
+
+    function drawRegionsMap() {
+      var data = new google.visualization.DataTable();
+      data.addRows(1);
+      data.addColumn('string', 'Country');
+      data.setValue(0, 0, '{{ DB_object.country }}');
+
+	var options = {region: '002', width: '400', };
+
+      var container = document.getElementById('map_canvas');
+      var geochart = new google.visualization.GeoChart(container);
+      geochart.draw(data, options);
+  };
+  </script>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div id="page_2">
+
+	<div id="fantaDB_id">
+
+		<table>
+			<tr class="odd"> <td> ID: </td> <td> {{ DB_object.id }} </td> </tr>			
+			<tr class="even"> <td> ID article: </td> <td> {{ DB_object.id_article }} </td> </tr>
+ 			<tr class="odd">  <td> Population: </td> <td> {{ DB_object.population }} </td> </tr>
+			<tr class="even"> <td> Ecosystem: </td> <td> {{ DB_object.ecosystem }} </td> </tr>
+			<tr class="odd">  <td> Country: </td> <td> {{ DB_object.country.common_name }} </td> </tr>			
+			<tr class="even"> <td> Species: </td> <td> {{ DB_object.genus }} {{ DB_object.species }} </td> </tr>
+			<tr class="odd">  <td> Biome FAO: </td> <td> {{ DB_object.biome_FAO }} </td> </tr>
+			<tr class="even"> <td> Biome UDVARDY: </td> <td> {{ DB_object.biome_UDVARDY }} </td> </tr>
+			<tr class="odd">  <td> Biome WWF: </td> <td> {{ DB_object.biome_WWF }} </td> </tr>	
+			<tr class="even"> <td> Division Bailey: </td> <td> {{ DB_object.division_BAILEY }} </td> </tr>	
+			<tr class="odd">  <td> Biome Holdridge: </td> <td> {{ DB_object.biome_HOLDRIDGE }} </td> </tr>	
+			<tr class="even">  <td> Output: </td> <td> {{ DB_object.output }} </td> </tr>	
+			<tr class="odd">  <td> Equation: </td> <td> {{ DB_object.equation_y }} </td> </tr>	
+			<tr class="even">  <td> Reference: </td> <td> {{ DB_object.reference }} </td> </tr>	
+			<tr class="odd">  <td> ID location: </td> <td> {{ DB_object.id_location }} </td> </tr>	
+			<tr class="even">  <td> Group location: </td> <td> {{ DB_object.group_location }} </td> </tr>			
+			<tr class="odd">  <td> Location: </td> <td> {{ DB_object.location }} </td> </tr>			
+			<tr class="even">  <td> Latitude: </td> <td> {{ DB_object.latitude }} </td> </tr>
+			<tr class="odd">  <td> Longitude: </td> <td> {{ DB_object.longitude }} </td> </tr>				
+			<tr class="even">  <td> Temperature: </td> <td> {{ DB_object.temperature }} </td> </tr>	
+			<tr class="odd">  <td> Potential evapotransp.: </td> <td> {{ DB_object.potential_evapotranspiration }} </td> </tr>	
+			<tr class="even">  <td> Precipitation: </td> <td> {{ DB_object.precipitation }} </td> </tr>	
+			<tr class="odd">  <td> Sunshine fraction: </td> <td> {{ DB_object.sunshine_fraction}} </td> </tr>	
+			<tr class="even">  <td> Wind: </td> <td> {{ DB_object.wind }} </td> </tr>			
+			<tr class="odd">  <td> Water vapor pressure: </td> <td> {{ DB_object.water_vapor_pressure }} </td> </tr>		
+			<tr class="even">  <td> Temp MIN: </td> <td> {{ DB_object.temp_MIN }} </td> </tr>
+			<tr class="odd">  <td> Temp MAX: </td> <td> {{ DB_object.temp_MAX }} </td> </tr>	
+		</table>
+	
+	</div>
+
+  		<div id="map_canvas"></div>
+
+	
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+

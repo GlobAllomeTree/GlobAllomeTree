@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Fantallometrik{% endblock %}
+
+{% block script %}
+
+	
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1', {packages: ['geochart']});
+
+    function drawVisualization() {
+      var data = new google.visualization.DataTable();
+      data.addRows(5);
+      data.addColumn('string', 'continents');
+      data.addColumn('string', 'continents');
+      data.setValue(0, 0, '002');
+      data.setValue(0, 1, 'Africa');
+      data.setValue(1, 0, '142');
+      data.setValue(1, 1, 'Asia');
+      data.setValue(2, 0, '150');
+      data.setValue(2, 1, 'Europe');
+      data.setValue(3, 0, '019');
+      data.setValue(3, 1, 'America');
+      data.setValue(4, 0, '009');
+      data.setValue(4, 1, 'Australia');
+
+ 
+
+ 
+      var geochart = new google.visualization.GeoChart(
+          document.getElementById('visualization'));
+
+ 		var options = {region: 'world', resolution: 'continents', height: 500}; 
+
+		google.visualization.events.addListener(geochart, 'regionClick', function(
+eventData) {
+ 	      window.location =  ("/continent_"+eventData['region']); 
+  }); 
+
+      geochart.draw(data, options);
+    }
+    
+
+    google.setOnLoadCallback(drawVisualization);
+  </script>
+{% endblock %}
+
+
+    {% block content %}
+<div id="map">
+	<div id="visualization">
+	</div>
+</div>
+{% endblock %}
+

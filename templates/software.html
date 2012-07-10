@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Fantallometrik{% endblock %}
+
+{% block content %}
+
+
+<div id="page">
+	<div id="content_docs">
+
+
+			<div class="column3">
+			<h3>1 Compare allometric equations</h3>
+			This module allows the comparison of existing allometric equations for a given geographical location (a site, an ecological zone, a country, a continent). The user can select the ecological classification from five different sources (FAO, Udvardy, WWF, Holdridge, and Bailey). The results obtained from the analysis can be downloaded by the users.
+			</div>
+
+
+			<div class="column3_center">
+			<h3>2 Assess volume, biomass and carbon stocks</h3>
+			This module allows the calculation of volume, biomass and carbon stocks, the calculation of descriptive statistics (error, confidence interval, median etc.). and comparison of data obtained according to the default values from the scientific literature. Moreover, it is a robust tool to assess the variable of interest and achieve the quality control and assurance.
+			</div>
+
+
+			<div class="column3">
+			<h3>3 Insert new equations</h3>
+			This module allows the entry of new allometric equations and enrich the database. New allometric equations are automatically inserted into the database of the user and can be submitted to Fantallometrik after his approval.
+<br><br>
+			<h3>4 Share your results</h3>
+This module allows the user to submit user data (allometric equation, inventory data). The data submitted is protected by the license by-nc-sa.
+			</div>
+
+
+
+
+
+
+			<div class="column2_left">
+			<h3>Presentation</h3>
+
+<p>The estimation of stem volume and tree biomass is needed for both sustainable planning of forest resources and for studies on the energy and nutri¬ents flows in ecosystems. Planners at the strategic and operational levels have strongly emphasised the need for accurate estimates of stem volume, and biomass as an energy source. In addition, the United Nations Framework Convention on Climate Change recognises the importance of forest carbon sink and the need to monitor, pre¬serve and enhance terrestrial carbon stocks, since changes in the forest carbon stock influence the atmospheric CO2 concentration.</p>
+<p>Terrestrial biotic carbon stocks and stock changes are difficult to assess and most current estimates are subject to considerable uncertainty particularly in developing countries where the data are lacking and the structure of the ecosystems is more complex. The reliability of the current estimates of the forest carbon stock and the understanding of ecosystem carbon dynamics can be improved by applying existing knowledge on the allometry of trees that is available in the form of biomass and volume equations. The volume and biomass equations can be applied directly to tree level inventory data using wood density data and biomass expansion factors (BEFs) to make the estimates comparable.</p>
+<p>In order to decrease the uncertainty related to the use of inappropriate allometric models, it is preferable to use local specific allometric equations rather than generalized ones. For that purpose, the software allows you accessing the allometric equation databases and select those that are the most adapted to your purpose. The calculation steps are the following ones:</p>
+	<ol>
+    <li>identify the allometric equations that are available,</li>
+ 	<li>insert new equations that are not already inserted in the database,</li>
+	<li>estimate volume, biomass and carbon stocks with the associated statistical data and compare with default value, and</li>
+  	<li>if you wish, you can submit your data to enrich the database and contribute to the “fantallometrik” community.</li>
+</ol>
+
+			</div>
+
+
+			<div class="column2_right">
+			<h3>Instructions</h3>	      
+
+	<p>FANTALLOMETRIK  Software (c) is a free software and works only under windows operating systems. It is required to accept a license agreement before downloading.</p>
+	<ul>
+      <li>FANTALLOMETRIK V1 release:</li>
+			<ul>
+          <li>Default allometric equation database containing 850 allometric equations for sub-Saharan Africa</li>
+       	<li>Default wood density database containing 2650 wood density values</li>
+        <li> 4 Modules [comparison, calculator, data insertion, submission]</li>
+			</ul>
+
+
+	<li>     Installing FANTALLOEMTRIKV1 on your machine</li>
+	<ol>
+			<li>Attempt to verify the MATLAB Component Runtime (MCR) exists on your system: the MCR usually resides in C:\Program Files\MATLAB\MATLAB Component Runtime\v76</li>
+			<li>If this directory exists, check that it is included in the environment variable 'PATH', otherwise, add the MCR directory to the environment variable</li>
+	<ul>
+		<li>Either by opening a command prompt and issuing the DOS command:
+set PATH=C:\Program Files\MATLAB\MATLAB Component Runtime\v76;%PATH%</li>
+ 		<li>Or, add C:\Program Files\MATLAB\MATLAB Component Runtime\v76 to the PATH environment variable by doing the following:</li>
+	<ol>
+	
+   <li>          Select the My Computer icon on your desktop.</li>
+       <li>       Right-click the icon and select Properties from the menu.</li>
+      <li>        Select the Advanced tab.</li>
+      <li>        Click Environment Variables.  Your environment variables are listed.</li>
+</ol>
+	</ul>
+       <li> If the directory does not exist, download and execute MCRInstaller_R2010A.exe (self-extracting MATLAB Component Runtime library archive) . To achieve this, you need to ask your administrator system.</li>
+        <li>then, to execute FANTALLOMETRIK, click twice on Fantallometrik.exe
+FANTALLOMETRIK License Agreement</li>
+		</ol>
+</ul>
+
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+			<div class="meta">
+
+			</div>
+		</div>
+
+	</div>
+	<!-- end #content -->
+	
+	</div>
+
+</div>
+
+
+{% endblock %}
+
+
+
