@@ -35,7 +35,7 @@ urlpatterns = patterns('',
 )
 
 
-#THIS IS FOR DEVELOPMENT STATIC MEDIA
+#THIS IS FOR DEVELOPMENT  MEDIA
 # -----------------------------------
 if settings.DEBUG:
     urlpatterns += patterns('',

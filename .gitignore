@@ -1,3 +1,5 @@
 *.pyc
 .project
 .pydev_project
+settings_local.py
+static_collected/*

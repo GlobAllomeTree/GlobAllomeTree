@@ -32,12 +32,6 @@ MEDIA_ROOT = BASE_PATH +'/media'
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
-
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
 #    ('django.template.loaders.cached.Loader', (
@@ -69,6 +63,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
 	'fantaDB',
 	'DB_MIXED',
 )
@@ -76,6 +71,11 @@ INSTALLED_APPS = (
 # Override the server-derived value of SCRIPT_NAME 
 # See http://code.djangoproject.com/wiki/BackwardsIncompatibleChanges#lighttpdfastcgiandothers
 FORCE_SCRIPT_NAME = ''
+
+#Static files configuration
+STATIC_ROOT = BASE_PATH + "/static_collected"
+STATIC_URL  = '/static/'
+
 
 try:
     from settings_local import *
