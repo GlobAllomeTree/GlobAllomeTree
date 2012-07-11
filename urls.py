@@ -1,6 +1,8 @@
 from django.conf.urls.defaults import *
 from django.views.generic import list_detail
 from django.contrib import admin
+from django.conf import settings
+
 from views import start_page, docs, links, principles, software
 from fantaDB.models import fantaDB
 from fantaDB.views import continents_map, fantaDB_id, geo_map, geo_map_id, database, export_db, export_db_all
@@ -33,6 +35,18 @@ urlpatterns = patterns('',
 )
 
 
-
+#THIS IS FOR DEVELOPMENT STATIC MEDIA
+# -----------------------------------
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$',
+            'django.views.static.serve',
+            {
+                'document_root': settings.MEDIA_ROOT,
+                'show_indexes': True
+            }
+        ),
+    )
+# -----------------------------------
 
 

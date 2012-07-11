@@ -5,12 +5,6 @@ import os.path
 
 BASE_PATH = os.path.dirname(__file__)
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
-
-MANAGERS = ADMINS
-
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -31,7 +25,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = BASE_PATH+'/media'
+MEDIA_ROOT = BASE_PATH +'/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -42,7 +36,6 @@ MEDIA_URL = '/media/'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
-
 
 
 # List of callables that know how to import templates from various sources.
@@ -61,7 +54,7 @@ MIDDLEWARE_CLASSES = (
 	'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'fantallometrik.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -83,3 +76,10 @@ INSTALLED_APPS = (
 # Override the server-derived value of SCRIPT_NAME 
 # See http://code.djangoproject.com/wiki/BackwardsIncompatibleChanges#lighttpdfastcgiandothers
 FORCE_SCRIPT_NAME = ''
+
+try:
+    from settings_local import *
+except Exception as e:
+    print "Failed to import settings_local. Copy ./bootstrap/settings_local.example.py to ./settings_local.py"
+    print "The error was %s" % e    
+
