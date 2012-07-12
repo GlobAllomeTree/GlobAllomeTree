@@ -35,7 +35,7 @@ class EquationSearchForm(SearchForm):
         return self.searchqueryset.all()
     
     def get_data_query_string(self):
-        q
+    
         return '?q='       + self.cleaned_data['q'] + \
                '&genus='   + self.cleaned_data['genus'] + \
-               '&species='   + self.cleaned_data['species'] + \
+               '&species='   + self.cleaned_data['species'] 
