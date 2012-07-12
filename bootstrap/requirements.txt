@@ -1,1 +1,5 @@
 django==1.4
+-e git+https://github.com/toastdriven/django-haystack.git#egg=django-haystack
+pysolr==2.1.0-beta
+requests==0.13.2
+#-e git+https://github.com/toastdriven/pyelasticsearch.git#egg=pyelasticsearch

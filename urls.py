@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     # (r'^test_project/', include('test_project.foo.urls')),
 
     ('^admin/', include(admin.site.urls)),
+    ('^data/', include('apps.data.urls')),
 	(r'^$', start_page),
 	(r'^continents/$', continents_map),
 	(r'^continent_002/$', list_detail.object_list, fantaDB_list),

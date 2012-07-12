@@ -1,0 +1,8 @@
+
+{{object.ecosystem}}
+{{object.biome_FAO}}
+{{object.biome_UDVARDY}}
+{{object.species}}
+{{object.genus}}
+{{object.country.common_name}}
+{{object.country.formal_name}}

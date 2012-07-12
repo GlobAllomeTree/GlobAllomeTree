@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Species{% endblock %}
+
+{% block content %}
+	<div id="page">
+		<ul>
+		{% for genus in genus_list %}
+			<li>{{genus.name}} 
+				<a href="/data/search/?genus={{genus.name}}">
+					 ({{genus.count}} equations) 
+				</a>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+{% endblock %}

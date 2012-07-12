@@ -64,8 +64,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.staticfiles',
+    'haystack',
 	'fantaDB',
 	'DB_MIXED',
+    'apps.data',
 )
 
 # Override the server-derived value of SCRIPT_NAME 
@@ -76,6 +78,19 @@ FORCE_SCRIPT_NAME = ''
 STATIC_ROOT = BASE_PATH + "/static_collected"
 STATIC_URL  = '/static/'
 
+HAYSTACK_CONNECTIONS = {
+#    'default': {
+#        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+#        'URL': 'http://127.0.0.1:9200/',
+#        'INDEX_NAME': 'globallometree',
+#    },
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr'
+        # ...or for multicore...
+        # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    },
+}
 
 try:
     from settings_local import *
