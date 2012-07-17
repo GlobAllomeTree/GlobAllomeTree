@@ -65,8 +65,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'haystack',
-	'fantaDB',
-	'DB_MIXED',
     'apps.data',
 )
 
