@@ -444,6 +444,7 @@ margin-bottom:10px;
 	color: #FFFFFF;
 	background: #699C4D;
 	padding:4px;
+	position:relative;
 }
 
 #footer p {
@@ -456,4 +457,10 @@ margin-bottom:10px;
 
 #footer a {
 	color: #FFFFFF;
+}
+
+#copy {
+    position:absolute;
+    bottom:6px;
+    left:6px;   
 }
