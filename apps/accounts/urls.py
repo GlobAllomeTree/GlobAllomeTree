@@ -33,4 +33,5 @@ urlpatterns = patterns('django.contrib.auth.views',
 #Site views
 urlpatterns += patterns('apps.accounts.views',
      (r'^register/$', 'register'),
+     (r'^approval-pending/$', 'approval_pending')
 )
