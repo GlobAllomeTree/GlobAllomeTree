@@ -96,12 +96,14 @@ def species(request, selected_genus=None):
 
 
 class EquationSearchView(SearchView):
+
+    
     def __name__(self):
         return "EquationSearchView"
 
     def extra_context(self):
         extra = super(EquationSearchView, self).extra_context()
 
-        #Add stuff to extra as a dict
+        #Add stuff to extra as a dict to include in template context
 
         return extra
