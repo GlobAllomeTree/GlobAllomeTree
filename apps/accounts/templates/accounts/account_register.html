@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block meta_title%}
+	Register
+{% endblock%}
+
+{%block content %}
+
+<div id="page">
+
+	{% if form.has_errors %}
+	    form.non_field_errors
+	{% endif %}
+	
+	<div style="float:left;width:48%">
+	
+	<h2>Register</h2>
+	<p>Register to access Globallometree</p>
+	<form method="post">
+		{% include "accounts/_inc.form_basic.html" %}
+	<div class="submit_block">
+		<input type="submit" value="register" />
+	</div>
+	<input type="hidden" name="next" value="/loadui/" />
+	</form>
+	</div>
+	{% include "accounts/_inc.register_options.html" %}
+	</div>
+
+</div>
+	
+{% endblock %}

@@ -1,0 +1,28 @@
+{% for error in form.non_field_errors  %} 
+   <span class="error"> {{ error|escape }} </span> <br>
+{% endfor %}
+{% csrf_token %}
+
+{% for field in form %}
+    {% if not field.is_hidden %}
+        <div class="field_wrapper" id="wrapper_{{ field.html_name }}">
+            <label for="id_{{ field.html_name }}"
+		                  {% if field.field.required %} 
+		                        class="required"
+		                   {% endif %}>
+                   {% if field.field.required %}
+                       <span class="required">*</span> 
+                   {% endif %}
+                   {{ field.label }}
+            </label>
+            <div class="field_input_block"> 
+                 {% if field.errors %} 
+		             	<span class="error"> {{ field.errors|first|striptags }}</span> <br>
+		         {% endif %}
+            	{{ field|safe }}
+            </div>
+        </div>
+    {% else %}
+        {{ field }}
+    {% endif %}
+{% endfor %}

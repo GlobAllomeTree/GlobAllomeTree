@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block meta_title%}
+	Login
+{% endblock%}
+
+{%block content %}
+<div id="page">
+	{% if form.has_errors %}
+	<p>Your username and password didn't match. Please try again.</p>
+	{% endif %}
+	
+	<div style="float:left;width:48%">
+	<h2>Login</h2>
+	<p>Please login to access the Globallometree site.</p>
+	<form method="post" >
+	{% include "accounts/_inc.form_basic.html" %}
+	<div class="submit_block">
+		<input type="submit" value="Login" />
+	</div>
+	<input type="hidden" name="next" value="/" />
+	</form>
+	<p><a href="/accounts/password-reset/">Lost your password?</a></p>
+	</div>
+	{% include "accounts/_inc.login_options.html" %}
+	</div>
+</div>
+	
+{% endblock %}

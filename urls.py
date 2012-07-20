@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 
     ('^admin/', include(admin.site.urls)),
     ('^data/', include('apps.data.urls')),
+    ('^accounts/', include('apps.accounts.urls')),
 	(r'^$', start_page),
 	(r'^continents/$', continents_map),
 	(r'^continent_002/$', list_detail.object_list, TreeEquation_list),

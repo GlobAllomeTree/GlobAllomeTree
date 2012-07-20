@@ -55,6 +55,14 @@ a img {
 	color: #FFFFFF;
 }
 
+
+#user-links {
+    float:right;
+    color:#9BC56F;
+    height:30px;
+    padding:5px;
+}
+
 /* Logo */
 
 #logo {
@@ -66,9 +74,6 @@ a img {
 #logo2 {
 	float: right;
 	background: url(../images/totale2.jpg) no-repeat left center;
-	margin-bottom:-75px;
-	padding-bottom:0;
-	padding-top:20px;
 	width:322px;
 	height:55px;
 }
@@ -91,7 +96,7 @@ a img {
 	float: right;
 	background: #243F12;
 	border-top: 2px #9BC56F solid;
-	margin: 88px 0 0 0;
+	margin: 48px 0 0 0;
 	text-shadow: 1px 1px 2px gray;
 }
 
@@ -232,6 +237,40 @@ margin-bottom:10px;
 	color: #699c4d;
 
 }
+
+/*  Forms */
+
+
+.error {
+    color:red;
+}
+
+.field_wrapper {
+    padding:6px 0px 4px 0px;
+    clear:left;
+}
+
+.field_wrapper label {
+    width:140px;
+    float:left;
+}
+
+.field_input_block {
+    width:180px;
+    float:left;
+}
+
+.field_input_block input {
+    width:180px;
+}
+
+.submit_block {
+    text-align:right;
+    padding:10px;
+    clear:both;
+    padding-right:60px;
+}
+
 
 
 /* Page */
@@ -399,11 +438,12 @@ margin-bottom:10px;
 
 #footer {
 	clear: both;
-	width: 900px;
-	height: 50px;
+	width: 896px;
+	height: 55px;
 	margin: 0px auto 30px auto;
 	color: #FFFFFF;
 	background: #699C4D;
+	padding:4px;
 }
 
 #footer p {
