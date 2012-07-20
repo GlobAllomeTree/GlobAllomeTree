@@ -1,32 +1,36 @@
 import csv
 
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.defaultfilters import slugify
 
 from haystack.views import SearchView
 from haystack.query import SearchQuerySet
 
-from .models import TreeEquation
+from django.template import RequestContext
+
+
+from .models import TreeEquation, Country
 
 
 def continents_map(request):
-    return render_to_response('continents_map.html',{'': '', })
+    return render_to_response('continents_map.html',context_instance = RequestContext(request,{'': '', }))
 
-def TreeEquation_id(request,DB_id):
-    DB_object = TreeEquation.objects.get(id=DB_id)
-    return render_to_response('TreeEquation_id.html', {'DB_object': DB_object, }) 
+def tree_equation_id(request, id):
+    tree_equation = TreeEquation.objects.get(id=id)
+    return render_to_response('data/template.tree_equation.html', 
+                              context_instance = RequestContext(request,{'tree_equation': tree_equation, })) 
 
 def geo_map(request):
     country_list = TreeEquation.objects.values_list('country__common_name',flat=True).distinct
-    return render_to_response('geo_map.html', {'country_list': country_list, })
+    return render_to_response('geo_map.html',context_instance = RequestContext(request, {'country_list': country_list, }))
 
 def geo_map_id(request, geo_id):
-    country_DB = TreeEquation.objects.filter(country__iso_3166_1_2_letter_code = geo_id )
-    return render_to_response('country_DB.html', {'country_DB': country_DB, })
-
+    country = Country.objects.get(iso_3166_1_2_letter_code = geo_id)
+    return HttpResponseRedirect('/data/search/?country=' + country.common_name)
+    
 def database(request):
-    return render_to_response('database.html',{'': '', })
+    return render_to_response('database.html',context_instance = RequestContext(request,{'': '', }))
 
 def export_db(request):
     # get the response object, this can be used as a stream.
@@ -63,14 +67,6 @@ def export_db_all(request,db_id):
 
 
 
-
-
-
-
-
-
-
-
 def species(request, selected_genus=None):
     
     #Call sorl for a faceted list of genus
@@ -86,11 +82,7 @@ def species(request, selected_genus=None):
     #Sort the list alphabetically by name
     genus_list.sort(key=lambda x : x['name'])
     
-    
-    
-    
-    
-    return render_to_response('data/template.species.html', {'genus_list': genus_list }) 
+    return render_to_response('data/template.species.html', context_instance = RequestContext(request,{'genus_list': genus_list }))
 
 
 

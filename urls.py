@@ -5,7 +5,7 @@ from django.conf import settings
 
 from views import start_page, docs, links, principles, software
 from apps.data.models import TreeEquation
-from apps.data.views import continents_map, TreeEquation_id, geo_map, geo_map_id, database, export_db, export_db_all
+from apps.data.views import continents_map, geo_map, geo_map_id, database, export_db, export_db_all
 
 admin.autodiscover()
 
@@ -24,7 +24,6 @@ urlpatterns = patterns('',
 	(r'^$', start_page),
 	(r'^continents/$', continents_map),
 	(r'^continent_002/$', list_detail.object_list, TreeEquation_list),
-    (r'^TreeEquation_(\d+)/$', TreeEquation_id),
 	(r'^geo_map/$', geo_map),
 	(r'^geo_map_([A-Za-z]+)/$', geo_map_id),   
 	(r'^docs/$', docs),

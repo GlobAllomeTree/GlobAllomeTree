@@ -8,11 +8,13 @@ from .views import EquationSearchView
 
 sqs = SearchQuerySet()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('apps.data.views',
 
-    url(r'^species/$', 
-         'apps.data.views.species'),
-                       
+
+    #List of genus / species
+    url(r'^species/$', 'species'),
+            
+    #Searchable list of equations                   
     url(r'^search/$', search_view_factory(
         view_class=EquationSearchView,
         template='data/template.search.html',
@@ -20,6 +22,11 @@ urlpatterns = patterns('',
         searchqueryset=sqs,
         results_per_page=40,
     ), name='haystack_search'), 
+                       
+
+    #Single equation
+    (r'^equation/(\d+)/$', 'tree_equation_id'),
+
    
 )
 

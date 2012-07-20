@@ -108,6 +108,11 @@ class TreeEquation(models.Model):
     ratio_equation                  = models.NullBooleanField()
     segmented_equation              = models.NullBooleanField()
 
+    def get_absolute_url(self):
+        return '/data/equation/%s' % self.id
+
     class Meta:
         verbose_name ='Allometric Equation'
         verbose_name_plural = 'Allometric Equations'
+        
+    
