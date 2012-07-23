@@ -9,13 +9,14 @@ from django.core.mail import send_mail
 @receiver(pre_save, sender=User)
 def user_pre_save(sender, instance, signal, *args, **kwargs):
     
-    if not instance.id:
-        #New account about to be created
-        return 
     
-    #instance is the record about to be saved
-    #compare user is the record in the db
-    compare_user = User.objects.get(pk=instance.id)
+    try:
+        #instance is the record about to be saved
+        #compare user is the record in the db
+        compare_user = User.objects.get(pk=instance.id)
+    except:
+        #returns if user is new or fixture is being loaded
+        return
     
     if compare_user.is_active != instance.is_active and instance.is_active == True:
         #Mail the admin
