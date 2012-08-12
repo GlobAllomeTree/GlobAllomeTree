@@ -24,6 +24,7 @@
 						<th>Species</th>
 						<th>Country</th>
 						<th>Biome (FAO)</th>
+						<th>Max X</th>
 						<th></th>
 				    </tr>
 	            {% for result in page.object_list %}
@@ -33,6 +34,8 @@
 	                   <td>{{ result.object.species}}</td>
 	                   <td>{{ result.object.country.common_name}}</td>
 	                   <td>{{ result.object.biome_FAO }}</td>
+	                   <td>{{ result.object.max_X }}</td>
+
 	                   
 	                   <td> <a href="{{ result.object.get_absolute_url }}">Detail &gt;&gt;</a></td>
 	                </tr>

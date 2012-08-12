@@ -28,10 +28,10 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     V                               = indexes.CharField(model_attr='V', null=True)
     unit_V                          = indexes.CharField(model_attr='unit_V', null=True)
     
-    min_X                           = indexes.DecimalField(model_attr='min_X', null=True)
-    max_X                           = indexes.DecimalField(model_attr='max_X', null=True)
-    min_H                           = indexes.DecimalField(model_attr='min_H', null=True)
-    max_H                           = indexes.DecimalField(model_attr='max_H', null=True)
+    min_X                           = indexes.FloatField(model_attr='min_X',null=True)
+    max_X                           = indexes.FloatField(model_attr='max_X',null=True)
+    min_H                           = indexes.FloatField(model_attr='min_H',null=True)
+    max_H                           = indexes.FloatField(model_attr='max_H',null=True)
     
     output                          = indexes.CharField(model_attr='output', null=True)
     unit_Y                          = indexes.CharField(model_attr='unit_Y', null=True)
@@ -53,6 +53,30 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     author                          = indexes.CharField(model_attr='author', null=True)
     year                            = indexes.IntegerField(model_attr='year', null=True)
     reference                       = indexes.CharField(model_attr='reference', null=True) 
+      
+    def _to_float(self, val):
+        if val is None:
+            return None
+        #By returning a None value, the row will be excluded from the result set
+        #when the value is not known and that value is included in the search
+        
+        elif val:
+            return float(val)  
+        else:
+            return float(0)
+    
+    def prepare_max_X(self, obj):
+        return self._to_float(obj.max_X)
+    
+    def prepare_min_X(self, obj):
+        return self._to_float(obj.max_X)
+    
+    def prepare_max_H(self, obj):
+        return self._to_float(obj.max_X)
+    
+    def prepare_min_H(self, obj):
+        return self._to_float(obj.max_X)
+      
       
     def get_model(self):
         """Let haystack know which model we are indexing"""
