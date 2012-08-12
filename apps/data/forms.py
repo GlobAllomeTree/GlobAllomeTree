@@ -9,12 +9,22 @@ class CountryChoiceField(forms.ModelChoiceField):
 
 class EquationSearchForm(SearchForm):
     
+    def __init__(self, *args, **kwargs):
+        #Add on initial arguments
+        if not kwargs.get('initial', False):
+            kwargs['initial'] = {}
+        kwargs['initial']['page'] = 1
+        return super(EquationSearchForm, self).__init__(*args, **kwargs)
+
+
+
     #Full Text
     q = forms.CharField(required=False, label='Keyword')
     
-    #Ordering
-    order_by = forms.CharField(required=False)
-        
+    #Ordering and paging
+    order_by = forms.CharField(required=False, widget=forms.HiddenInput())
+    page     = forms.IntegerField(required=False)
+    
     #Search Fields    
     population    = forms.CharField(required=False)
     ecosystem     = forms.CharField(required=False)
@@ -74,15 +84,13 @@ class EquationSearchForm(SearchForm):
     reference                       = forms.CharField(required=False) 
 
 
-
-
     def search(self):
        
         if not self.is_valid():
             return self.searchqueryset.all()
 
         sqs = self.searchqueryset.all()
-
+        
         if self.cleaned_data.get('q'):
             sqs = sqs.auto_query(self.cleaned_data['q'])
     
@@ -93,66 +101,55 @@ class EquationSearchForm(SearchForm):
             sqs = sqs.order_by(self.cleaned_data.get('order_by'))
             
             
-        #Send used fields to the query set
-        for field in ['population',
-                      'ecosystem',
-                      'genus',
-                      'species',
-                      'country',
-                      'biome_FAO',
-                      'biome_UDVARDY',
-                      'biome_WWF',
-                      'division_BAILEY',
-                      'biome_HOLDRIDGE',
-                      'X',
-                      'unit_X',
-                      'Z',
-                      'unit_Z',
-                      'W',
-                      'unit_W',
-                      'U',
-                      'unit_U',
-                      'V',
-                      'unit_V',
-                      'output',
-                      'unit_Y',
-                      'B',
-                      'Bd',
-                      'Bg',
-                      'Bt',
-                      'L',
-                      'Rb',
-                      'Rf',
-                      'Rm',
-                      'S',
-                      'T',
-                      'F',
-                      'equation_y',
-                      'author',
-                      'reference',
-                      'year',
-                      'min_X__gte',
-                      'max_X__gte',
-                      'min_H__gte',
-                      'max_H__gte',
-                      'min_X__lte',
-                      'max_X__lte',
-                      'min_H__lte',
-                      'max_H__lte'
-                      ]:
-            
-            # Check to see if the field was used in the search and non empty
-            if self.cleaned_data[field]:
+        #Send search fields to the the sqs.filter
+        for field in self.cleaned_data:
+        
+            if field in ['q', 'order_by', 'page']:
+                continue
+            if self.cleaned_data.get(field, False): 
                 kwargs = {field : self.cleaned_data.get(field)}
                 sqs = sqs.filter(**kwargs)
-        
-       
-        
+                
+           
         return sqs
         
- 
-    def get_data_query_string(self):
+        
+    def get_current_page(self):
+        if self.is_valid():
+            return  self.cleaned_data.get('page')
+        return 1
     
-        return '?q='       + self.cleaned_data['q'] + \
-               '&genus='   + self.cleaned_data['genus'] + \
-               '&species='   + self.cleaned_data['species'] 
+    def next_page_link(self):
+        return self.get_query_string({'page' : self.get_current_page()+1})
+    
+    def prev_page_link(self):
+        return self.get_query_string({'page' : self.get_current_page() -1})
+ 
+    def get_query_string(self, using_values = {}):
+    
+        query_dict = {}
+        query_string = ''
+        first = True
+       
+        #Send search fields to the the sqs.filter
+        if self.is_valid():
+            for field in self.cleaned_data:
+                if self.cleaned_data.get(field, False):
+                    query_dict[field] = self.cleaned_data.get(field)
+        
+        for field in using_values.keys():
+            query_dict[field] = using_values[field]
+            
+        
+        
+        for field in query_dict.keys():
+            if first:
+                c = '?'
+                first = False
+            else:
+                c = '&'
+                
+            query_string += '%s%s=%s' % (c, field, query_dict[field])
+                    
+        return query_string
+        

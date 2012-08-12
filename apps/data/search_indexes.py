@@ -65,6 +65,7 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
         else:
             return float(0)
     
+    #Convert the decimals to floats so we can so range filters on them
     def prepare_max_X(self, obj):
         return self._to_float(obj.max_X)
     
@@ -76,7 +77,6 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     
     def prepare_min_H(self, obj):
         return self._to_float(obj.max_X)
-      
       
     def get_model(self):
         """Let haystack know which model we are indexing"""

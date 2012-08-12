@@ -5,61 +5,377 @@
 	    <h2>Equations</h2>
 	
 	    <form method="get" action=".">
-	        <table>
-	            {{ form.as_table }}
-	            <tr>
-	                <td>&nbsp;</td>
-	                <td>
-	                    <input type="submit" value="Search">
-	                </td>
-	            </tr>
-	        </table>
-	
-	        {% if page.object_list %}
-	            <h3>Results</h3>
-				<table>
-					<tr>
-						<th>Ecosystem</th>
-						<th>Genus</th>
-						<th>Species</th>
-						<th>Country</th>
-						<th>Biome (FAO)</th>
-						<th>Max X</th>
-						<th></th>
-				    </tr>
-	            {% for result in page.object_list %}
-	                <tr>
-	                   <td>{{ result.object.ecosystem}}</td>
-	                   <td>{{ result.object.genus}}</td>
-	                   <td>{{ result.object.species}}</td>
-	                   <td>{{ result.object.country.common_name}}</td>
-	                   <td>{{ result.object.biome_FAO }}</td>
-	                   <td>{{ result.object.max_X }}</td>
+	       
+	        <h3>Identification</h3>
+	       
+            <div {% if form.ecosystem.errors %} class="error" {% endif %}>
+            {{ form.ecosystem.errors }}<label for="id_ecosystem">Ecosystem</label>
+            {{ form.ecosystem }}
+            <div>
+        
 
-	                   
-	                   <td> <a href="{{ result.object.get_absolute_url }}">Detail &gt;&gt;</a></td>
-	                </tr>
-	              
-	         
-	            {% endfor %}
-				
-				</table>
-				{% if page.has_previous or page.has_next %}
-	                <p style="float:right">
-	                	
-	                	
-	                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-	                    |
-	                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-	                </p>
-	            {% endif %}
-				<p>Page {{ page.number }} of {{ page.paginator.num_pages }}</p>
+            
+            <div {% if form.population.errors %} class="error" {% endif %}>
+            {{ form.population.errors }}<label for="id_population">Population</label>
+            {{ form.population }}
+            <div>
+        
+            <br>
+            <h3>Taxonomy</h3>
+
+	  
+            <div {% if form.genus.errors %} class="error" {% endif %}>
+            {{ form.genus.errors }}<label for="id_genus">Genus</label>
+            {{ form.genus }}
+            <div>
+                
+            
+            <div {% if form.species.errors %} class="error" {% endif %}>
+            {{ form.species.errors }}<label for="id_species">Species</label>
+            {{ form.species }}
+            <div>
+            
+            
+            <br>
+            <h3>Location</h3>  
+	      
 	           
-	        {% else %}
-	        	<h4>No results were found that matched your search</h4>
-	        	<p>Try making your search more general.</p>
-	            {# Show some example queries to run, maybe query syntax, something else? #}
-	        {% endif %}
+            <div {% if form.country.errors %} class="error" {% endif %}>
+            {{ form.country.errors }}<label for="id_country">Country</label>
+            {{ form.country }}
+            <div>        
+             
+
+            <div {% if form.biome_HOLDRIDGE.errors %} class="error" {% endif %}>
+            {{ form.biome_HOLDRIDGE.errors }}<label for="id_biome_HOLDRIDGE">Biome (HOLDRIDGE)</label>
+            {{ form.biome_HOLDRIDGE }}
+            <div>
+        
+        
+            
+            <div {% if form.biome_UDVARDY.errors %} class="error" {% endif %}>
+            {{ form.biome_UDVARDY.errors }}<label for="id_biome_UDVARDY">Biome (UDVARDY)</label>
+            {{ form.biome_UDVARDY }}
+            <div>
+        
+	      
+	           
+            <div {% if form.biome_FAO.errors %} class="error" {% endif %}>
+            {{ form.biome_FAO.errors }}<label for="id_biome_FAO">Biome (FAO)</label>
+            {{ form.biome_FAO }}
+            <div>
+        
+	       
+            <div {% if form.biome_WWF.errors %} class="error" {% endif %}>
+            {{ form.biome_WWF.errors }}<label for="id_biome_WWF">Biome (WWF)</label>
+            {{ form.biome_WWF }}
+            <div>
+        
+                   
+
+            <div {% if form.division_BAILEY.errors %} class="error" {% endif %}>
+            {{ form.division_BAILEY.errors }}<label for="id_division_BAILEY">Division (BAILEY)</label>
+            {{ form.division_BAILEY }}
+            <div>
+
+            <br>
+            <h3>Components</h3>
+                
+                  
+            <div {% if form.B.errors %} class="error" {% endif %}>
+            {{ form.B.errors }}
+            {{ form.B }}<label for="id_B">B</label>
+            <div>
+        
+
+            <div {% if form.Bd.errors %} class="error" {% endif %}>
+            {{ form.Bd.errors }}
+            {{ form.Bd }}<label for="id_Bd">Bd</label>
+            <div>
+        
+            
+            <div {% if form.Bg.errors %} class="error" {% endif %}>
+            {{ form.Bg.errors }}
+            {{ form.Bg }}<label for="id_Bg">Bg</label>
+            <div>    
+           
+
+            <div {% if form.Bt.errors %} class="error" {% endif %}>
+            {{ form.Bt.errors }}
+            {{ form.Bt }}<label for="id_Bt">Bt</label>
+            <div>
+       
+            <div {% if form.L.errors %} class="error" {% endif %}>
+            {{ form.L.errors }}
+            {{ form.L }}<label for="id_L">L</label>
+            <div>
+        
+
+                       
+            <div {% if form.Rb.errors %} class="error" {% endif %}>
+            {{ form.Rb.errors }}
+            {{ form.Rb }}<label for="id_Rb">Rb</label>
+            <div>   
+                
+                
+            <div {% if form.Rf.errors %} class="error" {% endif %}>
+            {{ form.Rf.errors }}
+            {{ form.Rf }}<label for="id_Rf">Rf</label>
+            <div>
+                
+            <div {% if form.Rm.errors %} class="error" {% endif %}>
+            {{ form.Rm.errors }}
+            {{ form.Rm }}<label for="id_Rm">Rm</label>
+            <div>
+
+            <div {% if form.S.errors %} class="error" {% endif %}>
+            {{ form.S.errors }}
+            {{ form.S }} <label for="id_S">S</label>
+            <div>
+                
+              
+            <div {% if form.T.errors %} class="error" {% endif %}>
+            {{ form.T.errors }}
+            {{ form.T }}<label for="id_T">T</label>
+            <div>
+      
+
+            <div {% if form.F.errors %} class="error" {% endif %}>
+            {{ form.F.errors }}
+            {{ form.F }}<label for="id_F">F</label>
+            <div>
+        
+
+            <br>
+            <h3>Input/Output</h3>
+            
+            <div {% if form.X.errors %} class="error" {% endif %}>
+            {{ form.X.errors }}<label for="id_X">X</label>
+            {{ form.X }}
+            <div>
+        
+
+            <div {% if form.Z.errors %} class="error" {% endif %}>
+            {{ form.Z.errors }}<label for="id_Z">Z</label>
+            {{ form.Z }}
+            <div>
+
+            <div {% if form.W.errors %} class="error" {% endif %}>
+            {{ form.W.errors }}<label for="id_W">W</label>
+            {{ form.W }}
+            <div>
+            
+            <div {% if form.U.errors %} class="error" {% endif %}>
+            {{ form.U.errors }}<label for="id_U">U</label>
+            {{ form.U }}
+            <div>
+
+            <div {% if form.V.errors %} class="error" {% endif %}>
+            {{ form.V.errors }}<label for="id_V">V</label>
+            {{ form.V }}
+            <div>
+        
+        
+        
+            
+            
+            <div {% if form.unit_U.errors %} class="error" {% endif %}>
+            {{ form.unit_U.errors }}<label for="id_unit_U">Unit U</label>
+            {{ form.unit_U }}
+            <div>
+        
+
+
+            <div {% if form.unit_V.errors %} class="error" {% endif %}>
+            {{ form.unit_V.errors }}<label for="id_unit_V">Unit V</label>
+            {{ form.unit_V }}
+            <div>           
+            
+            <div {% if form.unit_W.errors %} class="error" {% endif %}>
+            {{ form.unit_W.errors }}<label for="id_unit_W">Unit W</label>
+            {{ form.unit_W }}
+            <div>
+                
+            <div {% if form.unit_X.errors %} class="error" {% endif %}>
+            {{ form.unit_X.errors }}<label for="id_unit_X">Unit X</label>
+            {{ form.unit_X }}
+            <div>
+        
+            
+            <div {% if form.unit_Y.errors %} class="error" {% endif %}>
+            {{ form.unit_Y.errors }}<label for="id_unit_Y">Unit Y</label>
+            {{ form.unit_Y }}
+            <div>
+                
+            <div {% if form.unit_Z.errors %} class="error" {% endif %}>
+            {{ form.unit_Z.errors }}<label for="id_unit_Z">Unit Z</label>
+            {{ form.unit_Z }}
+            <div>
+        
+
+
+            <div {% if form.min_X__gte.errors %} class="error" {% endif %}>
+            {{ form.min_X__gte.errors }}<label for="id_min_X__gte">Min X From</label>
+            {{ form.min_X__gte }}
+            <div>
+                
+                             
+
+            <div {% if form.min_X__lte.errors %} class="error" {% endif %}>
+            {{ form.min_X__lte.errors }}<label for="id_min_X__lte">Min X To</label>
+            {{ form.min_X__lte }}
+            <div>
+        
+     
+
+            <div {% if form.max_X__gte.errors %} class="error" {% endif %}>
+            {{ form.max_X__gte.errors }}<label for="id_max_X__gte">Max X From</label>
+            {{ form.max_X__gte }}
+            <div>
+                
+            <div {% if form.max_X__lte.errors %} class="error" {% endif %}>
+            {{ form.max_X__lte.errors }}<label for="id_max_X__lte">Max X To</label>
+            {{ form.max_X__lte }}
+            <div>
+        
+
+              
+            <div {% if form.min_H__gte.errors %} class="error" {% endif %}>
+            {{ form.min_H__gte.errors }}<label for="id_min_H__gte">Min H From</label>
+            {{ form.min_H__gte }}
+            <div>
+        
+        
+            <div {% if form.min_H__lte.errors %} class="error" {% endif %}>
+            {{ form.min_H__lte.errors }}<label for="id_min_H__lte">Min H To</label>
+            {{ form.min_H__lte }}
+            <div>
+                          
+            <div {% if form.max_H__gte.errors %} class="error" {% endif %}>
+            {{ form.max_H__gte.errors }}<label for="id_max_H__gte">Max H From</label>
+            {{ form.max_H__gte }}
+            <div>
+                
+          
+                
+            <div {% if form.max_H__lte.errors %} class="error" {% endif %}>
+            {{ form.max_H__lte.errors }}<label for="id_max_H__lte">Max H To</label>
+            {{ form.max_H__lte }}
+            <div>
+        
+        
+
+            <div {% if form.output.errors %} class="error" {% endif %}>
+            {{ form.output.errors }}<label for="id_output">Output</label>
+            {{ form.output }}
+            <div>
+            
+            <br>
+            <h3>Allometry</h3>
+            
+
+  
+            <div {% if form.equation_y.errors %} class="error" {% endif %}>
+            {{ form.equation_y.errors }}<label for="id_equation_y">Equation Y</label>
+            {{ form.equation_y }}
+            <div>
+                
+                
+            <br>
+            <h3>Reference</h3>
+              
+        
+
+            <div {% if form.author.errors %} class="error" {% endif %}>
+            {{ form.author.errors }}<label for="id_author">Author</label>
+            {{ form.author }}
+            <div>
+        
+
+
+            <div {% if form.reference.errors %} class="error" {% endif %}>
+            {{ form.reference.errors }}
+            <label for="id_reference">Reference</label>
+            {{ form.reference }}
+            <div>        
+
+            <div {% if form.year.errors %} class="error" {% endif %}>
+            {{ form.year.errors }}<label for="id_year">Year</label>
+            {{ form.year }}
+            <div>
+        
+
+            
+    
+        
+             
+            <br>
+            <h3>Keyword</h3>    
+
+            <div {% if form.q.errors %} class="error" {% endif %}>
+            {{ form.q.errors }}<label for="id_q">Keyword</label>
+            {{ form.q }}
+            <div>
+        
+        
+            
+
+          
+            {{ form.order_by }} 
+            <input type="hidden" name="page" value="1">
+	        <input type="submit" value="Search">
+	            
+	
 	    </form>
+	  
+	   
+        {% if page.object_list %}
+         <br>
+         <br>
+            <h3>Results</h3>
+			<table>
+				<tr>
+					<th>Ecosystem</th>
+					<th>Genus</th>
+					<th>Species</th>
+					<th>Country</th>
+					<th>Biome (FAO)</th>
+					<th>Max X</th>
+					<th></th>
+			    </tr>
+            {% for result in page.object_list %}
+                <tr>
+                   <td>{{ result.object.ecosystem}}</td>
+                   <td>{{ result.object.genus}}</td>
+                   <td>{{ result.object.species}}</td>
+                   <td>{{ result.object.country.common_name}}</td>
+                   <td>{{ result.object.biome_FAO }}</td>
+                   <td>{{ result.object.max_X }}</td>
+
+                   
+                   <td> <a href="{{ result.object.get_absolute_url }}">Detail &gt;&gt;</a></td>
+                </tr>
+              
+         
+            {% endfor %}
+			
+			</table>
+			{% if page.has_previous or page.has_next %}
+                <p style="float:right">
+                	
+                	
+                    {% if page.has_previous %}<a href="{{form.prev_page_link}}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="{{form.next_page_link}}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                </p>
+            {% endif %}
+			<p>Page {{ page.number }} of {{ page.paginator.num_pages }}</p>
+           
+        {% else %}
+        	<h4>No results were found that matched your search</h4>
+        	<p>Try making your search more general.</p>
+            {# Show some example queries to run, maybe query syntax, something else? #}
+        {% endif %}
+	    
     </div>
 {% endblock %}
