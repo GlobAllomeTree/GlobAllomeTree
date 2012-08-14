@@ -26,62 +26,62 @@ class EquationSearchForm(SearchForm):
     page     = forms.IntegerField(required=False)
     
     #Search Fields    
-    population    = forms.CharField(required=False)
-    ecosystem     = forms.CharField(required=False)
-    genus         = forms.CharField(required=False)
-    species       = forms.CharField(required=False)
-    country       = forms.CharField(required=False)
+    population    = forms.CharField(required=False, label='Population')
+    ecosystem     = forms.CharField(required=False, label='Ecosystem')
+    genus         = forms.CharField(required=False, label='Genus')
+    species       = forms.CharField(required=False, label='Species')
+    country       = forms.CharField(required=False, label='Country')
 
 
-    biome_FAO                       = forms.CharField(required=False)
-    biome_UDVARDY                   = forms.CharField(required=False)
-    biome_WWF                       = forms.CharField(required=False)
-    division_BAILEY                 = forms.CharField(required=False) 
-    biome_HOLDRIDGE                 = forms.CharField(required=False)
+    biome_FAO                       = forms.CharField(required=False, label='Biome (FAO)')
+    biome_UDVARDY                   = forms.CharField(required=False, label='Biome (UDVARDY)')
+    biome_WWF                       = forms.CharField(required=False, label='Biome (WWF)')
+    division_BAILEY                 = forms.CharField(required=False, label='Division (BAILEY)') 
+    biome_HOLDRIDGE                 = forms.CharField(required=False, label='Biome (HOLDRIDGE)')
      
-    X                               = forms.CharField(required=False)
-    unit_X                          = forms.CharField(required=False)
-    Z                               = forms.CharField(required=False)
-    unit_Z                          = forms.CharField(required=False) 
-    W                               = forms.CharField(required=False)
-    unit_W                          = forms.CharField(required=False)
-    U                               = forms.CharField(required=False)
-    unit_U                          = forms.CharField(required=False) 
-    V                               = forms.CharField(required=False)
-    unit_V                          = forms.CharField(required=False)
+    X                               = forms.CharField(required=False, label='X')
+    unit_X                          = forms.CharField(required=False, label='Unit X')
+    Z                               = forms.CharField(required=False, label='Z')
+    unit_Z                          = forms.CharField(required=False, label='Unit Z') 
+    W                               = forms.CharField(required=False, label='W')
+    unit_W                          = forms.CharField(required=False, label='Unit W')
+    U                               = forms.CharField(required=False, label='U')
+    unit_U                          = forms.CharField(required=False, label='Unit U') 
+    V                               = forms.CharField(required=False, label='V')
+    unit_V                          = forms.CharField(required=False, label='Unit V')
     
-    min_X__gte                      = forms.DecimalField(required=False)
-    min_X__lte                      = forms.DecimalField(required=False)
+    min_X__gte                      = forms.DecimalField(required=False, label='Min X From')
+    min_X__lte                      = forms.DecimalField(required=False, label='Min X To')
  
-    max_X__gte                      = forms.DecimalField(required=False)
-    max_X__lte                      = forms.DecimalField(required=False)
+    max_X__gte                      = forms.DecimalField(required=False, label='Max X From')
+    max_X__lte                      = forms.DecimalField(required=False, label='Max X To')
 
-    min_H__gte                      = forms.DecimalField(required=False)
-    min_H__lte                      = forms.DecimalField(required=False)
+    min_H__gte                      = forms.DecimalField(required=False, label='Min H From')
+    min_H__lte                      = forms.DecimalField(required=False, label='Min H To')
 
-    max_H__gte                      = forms.DecimalField(required=False)
-    max_H__lte                      = forms.DecimalField(required=False)
+    max_H__gte                      = forms.DecimalField(required=False, label='Max H From')
+    max_H__lte                      = forms.DecimalField(required=False, label='Max H To')
     
-    output                          = forms.CharField(required=False)
-    unit_Y                          = forms.CharField(required=False)
+    output                          = forms.CharField(required=False, label='Output')
+    unit_Y                          = forms.CharField(required=False, label='Unit Y')
     
-    B                               = forms.BooleanField(required=False)
-    Bd                              = forms.BooleanField(required=False)
-    Bg                              = forms.BooleanField(required=False)
-    Bt                              = forms.BooleanField(required=False)
-    L                               = forms.BooleanField(required=False)
-    Rb                              = forms.BooleanField(required=False)
-    Rf                              = forms.BooleanField(required=False)
-    Rm                              = forms.BooleanField(required=False)
-    S                               = forms.BooleanField(required=False)
-    T                               = forms.BooleanField(required=False)
-    F                               = forms.BooleanField(required=False)
+    B                               = forms.BooleanField(required=False, label='B')
+    Bd                              = forms.BooleanField(required=False, label='Bd')
+    Bg                              = forms.BooleanField(required=False, label='Bg')
+    Bt                              = forms.BooleanField(required=False, label='Bt')
+    L                               = forms.BooleanField(required=False, label='L')
+    Rb                              = forms.BooleanField(required=False, label='Rb')
+    Rf                              = forms.BooleanField(required=False, label='Rf')
+    Rm                              = forms.BooleanField(required=False, label='Rm')
+    S                               = forms.BooleanField(required=False, label='S')
+    T                               = forms.BooleanField(required=False, label='T')
+    F                               = forms.BooleanField(required=False, label='F')
     
-    equation_y                      = forms.CharField(required=False)
+    equation_y                      = forms.CharField(required=False, label='Equation')
     
-    author                          = forms.CharField(required=False)
-    year                            = forms.IntegerField(required=False)
-    reference                       = forms.CharField(required=False) 
+    author                          = forms.CharField(required=False, label='Author')
+    year                            = forms.IntegerField(required=False, label='Year')
+    reference                       = forms.CharField(required=False, label='Reference') 
 
 
     def search(self):
@@ -124,6 +124,23 @@ class EquationSearchForm(SearchForm):
     
     def prev_page_link(self):
         return self.get_query_string({'page' : self.get_current_page() -1})
+    
+    def current_search_summary(self):
+        current_search = []
+        if not self.is_valid():
+            return []
+        #Send search fields to the the sqs.filter
+        for field in self.cleaned_data:
+        
+            if field in ['order_by', 'page']:
+                continue
+            if self.cleaned_data.get(field, False): 
+                current_search.append( {'field' : self.fields[field].label,
+                                        'search_value' :  self.cleaned_data.get(field),
+                                        'clear_link'   :  self.get_query_string({'page' : 1,
+                                                                                field : ''})
+                                    })
+        return current_search     
  
     def get_query_string(self, using_values = {}):
     

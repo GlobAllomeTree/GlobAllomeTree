@@ -464,3 +464,18 @@ margin-bottom:10px;
     bottom:6px;
     left:6px;   
 }
+
+
+/* Search Form */
+#searchForm .floatedLabel {
+    float:left;
+    width:160px;
+    display:block;
+    clear:left;
+}
+
+#searchForm .floatedCheckBoxBlock {
+    float:left;
+    width:60px;
+    display:block;
+}
