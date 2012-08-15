@@ -4,6 +4,35 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db import models
+
+
+class UserProfile(models.Model):
+    
+    DATA_MAY_PROVIDE_CHOICES = (('species_data',        'Species data'),
+                                ('wood_density',        'Wood Density'),
+                                ('allometric_equation', 'Allometric Equation'),
+                                ('reports',             'Reports and scientific literature containing new allometric equations'),)
+    
+    user        = models.ForeignKey(User)
+    address     = models.CharField(max_length=200)
+    country     = models.CharField(max_length=80)
+    region      = models.CharField(max_length=80)
+    subregion   = models.CharField(max_length=80)
+    
+    education   = models.CharField(max_length=300)
+
+    institution_name      = models.CharField(max_length=200)
+    institution_address   = models.CharField(max_length=200)
+    institution_phone     = models.CharField(max_length=60)
+    institution_fax       = models.CharField(max_length=60)
+    field_subject         = models.CharField(max_length=60)
+
+    data_may_provide      = models.CharField(max_length=40, choices=DATA_MAY_PROVIDE_CHOICES)
+
+    def __unicode__(self):
+        return u"User profile for %s" % self.user
+    
 
 # Notify a user their status has changed to active
 @receiver(pre_save, sender=User)
@@ -27,11 +56,12 @@ Dear Globallometree Admin,
 A new user has been correctly approved for your website.
 
 You can view the user's information here:
-
+Django User
 http://globallometree.com/admin/auth/user/%s/
+User Profile
+http://globallometree.com/admin/accounts/userprofile/%s/
 
-
-""" % instance.id, 
+""" % (instance.id, instance.get_profile().id),
                     'no-reply@globallometree.com',
                      [settings.NEW_USER_NOTIFY_EMAIL], 
                      fail_silently=False)
@@ -46,7 +76,6 @@ Your account has been approved at globallometree.com
 You may login at the following link:
 
 http://globallometree.com/accounts/login/
-
 
 """ % instance.username, 
                     'no-reply@globallometree.com',
