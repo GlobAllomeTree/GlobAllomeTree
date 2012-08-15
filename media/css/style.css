@@ -2,10 +2,10 @@
 body {
 	margin: 0px;
 	padding: 0px;
-	background: url(../images/img01.jpg) repeat-x left top;
 	font: 13px Arial, Helvetica, sans-serif;
 	color: #212121;
 }
+
 
 h1, h2, h3 {
 	margin-top: 0px;
@@ -43,11 +43,18 @@ a img {
 
 /* Header */
 
+#headerOuter {
+        background: url(../images/img01.jpg) repeat-x bottom;
+        width:100%;
+        height:100px;
+}
+
 #header {
-	width: 900px;
-	height: 130px;
+	width: 1060px;
+	height: 95px;
 	margin: 0px auto;
 	background: #699C4D;
+	position:relative;
 }
 
 #header a {
@@ -87,16 +94,19 @@ a img {
 }
 
 #logo h1 {
-	padding: 25px 0px 0px 0px;
+	padding: 22px 0px 0px 0px;
 }
 
 /* Menu */
 
 #menu {
-	float: right;
+	position:absolute;
+	bottom:0px;
+	right:0px;
+	
 	background: #243F12;
 	border-top: 2px #9BC56F solid;
-	margin: 48px 0 0 0;
+	
 	text-shadow: 1px 1px 2px gray;
 }
 
@@ -211,12 +221,12 @@ margin-bottom:10px;
 
 #content_docs {
 	float: left;
-	width: 900px;
+	width: 1060px;
 }
 
 #content_links {
 	float: left;
-	width: 900px;
+	width: 1060px;
 }
 
 #content_links ul li{
@@ -276,18 +286,18 @@ margin-bottom:10px;
 /* Page */
 
 #page {
-	width: 900px;
+	width: 1060px;
 	margin: 0px auto;
 	padding: 30px 0px;
 }
 
 #page_2 {
-	width: 900px;
+	width: 1060px;
 	margin: 0px auto;
 }
 
 #map {
-	width: 900px;
+	width: 1060px;
 	margin: 0px auto;
 }
 
@@ -438,7 +448,7 @@ margin-bottom:10px;
 
 #footer {
 	clear: both;
-	width: 896px;
+	width: 1056px;
 	height: 55px;
 	margin: 0px auto 30px auto;
 	color: #FFFFFF;
@@ -478,4 +488,54 @@ margin-bottom:10px;
     float:left;
     width:60px;
     display:block;
+}
+
+/* Results Table 
+.equationTable td {
+    white-space:nowrap;
+    border:1px solid #C1DDA4;
+    padding:4px;
+}
+.equationTable {
+    border-collapse:collapse;
+    border-radius: 4px 4px 4px 4px;
+    margin:0px;
+  
+}
+
+.equationTable th {
+    text-align:left;
+    padding:4px;
+    border:1px solid #699C4D;
+    border-bottom-width:2px;
+}
+
+.equationTable th:first-child {
+      border-radius:4px 0px 0px 0px;
+}
+*/
+
+table {
+    border: 0;
+    padding: 0;
+    margin: 0 0 20px 0;
+    border-collapse: collapse;
+}
+th {
+    padding: 7px; /* NOTE: th padding must be set explicitly in order to support IE */
+    text-align: left;        
+    font-weight:bold;
+    line-height: 2em;
+    color: #FFF;
+    background-color: #243F12;
+    white-space:nowrap;
+}
+tbody td {
+    padding: 7px;
+    line-height: 18px;
+    border-top: 1px solid #E0E0E0;
+    white-space:nowrap;
+}
+tbody tr:nth-child(2n) {
+    background-color: #F5F3E5;
 }

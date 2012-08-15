@@ -5,6 +5,7 @@ import os.path
 
 BASE_PATH = os.path.dirname(__file__)
 
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -77,6 +78,7 @@ FORCE_SCRIPT_NAME = ''
 STATIC_ROOT = BASE_PATH + "/static_collected"
 STATIC_URL  = '/static/'
 
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',

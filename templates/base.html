@@ -16,47 +16,48 @@
 </head>
 <body>
 
-
-<div id="header">
-
-    <div id="user-links">
-        
-        {% if user.is_authenticated %}
-        logged in as <span style="color:#fff;font-weight:bold">{{user.username}}</span> 
-        |
-        <a href="/accounts/change-password/">Change Password</a>
-
-        | 
-        <a href="/accounts/logout/">Logout</a>
-        
-        {% else %}
-        <a href="/accounts/login/">Log In</a>
-        |
-        <a href="/accounts/register/">Register</a>
-        {% endif %}
+<div id="headerOuter">
+    <div id="header">
+    
+        <div id="user-links">
+            
+            {% if user.is_authenticated %}
+            logged in as <span style="color:#fff;font-weight:bold">{{user.username}}</span> 
+            |
+            <a href="/accounts/change-password/">Change Password</a>
+    
+            | 
+            <a href="/accounts/logout/">Logout</a>
+            
+            {% else %}
+            <a href="/accounts/login/">Log In</a>
+            |
+            <a href="/accounts/register/">Register</a>
+            {% endif %}
+        </div>
+    
+    	<div id="logo">
+    		<h1><a href="/">Globallometree</a></h1>
+    		<p>Assessing volume, biomass and carbon stocks</p>	
+    		<p>in forest lands and trees outside forests</p>	
+    	</div>
+    	
+    	
+    	<!-- end #logo -->
+    	<div id="menu">
+    		<ul>
+    		<!--	<li class="first"><a href="/">Home</a></li> -->
+    			<li><a href="/data/search/">Equations</a></li>
+    			<li><a href="/database">Data</a></li>
+    			<li><a href="/geo_map">Maps</a></li>
+    			<li><a href="/software">Software</a></li>
+    			<li><a href="/principles">Principles</a></li>
+    			<li><a href="/docs">Docs</a></li>
+    		<!--	<li><a href="/links">Links</a></li> -->
+    		</ul>
+    	</div>
+    	<!-- end #menu -->
     </div>
-
-	<div id="logo">
-		<h1><a href="/">Globallometree</a></h1>
-		<p>Assessing volume, biomass and carbon stocks</p>	
-		<p>in forest lands and trees outside forests</p>	
-	</div>
-	
-	
-	<!-- end #logo -->
-	<div id="menu">
-		<ul>
-		<!--	<li class="first"><a href="/">Home</a></li> -->
-			<li><a href="/data/search/">Equations</a></li>
-			<li><a href="/database">Data</a></li>
-			<li><a href="/geo_map">Maps</a></li>
-			<li><a href="/software">Software</a></li>
-			<li><a href="/principles">Principles</a></li>
-			<li><a href="/docs">Docs</a></li>
-		<!--	<li><a href="/links">Links</a></li> -->
-		</ul>
-	</div>
-	<!-- end #menu -->
 </div>
 <!-- end #header -->
 

@@ -108,7 +108,14 @@ class TreeEquation(models.Model):
     ratio_equation                  = models.NullBooleanField()
     segmented_equation              = models.NullBooleanField()
 
-   
+    def components_string(self):
+        c_string = ''
+        for field in ['B', 'Bd', 'Bg', 'Bt', 'L', 'Rb', 'Rf', 'Rm', 'S', 'T', 'F']:
+            if getattr(self, field):
+                c_string += field + ' '
+        return c_string
+
+
 
     def get_absolute_url(self):
         return '/data/equation/%s' % self.id

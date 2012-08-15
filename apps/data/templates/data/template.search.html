@@ -6,6 +6,8 @@
         $( "#tabs" ).tabs();
         $( "#searchButton" ).button();
     });
+   
+
 </script>
 {% endblock %}
 
@@ -16,7 +18,7 @@
 	    
 	    
 	    {% if form.current_search_summary %}
-	       <div style="float:right;width:330px;">
+	       <div style="float:right;width:330px;margin-bottom:20px;">
 	           <h3 style="color:#243F12">Your current search:</h3>
     	       <table>
         	       {% for item in form.current_search_summary %}
@@ -29,8 +31,7 @@
     	       </table>
 	       </div>
 	    {% endif %}
-	    <h2>Equations</h2>
-	    <h3>Search Options</h3>
+
 	    <form method="get" action="." id="searchForm">
 	       
 	        <div id="tabs" style="clear:right;">
@@ -347,7 +348,7 @@
   
                     <div {% if form.equation_y.errors %} class="error" {% endif %}>
                     {{ form.equation_y.errors }}
-                    <label for="id_equation_y" class="floatedLabel">Equation Y</label>
+                    <label for="id_equation_y" class="floatedLabel">Equation</label>
                     {{ form.equation_y }}
                     </div>
                         
@@ -396,33 +397,51 @@
         {% if page.object_list %}
          <br>
          <br>
-			<table>
-				<tr>
-					<th>Ecosystem</th>
-					<th>Genus</th>
-					<th>Species</th>
-					<th>Country</th>
-					<th>Biome (FAO)</th>
-					<th>Max X</th>
-					<th></th>
-			    </tr>
-            {% for result in page.object_list %}
-                <tr>
-                   <td>{{ result.object.ecosystem}}</td>
-                   <td>{{ result.object.genus}}</td>
-                   <td>{{ result.object.species}}</td>
-                   <td>{{ result.object.country.common_name}}</td>
-                   <td>{{ result.object.biome_FAO }}</td>
-                   <td>{{ result.object.max_X }}</td>
-
-                   
-                   <td> <a href="{{ result.object.get_absolute_url }}">Detail &gt;&gt;</a></td>
-                </tr>
-              
-         
-            {% endfor %}
-			
-			</table>
+            <div style="float:left;width:299px;border-right: 1px solid #9BC56F;"> 
+    			<table class="equationTable" style="width:100%">
+    			 <thead>   
+    				<tr>
+    					<th>Equation</th>
+    				</tr>
+    			 </thead>   
+                 <tbody>
+    				{% for result in page.object_list %}
+    				<tr>
+                         <td><a href="{{ result.object.get_absolute_url }}">{{ result.object.equation_y}}</a></td>
+                    </tr>
+                    {% endfor %}
+                 </tbody>
+    			</table>
+			</div>	
+			<div style="float:left;width:759px;overflow-x:scroll;">	
+				<table class="equationTable" style="width:500px;">
+				<thead>   
+    				<tr>	
+    					<th>Id</th>
+    					<th>Genus</th>
+    					<th>Species</th>
+    					<th>Country</th>
+    					<th>Components</th>
+    					<th>Biome (FAO)</th>
+    					<th>Author</th>
+    			    </tr>
+			    </thead>
+			    <tbody>
+                {% for result in page.object_list %}
+                    <tr>
+                       <td>{{ result.object.id}}</td>
+                       <td>{{ result.object.genus}}</td>
+                       <td>{{ result.object.species}}</td>
+                       <td>{{ result.object.country.common_name}}</td>
+                       <td>{{ result.object.components_string}}</td>
+                       <td>{{ result.object.biome_FAO }}</td>
+                       <td>{{ result.object.author }}</td>
+                    </tr>
+                  {% endfor %}
+			     </tbody>
+			     </table>
+			</div>
+			<div style="clear:both;"></div>
 			{% if page.has_previous or page.has_next %}
                 <p style="float:right">
                 	
