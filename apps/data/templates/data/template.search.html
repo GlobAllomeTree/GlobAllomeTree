@@ -16,6 +16,7 @@
 
 	<div id="page">
 	    
+	    <h3>Equations</h3>
 	    
 	    {% if form.current_search_summary %}
 	       <div style="float:right;width:330px;margin-bottom:20px;">
@@ -410,7 +411,7 @@
                  </tfoot>   
     			</table>
 			</div>	
-			<div style="float:left;width:759px;overflow-x:scroll;">	
+			<div style="float:left;width:759px;overflow-x:auto;">	
 				<table class="equationTable" style="width:500px;">
 				<thead>   
     				<tr>	
@@ -419,6 +420,7 @@
     					<th>Species</th>
     					<th>Country</th>
     					<th>Components</th>
+    					<th>Output</th>
     					<th>Biome (FAO)</th>
     					<th>Author</th>
     			    </tr>
@@ -431,6 +433,7 @@
                        <td>{{ result.object.species}}</td>
                        <td>{{ result.object.country.common_name}}</td>
                        <td>{{ result.object.components_string}}</td>
+                       <td>{{ result.object.output}}</td>
                        <td>{{ result.object.biome_FAO }}</td>
                        <td>{{ result.object.author }}</td>
                     </tr>
@@ -443,6 +446,7 @@
                         <th>Species</th>
                         <th>Country</th>
                         <th>Components</th>
+                        <th>Output</th>
                         <th>Biome (FAO)</th>
                         <th>Author</th>
                     </tr>
