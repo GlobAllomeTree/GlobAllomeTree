@@ -477,6 +477,8 @@ margin-bottom:10px;
 
 
 /* Search Form */
+
+
 #searchForm .floatedLabel {
     float:left;
     width:160px;
@@ -490,35 +492,41 @@ margin-bottom:10px;
     display:block;
 }
 
-/* Results Table 
-.equationTable td {
-    white-space:nowrap;
-    border:1px solid #C1DDA4;
-    padding:4px;
-}
-.equationTable {
-    border-collapse:collapse;
-    border-radius: 4px 4px 4px 4px;
-    margin:0px;
-  
+
+.smallInputs label {
+    float:left;
+    clear:left;
+    width:50px;
 }
 
-.equationTable th {
-    text-align:left;
-    padding:4px;
-    border:1px solid #699C4D;
-    border-bottom-width:2px;
+.smallInputs input {
+    float:left;
+    width:80px;
 }
 
-.equationTable th:first-child {
-      border-radius:4px 0px 0px 0px;
-}
-*/
 
+.smallInputs2 label {
+    float:left;
+    clear:left;
+    width:80px;
+}
+
+.smallInputs2 label.middle {
+    float:left;
+    text-align:center;
+    width:60px;
+    clear:none;
+}
+
+.smallInputs2 input {
+    float:left;
+    width:80px;
+}
+
+/* Table */
 table {
     border: 0;
     padding: 0;
-    margin: 0 0 20px 0;
     border-collapse: collapse;
 }
 th {
