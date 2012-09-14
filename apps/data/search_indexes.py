@@ -5,17 +5,19 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     #Full Text Search
     text = indexes.CharField(document=True, use_template=True)
     
-    population                      = indexes.CharField(model_attr='population', null=True)
-    ecosystem                       = indexes.CharField(model_attr='ecosystem', null=True)
-    genus                           = indexes.CharField(model_attr='genus', null=True)
-    species                         = indexes.CharField(model_attr='species', null=True)
-    country                         = indexes.CharField(model_attr='country__common_name', null=True)
+    id                              = indexes.IntegerField(model_attr='id')
+
+    population                      = indexes.CharField(model_attr='population', null=True, faceted=True, indexed=False)
+    ecosystem                       = indexes.CharField(model_attr='ecosystem', null=True, faceted=True, indexed=False)
+    genus                           = indexes.CharField(model_attr='genus', null=True, faceted=True, indexed=False)
+    species                         = indexes.CharField(model_attr='species', null=True, faceted=True, indexed=False)
+    country                         = indexes.CharField(model_attr='country__common_name', null=True, faceted=True, indexed=False)
     
-    biome_FAO                       = indexes.CharField(model_attr='biome_FAO', null=True)
-    biome_UDVARDY                   = indexes.CharField(model_attr='biome_UDVARDY', null=True)
-    biome_WWF                       = indexes.CharField(model_attr='biome_WWF', null=True) 
-    division_BAILEY                 = indexes.CharField(model_attr='division_BAILEY', null=True) 
-    biome_HOLDRIDGE                 = indexes.CharField(model_attr='biome_HOLDRIDGE', null=True)
+    biome_FAO                       = indexes.CharField(model_attr='biome_FAO', null=True, faceted=True, indexed=False)
+    biome_UDVARDY                   = indexes.CharField(model_attr='biome_UDVARDY', null=True, faceted=True, indexed=False)
+    biome_WWF                       = indexes.CharField(model_attr='biome_WWF', null=True, faceted=True, indexed=False) 
+    division_BAILEY                 = indexes.CharField(model_attr='division_BAILEY', null=True, faceted=True, indexed=False) 
+    biome_HOLDRIDGE                 = indexes.CharField(model_attr='biome_HOLDRIDGE', null=True, faceted=True, indexed=False)
      
     X                               = indexes.CharField(model_attr='X', null=True)
     unit_X                          = indexes.CharField(model_attr='unit_X', null=True)
@@ -33,7 +35,7 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     min_H                           = indexes.FloatField(model_attr='min_H',null=True)
     max_H                           = indexes.FloatField(model_attr='max_H',null=True)
     
-    output                          = indexes.CharField(model_attr='output', null=True)
+    output                          = indexes.CharField(model_attr='output', null=True, faceted=True)
     unit_Y                          = indexes.CharField(model_attr='unit_Y', null=True)
     
     B                               = indexes.BooleanField(model_attr='B', null=True)
@@ -50,10 +52,29 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     
     equation_y                      = indexes.NgramField(model_attr='equation_y', null=True)
     
-    author                          = indexes.CharField(model_attr='author', null=True)
+    author                          = indexes.CharField(model_attr='author', null=True, faceted=True, indexed=True)
+    author_order                    = indexes.CharField(model_attr='author', null=True, faceted=True, indexed=False)
+   
     year                            = indexes.IntegerField(model_attr='year', null=True)
-    reference                       = indexes.CharField(model_attr='reference', null=True) 
+    reference                       = indexes.CharField(model_attr='reference', null=True, faceted=True) 
+    
       
+    # We add these for autocomplete lookups
+    population_auto                 = indexes.EdgeNgramField(model_attr='population')
+    ecosystem_auto                  = indexes.EdgeNgramField(model_attr='ecosystem') 
+    genus_auto                      = indexes.EdgeNgramField(model_attr='genus')
+    species_auto                    = indexes.EdgeNgramField(model_attr='species')
+    country_auto                    = indexes.EdgeNgramField(model_attr='country')
+    biome_FAO_auto                  = indexes.EdgeNgramField(model_attr='biome_FAO')
+    biome_UDVARDY_auto              = indexes.EdgeNgramField(model_attr='biome_UDVARDY')
+    biome_WWF_auto                  = indexes.EdgeNgramField(model_attr='biome_WWF')
+    division_BAILEY_auto            = indexes.EdgeNgramField(model_attr='division_BAILEY')
+    biome_HOLDRIDGE_auto            = indexes.EdgeNgramField(model_attr='biome_HOLDRIDGE')
+    author_auto                     = indexes.EdgeNgramField(model_attr='author')
+    reference_auto                  = indexes.EdgeNgramField(model_attr='reference') 
+    output_auto                     = indexes.EdgeNgramField(model_attr='output') 
+
+
     def _to_float(self, val):
         if val is None:
             return None

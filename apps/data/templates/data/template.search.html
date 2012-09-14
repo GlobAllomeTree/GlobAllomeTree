@@ -5,6 +5,35 @@
     $(function() {
         $( "#tabs" ).tabs();
         $( "#searchButton" ).button();
+
+
+        var autocompletes = ['country',
+                             'ecosystem',
+                             'population',
+                             'genus',
+                             'species',
+                             'biome_FAO',
+                             'biome_UDVARDY',
+                             'biome_WWF',
+                             'division_BAILEY',
+                             'biome_HOLDRIDGE',
+                             'author',
+                             'reference',
+                             'output'];
+
+        $.each(autocompletes, function (index, field) {
+
+            $( "#id_" + field ).autocomplete({
+            source: "/data/autocomplete/" + field + "/",
+            minLength: 2
+            }).data( "autocomplete" )._renderItem = function( ul, item ) {
+                return $( "<li></li>" )
+                    .data( "item.autocomplete", item )
+                    .append( '<a><span class="auto_count">' + item.count + "</span>" + item.display_value + "</a>" )
+                    .appendTo( ul );
+            };
+        });
+        
     });
    
 
@@ -16,22 +45,24 @@
 
 	<div id="page">
 	    
-	    <h3>Equations</h3>
+	    
 	    
 	    {% if form.current_search_summary %}
-	       <div style="float:right;width:330px;margin-bottom:20px;">
+	       <div id="currentSearch">
 	           <h3 style="color:#243F12">Your current search:</h3>
     	       <table>
         	       {% for item in form.current_search_summary %}
         	           <tr>
         	                <td style="width:150px;">{{item.field}}</td>
-        	                <td style="width:150px;">{{item.search_value}}</td>
+        	                <td style="width:250px;">{{item.search_value|truncatechars:48 }}</td>
                             <td style="width:30px;"><a href="{{item.clear_link}}">clear</a></td>
         	           </tr>
         	       {% endfor %}
     	       </table>
 	       </div>
 	    {% endif %}
+
+        <h3>Equations</h3>
 
 	    <form method="get" action="." id="searchForm">
 	       
@@ -390,45 +421,45 @@
         {% if page.object_list %}
          <br>
          <br>
-            <div style="float:left;width:299px;border-right: 1px solid #9BC56F;"> 
+            <div style="float:left;width:100px;border-right: 1px solid #9BC56F;"> 
     			<table class="equationTable" style="width:100%">
     			 <thead>   
     				<tr>
-    					<th>Equation</th>
+    					<th> Id</th>
     				</tr>
     			 </thead>   
                  <tbody>
     				{% for result in page.object_list %}
     				<tr>
-                         <td><a href="{{ result.object.get_absolute_url }}">{{ result.object.equation_y}}</a></td>
+                         <td><a href="{{ result.object.get_absolute_url }}">{{ result.object.id}}</a></td>
                     </tr>
                     {% endfor %}
                  </tbody>
                   <tfoot>   
                     <tr>
-                        <th>Equation</th>
+                        <th>Id</th>
                     </tr>
                  </tfoot>   
     			</table>
 			</div>	
-			<div style="float:left;width:759px;overflow-x:auto;">	
+			<div style="float:left;width:959px;overflow-x:auto;">	
 				<table class="equationTable" style="width:500px;">
 				<thead>   
     				<tr>	
-    					<th>Id</th>
-    					<th>Genus</th>
-    					<th>Species</th>
-    					<th>Country</th>
+    					<th>Equation</th>
+    					<th><a href="{{form.sort_link_genus}}">Genus</a></th>
+    					<th><a href="{{form.sort_link_species}}">Species</a></th>
+    					<th><a href="{{form.sort_link_country}}">Country</a></th>
     					<th>Components</th>
-    					<th>Output</th>
-    					<th>Biome (FAO)</th>
-    					<th>Author</th>
+    					<th><a href="{{form.sort_link_output}}">Output</a></th>
+    					<th><a href="{{form.sort_link_biome_FAO}}">Biome (FAO)</a></th>
+    					<th><a href="{{form.sort_link_author_order}}">Author</a></th>
     			    </tr>
 			    </thead>
 			    <tbody>
                 {% for result in page.object_list %}
                     <tr>
-                       <td>{{ result.object.id}}</td>
+                       <td>{{ result.object.equation_y}}</td>
                        <td>{{ result.object.genus}}</td>
                        <td>{{ result.object.species}}</td>
                        <td>{{ result.object.country.common_name}}</td>
@@ -441,14 +472,14 @@
 			     </tbody>
 			      <tfoot>   
                    <tr> 
-                        <th>Id</th>
-                        <th>Genus</th>
-                        <th>Species</th>
-                        <th>Country</th>
+                        <th>Equation</th>
+                        <th><a href="{{form.sort_link_genus}}">Genus</a></th>
+                        <th><a href="{{form.sort_link_species}}">Species</a></th>
+                        <th><a href="{{form.sort_link_country}}">Country</a></th>
                         <th>Components</th>
-                        <th>Output</th>
-                        <th>Biome (FAO)</th>
-                        <th>Author</th>
+                        <th><a href="{{form.sort_link_output}}">Output</a></th>
+                        <th><a href="{{form.sort_link_biome_FAO}}">Biome (FAO)</a></th>
+                        <th><a href="{{form.sort_link_author_order}}">Author</a></th>
                     </tr>
                  </tfoot>   
 			     </table>

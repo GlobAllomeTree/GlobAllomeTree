@@ -13,6 +13,12 @@ urlpatterns = patterns('apps.data.views',
 
     #List of genus / species
     url(r'^species/$', 'species'),
+
+    #Field Autocomplete
+    url(r'^autocomplete/(.+)/$', 'autocomplete'),
+
+    #Sample code for json based search
+    #url(r'^json/$', 'json_search'),
             
     #Searchable list of equations                   
     url(r'^search/$', search_view_factory(

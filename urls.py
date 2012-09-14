@@ -3,7 +3,7 @@ from django.views.generic import list_detail
 from django.contrib import admin
 from django.conf import settings
 
-from views import start_page, docs, links, principles, software
+from views import start_page, docs, links, principles, software, backbone
 from apps.data.models import TreeEquation
 from apps.data.views import continents_map, geo_map, geo_map_id, database, export_db, export_db_all
 
@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     # (r'^test_project/', include('test_project.foo.urls')),
 
     ('^admin/', include(admin.site.urls)),
+    (r'^grappelli/', include('grappelli.urls')),
     ('^data/', include('apps.data.urls')),
     ('^accounts/', include('apps.accounts.urls')),
 	(r'^$', start_page),
@@ -30,6 +31,7 @@ urlpatterns = patterns('',
 	(r'^links/$', links),
 	(r'^principles/$', principles),
 	(r'^software/$', software),
+    (r'^backbone/$', backbone),
     (r'^database/$', database),
     (r'^export_db/$', export_db), 
     (r'^export_db_(\d+)/$', export_db_all),  

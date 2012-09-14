@@ -94,7 +94,7 @@ class EquationSearchForm(SearchForm):
         if self.cleaned_data.get('q'):
             sqs = sqs.auto_query(self.cleaned_data['q'])
     
-              
+        #import pdb;pdb.set_trace()
         # ORDERING 
         # Check to see if a order_by field was chosen.
         if self.cleaned_data.get('order_by'):
@@ -124,6 +124,27 @@ class EquationSearchForm(SearchForm):
     
     def prev_page_link(self):
         return self.get_query_string({'page' : self.get_current_page() -1})
+
+    def __getattribute__(self, name):
+        if name.startswith('sort_link_'):
+            return self.sort_link(name.replace('sort_link_', ''))
+        else:
+            # Default behaviour
+            return SearchForm.__getattribute__(self, name)
+
+    def sort_link(self, field_name):
+        try:
+            current_order_by = self.cleaned_data['order_by']
+        except:
+            current_order_by = None
+
+        if field_name == current_order_by and current_order_by[0:1] != '-':
+            field_name = '-' + field_name
+
+
+        return self.get_query_string({'page' : 1, 'order_by' : field_name})
+
+
     
     def current_search_summary(self):
         current_search = []

@@ -538,6 +538,11 @@ th {
     background-color: #243F12;
     white-space:nowrap;
 }
+
+th a {
+	color:#fff;
+}
+
 tbody td {
     padding: 7px;
     line-height: 18px;
@@ -546,4 +551,33 @@ tbody td {
 }
 tbody tr:nth-child(2n) {
     background-color: #F5F3E5;
+}
+
+/* autocomplete */
+.auto_count {
+	display:block;
+	float:right;
+	color:#999;
+	width:40px;
+	text-align: right;
+}
+
+/* currentSearch */
+
+#currentSearch {
+	float:right;
+	width:500px;
+	margin-bottom:20px;
+	border:1px solid #243F12;
+	border-radius: 4px;
+	padding:10px;
+	margin-right:5px;
+	background-color: #E5FFD6;
+	-moz-box-shadow: 5px 5px 5px #bbb;
+	-webkit-box-shadow: 5px 5px 5px #bbb;
+	box-shadow: 5px 5px 5px #bbb;
+}
+
+#currentSearch  tbody tr:nth-child(2n) {
+    background-color: #D1FFB7;
 }

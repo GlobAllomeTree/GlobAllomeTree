@@ -1,4 +1,5 @@
 import csv
+import json
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
@@ -93,4 +94,48 @@ class EquationSearchView(SearchView):
     def __name__(self):
         return "EquationSearchView"
 
- 
+def autocomplete(request, field): 
+    term    = request.GET.get('term') 
+    sqs     = SearchQuerySet()
+    
+    kwargs = {field + '_auto':term} #ex) country_auto for the autocomplete index of country
+    sqs    = SearchQuerySet().facet(field).filter(**kwargs)
+
+    result_counts = sqs.facet_counts()['fields'][field]
+    result_list = []
+
+    for result_count in result_counts:
+
+        if len(result_count[0]) > 120:
+            display_value = result_count[0][0:120] + '...'
+        else:
+            display_value = result_count[0]
+
+        result_list.append({
+            'value'  : result_count[0],
+            'display_value': display_value,
+            'count'  : result_count[1]
+        })
+
+    return HttpResponse(json.dumps(result_list))
+
+
+""" Sample code for json search
+from .forms import EquationSearchForm
+import json
+def json_search(request):
+    form = EquationSearchForm(request.GET)
+    sqs = form.search()
+    result_list = []
+    for result in sqs:
+        result_list.append({'id' : result.id,
+                            'country' : result.country,
+                            'species' : result.species,
+                            'equation' : result.equation_y
+                            })
+    result_obj = {
+        'results' : result_list
+    }
+
+    return HttpResponse(json.dumps(result_obj))
+"""

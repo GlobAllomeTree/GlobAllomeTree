@@ -3,3 +3,4 @@ django==1.4
 #pysolr==2.1.0-beta
 requests==0.13.2
 -e git+git://github.com/toastdriven/pyelasticsearch.git#egg=pyelasticsearch
+django-grappelli==2.4.0
