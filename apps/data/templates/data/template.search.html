@@ -4,7 +4,16 @@
 <script>
     $(function() {
         $( "#tabs" ).tabs();
-        $( "#searchButton" ).button();
+        $( "#searchButton" ).button({
+            icons : {
+                secondary : "ui-icon-search"
+            }
+        });
+        $( "#exportButton").button({
+            icons : {
+                secondary : "ui-icon-arrowthickstop-1-s"
+            }
+        });
 
 
         var autocompletes = ['country',
@@ -49,7 +58,13 @@
 	    
 	    {% if form.current_search_summary %}
 	       <div id="currentSearch">
-	           <h3 style="color:#243F12">Your current search:</h3>
+               <div style="float:right"> 
+                    <a target="_blank" href="/data/export/{{form.export_link}}" id="exportButton">Export Results</a>
+                </div>
+	           
+               <h3 style="color:#243F12;margin-bottom:0px;">Your current search</h3>
+               <h4 style="color:#75AA3B;margin:2px 0px 6px 2px;">Equations found: {{ page.paginator.count}} </h4>
+
     	       <table>
         	       {% for item in form.current_search_summary %}
         	           <tr>
@@ -425,7 +440,7 @@
     			<table class="equationTable" style="width:100%">
     			 <thead>   
     				<tr>
-    					<th> Id</th>
+    					<th><a href="{{form.sort_link_id}}">Id</a></th>
     				</tr>
     			 </thead>   
                  <tbody>
@@ -437,7 +452,7 @@
                  </tbody>
                   <tfoot>   
                     <tr>
-                        <th>Id</th>
+                        <th><a href="{{form.sort_link_id}">Id</a></th>
                     </tr>
                  </tfoot>   
     			</table>
@@ -447,12 +462,12 @@
 				<thead>   
     				<tr>	
     					<th>Equation</th>
-    					<th><a href="{{form.sort_link_genus}}">Genus</a></th>
-    					<th><a href="{{form.sort_link_species}}">Species</a></th>
-    					<th><a href="{{form.sort_link_country}}">Country</a></th>
+    					<th><a href="{{form.sort_link_genus_order}}">Genus</a></th>
+    					<th><a href="{{form.sort_link_species_order}}">Species</a></th>
+    					<th><a href="{{form.sort_link_country_order}}">Country</a></th>
     					<th>Components</th>
-    					<th><a href="{{form.sort_link_output}}">Output</a></th>
-    					<th><a href="{{form.sort_link_biome_FAO}}">Biome (FAO)</a></th>
+    					<th><a href="{{form.sort_link_output_order}}">Output</a></th>
+    					<th><a href="{{form.sort_link_biome_FAO_order}}">Biome (FAO)</a></th>
     					<th><a href="{{form.sort_link_author_order}}">Author</a></th>
     			    </tr>
 			    </thead>
@@ -473,12 +488,12 @@
 			      <tfoot>   
                    <tr> 
                         <th>Equation</th>
-                        <th><a href="{{form.sort_link_genus}}">Genus</a></th>
-                        <th><a href="{{form.sort_link_species}}">Species</a></th>
-                        <th><a href="{{form.sort_link_country}}">Country</a></th>
+                        <th><a href="{{form.sort_link_genus_order}}">Genus</a></th>
+                        <th><a href="{{form.sort_link_species_order}}">Species</a></th>
+                        <th><a href="{{form.sort_link_country_order}}">Country</a></th>
                         <th>Components</th>
-                        <th><a href="{{form.sort_link_output}}">Output</a></th>
-                        <th><a href="{{form.sort_link_biome_FAO}}">Biome (FAO)</a></th>
+                        <th><a href="{{form.sort_link_output_order}}">Output</a></th>
+                        <th><a href="{{form.sort_link_biome_FAO_order}}">Biome (FAO)</a></th>
                         <th><a href="{{form.sort_link_author_order}}">Author</a></th>
                     </tr>
                  </tfoot>   
@@ -494,7 +509,7 @@
                     {% if page.has_next %}<a href="{{form.next_page_link}}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
                 </p>
             {% endif %}
-			<p>Page {{ page.number }} of {{ page.paginator.num_pages }}</p>
+			<p>Showing equations: {{ page.start_index }} to {{ page.end_index }} of {{ page.paginator.count}}</p>
            
         {% else %}
         	<h4>No results were found that matched your search</h4>

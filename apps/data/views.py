@@ -33,40 +33,6 @@ def geo_map_id(request, geo_id):
 def database(request):
     return render_to_response('database.html',context_instance = RequestContext(request,{'': '', }))
 
-def export_db(request):
-    # get the response object, this can be used as a stream.
-    response = HttpResponse(mimetype='text/csv')
-    # force download.
-    response['Content-Disposition'] = 'attachment;filename = "export.csv"'
-    # the csv writer
-    writer = csv.writer(response)
-    fanta_objects = TreeEquation.objects.all()
-    writer.writerow(['id_article', 'population', 'genus', 'species', 'ecosystem', 'temperature', 'country'])  
-    for data in fanta_objects:
-        writer.writerow([data.id_article, data.population, data.genus, data.species, unicode(data.ecosystem).encode("utf-8"), data.temperature, data.country_id])
-    return response
-
-def export_db_all(request,db_id):
-    model = TreeEquation
-    response = HttpResponse(mimetype='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=%s.csv' % slugify(model.__name__)
-    writer = csv.writer(response)
-    # Write headers to CSV file
-    headers = []
-    for field in model._meta.fields:
-        headers.append(field.name)
-    writer.writerow(headers)
-    # Write data to CSV file
-    print model.objects.all()
-    for obj in model.objects.all().order_by("id"):
-        row = []
-        for field in model._meta.fields:
-            row.append(unicode(getattr(obj, field.name)).encode("utf-8"))
-        writer.writerow(row)
-    # Return CSV file to browser as download
-    return response
-
-
 
 def species(request, selected_genus=None):
     
@@ -119,6 +85,29 @@ def autocomplete(request, field):
 
     return HttpResponse(json.dumps(result_list))
 
+from .forms import EquationSearchForm
+def export(request):
+
+    form = EquationSearchForm(request.GET)
+    sqs = form.search()
+   
+    response = HttpResponse(mimetype='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=tree_equations.csv'
+    writer = csv.writer(response)
+    # Write headers to CSV file
+    headers = []
+    for field in TreeEquation._meta.fields:
+        headers.append(field.name)
+    writer.writerow(headers)
+    # Write data to CSV file
+    
+    for result in sqs:
+        obj = TreeEquation.objects.get(pk=result.id)
+        row = []
+        for field in TreeEquation._meta.fields:
+            row.append(unicode(getattr(obj, field.name)).encode("utf-8"))
+        writer.writerow(row)
+    return response
 
 """ Sample code for json search
 from .forms import EquationSearchForm

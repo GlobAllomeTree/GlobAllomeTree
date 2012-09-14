@@ -125,6 +125,9 @@ class EquationSearchForm(SearchForm):
     def prev_page_link(self):
         return self.get_query_string({'page' : self.get_current_page() -1})
 
+    def export_link(self):
+        return self.get_query_string(export=True)
+
     def __getattribute__(self, name):
         if name.startswith('sort_link_'):
             return self.sort_link(name.replace('sort_link_', ''))
@@ -163,7 +166,7 @@ class EquationSearchForm(SearchForm):
                                     })
         return current_search     
  
-    def get_query_string(self, using_values = {}):
+    def get_query_string(self, using_values = {}, export=False):
     
         query_dict = {}
         query_string = ''
@@ -178,7 +181,8 @@ class EquationSearchForm(SearchForm):
         for field in using_values.keys():
             query_dict[field] = using_values[field]
             
-        
+        if export and 'page' in query_dict.keys():
+            del query_dict['page']
         
         for field in query_dict.keys():
             if first:
@@ -190,4 +194,3 @@ class EquationSearchForm(SearchForm):
             query_string += '%s%s=%s' % (c, field, query_dict[field])
                     
         return query_string
-        

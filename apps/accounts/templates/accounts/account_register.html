@@ -4,6 +4,16 @@
 	Register
 {% endblock%}
 
+
+{% block script %}
+<script>
+    $(function() {
+       $( ".btn" ).button();
+     });
+
+</script>
+{% endblock %}
+
 {%block content %}
 
 <div id="page">
@@ -12,21 +22,78 @@
 	    form.non_field_errors
 	{% endif %}
 	
-	<div style="float:left;width:48%">
+	<div style="float:left;width:70%">
 	
 	<h2>Register</h2>
 	<h4>Register to access Globallometree:</h4>
 	    <ol>
-	        <li>Fill out the form below</li>
+	        <li>Fill out the form below. Fields marked with an asterisk (*) are required.</li>
 	        <li>Your registration will be reviewed by Globallometree</li>
 	        <li>You will be notified when your account is approved by email</li>
 	    </ol>
 	    
 	    </p>
-	<form method="post">
-		{% include "accounts/_inc.form_basic.html" %}
+	<form method="post" style="padding:0px 15px 0px 0px;">
+		{% for error in form.non_field_errors  %} 
+		   <span class="error"> {{ error|escape }} </span> <br>
+		{% endfor %}
+
+		{% csrf_token %}
+        
+		<fieldset>
+			<legend>Your Information</legend>
+			{% with form.title as field %}  {% include "accounts/_inc.form_field.html" %} {% endwith %}
+			{% with form.first_name as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.last_name as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.email as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.username as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.password1 as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.password2 as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.address as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.country as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.subregion as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.region as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.education as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.field_subject as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+		</fieldset>
+		<br>
+		<fieldset>
+			<legend>Instituion</legend>
+			{% with form.institution_name as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.institution_address as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.institution_phone as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.institution_fax as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.data_may_provide as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+		</fieldset>
+		<br>
+
+		<fieldset>
+			<legend>Terms &amp; Conditions</legend>
+			<div id="toc">
+				{% include 'accounts/terms_and_conditions.html' %}
+			</div>
+			{% with form.accept_terms as field %}
+			 <label  class="required" for="id_{{ field.html_name }}">
+                  
+
+	              {% if field.errors %} 
+		             	<span class="error"> {{ field.errors|first|striptags }}</span> <br>
+		          {% endif %}
+
+		          {{ field|safe }}
+
+	                 <span class="required">*</span> 
+	              {{ field.label }}
+	          </label>
+		          
+
+
+			{% endwith %}
+		</fieldset>
+
+
 	<div class="submit_block">
-		<input type="submit" value="Register" />
+		<input type="submit" value="Register" class="btn"/>
 	</div>
 	<input type="hidden" name="next" value="/loadui/" />
 	</form>

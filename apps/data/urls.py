@@ -19,6 +19,8 @@ urlpatterns = patterns('apps.data.views',
 
     #Sample code for json based search
     #url(r'^json/$', 'json_search'),
+
+    url(r'^export/$', 'export'),
             
     #Searchable list of equations                   
     url(r'^search/$', search_view_factory(

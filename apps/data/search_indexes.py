@@ -7,17 +7,17 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     
     id                              = indexes.IntegerField(model_attr='id')
 
-    population                      = indexes.CharField(model_attr='population', null=True, faceted=True, indexed=False)
-    ecosystem                       = indexes.CharField(model_attr='ecosystem', null=True, faceted=True, indexed=False)
-    genus                           = indexes.CharField(model_attr='genus', null=True, faceted=True, indexed=False)
-    species                         = indexes.CharField(model_attr='species', null=True, faceted=True, indexed=False)
-    country                         = indexes.CharField(model_attr='country__common_name', null=True, faceted=True, indexed=False)
+    population                      = indexes.CharField(model_attr='population', null=True, faceted=True)
+    ecosystem                       = indexes.CharField(model_attr='ecosystem', null=True, faceted=True)
+    genus                           = indexes.CharField(model_attr='genus', null=True, faceted=True)
+    species                         = indexes.CharField(model_attr='species', null=True, faceted=True)
+    country                         = indexes.CharField(model_attr='country__common_name', null=True, faceted=True)
     
-    biome_FAO                       = indexes.CharField(model_attr='biome_FAO', null=True, faceted=True, indexed=False)
-    biome_UDVARDY                   = indexes.CharField(model_attr='biome_UDVARDY', null=True, faceted=True, indexed=False)
-    biome_WWF                       = indexes.CharField(model_attr='biome_WWF', null=True, faceted=True, indexed=False) 
-    division_BAILEY                 = indexes.CharField(model_attr='division_BAILEY', null=True, faceted=True, indexed=False) 
-    biome_HOLDRIDGE                 = indexes.CharField(model_attr='biome_HOLDRIDGE', null=True, faceted=True, indexed=False)
+    biome_FAO                       = indexes.CharField(model_attr='biome_FAO', null=True, faceted=True)
+    biome_UDVARDY                   = indexes.CharField(model_attr='biome_UDVARDY', null=True, faceted=True)
+    biome_WWF                       = indexes.CharField(model_attr='biome_WWF', null=True, faceted=True) 
+    division_BAILEY                 = indexes.CharField(model_attr='division_BAILEY', null=True, faceted=True) 
+    biome_HOLDRIDGE                 = indexes.CharField(model_attr='biome_HOLDRIDGE', null=True, faceted=True)
      
     X                               = indexes.CharField(model_attr='X', null=True)
     unit_X                          = indexes.CharField(model_attr='unit_X', null=True)
@@ -53,13 +53,22 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     equation_y                      = indexes.NgramField(model_attr='equation_y', null=True)
     
     author                          = indexes.CharField(model_attr='author', null=True, faceted=True, indexed=True)
-    author_order                    = indexes.CharField(model_attr='author', null=True, faceted=True, indexed=False)
+    
    
     year                            = indexes.IntegerField(model_attr='year', null=True)
     reference                       = indexes.CharField(model_attr='reference', null=True, faceted=True) 
     
-      
-    # We add these for autocomplete lookups
+
+    #ordering
+    author_order                    = indexes.CharField(model_attr='author', null=True, indexed=False)
+    biome_FAO_order                 = indexes.CharField(model_attr='biome_FAO', null=True,  indexed=False)
+    genus_order                     = indexes.CharField(model_attr='genus', null=True, indexed=False)
+    species_order                   = indexes.CharField(model_attr='species', null=True, indexed=False)
+    output_order                    = indexes.CharField(model_attr='output', null=True, indexed=False)
+    country_order                   = indexes.CharField(model_attr='country__common_name', null=True, indexed=False)
+
+
+    #autocomplete lookups
     population_auto                 = indexes.EdgeNgramField(model_attr='population')
     ecosystem_auto                  = indexes.EdgeNgramField(model_attr='ecosystem') 
     genus_auto                      = indexes.EdgeNgramField(model_attr='genus')

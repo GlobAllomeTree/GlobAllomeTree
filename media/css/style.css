@@ -278,7 +278,6 @@ margin-bottom:10px;
     text-align:right;
     padding:10px;
     clear:both;
-    padding-right:60px;
 }
 
 
@@ -580,4 +579,25 @@ tbody tr:nth-child(2n) {
 
 #currentSearch  tbody tr:nth-child(2n) {
     background-color: #D1FFB7;
+}
+
+#exportButton:hover {
+	color:#fff;
+}
+
+
+/* registration */
+
+fieldset {
+	padding:10px;
+}
+
+#toc {
+	margin:0px 0px 10px 0px;
+	padding:10px;
+	height:300px;
+	overflow:scroll;
+	border:1px solid #999;
+	background-color: #E5FFD6;
+
 }

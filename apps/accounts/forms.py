@@ -20,7 +20,7 @@ class RegistrationForm(forms.ModelForm):
   
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput,
-        help_text = "Enter the same password as above, for verification.")
+    help_text = "Enter the same password as above, for verification.")
     
     address     = forms.CharField(label='Address', max_length=200)
     country     = forms.CharField(label='Country', max_length=80)
