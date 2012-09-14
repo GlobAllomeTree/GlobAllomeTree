@@ -12,8 +12,11 @@ class UserProfile(models.Model):
     DATA_MAY_PROVIDE_CHOICES = (('species_data',        'Species data'),
                                 ('wood_density',        'Wood Density'),
                                 ('allometric_equation', 'Allometric Equation'),
-                                ('reports',             'Reports and scientific literature containing new allometric equations'),)
-    
+                                ('reports',             'Reports and scientific literature containing new allometric equations'),
+                                ('biomass_factors', 'Biomass Expansion Factors'),
+                                ('volume_tables', 'Volume Tables'),
+                                )
+
     user        = models.ForeignKey(User)
     address     = models.CharField(max_length=200)
     country     = models.CharField(max_length=80)
