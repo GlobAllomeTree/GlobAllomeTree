@@ -68,7 +68,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'haystack',
     'apps.data',
-    'apps.accounts'
+    'apps.accounts',
+    'gunicorn'
 )
 
 # Override the server-derived value of SCRIPT_NAME 
