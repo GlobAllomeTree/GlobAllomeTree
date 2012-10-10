@@ -5,4 +5,4 @@ requests==0.13.2
 django-grappelli==2.4.0
 gunicorn==0.14.6
 psycopg2==2.4.5
-south==South 0.7.6
+south==0.7.6
