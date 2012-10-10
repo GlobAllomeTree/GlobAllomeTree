@@ -95,9 +95,14 @@ HAYSTACK_CONNECTIONS = {
 #    },
 }
 
-try:
-    from settings_local import *
-except Exception as e:
-    print "Failed to import settings_local. Copy ./bootstrap/settings_local.example.py to ./settings_local.py"
-    print "The error was %s" % e    
+if os.path.exists(os.path.join(PROJECT_ROOT, 'prod')):
+    STAGE = 'prod'
+    from settings_deployment import *
+else:
+    STAGE = 'dev'
+    try:
+        from settings_local import *
+    except Exception as e:
+        print "Failed to import settings_local. Copy ./bootstrap/settings_local.example.py to ./settings_local.py"
+        print "The error was %s" % e    
 
