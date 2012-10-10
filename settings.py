@@ -69,7 +69,8 @@ INSTALLED_APPS = (
     'haystack',
     'apps.data',
     'apps.accounts',
-    'gunicorn'
+    'gunicorn',
+    'south'
 )
 
 # Override the server-derived value of SCRIPT_NAME 
