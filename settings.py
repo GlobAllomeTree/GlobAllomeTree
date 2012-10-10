@@ -95,7 +95,7 @@ HAYSTACK_CONNECTIONS = {
 #    },
 }
 
-if os.path.exists(os.path.join(PROJECT_ROOT, 'prod')):
+if os.path.exists(os.path.join(BASE_PATH, 'prod')):
     STAGE = 'prod'
     from settings_deployment import *
 else:
