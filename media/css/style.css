@@ -1,4 +1,4 @@
-
+/*
 body {
 	margin: 0px;
 	padding: 0px;
@@ -40,10 +40,10 @@ a:hover {
 a img {
 	border: none;
 }
-
+*/
 /* Header */
 
-#headerOuter {
+/*#headerOuter {
         background: url(../images/img01.jpg) repeat-x bottom;
         width:100%;
         height:100px;
@@ -68,14 +68,18 @@ a img {
     color:#9BC56F;
     height:30px;
     padding:5px;
+}*/
+
+/* Header */
+
+#main-header .container #title {
+	background: url(../images/logo.png) no-repeat left center;
+        padding-left: 95px;
 }
 
-/* Logo */
-
-#logo {
-	float: left;
-	background: url(../images/img03.jpg) no-repeat left center;
-	padding-left: 80px;
+#title h1 {
+    font-weight: bold;
+    font-size: 40px;
 }
 
 #logo2 {
@@ -85,21 +89,13 @@ a img {
 	height:55px;
 }
 
-
-#logo h1, #logo p {
-	margin: 0px;
-	line-height: normal;
-	font-weight: normal;
-	color: #FFFFFF;
-}
-
 #logo h1 {
 	padding: 22px 0px 0px 0px;
 }
 
 /* Menu */
 
-#menu {
+/*#menu {
 	position:absolute;
 	bottom:0px;
 	right:0px;
@@ -246,7 +242,7 @@ margin-bottom:10px;
 #content_links ul li a:hover { 
 	color: #699c4d;
 
-}
+}*/
 
 /*  Forms */
 
@@ -283,7 +279,7 @@ margin-bottom:10px;
 
 
 /* Page */
-
+/*
 #page {
 	width: 1060px;
 	margin: 0px auto;
@@ -310,7 +306,7 @@ margin-bottom:10px;
 	margin: 0px auto;
 	font-size:17px;
 	float:left;
-}
+}*/
 
 /* Content */
 
@@ -322,7 +318,7 @@ margin-bottom:10px;
 #content_TreeEquation {
 	width: auto;
 }
-
+/*
 .post {
 	margin: 0px 0px 30px 0px;
 }
@@ -349,7 +345,7 @@ margin-bottom:10px;
 
 .post .byline {
 	margin: 0px;
-}
+}*/
 
 /* Sidebar */
 
@@ -445,7 +441,7 @@ margin-bottom:10px;
 
 /* Footer */
 
-#footer {
+/*#footer {
 	clear: both;
 	width: 1056px;
 	height: 55px;
@@ -472,7 +468,7 @@ margin-bottom:10px;
     position:absolute;
     bottom:6px;
     left:6px;   
-}
+}*/
 
 
 /* Search Form */
@@ -601,3 +597,26 @@ fieldset {
 	background-color: #E5FFD6;
 
 }
+
+/* Bootstrap tweeks */
+
+body {
+    padding-top: 45px;
+}
+
+.footer {
+    padding: 60px 0;
+    margin-top: 70px;
+    border-top: 1px solid #E5E5E5;
+    background-color: whiteSmoke;
+}
+/*
+.navbar .nav > li > a {    
+   line-height: 40px;
+}
+
+/* Change the brand color 
+.navbar .brand {
+   padding: 8px 50px 12px 20px;
+   color:#f89406
+}*/
