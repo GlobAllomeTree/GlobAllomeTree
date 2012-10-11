@@ -35,14 +35,23 @@
                         <li {% if is_page_docs %}class="active" {% endif %}><a href="/docs">Documents</a></li>
                         <li {% if is_page_links %}class="active" {% endif %}><a href="/links">Contributors</a></li>
                     </ul>
-                    <ul class="nav pull-right">                
+                                   
                         {% if user.is_authenticated %}
-                        <li>logged in as <span style="color:#fff;font-weight:bold">{{user.username}}</span></li>
-                        <li><a href="/accounts/change-password/">Change Password</a></li>
-                        <li><a href="/accounts/logout/">Logout</a></li>
+                         <div class="btn-group pull-right" id="user-button-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                              <i class="icon-user"></i> {{user.username}}
+                              <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                              <li><a href="/accounts/change-password/">Change Password</a></li>
+                              <li><a href="/accounts/logout/">Logout</a></li>
+                            </ul>
+                          </div>
                         {% else %}
-                        <li><a href="/accounts/login/">Log In</a></li>
-                        <li><a href="/accounts/register/">Register</a></li>
+                        <ul class="nav pull-right"> 
+                          <li><a href="/accounts/login/">Log In</a></li>
+                          <li><a href="/accounts/register/">Register</a></li>
+                        </ul>
                         {% endif %}
                     </ul>
                 </div>
