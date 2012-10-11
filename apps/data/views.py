@@ -15,23 +15,31 @@ from .models import TreeEquation, Country
 
 
 def continents_map(request):
-    return render_to_response('continents_map.html',context_instance = RequestContext(request,{'': '', }))
+    return render_to_response('continents_map.html',
+                              context_instance = RequestContext(request,
+                              {'is_page_maps': True, }))
 
 def tree_equation_id(request, id):
     tree_equation = TreeEquation.objects.get(id=id)
     return render_to_response('data/template.tree_equation.html', 
-                              context_instance = RequestContext(request,{'tree_equation': tree_equation, })) 
+                              context_instance = RequestContext(request,
+                              {'tree_equation': tree_equation, 
+                               'is_page_equations' : True})) 
 
 def geo_map(request):
     country_list = TreeEquation.objects.values_list('country__common_name',flat=True).distinct
-    return render_to_response('geo_map.html',context_instance = RequestContext(request, {'country_list': country_list, }))
+    return render_to_response('geo_map.html',
+                               context_instance = RequestContext(request,
+                                {'country_list': country_list,
+                                 'is_page_maps' : True }))
 
 def geo_map_id(request, geo_id):
     country = Country.objects.get(iso_3166_1_2_letter_code = geo_id)
     return HttpResponseRedirect('/data/search/?country=' + country.common_name)
     
 def database(request):
-    return render_to_response('database.html',context_instance = RequestContext(request,{'': '', }))
+    return render_to_response('database.html',
+                              context_instance = RequestContext(request,{'': '', }))
 
 
 def species(request, selected_genus=None):
@@ -49,7 +57,10 @@ def species(request, selected_genus=None):
     #Sort the list alphabetically by name
     genus_list.sort(key=lambda x : x['name'])
     
-    return render_to_response('data/template.species.html', context_instance = RequestContext(request,{'genus_list': genus_list }))
+    return render_to_response('data/template.species.html', 
+                               context_instance = RequestContext(request,
+                               {'genus_list': genus_list,
+                               'is_page_equations' : True }))
 
 
 
@@ -59,6 +70,9 @@ class EquationSearchView(SearchView):
     
     def __name__(self):
         return "EquationSearchView"
+
+    def extra_context(self):
+        return {'is_page_equations' : True}
 
 def autocomplete(request, field): 
     term    = request.GET.get('term') 

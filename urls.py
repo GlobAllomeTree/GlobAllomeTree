@@ -3,7 +3,7 @@ from django.views.generic import list_detail
 from django.contrib import admin
 from django.conf import settings
 
-from views import start_page, docs, links, principles, software, backbone
+from views import start_page, docs, links, principles, software, about
 from apps.data.models import TreeEquation
 from apps.data.views import continents_map, geo_map, geo_map_id, database
 
@@ -31,7 +31,7 @@ urlpatterns = patterns('',
 	(r'^links/$', links),
 	(r'^principles/$', principles),
 	(r'^software/$', software),
-    (r'^backbone/$', backbone),
+    (r'^about/$', about),
     (r'^database/$', database)
 )
 
