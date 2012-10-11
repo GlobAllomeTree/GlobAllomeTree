@@ -1,145 +1,97 @@
 {% extends "base.html" %}
 
-{% block title %}Fantallometrik{% endblock %}
-
 {% block content %}
 
 
-<div id="page">
-	<div id="content">
-		<div class="post">
-			<h1 class="title">Welcome to Fantallometrik website</h1>
-			<p class="byline"><small>&nbsp;&nbsp; </small></p>
-			<div class="entry">
-Fantallometrik is the international platform to facilitate the calculation of volume, biomass and carbon stocks for forests and trees outside forests. The platform allows accessing and sharing data and tools to
-
-<ol>
-	<li>provide access to continually updated databases containing tree allometric equation, conversion factors and wood densities per ecological zones, countries and continents</li>
-
-	<li>facilitate access to the most relevant scientific literature</li>
-
-
-	<li>facilitate the selection and comparison of tree allometric equations</li>
-
-	<li>provide access to manuals, documentations and tutorials</li>
-
-	<li>assess volume, biomass and carbon stocks in different tree compartments and forest plots considering all available allometric equations</li>
-
-	<li>provide the statistical information</li>
-
-	<li>share data with the fantallometrik community</li>
-</ol>
-
-			</div>
-
-
-
-			<div class="post">
-			<h1 class="title">Allometric equation's database center</h1>
-			<p class="byline"><small>&nbsp;&nbsp; </small></p>
-			<div class="entry">
-
-
-
-
-<p>Download the allometric equations for your project, country and continent!</p>
-
-<p>The Allometric equation's database center provides access to the tree allometric equations by ecological zones, countries or continents. They can be used to assess volume, biomass and carbon of trees in natural forests, outside the forest and in forest plantations. The data are collected from the scientific literature, reports from logging companies, conference proceedings, national reports (access to the references).</p> 
-<p>The data are harmonized to facilitate their use (access to the methodology). The harmonization procedure takes into account the tree compartments that are considered by the equations (stem, root, branch, leaf, etc..) geographical location (ecological zone, country, continent), the references of the authors and the statistics (correlation coefficient , sample size, confidence intervals etc.).
-The data are those originally reported by the authors. Errors can appear in certain equations. We try to detect errors and suggest corrections. The users can find a list of suggested equations that we modified.
-		</div>
-		</div>
-
-
-
-
-
-			<div class="post">
-			<h1 class="title"> Fantallometrik software</h1>
-			<p class="byline"><small>&nbsp;&nbsp; </small></p>
-			<div class="entry">
-
-
-
-
-
-<p>Download the software to assess volume, biomass and carbon stocks.</p>
- 
-<p>Fantallometrik software is the first tool for calculating the volume, biomass and carbon that takes into account the existing allometric equations at the continental level. It is a robust tool that allows provide quality control and quality assurance, and comparability of the data. It aims to facilitate and improve the calculations carried out by scientific research, forest companies, NGOs and forestry institutions. It consists of different modules that serve different purposes and are complementary.</p>
-<ol>
-<li>Comparing allometric equations and controlling and quality assurance</li>
-<li>Calculating volume, biomass and carbon stocks</li>
-<li>Inserting new allometric equations</li>
-<li>Sharing of data to enrich the existing databases</li>
-<ol>
-		</div>
-		</div>
-
-
-
-
-
-
-			<div class="meta">
-
-			</div>
-		</div>
-
-	</div>
-	<!-- end #content -->
-	<div id="sidebar">
-		<div id="sidebar-bgtop"></div>
-		<div id="sidebar-content">
-			<div id="smallbox_top"></div>
-				<div id="smallbox">
-
-					
-					<h3>CIRAD</h3>
-					<p>
-					Centre de coopération internationale en recherche agronomique pour le développement, 42, rue Scheffer, 75116 Paris (France)
-					</p>
-
-					
-					<h3>UNITUS</h3>
-					<p>
-					Laboratory of Forest Ecology
-					University of Tuscia, Via Camillo de Lellis, snc - 01100, Viterbo (Italy)
-					</p>
-
-
-					<h3>FAO</h3>
-					<p>
-					Food and Agriculture Organization of the United Nations,
-					Vialle delle terme di Caracalla
-					00154 Roma (Italy)
-					</p>
-
-
-				</div>
-
-
-			<div id="smallbox_top"></div>
-				<div id="smallbox">
-
-					<p>The elements presented in this webiste are provided under the terms of the Creative Commons Public Liscence (CCPL). The work is protected by copyright and/or other applicable law. Any use of the work other than as authorized under this liscence or copyright law is prohibited.
+<div id="home">
+    <div class="main">
+        <div class="row">
+            <div class="span12">
+                <div id="carousel" class="carousel slide">
+                    <div class="carousel-inner">
+                        <div class="active item">
+                            <img src="media/images/carousel/locatelli-1.jpg" alt="">
+                        </div>
+                        <div class="item">
+                            <img src="media/images/carousel/locatelli-2.jpg" alt="">
+                        </div>
+                        <div class="item">
+                            <img src="media/images/carousel/locatelli-3.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <p>
+                    GlobAllomeTree is the international platform for tree allometric equations to support volume, biomass and carbon stock assessment for trees and forests. The platform allows accessing:
+                </p>        
+            </div>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <p class="well">Updated databases containing tree allometric equations, and conversion factors per ecological zones, countries and continents</p>
+            </div>
+            <div class="span6">
+                <p class="well">Updated links to scientific literature related to tree allometric equation and forest biomass assessment</p>
+            </div>
+            <div class="span6">
+                <p class="well">Manuals and tutorials to facilitate assessment of volume, biomass and carbon stocks</p>
+            </div>
+            <div class="span6">
+                <p class="well">Software for comparing tree allometric equations, assess volume, biomass and carbon stocks per tree components and forest types</p>
+            </div>
+        </div>
+    </div>
+    
+<script type="text/javascript">
+    $('.carousel').carousel({
+        interval: 4500
+    })
+</script>
+    
+    <!--<div id="sidebar">
+        <div id="sidebar-bgtop"></div>
+        <div id="sidebar-content">
+            <div id="smallbox_top"></div>
+            <div id="smallbox">
+                <h3>CIRAD</h3>
+                <p>
+                Centre de coopération internationale en recherche agronomique pour le développement, 42, rue Scheffer, 75116 Paris (France)
+                </p>
+                <h3>UNITUS</h3>
+                <p>
+                Laboratory of Forest Ecology
+                University of Tuscia, Via Camillo de Lellis, snc - 01100, Viterbo (Italy)
+                </p>
+                <h3>FAO</h3>
+                <p>
+                Food and Agriculture Organization of the United Nations,
+                Vialle delle terme di Caracalla
+                00154 Roma (Italy)
+                </p>
+            </div>
+            <div id="smallbox_top"></div>
+            <div id="smallbox">
+                <p>The elements presented in this webiste are provided under the terms of the Creative Commons Public Liscence (CCPL). The work is protected by copyright and/or other applicable law. Any use of the work other than as authorized under this liscence or copyright law is prohibited.
 You are free:
 
-    * to Share — to copy, distribute and transmit the work
-    * to Remix — to adapt the work
+* to Share — to copy, distribute and transmit the work
+* to Remix — to adapt the work
 
 
 Creative Commons Public Liscence (CCPL).
-					</p>
+                </p>
 
-				</div>
+            </div>
 
 
-		</div>
-		<div id="sidebar-bgbtm"></div>
-	</div>
+        </div>
+        <div id="sidebar-bgbtm"></div>
+    </div>-->
 
 </div>
-
 
 {% endblock %}
 
