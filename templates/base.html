@@ -1,6 +1,8 @@
+{% load cms_tags sekizai_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% render_block "css" %}
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GlobAllomeTree</title>
     <link rel="stylesheet" type="text/css" href="/media/bootstrap/css/bootstrap.min.css" />
@@ -15,7 +17,7 @@
     {% block script %}{% endblock %}
 </head>
 <body>
-
+    {% cms_toolbar %}
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
@@ -83,6 +85,6 @@
             </ul>
         </div>
     </footer>
-
+    {% render_block "js" %}
 </body>
 </html>

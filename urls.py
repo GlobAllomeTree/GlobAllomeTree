@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     # (r'^test_project/', include('test_project.foo.urls')),
 
     ('^admin/', include(admin.site.urls)),
-    (r'^grappelli/', include('grappelli.urls')),
+    #(r'^grappelli/', include('grappelli.urls')),
     ('^data/', include('apps.data.urls')),
     ('^accounts/', include('apps.accounts.urls')),
 	(r'^$', start_page),
@@ -32,7 +32,8 @@ urlpatterns = patterns('',
 	(r'^principles/$', principles),
 	(r'^software/$', software),
     (r'^about/$', about),
-    (r'^database/$', database)
+    (r'^database/$', database),
+    url(r'^', include('cms.urls')),
 )
 
 
@@ -50,4 +51,14 @@ if settings.DEBUG:
     )
 # -----------------------------------
 
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$',
+            'django.views.static.serve',
+            {
+                'document_root': settings.STATIC_ROOT,
+                'show_indexes': True
+            }
+        ),
+    )
 

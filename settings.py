@@ -18,6 +18,10 @@ TIME_ZONE = 'Europe/Zurich'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
+LANGUAGES = [
+    ('en', 'English'),
+]
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -41,12 +45,27 @@ TEMPLATE_LOADERS = (
 #    )),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.request',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'cms.context_processors.media',
+    'sekizai.context_processors.sekizai',
+)
+
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.doc.XViewMiddleware',
-	'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -55,7 +74,11 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    BASE_PATH+'/templates/',
+    os.path.join(BASE_PATH, 'templates'),
+)
+
+CMS_TEMPLATES = (
+    ('cms/basic_page.html', 'CMS basic page'),
 )
 
 INSTALLED_APPS = (
@@ -63,14 +86,23 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'grappelli',
+    #'grappelli',
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'haystack',
     'apps.data',
     'apps.accounts',
     'gunicorn',
-    'south'
+    'south',
+    'cms',
+    'mptt',
+    'menus',
+    'south',
+    'sekizai',
+    'cms.plugins.file',
+    'cms.plugins.link',
+    'cms.plugins.picture',
+    'cms.plugins.text',
 )
 
 # Override the server-derived value of SCRIPT_NAME 
@@ -88,12 +120,6 @@ HAYSTACK_CONNECTIONS = {
         'URL': 'http://127.0.0.1:9200/',
         'INDEX_NAME': 'globallometree',
     },
-#    'default': {
-#        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-#        'URL': 'http://127.0.0.1:8983/solr'
-        # ...or for multicore...
-        # 'URL': 'http://127.0.0.1:8983/solr/mysite',
-#    },
 }
 
 if os.path.exists(os.path.join(BASE_PATH, 'prod')):
