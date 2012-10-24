@@ -102,6 +102,9 @@ def autocomplete(request, field):
 
 from .forms import EquationSearchForm
 def export(request):
+    
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accouts/login/')
 
     form = EquationSearchForm(request.GET)
     sqs = form.search()
