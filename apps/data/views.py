@@ -67,7 +67,6 @@ def species(request, selected_genus=None):
 
 
 class EquationSearchView(SearchView):
-
     
     def __name__(self):
         return "EquationSearchView"
@@ -104,7 +103,7 @@ from .forms import EquationSearchForm
 def export(request):
     
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/accouts/login/')
+        return HttpResponseRedirect('/accounts/login/')
 
     form = EquationSearchForm(request.GET)
     sqs = form.search()
@@ -126,23 +125,3 @@ def export(request):
             row.append(unicode(getattr(obj, field.name)).encode("utf-8"))
         writer.writerow(row)
     return response
-
-""" Sample code for json search
-from .forms import EquationSearchForm
-import json
-def json_search(request):
-    form = EquationSearchForm(request.GET)
-    sqs = form.search()
-    result_list = []
-    for result in sqs:
-        result_list.append({'id' : result.id,
-                            'country' : result.country,
-                            'species' : result.species,
-                            'equation' : result.equation_y
-                            })
-    result_obj = {
-        'results' : result_list
-    }
-
-    return HttpResponse(json.dumps(result_obj))
-"""
