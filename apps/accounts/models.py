@@ -9,29 +9,30 @@ from django.db import models
 
 class UserProfile(models.Model):
     
-    DATA_MAY_PROVIDE_CHOICES = (('species_data',        'Species data'),
+    DATA_MAY_PROVIDE_CHOICES = (('no_data',             'No data available'),
+                                ('species_data',        'Species data'),
                                 ('wood_density',        'Wood Density'),
                                 ('allometric_equation', 'Allometric Equation'),
                                 ('reports',             'Reports and scientific literature containing new allometric equations'),
-                                ('biomass_factors', 'Biomass Expansion Factors'),
-                                ('volume_tables', 'Volume Tables'),
+                                ('biomass_factors',     'Biomass Expansion Factors'),
+                                ('volume_tables',       'Volume Tables'),
                                 )
 
     user        = models.ForeignKey(User)
     address     = models.CharField(max_length=200)
     country     = models.CharField(max_length=80)
-    region      = models.CharField(max_length=80)
-    subregion   = models.CharField(max_length=80)
+    region      = models.CharField(max_length=80, blank=True)
+    subregion   = models.CharField(max_length=80, blank=True)
     
-    education   = models.CharField(max_length=300)
+    education   = models.CharField(max_length=300, blank=True)
 
-    institution_name      = models.CharField(max_length=200)
-    institution_address   = models.CharField(max_length=200)
-    institution_phone     = models.CharField(max_length=60)
-    institution_fax       = models.CharField(max_length=60)
-    field_subject         = models.CharField(max_length=60)
+    institution_name      = models.CharField(max_length=200, blank=True)
+    institution_address   = models.CharField(max_length=200, blank=True)
+    institution_phone     = models.CharField(max_length=60, blank=True)
+    institution_fax       = models.CharField(max_length=60, blank=True)
+    field_subject         = models.CharField(max_length=60, blank=True)
 
-    data_may_provide      = models.CharField(max_length=40, choices=DATA_MAY_PROVIDE_CHOICES)
+    data_may_provide      = models.CharField(max_length=40, choices=DATA_MAY_PROVIDE_CHOICES, blank=True)
 
     def __unicode__(self):
         return u"User profile for %s" % self.user

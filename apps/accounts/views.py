@@ -85,5 +85,3 @@ def approval_pending(request):
     
     return render_to_response('accounts/account_approval_pending.html',
                                context_instance=RequestContext(request))
-    
-
