@@ -98,6 +98,7 @@ HAYSTACK_CONNECTIONS = {
 
 if os.path.exists(os.path.join(BASE_PATH, 'prod')):
     STAGE = 'prod'
+    INITIAL_DATA_DIR = '/opt/apps/globallometree_initial_data/'
     from settings_deployment import *
 else:
     STAGE = 'dev'

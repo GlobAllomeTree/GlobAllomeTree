@@ -5,6 +5,7 @@ import collections
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
+from django.conf import settings
 
 class Migration(DataMigration):
 
@@ -16,7 +17,7 @@ class Migration(DataMigration):
 
         TreeEquation = orm['data.TreeEquation']
         Country      = orm['data.Country']
-        file = codecs.open('/opt/apps/globallometree_initial_data/DB-africa.csv', 'r', 'utf-8-sig')
+        file = codecs.open(settings.INITIAL_DATA_DIR  + 'DB-africa.csv', 'r', 'utf-8-sig')
    
         tree_eq_fields = [field.name for field in TreeEquation._meta.fields]         
         
