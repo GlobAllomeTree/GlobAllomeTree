@@ -21,7 +21,3 @@ MANAGERS = ADMINS
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
-SECRET_KEY = ''
-
-NEW_USER_NOTIFY_EMAIL = 'tom.gruner@gmail.com'

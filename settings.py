@@ -108,3 +108,7 @@ else:
         print "Failed to import settings_local. Copy ./bootstrap/settings_local.example.py to ./settings_local.py"
         print "The error was %s" % e    
 
+try:
+    from settings_secret import *
+except:
+    print "Skipping settings_secret.py since the file does not exist"
