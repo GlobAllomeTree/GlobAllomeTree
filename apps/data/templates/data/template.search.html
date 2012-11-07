@@ -4,6 +4,7 @@
 <script>
     $(function() {
         $( "#tabs" ).tabs();
+        /*
         $( "#searchButton" ).button({
             icons : {
                 secondary : "ui-icon-search"
@@ -14,7 +15,7 @@
                 secondary : "ui-icon-arrowthickstop-1-s"
             }
         });
-
+        */
 
         var autocompletes = ['country',
                              'ecosystem',
@@ -52,6 +53,11 @@
     .container {
         width:1060px;
     }
+    #main-header .container #title {
+      margin: auto;
+      padding-left: 97px;
+      width: 843px;
+    }
 </style>
 
 {% endblock %}
@@ -66,7 +72,7 @@
 	    {% if form.current_search_summary %}
 	       <div id="currentSearch">
                <div style="float:right"> 
-                    <a target="_blank" href="/data/export/{{form.export_link}}" id="exportButton">Export Results</a>
+                    <a target="_blank" href="/data/export/{{form.export_link}}" class="btn btn-succcess" id="exportButton">Export Results</a>
                 </div>
 	           
                <h3 style="color:#243F12;margin-bottom:0px;">Your current search</h3>
@@ -434,7 +440,7 @@
             
             <input type="hidden" name="page" value="1">
             <div style="padding:5px;height:30px;">
-                  <input style="float:right" id="searchButton" type="submit" value="Search">
+                  <input id="searchButton" style="float:right" class="btn btn-succcess" type="submit" value="Search">
             </div>
 	            
 	    </form>

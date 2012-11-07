@@ -24,24 +24,25 @@ class RegistrationForm(forms.ModelForm):
     
     address     = forms.CharField(label='Address', max_length=200)
     country     = forms.CharField(label='Country', max_length=80)
-    subregion   = forms.CharField(label='Subregion', max_length=80)
-    region      = forms.CharField(label='Region', max_length=80)
+    subregion   = forms.CharField(label='Subregion', max_length=80, required=False)
+    region      = forms.CharField(label='Region', max_length=80, required=False)
   
     email       = forms.EmailField(label="Email")
     education   = forms.CharField(label='Education', max_length=300)
 
 
-    institution_name      = forms.CharField(label='Name of Institution', max_length=200)
-    institution_address   = forms.CharField(label='Institution Address', max_length=200)
-    institution_phone     = forms.CharField(label='Institution Phone', max_length=60)
-    institution_fax       = forms.CharField(label='Institution Fax', max_length=60)
+    institution_name      = forms.CharField(label='Name of Institution', max_length=200, required=False)
+    institution_address   = forms.CharField(label='Institution Address', max_length=200, required=False)
+    institution_phone     = forms.CharField(label='Institution Phone', max_length=60, required=False)
+    institution_fax       = forms.CharField(label='Institution Fax', max_length=60, required=False)
     field_subject         = forms.CharField(label='Field Subject', max_length=60)
 
     
-    data_may_provide      = forms.ChoiceField(label='Data you may provide', choices=UserProfile.DATA_MAY_PROVIDE_CHOICES)
+    data_may_provide      = forms.ChoiceField(label='Data you may provide', choices=UserProfile.DATA_MAY_PROVIDE_CHOICES, required=False)
 
-    accept_terms          = forms.BooleanField(label='I accept the terms and conditions')
-    
+    accept_terms_software = forms.BooleanField(label='I accept the terms and conditions related to software.')
+    accept_terms_databases   = forms.BooleanField(label='I accept the GlobAllomeTree databases Terms of Use and user rights.')
+   
     class Meta:
         model = User
         fields = ("username",)

@@ -17,21 +17,21 @@ from .models import TreeEquation, Country
 def continents_map(request):
     return render_to_response('continents_map.html',
                               context_instance = RequestContext(request,
-                              {'is_page_maps': True, }))
+                              {'is_page_data': True, }))
 
 def tree_equation_id(request, id):
     tree_equation = TreeEquation.objects.get(id=id)
     return render_to_response('data/template.tree_equation.html', 
                               context_instance = RequestContext(request,
                               {'tree_equation': tree_equation, 
-                               'is_page_equations' : True})) 
+                               'is_page_data' : True})) 
 
 def geo_map(request):
     country_list = TreeEquation.objects.values_list('country__common_name',flat=True).distinct
     return render_to_response('geo_map.html',
                                context_instance = RequestContext(request,
                                 {'country_list': country_list,
-                                 'is_page_maps' : True }))
+                                 'is_page_data' : True }))
 
 def geo_map_id(request, geo_id):
     country = Country.objects.get(iso_3166_1_2_letter_code = geo_id)
@@ -39,7 +39,8 @@ def geo_map_id(request, geo_id):
     
 def database(request):
     return render_to_response('database.html',
-                              context_instance = RequestContext(request,{'': '', }))
+                              context_instance = RequestContext(request,
+                             {'is_page_data' : True}))
 
 
 def species(request, selected_genus=None):
@@ -60,19 +61,18 @@ def species(request, selected_genus=None):
     return render_to_response('data/template.species.html', 
                                context_instance = RequestContext(request,
                                {'genus_list': genus_list,
-                               'is_page_equations' : True }))
+                               'is_page_data' : True }))
 
 
 
 
 class EquationSearchView(SearchView):
-
     
     def __name__(self):
         return "EquationSearchView"
 
     def extra_context(self):
-        return {'is_page_equations' : True}
+        return {'is_page_data' : True}
 
 def autocomplete(request, field): 
     term    = request.GET.get('term') 
@@ -101,6 +101,9 @@ def autocomplete(request, field):
 
 from .forms import EquationSearchForm
 def export(request):
+    
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login/')
 
     form = EquationSearchForm(request.GET)
     sqs = form.search()
@@ -122,23 +125,3 @@ def export(request):
             row.append(unicode(getattr(obj, field.name)).encode("utf-8"))
         writer.writerow(row)
     return response
-
-""" Sample code for json search
-from .forms import EquationSearchForm
-import json
-def json_search(request):
-    form = EquationSearchForm(request.GET)
-    sqs = form.search()
-    result_list = []
-    for result in sqs:
-        result_list.append({'id' : result.id,
-                            'country' : result.country,
-                            'species' : result.species,
-                            'equation' : result.equation_y
-                            })
-    result_obj = {
-        'results' : result_list
-    }
-
-    return HttpResponse(json.dumps(result_obj))
-"""
