@@ -92,6 +92,7 @@ INSTALLED_APPS = (
     'haystack',
     'apps.data',
     'apps.accounts',
+    'apps.journals',
     'gunicorn',
     'south',
     'cms',
@@ -133,6 +134,7 @@ else:
     except Exception as e:
         print "Failed to import settings_local. Copy ./bootstrap/settings_local.example.py to ./settings_local.py"
         print "The error was %s" % e    
+
 
 try:
     from settings_secret import *

@@ -12,3 +12,4 @@ django-classy-tags==0.3.4.1
 django-mptt==0.5.2
 django-sekizai==0.6.1
 html5lib==0.95
+feedparser==5.1.2
