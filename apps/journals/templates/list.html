@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page-header">
+        <h3>Top ten Journals</h3>
+    </div>
+    {% for journal in journals %}
+        {% if forloop.counter0|divisibleby:2 %}
+            <div class="row">
+        {% endif %}
+        <div class="span6" >
+            <div class="journal well clearfix" style="height:290px;">
+                <h4>{{journal.title}}</h4>
+                <p>{{journal.description}}</p>
+                <ul>
+                    {% for entry in journal.feed_items.entries|slice:":2" %}
+                        <li>
+                            <span class="date">{{ entry.published_datetime|date:"SHORT_DATE_FORMAT" }}</span>
+                            {% if entry.published_datetime|date:"SHORT_DATE_FORMAT" %}
+                                &nbsp;-&nbsp;
+                            {% endif %}
+                            <a href="{{entry.link}}" >{{entry.title}}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a href="/journals/{{journal.id}} " class="btn btn-success pull-right clearfix" >Read more >></a>
+            </div>
+        </div>
+        {% if not forloop.counter0|divisibleby:2 %}
+            </div>
+        {% endif %}
+        {% if forloop.counter0|divisibleby:2 and forloop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

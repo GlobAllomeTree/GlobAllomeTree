@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page-header">
+        <h3>{{journal.title}}</h3>
+    </div>
+    <div class="journal clearfix">
+        <p>{{journal.description}}</p>
+        <ul>
+            {% for entry in journal.feed_items.entries|slice:":25" %}
+                <li>
+                    <a href="{{entry.link}}" >{{entry.title}}</a>
+                    <span class="date pull-right">{{ entry.published_datetime|date:"SHORT_DATE_FORMAT" }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="/journals" class="btn btn-success pull-left" ><< Back to the journals list </a>
+        <a href="{{journal.site_url}}" class="btn btn-success pull-right" >Go to the journal page >></a>
+    </div>
+{% endblock %}
