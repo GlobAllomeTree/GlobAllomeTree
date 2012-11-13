@@ -2,19 +2,22 @@
 
 {% block content %}
     <div class="page-header">
-        <h3>{{journal.title}}</h3>
+        <h3>{{ journal.title }}</h3>
     </div>
-    <div class="journal clearfix">
-        <p>{{journal.description}}</p>
+    <div class="journal">
+        <p>{{ journal.description|striptags }}</p>
         <ul>
-            {% for entry in journal.feed_items.entries|slice:":25" %}
-                <li>
-                    <a href="{{entry.link}}" >{{entry.title}}</a>
-                    <span class="date pull-right">{{ entry.published_datetime|date:"SHORT_DATE_FORMAT" }}</span>
+            {% for entry in journal.feed_items.entries|slice:":20" %}
+                <li class="article" >
+                    <a href="{{entry.link}}" >{{ entry.title|truncatewords:20 }}</a>
+                    <span class="pull-right">{{ entry.published_datetime|date:"SHORT_DATE_FORMAT" }}</span>
+                    <div>{{ entry.summary|truncatewords:45|striptags }}</div>
+                    <a class="article-page-link pull-right" href="{{entry.link}}" >Go to the article page >></a>
+                    <div class="clearfix"></div>
                 </li>
             {% endfor %}
         </ul>
         <a href="/journals" class="btn btn-success pull-left" ><< Back to the journals list </a>
-        <a href="{{journal.site_url}}" class="btn btn-success pull-right" >Go to the journal page >></a>
+        <a href="{{ journal.site_url }}" class="btn btn-success pull-right" >Go to the journal page >></a>
     </div>
 {% endblock %}

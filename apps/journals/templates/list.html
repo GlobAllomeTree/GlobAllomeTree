@@ -10,8 +10,8 @@
         {% endif %}
         <div class="span6" >
             <div class="journal well clearfix" style="height:290px;">
-                <h4>{{journal.title}}</h4>
-                <p>{{journal.description}}</p>
+                <h4>{{ journal.title }}</h4>
+                <p>{{ journal.description }}</p>
                 <ul>
                     {% for entry in journal.feed_items.entries|slice:":2" %}
                         <li>
@@ -19,11 +19,11 @@
                             {% if entry.published_datetime|date:"SHORT_DATE_FORMAT" %}
                                 &nbsp;-&nbsp;
                             {% endif %}
-                            <a href="{{entry.link}}" >{{entry.title}}</a>
+                            <a href="{{ entry.link }}" >{{ entry.title|striptags }}</a>
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="/journals/{{journal.id}} " class="btn btn-success pull-right clearfix" >Read more >></a>
+                <a href="/journals/{{ journal.id }}" class="btn btn-success pull-right clearfix" >Read more >></a>
             </div>
         </div>
         {% if not forloop.counter0|divisibleby:2 %}

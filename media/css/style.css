@@ -607,6 +607,11 @@ fieldset {
 
 }
 
+/* Journals */
+.article {
+    margin: 0 0 20px 0
+}
+
 /* Bootstrap tweeks */
 
 body {
