@@ -5,9 +5,9 @@ admin.site.register(models.Country)
 
 
 class TreeEquationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'population', 'ecosystem', 'country', 'species', 'genus',  'equation_y')
-    ordering = ["id"]
-    search_fields  = ['id','country']
-    list_filter = ['country']
+    list_display = ('ID', 'Population', 'Ecosystem', 'Country', 'Species', 'Genus',  'Equation')
+    ordering = ["ID"]
+    search_fields  = ['ID','Country']
+    list_filter = ['Country']
 
 admin.site.register(models.TreeEquation, TreeEquationAdmin)

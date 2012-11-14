@@ -4,14 +4,11 @@ from haystack.views import search_view_factory
 from .forms import EquationSearchForm
 from .views import EquationSearchView
 
-
-
 sqs = SearchQuerySet()
 
 urlpatterns = patterns('apps.data.views',
 
-
-    #List of genus / species
+    #List of Genus / Species
     url(r'^species/$', 'species'),
 
     #Field Autocomplete
@@ -22,6 +19,8 @@ urlpatterns = patterns('apps.data.views',
 
     url(r'^export/$', 'export'),
             
+    url(r'^submit-data/$', 'submit_data'),
+
     #Searchable list of equations                   
     url(r'^search/$', search_view_factory(
         view_class=EquationSearchView,
@@ -31,11 +30,6 @@ urlpatterns = patterns('apps.data.views',
         results_per_page=40,
     ), name='haystack_search'), 
                        
-
     #Single equation
-    (r'^equation/(\d+)/$', 'tree_equation_id'),
-
-   
+    (r'^equation/(\d+)/$', 'tree_equation_id')
 )
-
-

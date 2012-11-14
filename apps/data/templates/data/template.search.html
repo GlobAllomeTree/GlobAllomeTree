@@ -18,18 +18,18 @@
         */
 
         var autocompletes = ['country',
-                             'ecosystem',
-                             'population',
-                             'genus',
-                             'species',
-                             'biome_FAO',
-                             'biome_UDVARDY',
-                             'biome_WWF',
-                             'division_BAILEY',
-                             'biome_HOLDRIDGE',
+                             'Ecosystem',
+                             'Population',
+                             'Genus',
+                             'Species',
+                             'Biome_FAO',
+                             'Biome_UDVARDY',
+                             'Biome_WWF',
+                             'Division_BAILEY',
+                             'Biome_HOLDRIDGE',
                              'author',
                              'reference',
-                             'output'];
+                             'Output'];
 
         $.each(autocompletes, function (index, field) {
 
@@ -100,9 +100,9 @@
 	                <li><a href="#keyword">Keyword</a></li>
 	                <li><a href="#identification">Identification</a></li>
 	                <li><a href="#taxonomy">Taxonomy</a></li>
-                    <li><a href="#location">Location</a></li>
+                    <li><a href="#Location">Location</a></li>
                     <li><a href="#components">Components</a></li>
-                    <li><a href="#input_output">Input/Output</a></li>
+                    <li><a href="#input_Output">Input/Output</a></li>
                     <li><a href="#allometry">Allometry</a></li>
                     <li><a href="#reference">Reference</a></li>
 	            </ul>
@@ -116,18 +116,18 @@
 	            </div>
 	            <div id="identification">
         	                  
-                    <div {% if form.ecosystem.errors %} class="error" {% endif %}>
-                    {{ form.ecosystem.errors }}
-                    <label for="id_ecosystem" class="floatedLabel">Ecosystem</label>
-                    {{ form.ecosystem }}
+                    <div {% if form.Ecosystem.errors %} class="error" {% endif %}>
+                    {{ form.Ecosystem.errors }}
+                    <label for="id_Ecosystem" class="floatedLabel">Ecosystem</label>
+                    {{ form.Ecosystem }}
                     </div>
                 
         
                     
-                    <div {% if form.population.errors %} class="error" {% endif %}>
-                    {{ form.population.errors }}
-                    <label for="id_population" class="floatedLabel">Population</label>
-                    {{ form.population }}
+                    <div {% if form.Population.errors %} class="error" {% endif %}>
+                    {{ form.Population.errors }}
+                    <label for="id_Population" class="floatedLabel">Population</label>
+                    {{ form.Population }}
                     </div>
 
 	            </div>
@@ -137,24 +137,24 @@
 
 
         	  
-                    <div {% if form.genus.errors %} class="error" {% endif %}>
-                    {{ form.genus.errors }}
-                    <label  for="id_genus" class="floatedLabel">Genus</label>
-                    {{ form.genus }}
+                    <div {% if form.Genus.errors %} class="error" {% endif %}>
+                    {{ form.Genus.errors }}
+                    <label  for="id_Genus" class="floatedLabel">Genus</label>
+                    {{ form.Genus }}
                     </div>
                         
                     
-                    <div {% if form.species.errors %} class="error" {% endif %}>
-                    {{ form.species.errors }}
-                    <label for="id_species" class="floatedLabel">Species</label>
-                    {{ form.species }}
+                    <div {% if form.Species.errors %} class="error" {% endif %}>
+                    {{ form.Species.errors }}
+                    <label for="ID_Species" class="floatedLabel">Species</label>
+                    {{ form.Species }}
                     </div>
             
         
                 </div>
          
         
-                <div id="location">
+                <div id="Location">
                     <div style="width:50%;float:left">
                         <div {% if form.country.errors %} class="error" {% endif %}>
                         {{ form.country.errors }}
@@ -163,42 +163,42 @@
                         </div>        
                          
             
-                        <div {% if form.biome_HOLDRIDGE.errors %} class="error" {% endif %}>
-                        {{ form.biome_HOLDRIDGE.errors }}
-                        <label for="id_biome_HOLDRIDGE" class="floatedLabel">Biome (HOLDRIDGE)</label>
-                        {{ form.biome_HOLDRIDGE }}
+                        <div {% if form.Biome_HOLDRIDGE.errors %} class="error" {% endif %}>
+                        {{ form.Biome_HOLDRIDGE.errors }}
+                        <label for="id_Biome_HOLDRIDGE" class="floatedLabel">Biome (HOLDRIDGE)</label>
+                        {{ form.Biome_HOLDRIDGE }}
                         </div>
                     
                     
                         
-                        <div {% if form.biome_UDVARDY.errors %} class="error" {% endif %}>
-                        {{ form.biome_UDVARDY.errors }}
-                        <label for="id_biome_UDVARDY" class="floatedLabel">Biome (UDVARDY)</label>
-                        {{ form.biome_UDVARDY }}
+                        <div {% if form.Biome_UDVARDY.errors %} class="error" {% endif %}>
+                        {{ form.Biome_UDVARDY.errors }}
+                        <label for="id_Biome_UDVARDY" class="floatedLabel">Biome (UDVARDY)</label>
+                        {{ form.Biome_UDVARDY }}
                         </div>
                     
         	        </div>
         	        <div style="width:50%;float:left">
  
-                        <div {% if form.biome_FAO.errors %} class="error" {% endif %}>
-                        {{ form.biome_FAO.errors }}
-                        <label for="id_biome_FAO" class="floatedLabel">Biome (FAO)</label>
-                        {{ form.biome_FAO }}
+                        <div {% if form.Biome_FAO.errors %} class="error" {% endif %}>
+                        {{ form.Biome_FAO.errors }}
+                        <label for="id_Biome_FAO" class="floatedLabel">Biome (FAO)</label>
+                        {{ form.Biome_FAO }}
                         </div>
                     
             	       
-                        <div {% if form.biome_WWF.errors %} class="error" {% endif %}>
-                        {{ form.biome_WWF.errors }}
-                        <label for="id_biome_WWF" class="floatedLabel">Biome (WWF)</label>
-                        {{ form.biome_WWF }}
+                        <div {% if form.Biome_WWF.errors %} class="error" {% endif %}>
+                        {{ form.Biome_WWF.errors }}
+                        <label for="id_Biome_WWF" class="floatedLabel">Biome (WWF)</label>
+                        {{ form.Biome_WWF }}
                         </div>
                     
                                
             
-                        <div {% if form.division_BAILEY.errors %} class="error" {% endif %}>
-                        {{ form.division_BAILEY.errors }}
-                        <label for="id_division_BAILEY" class="floatedLabel">Division (BAILEY)</label>
-                        {{ form.division_BAILEY }}
+                        <div {% if form.Division_BAILEY.errors %} class="error" {% endif %}>
+                        {{ form.Division_BAILEY.errors }}
+                        <label for="id_Division_BAILEY" class="floatedLabel">Division (BAILEY)</label>
+                        {{ form.Division_BAILEY }}
                         </div>
     
                     </div>
@@ -277,7 +277,7 @@
                 </div>
          
         
-                <div id="input_output">
+                <div id="input_Output">
                     
                     <div style="float:left;width:24%" class="smallInputs">
                         <div class="{% if form.X.errors %}error{% endif %}">
@@ -311,83 +311,83 @@
 
                         
                         
-                        <div class="{% if form.unit_U.errors %}error{% endif %}">
-                        {{ form.unit_U.errors }}<label for="id_unit_U">Unit U</label>
-                        {{ form.unit_U }}
+                        <div class="{% if form.Unit_U.errors %}error{% endif %}">
+                        {{ form.Unit_U.errors }}<label for="id_Unit_U">Unit U</label>
+                        {{ form.Unit_U }}
                         </div>
                     
             
             
-                        <div class="{% if form.unit_V.errors %}error{% endif %}">
-                        {{ form.unit_V.errors }}<label for="id_unit_V">Unit V</label>
-                        {{ form.unit_V }}
+                        <div class="{% if form.Unit_V.errors %}error{% endif %}">
+                        {{ form.Unit_V.errors }}<label for="id_Unit_V">Unit V</label>
+                        {{ form.Unit_V }}
                         </div>           
                         
-                        <div class="{% if form.unit_W.errors %}error{% endif %}">
-                        {{ form.unit_W.errors }}<label for="id_unit_W">Unit W</label>
-                        {{ form.unit_W }}
+                        <div class="{% if form.Unit_W.errors %}error{% endif %}">
+                        {{ form.Unit_W.errors }}<label for="id_Unit_W">Unit W</label>
+                        {{ form.Unit_W }}
                         </div>
                             
-                        <div class="{% if form.unit_X.errors %}error{% endif %}">
-                        {{ form.unit_X.errors }}<label for="id_unit_X">Unit X</label>
-                        {{ form.unit_X }}
+                        <div class="{% if form.Unit_X.errors %}error{% endif %}">
+                        {{ form.Unit_X.errors }}<label for="id_Unit_X">Unit X</label>
+                        {{ form.Unit_X }}
                         </div>
                     
                         
-                        <div class="{% if form.unit_Y.errors %}error{% endif %}">
-                        {{ form.unit_Y.errors }}<label for="id_unit_Y">Unit Y</label>
-                        {{ form.unit_Y }}
+                        <div class="{% if form.Unit_Y.errors %}error{% endif %}">
+                        {{ form.Unit_Y.errors }}<label for="id_Unit_Y">Unit Y</label>
+                        {{ form.Unit_Y }}
                         </div>
                             
-                        <div class="{% if form.unit_Z.errors %}error{% endif %}">
-                        {{ form.unit_Z.errors }}<label for="id_unit_Z">Unit Z</label>
-                        {{ form.unit_Z }}
+                        <div class="{% if form.Unit_Z.errors %}error{% endif %}">
+                        {{ form.Unit_Z.errors }}<label for="id_Unit_Z">Unit Z</label>
+                        {{ form.Unit_Z }}
                         </div>
                     
         
                     </div>
                     <div style="float:left;width:50%">
             
-                        <div class="{% if form.min_X__gte.errors %}error{% endif %} {% if form.min_X__lte.errors %}error{% endif %} smallInputs2">
-                        {{ form.min_X__gte.errors }}<label for="id_min_X__gte">Min X From</label>
-                        {{ form.min_X__gte }}
-                        {{ form.min_X__lte.errors }}<label for="id_min_X__lte" class="middle">To</label>
-                        {{ form.min_X__lte }}
+                        <div class="{% if form.Min_X__gte.errors %}error{% endif %} {% if form.Min_X__lte.errors %}error{% endif %} smallInputs2">
+                        {{ form.Min_X__gte.errors }}<label for="id_Min_X__gte">Min X From</label>
+                        {{ form.Min_X__gte }}
+                        {{ form.Min_X__lte.errors }}<label for="id_Min_X__lte" class="middle">To</label>
+                        {{ form.Min_X__lte }}
                         </div>
                       
                  
             
-                        <div class="{% if form.max_X__gte.errors %}error{% endif %} {% if form.max_X__lte.errors %}error{% endif %} smallInputs2">
-                        {{ form.max_X__gte.errors }}<label for="id_max_X__gte">Max X From</label>
-                        {{ form.max_X__gte }}
-                        {{ form.max_X__lte.errors }}<label for="id_max_X__lte" class="middle">To</label>
-                        {{ form.max_X__lte }}
+                        <div class="{% if form.Max_X__gte.errors %}error{% endif %} {% if form.Max_X__lte.errors %}error{% endif %} smallInputs2">
+                        {{ form.Max_X__gte.errors }}<label for="id_Max_X__gte">Max X From</label>
+                        {{ form.Max_X__gte }}
+                        {{ form.Max_X__lte.errors }}<label for="id_Max_X__lte" class="middle">To</label>
+                        {{ form.Max_X__lte }}
                         </div>
                             
                     
                           
-                        <div class="{% if form.min_H__gte.errors %}error{% endif %} {% if form.min_H__lte.errors %}error{% endif %} smallInputs2">
-                        {{ form.min_H__gte.errors }}<label for="id_min_H__gte">Min H From</label>
-                        {{ form.min_H__gte }}
-                        {{ form.min_H__lte.errors }}<label for="id_min_H__lte" class="middle">To</label>
-                        {{ form.min_H__lte }}
+                        <div class="{% if form.Min_Z__gte.errors %}error{% endif %} {% if form.Min_Z__lte.errors %}error{% endif %} smallInputs2">
+                        {{ form.Min_Z__gte.errors }}<label for="id_Min_Z__gte">Min H From</label>
+                        {{ form.Min_Z__gte }}
+                        {{ form.Min_Z__lte.errors }}<label for="id_Min_Z__lte" class="middle">To</label>
+                        {{ form.Min_Z__lte }}
                         </div>
                     
                     
                                       
-                        <div class="{% if form.max_H__gte.errors %}error{% endif %} {% if form.max_H__lte.errors %}error{% endif %} smallInputs2">
-                        {{ form.max_H__gte.errors }}<label for="id_max_H__gte" style="margin-bottom:34px;">Max H From</label>
-                        {{ form.max_H__gte }}
-                        {{ form.max_H__lte.errors }}<label for="id_max_H__lte" class="middle">To</label>
-                        {{ form.max_H__lte }}
+                        <div class="{% if form.Max_Z__gte.errors %}error{% endif %} {% if form.Max_Z__lte.errors %}error{% endif %} smallInputs2">
+                        {{ form.Max_Z__gte.errors }}<label for="id_Max_Z__gte" style="margin-bottom:34px;">Max H From</label>
+                        {{ form.Max_Z__gte }}
+                        {{ form.Max_Z__lte.errors }}<label for="id_Max_Z__lte" class="middle">To</label>
+                        {{ form.Max_Z__lte }}
                         </div>
                             
                   
                     
             
-                        <div class="{% if form.output.errors %}error{% endif %} smallInputs2">
-                        {{ form.output.errors }}<label for="id_output" >Output</label>
-                        {{ form.output }}
+                        <div class="{% if form.Output.errors %}error{% endif %} smallInputs2">
+                        {{ form.Output.errors }}<label for="id_Output" >Output</label>
+                        {{ form.Output }}
                         </div>
                     </div>
                     <div style="clear:both"></div>
@@ -398,10 +398,10 @@
                 <div id="allometry">
 
   
-                    <div {% if form.equation_y.errors %} class="error" {% endif %}>
-                    {{ form.equation_y.errors }}
-                    <label for="id_equation_y" class="floatedLabel">Equation</label>
-                    {{ form.equation_y }}
+                    <div {% if form.Equation.errors %} class="error" {% endif %}>
+                    {{ form.Equation.errors }}
+                    <label for="id_Equation" class="floatedLabel">Equation</label>
+                    {{ form.Equation }}
                     </div>
                         
                 </div>
@@ -420,7 +420,7 @@
         
                     <div {% if form.reference.errors %} class="error" {% endif %}>
                     {{ form.reference.errors }}
-                    <label for="id_reference" class="floatedLabel">Reference</label>
+                    <label for="ID_REFerence" class="floatedLabel">Reference</label>
                     {{ form.reference }}
                     </div>        
         
@@ -475,25 +475,25 @@
 				<thead>   
     				<tr>	
     					<th>Equation</th>
-    					<th><a href="{{form.sort_link_genus_order}}">Genus</a></th>
-    					<th><a href="{{form.sort_link_species_order}}">Species</a></th>
+    					<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
+    					<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
     					<th><a href="{{form.sort_link_country_order}}">Country</a></th>
     					<th>Components</th>
-    					<th><a href="{{form.sort_link_output_order}}">Output</a></th>
-    					<th><a href="{{form.sort_link_biome_FAO_order}}">Biome (FAO)</a></th>
+    					<th><a href="{{form.sort_link_Output_order}}">Output</a></th>
+    					<th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
     					<th><a href="{{form.sort_link_author_order}}">Author</a></th>
     			    </tr>
 			    </thead>
 			    <tbody>
                 {% for result in page.object_list %}
                     <tr>
-                       <td>{{ result.object.equation_y}}</td>
-                       <td>{{ result.object.genus}}</td>
-                       <td>{{ result.object.species}}</td>
+                       <td>{{ result.object.Equation}}</td>
+                       <td>{{ result.object.Genus}}</td>
+                       <td>{{ result.object.Species}}</td>
                        <td>{{ result.object.country.common_name}}</td>
                        <td>{{ result.object.components_string}}</td>
-                       <td>{{ result.object.output}}</td>
-                       <td>{{ result.object.biome_FAO }}</td>
+                       <td>{{ result.object.Output}}</td>
+                       <td>{{ result.object.Biome_FAO }}</td>
                        <td>{{ result.object.author }}</td>
                     </tr>
                   {% endfor %}
@@ -501,12 +501,12 @@
 			      <tfoot>   
                    <tr> 
                         <th>Equation</th>
-                        <th><a href="{{form.sort_link_genus_order}}">Genus</a></th>
-                        <th><a href="{{form.sort_link_species_order}}">Species</a></th>
+                        <th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
+                        <th><a href="{{form.sort_link_Species_order}}">Species</a></th>
                         <th><a href="{{form.sort_link_country_order}}">Country</a></th>
                         <th>Components</th>
-                        <th><a href="{{form.sort_link_output_order}}">Output</a></th>
-                        <th><a href="{{form.sort_link_biome_FAO_order}}">Biome (FAO)</a></th>
+                        <th><a href="{{form.sort_link_Output_order}}">Output</a></th>
+                        <th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
                         <th><a href="{{form.sort_link_author_order}}">Author</a></th>
                     </tr>
                  </tfoot>   

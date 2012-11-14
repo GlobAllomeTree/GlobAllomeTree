@@ -20,14 +20,14 @@ def continents_map(request):
                               {'is_page_data': True, }))
 
 def tree_equation_id(request, id):
-    tree_equation = TreeEquation.objects.get(id=id)
+    tree_equation = TreeEquation.objects.get(ID=id)
     return render_to_response('data/template.tree_equation.html', 
                               context_instance = RequestContext(request,
                               {'tree_equation': tree_equation, 
                                'is_page_data' : True})) 
 
 def geo_map(request):
-    country_list = TreeEquation.objects.values_list('country__common_name',flat=True).distinct
+    country_list = TreeEquation.objects.values_list('Country__common_name',flat=True).distinct
     return render_to_response('geo_map.html',
                                context_instance = RequestContext(request,
                                 {'country_list': country_list,
@@ -43,12 +43,12 @@ def database(request):
                              {'is_page_data' : True}))
 
 
-def species(request, selected_genus=None):
+def species(request, selected_Genus=None):
     
-    #Call sorl for a faceted list of genus
+    #Call sorl for a faceted list of Genus
     sqs = SearchQuerySet().facet('genus')
     genus_list = []
-    for genus_count in sqs.facet_counts()['fields']['genus']:
+    for genus_count in sqs.facet_counts()['fields']['Genus']:
         genus_list.append({
             'name'  : genus_count[0],
             'count' : genus_count[1]
@@ -62,6 +62,12 @@ def species(request, selected_genus=None):
                                context_instance = RequestContext(request,
                                {'genus_list': genus_list,
                                'is_page_data' : True }))
+
+
+def submit_data(request):
+    return render_to_response('continents_map.html',
+                              context_instance = RequestContext(request,
+                              {'is_page_data': True, }))
 
 
 
