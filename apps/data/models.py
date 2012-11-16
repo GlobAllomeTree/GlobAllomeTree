@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Country(models.Model):
     common_name = models.CharField(max_length=159, blank=True)
@@ -18,9 +19,18 @@ class Country(models.Model):
     def __unicode__(self):
         return self.common_name
     
+    
     class Meta:
         verbose_name ='Country'
         verbose_name_plural = 'Countries'
+
+class DataSubmission(models.Model):
+    submitted_file = models.FileField(upload_to='data_submissions')
+    submitted_notes = models.TextField(blank=True, null=True)
+    date_uploaded = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User)
+    imported = models.BooleanField()
+
 
 
 class TreeEquation(models.Model):
@@ -36,7 +46,7 @@ class TreeEquation(models.Model):
     Ecosystem                       = models.CharField(max_length=255, null=True, blank=True)    
     Country                         = models.ForeignKey(Country, blank=True, null=True)
     ID_Location                     = models.IntegerField(null=True, blank=True)
-    Group_Location                  = models.NullBooleanField()
+    Group_Location                  = models.IntegerField(null=True, blank=True)
     Location                        = models.CharField(max_length=255, null=True, blank=True) 
     Latitude                        = models.DecimalField(null=True, blank=True, max_digits=8, decimal_places=6)
     Longitude                       = models.DecimalField(null=True, blank=True, max_digits=8, decimal_places=6)

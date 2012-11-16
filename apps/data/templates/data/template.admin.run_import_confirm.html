@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+     <a href="../../">{% trans "Home" %}</a> &rsaquo;
+     {% trans 'Run Data Submission Import' %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+	<h2>Import data from file {{data_submission.submitted_file}} from user {{data_submission.user}}</h2>
+    
+    {% if errors %}
+
+    	<h3 style="color:red">Errors were encountered while parsing the file.</h3>
+    	<p>Please correct the following errors to continue</p>
+    	<ul>
+    	{% for error in errors %}	
+    		<li>{{error}}</li>
+    	{% endfor %}
+    	</ul>
+
+    {% else %}
+    
+	    {% if show_import_summary %}
+			<h3>Data Imported</h3>
+
+			<p>Total rows imported: {{total_rows_imported}}</p>
+			<p>Missed Rows:
+				<ul>
+				{% for row in missed_rows %}
+					<li>Row:{{ row.line_number }} Exception: {{ row.exception }}</li>
+				{% endfor %}
+				</ul>
+			</p>
+			
+
+		{% else %}
+			 <h3>Fields that will be imported</h3>
+			 <p>
+			 {% for header in ok_headers %} 
+			 	{{header}},
+			 {% endfor %}
+			 </p>
+			 {% if unknown_headers%}
+				 <h3>Fields that will be not be imported from the csv file</h3>
+				 <p>
+				 {% for header in unknown_headers %} 
+				 	{{header}},
+				 {% endfor %}
+				  </p>
+			 {% endif %}
+			 {% if missing_headers%}
+				 <h3>Fields expected from the csv file that are missing in the csv file</h3>
+				 <p>
+				 {% for header in missing_headers %} 
+				 	{{header}},
+				 {% endfor %}
+				  </p>
+			 {% endif %}
+			 <h3>Rows to be imported: {{rows_to_import}}</h3>
+
+			 <form action="" method="post">{% csrf_token %}
+			    <div>
+			    	{% for obj in queryset %}
+				   		 <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk|unlocalize }}" />
+				    {% endfor %}
+				    <input type="hidden" name="action" value="run_import" />
+				    <input type="hidden" name="post" value="yes" />
+				    <input type="hidden" name="run" value="yes" />
+				    <input type="submit" value="{% trans "Yes, run the import" %}" />
+			    </div>
+		    </form>
+
+		{% endif %}
+	{% endif %}
+ 
+
+{% endblock %}

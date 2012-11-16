@@ -5,13 +5,13 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     #Full Text Search
     text = indexes.CharField(document=True, use_template=True)
     
-    id                              = indexes.IntegerField(model_attr='id')
+    id                              = indexes.IntegerField(model_attr='ID')
 
     Population                      = indexes.CharField(model_attr='Population', null=True, faceted=True)
     Ecosystem                       = indexes.CharField(model_attr='Ecosystem', null=True, faceted=True)
     Genus                           = indexes.CharField(model_attr='Genus', null=True, faceted=True)
     Species                         = indexes.CharField(model_attr='Species', null=True, faceted=True)
-    country                         = indexes.CharField(model_attr='country__common_name', null=True, faceted=True)
+    Country                         = indexes.CharField(model_attr='Country__common_name', null=True, faceted=True)
     
     Biome_FAO                       = indexes.CharField(model_attr='Biome_FAO', null=True, faceted=True)
     Biome_UDVARDY                   = indexes.CharField(model_attr='Biome_UDVARDY', null=True, faceted=True)
@@ -52,20 +52,20 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     
     Equation                      = indexes.NgramField(model_attr='Equation', null=True)
     
-    Author                          = indexes.CharField(model_attr='author', null=True, faceted=True, indexed=True)
+    Author                          = indexes.CharField(model_attr='Author', null=True, faceted=True, indexed=True)
     
    
-    Year                            = indexes.IntegerField(model_attr='year', null=True)
-    Reference                       = indexes.CharField(model_attr='reference', null=True, faceted=True) 
+    Year                            = indexes.IntegerField(model_attr='Year', null=True)
+    Reference                       = indexes.CharField(model_attr='Reference', null=True, faceted=True) 
     
 
     #ordering
-    Author_order                    = indexes.CharField(model_attr='author', null=True, indexed=False)
+    Author_order                    = indexes.CharField(model_attr='Author', null=True, indexed=False)
     Biome_FAO_order                 = indexes.CharField(model_attr='Biome_FAO', null=True,  indexed=False)
     Genus_order                     = indexes.CharField(model_attr='Genus', null=True, indexed=False)
     Species_order                   = indexes.CharField(model_attr='Species', null=True, indexed=False)
     Output_order                    = indexes.CharField(model_attr='Output', null=True, indexed=False)
-    Country_order                   = indexes.CharField(model_attr='country__common_name', null=True, indexed=False)
+    Country_order                   = indexes.CharField(model_attr='Country__common_name', null=True, indexed=False)
 
 
     #autocomplete lookups
@@ -73,14 +73,14 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     Ecosystem_auto                  = indexes.EdgeNgramField(model_attr='Ecosystem') 
     Genus_auto                      = indexes.EdgeNgramField(model_attr='Genus')
     Species_auto                    = indexes.EdgeNgramField(model_attr='Species')
-    Country_auto                    = indexes.EdgeNgramField(model_attr='country')
+    Country_auto                    = indexes.EdgeNgramField(model_attr='Country', null=True,)
     Biome_FAO_auto                  = indexes.EdgeNgramField(model_attr='Biome_FAO')
     Biome_UDVARDY_auto              = indexes.EdgeNgramField(model_attr='Biome_UDVARDY')
     Biome_WWF_auto                  = indexes.EdgeNgramField(model_attr='Biome_WWF')
     Division_BAILEY_auto            = indexes.EdgeNgramField(model_attr='Division_BAILEY')
     Biome_HOLDRIDGE_auto            = indexes.EdgeNgramField(model_attr='Biome_HOLDRIDGE')
-    Author_auto                     = indexes.EdgeNgramField(model_attr='author')
-    Reference_auto                  = indexes.EdgeNgramField(model_attr='reference') 
+    Author_auto                     = indexes.EdgeNgramField(model_attr='Author')
+    Reference_auto                  = indexes.EdgeNgramField(model_attr='Reference') 
     Output_auto                     = indexes.EdgeNgramField(model_attr='Output') 
 
 
