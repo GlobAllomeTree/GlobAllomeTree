@@ -1,6 +1,8 @@
 import codecs
 import difflib
 from decimal import Decimal
+from decimal import getcontext
+getcontext().prec = 10
 
 from django.contrib import admin
 from django.shortcuts import render_to_response
@@ -190,11 +192,9 @@ class DataSubmissionAdmin(admin.ModelAdmin):
                                 if row[key] not in self.none_fields:
 
                                     if key in decimal_fields:
+
                                         try:
-                                            row[key] = row[key].replace(',', '.')
-                                            dot_index = row[key].find('.')
-                                            if dot_index != -1:
-                                                row[key] = Decimal(row[key][0:dot_index+6])
+                                            val = Decimal(row[key].replace(',', '.').upper())    
                                         except Exception, e:
                                             raise Exception('Could not convert value "%s" to decimal for field %s, exception was %s' % (row[key], key, e))
                                     elif key in bool_fields:
@@ -205,7 +205,10 @@ class DataSubmissionAdmin(admin.ModelAdmin):
                                             val = False
                                         if val is None:
                                             raise Exception('Could not convert value "%s" to boolean for field %s ' % (row[key], key))
-                                    setattr(tree_equation, key, row[key])
+                                    else:
+                                        val = row[key]
+
+                                    setattr(tree_equation, key, val)
                     
                         tree_equation.save()
                         total_rows_imported += 1
