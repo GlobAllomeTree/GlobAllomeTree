@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Country(models.Model):
     common_name = models.CharField(max_length=159, blank=True)
@@ -18,62 +19,63 @@ class Country(models.Model):
     def __unicode__(self):
         return self.common_name
     
+    
     class Meta:
         verbose_name ='Country'
         verbose_name_plural = 'Countries'
+
+class DataSubmission(models.Model):
+    submitted_file = models.FileField(upload_to='data_submissions')
+    submitted_notes = models.TextField(blank=True, null=True)
+    date_uploaded = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User)
+    imported = models.BooleanField()
+
 
 
 class TreeEquation(models.Model):
     
     POPULATION_CHOICES = (
             ('Tree', 'Tree'),
-              ('Sprout', 'Sprout'),
-             ('Stand', 'Stand'),
+            ('Sprout', 'Sprout'),
+            ('Stand', 'Stand'),
      )
 
-    id_article                      = models.IntegerField(null=True, blank=True)	
-    population                      = models.CharField(max_length=255, null=True, blank=True, choices=POPULATION_CHOICES)
-    ecosystem                       = models.CharField(max_length=255, null=True, blank=True)    
-    country                         = models.ForeignKey(Country, blank=True, null=True)
-    id_location                     = models.IntegerField(null=True, blank=True)
-    group_location                  = models.NullBooleanField()
-    location                        = models.CharField(max_length=255, null=True, blank=True) 
-    latitude                        = models.DecimalField(null=True, blank=True, max_digits=8, decimal_places=6)
-    longitude                       = models.DecimalField(null=True, blank=True, max_digits=8, decimal_places=6)
-    biome_FAO                       = models.CharField(max_length=200, null=True, blank=True) 
-    biome_UDVARDY                   = models.CharField(max_length=200, null=True, blank=True) 
-    biome_WWF                       = models.CharField(max_length=200, null=True, blank=True) 
-    division_BAILEY                 = models.CharField(max_length=200, null=True, blank=True) 
-    biome_HOLDRIDGE                 = models.CharField(max_length=200, null=True, blank=True) 
-    temperature                     = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    potential_evapotranspiration    = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    precipitation                   = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    sunshine_fraction               = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    wind                            = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    water_vapor_pressure            = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8) 
-    temp_MIN                        = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    temp_MAX                        = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
+    ID                              = models.IntegerField(primary_key=True)	
+    IDequation                      = models.IntegerField(null=True, blank=True)
+    Population                      = models.CharField(max_length=255, null=True, blank=True, choices=POPULATION_CHOICES)
+    Ecosystem                       = models.CharField(max_length=255, null=True, blank=True)    
+    Continent                       = models.CharField(max_length=100, null=True, blank=True)    
+    Country                         = models.ForeignKey(Country, blank=True, null=True)
+    ID_Location                     = models.IntegerField(null=True, blank=True)
+    Group_Location                  = models.IntegerField(null=True, blank=True)
+    Location                        = models.CharField(max_length=255, null=True, blank=True) 
+    Latitude                        = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=9)
+    Longitude                       = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=9)
+    Biome_FAO                       = models.CharField(max_length=200, null=True, blank=True) 
+    Biome_UDVARDY                   = models.CharField(max_length=200, null=True, blank=True) 
+    Biome_WWF                       = models.CharField(max_length=200, null=True, blank=True) 
+    Division_BAILEY                 = models.CharField(max_length=200, null=True, blank=True) 
+    Biome_HOLDRIDGE                 = models.CharField(max_length=200, null=True, blank=True) 
     X                               = models.CharField(max_length=20, null=True, blank=True)
-    unit_X                          = models.CharField(max_length=20, null=True, blank=True) 
+    Unit_X                          = models.CharField(max_length=20, null=True, blank=True) 
     Z                               = models.CharField(max_length=20, null=True, blank=True)
-    unit_Z                          = models.CharField(max_length=20, null=True, blank=True) 
+    Unit_Z                          = models.CharField(max_length=20, null=True, blank=True) 
     W                               = models.CharField(max_length=20, null=True, blank=True)
-    unit_W                          = models.CharField(max_length=20, null=True, blank=True) 
+    Unit_W                          = models.CharField(max_length=20, null=True, blank=True) 
     U                               = models.CharField(max_length=20, null=True, blank=True)
-    unit_U                          = models.CharField(max_length=20, null=True, blank=True) 
+    Unit_U                          = models.CharField(max_length=20, null=True, blank=True) 
     V                               = models.CharField(max_length=20, null=True, blank=True)
-    unit_V                          = models.CharField(max_length=20, blank=True)
-    min_X                           = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    max_X                           = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    min_H                           = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    max_H                           = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    min_Z                           = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    max_Z                           = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=8)
-    output                          = models.CharField(max_length=30, null=True, blank=True)
-    output_TR                       = models.CharField(max_length=30, null=True, blank=True)
-    unit_Y                          = models.CharField(max_length=50, null=True, blank=True)
-    age                             = models.CharField(max_length=50, null=True, blank=True)
-    veg_component                   = models.CharField(max_length=150, null=True, blank=True)
+    Unit_V                          = models.CharField(max_length=20, blank=True)
+    Min_X                           = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    Max_X                           = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    Min_Z                           = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    Max_Z                           = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    Output                          = models.CharField(max_length=30, null=True, blank=True)
+    Output_TR                       = models.CharField(max_length=30, null=True, blank=True)
+    Unit_Y                          = models.CharField(max_length=50, null=True, blank=True)
+    Age                             = models.CharField(max_length=50, null=True, blank=True)
+    Veg_Component                   = models.CharField(max_length=150, null=True, blank=True)
     B                               = models.NullBooleanField()
     Bd                              = models.NullBooleanField()
     Bg                              = models.NullBooleanField()
@@ -85,33 +87,32 @@ class TreeEquation(models.Model):
     S                               = models.NullBooleanField()
     T                               = models.NullBooleanField()
     F                               = models.NullBooleanField()
-    id_species                      = models.IntegerField(null=True, blank=True)
-    family                          = models.CharField(max_length=80, null=True, blank=True) 
-    genus                           = models.CharField(max_length=80, null=True, blank=True) 
-    species                         = models.CharField(max_length=80, null=True, blank=True)
-    group_species                   = models.IntegerField(null=True, blank=True)
-    id_group                        = models.IntegerField(null=True, blank=True)
-    equation_y                      = models.CharField(max_length=255, null=True, blank=True) 
-    n                               = models.IntegerField(null=True, blank=True)
-    top_dob                         = models.IntegerField(null=True, blank=True)
-    stump_height                    = models.IntegerField(null=True, blank=True)
-    id_ref                          = models.IntegerField(null=True, blank=True)
-    label                           = models.CharField(max_length=20, null=True, blank=True) 
-    author                          = models.CharField(max_length=200, null=True, blank=True) 
-    year                            = models.IntegerField(null=True, blank=True)
-    reference                       = models.TextField(null=True, blank=True) 
-    r2                              = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
-    r2_adjusted                     = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
-    rmse                            = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=9)
-    rms                             = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=9)
-    see                             = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=9)
-    corrected_for_bias              = models.NullBooleanField()
-    bias_correction_cf              = models.IntegerField(null=True, blank=True)
-    ratio_equation                  = models.NullBooleanField()
-    segmented_equation              = models.NullBooleanField()
-    sample_size                     = models.IntegerField(null=True, blank=True)
-    contributor                     = models.CharField(max_length=150, null=True, blank=True) 
-    name_operator                   = models.CharField(max_length=150, null=True, blank=True) 
+    ID_Species                      = models.IntegerField(null=True, blank=True)
+    Family                          = models.CharField(max_length=80, null=True, blank=True) 
+    Genus                           = models.CharField(max_length=80, null=True, blank=True) 
+    Species                         = models.CharField(max_length=80, null=True, blank=True)
+    Group_Species                   = models.IntegerField(null=True, blank=True)
+    ID_Group                        = models.IntegerField(null=True, blank=True)
+    Equation                        = models.CharField(max_length=500, null=True, blank=True) 
+    Substitute_equation             = models.CharField(max_length=500, null=True, blank=True) 
+    Top_dob                         = models.IntegerField(null=True, blank=True)
+    Stump_height                    = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    ID_REF                          = models.IntegerField(null=True, blank=True)
+    Label                           = models.CharField(max_length=20, null=True, blank=True) 
+    Author                          = models.CharField(max_length=200, null=True, blank=True) 
+    Year                            = models.IntegerField(null=True, blank=True)
+    Reference                       = models.TextField(null=True, blank=True) 
+    R2                              = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    R2_Adjusted                     = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    RMSE                            = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    SEE                             = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    Corrected_for_bias              = models.NullBooleanField()
+    Bias_correction                 = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
+    Ratio_equation                  = models.NullBooleanField()
+    Segmented_equation              = models.NullBooleanField()
+    Sample_size                     = models.IntegerField(null=True, blank=True)
+    Contributor                     = models.CharField(max_length=150, null=True, blank=True) 
+    Name_operator                   = models.CharField(max_length=150, null=True, blank=True) 
 
     def components_string(self):
         c_string = ''
@@ -122,7 +123,7 @@ class TreeEquation(models.Model):
 
 
     def get_absolute_url(self):
-        return '/data/equation/%s' % self.id
+        return '/data/equation/%s' % self.ID
 
     class Meta:
         verbose_name ='Allometric Equation'

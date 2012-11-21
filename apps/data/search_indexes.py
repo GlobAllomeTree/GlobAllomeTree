@@ -5,38 +5,38 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     #Full Text Search
     text = indexes.CharField(document=True, use_template=True)
     
-    id                              = indexes.IntegerField(model_attr='id')
+    id                              = indexes.IntegerField(model_attr='ID')
 
-    population                      = indexes.CharField(model_attr='population', null=True, faceted=True)
-    ecosystem                       = indexes.CharField(model_attr='ecosystem', null=True, faceted=True)
-    genus                           = indexes.CharField(model_attr='genus', null=True, faceted=True)
-    species                         = indexes.CharField(model_attr='species', null=True, faceted=True)
-    country                         = indexes.CharField(model_attr='country__common_name', null=True, faceted=True)
+    Population                      = indexes.CharField(model_attr='Population', null=True, faceted=True)
+    Ecosystem                       = indexes.CharField(model_attr='Ecosystem', null=True, faceted=True)
+    Genus                           = indexes.CharField(model_attr='Genus', null=True, faceted=True)
+    Species                         = indexes.CharField(model_attr='Species', null=True, faceted=True)
+    Country                         = indexes.CharField(model_attr='Country__common_name', null=True, faceted=True)
     
-    biome_FAO                       = indexes.CharField(model_attr='biome_FAO', null=True, faceted=True)
-    biome_UDVARDY                   = indexes.CharField(model_attr='biome_UDVARDY', null=True, faceted=True)
-    biome_WWF                       = indexes.CharField(model_attr='biome_WWF', null=True, faceted=True) 
-    division_BAILEY                 = indexes.CharField(model_attr='division_BAILEY', null=True, faceted=True) 
-    biome_HOLDRIDGE                 = indexes.CharField(model_attr='biome_HOLDRIDGE', null=True, faceted=True)
+    Biome_FAO                       = indexes.CharField(model_attr='Biome_FAO', null=True, faceted=True)
+    Biome_UDVARDY                   = indexes.CharField(model_attr='Biome_UDVARDY', null=True, faceted=True)
+    Biome_WWF                       = indexes.CharField(model_attr='Biome_WWF', null=True, faceted=True) 
+    Division_BAILEY                 = indexes.CharField(model_attr='Division_BAILEY', null=True, faceted=True) 
+    Biome_HOLDRIDGE                 = indexes.CharField(model_attr='Biome_HOLDRIDGE', null=True, faceted=True)
      
     X                               = indexes.CharField(model_attr='X', null=True)
-    unit_X                          = indexes.CharField(model_attr='unit_X', null=True)
+    Unit_X                          = indexes.CharField(model_attr='Unit_X', null=True)
     Z                               = indexes.CharField(model_attr='Z', null=True)
-    unit_Z                          = indexes.CharField(model_attr='unit_Z', null=True) 
+    Unit_Z                          = indexes.CharField(model_attr='Unit_Z', null=True) 
     W                               = indexes.CharField(model_attr='W', null=True)
-    unit_W                          = indexes.CharField(model_attr='unit_W', null=True)
+    Unit_W                          = indexes.CharField(model_attr='Unit_W', null=True)
     U                               = indexes.CharField(model_attr='U', null=True)
-    unit_U                          = indexes.CharField(model_attr='unit_U', null=True) 
+    Unit_U                          = indexes.CharField(model_attr='Unit_U', null=True) 
     V                               = indexes.CharField(model_attr='V', null=True)
-    unit_V                          = indexes.CharField(model_attr='unit_V', null=True)
+    Unit_V                          = indexes.CharField(model_attr='Unit_V', null=True)
     
-    min_X                           = indexes.FloatField(model_attr='min_X',null=True)
-    max_X                           = indexes.FloatField(model_attr='max_X',null=True)
-    min_H                           = indexes.FloatField(model_attr='min_H',null=True)
-    max_H                           = indexes.FloatField(model_attr='max_H',null=True)
+    Min_X                           = indexes.FloatField(model_attr='Min_X',null=True)
+    Max_X                           = indexes.FloatField(model_attr='Max_X',null=True)
+    Min_Z                           = indexes.FloatField(model_attr='Min_Z',null=True)
+    Max_Z                           = indexes.FloatField(model_attr='Max_Z',null=True)
     
-    output                          = indexes.CharField(model_attr='output', null=True, faceted=True)
-    unit_Y                          = indexes.CharField(model_attr='unit_Y', null=True)
+    Output                          = indexes.CharField(model_attr='Output', null=True, faceted=True)
+    Unit_Y                          = indexes.CharField(model_attr='Unit_Y', null=True)
     
     B                               = indexes.BooleanField(model_attr='B', null=True)
     Bd                              = indexes.BooleanField(model_attr='Bd', null=True)
@@ -50,38 +50,38 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     T                               = indexes.BooleanField(model_attr='T', null=True)
     F                               = indexes.BooleanField(model_attr='F', null=True)
     
-    equation_y                      = indexes.NgramField(model_attr='equation_y', null=True)
+    Equation                      = indexes.NgramField(model_attr='Equation', null=True)
     
-    author                          = indexes.CharField(model_attr='author', null=True, faceted=True, indexed=True)
+    Author                          = indexes.CharField(model_attr='Author', null=True, faceted=True, indexed=True)
     
    
-    year                            = indexes.IntegerField(model_attr='year', null=True)
-    reference                       = indexes.CharField(model_attr='reference', null=True, faceted=True) 
+    Year                            = indexes.IntegerField(model_attr='Year', null=True)
+    Reference                       = indexes.CharField(model_attr='Reference', null=True, faceted=True) 
     
 
     #ordering
-    author_order                    = indexes.CharField(model_attr='author', null=True, indexed=False)
-    biome_FAO_order                 = indexes.CharField(model_attr='biome_FAO', null=True,  indexed=False)
-    genus_order                     = indexes.CharField(model_attr='genus', null=True, indexed=False)
-    species_order                   = indexes.CharField(model_attr='species', null=True, indexed=False)
-    output_order                    = indexes.CharField(model_attr='output', null=True, indexed=False)
-    country_order                   = indexes.CharField(model_attr='country__common_name', null=True, indexed=False)
+    Author_order                    = indexes.CharField(model_attr='Author', null=True, indexed=False)
+    Biome_FAO_order                 = indexes.CharField(model_attr='Biome_FAO', null=True,  indexed=False)
+    Genus_order                     = indexes.CharField(model_attr='Genus', null=True, indexed=False)
+    Species_order                   = indexes.CharField(model_attr='Species', null=True, indexed=False)
+    Output_order                    = indexes.CharField(model_attr='Output', null=True, indexed=False)
+    Country_order                   = indexes.CharField(model_attr='Country__common_name', null=True, indexed=False)
 
 
     #autocomplete lookups
-    population_auto                 = indexes.EdgeNgramField(model_attr='population')
-    ecosystem_auto                  = indexes.EdgeNgramField(model_attr='ecosystem') 
-    genus_auto                      = indexes.EdgeNgramField(model_attr='genus')
-    species_auto                    = indexes.EdgeNgramField(model_attr='species')
-    country_auto                    = indexes.EdgeNgramField(model_attr='country')
-    biome_FAO_auto                  = indexes.EdgeNgramField(model_attr='biome_FAO')
-    biome_UDVARDY_auto              = indexes.EdgeNgramField(model_attr='biome_UDVARDY')
-    biome_WWF_auto                  = indexes.EdgeNgramField(model_attr='biome_WWF')
-    division_BAILEY_auto            = indexes.EdgeNgramField(model_attr='division_BAILEY')
-    biome_HOLDRIDGE_auto            = indexes.EdgeNgramField(model_attr='biome_HOLDRIDGE')
-    author_auto                     = indexes.EdgeNgramField(model_attr='author')
-    reference_auto                  = indexes.EdgeNgramField(model_attr='reference') 
-    output_auto                     = indexes.EdgeNgramField(model_attr='output') 
+    Population_auto                 = indexes.EdgeNgramField(model_attr='Population')
+    Ecosystem_auto                  = indexes.EdgeNgramField(model_attr='Ecosystem') 
+    Genus_auto                      = indexes.EdgeNgramField(model_attr='Genus')
+    Species_auto                    = indexes.EdgeNgramField(model_attr='Species')
+    Country_auto                    = indexes.EdgeNgramField(model_attr='Country', null=True,)
+    Biome_FAO_auto                  = indexes.EdgeNgramField(model_attr='Biome_FAO')
+    Biome_UDVARDY_auto              = indexes.EdgeNgramField(model_attr='Biome_UDVARDY')
+    Biome_WWF_auto                  = indexes.EdgeNgramField(model_attr='Biome_WWF')
+    Division_BAILEY_auto            = indexes.EdgeNgramField(model_attr='Division_BAILEY')
+    Biome_HOLDRIDGE_auto            = indexes.EdgeNgramField(model_attr='Biome_HOLDRIDGE')
+    Author_auto                     = indexes.EdgeNgramField(model_attr='Author')
+    Reference_auto                  = indexes.EdgeNgramField(model_attr='Reference') 
+    Output_auto                     = indexes.EdgeNgramField(model_attr='Output') 
 
 
     def _to_float(self, val):
@@ -96,17 +96,17 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
             return float(0)
     
     #Convert the decimals to floats so we can so range filters on them
-    def prepare_max_X(self, obj):
-        return self._to_float(obj.max_X)
+    def prepare_Max_X(self, obj):
+        return self._to_float(obj.Max_X)
     
-    def prepare_min_X(self, obj):
-        return self._to_float(obj.max_X)
+    def prepare_Min_X(self, obj):
+        return self._to_float(obj.Max_X)
     
-    def prepare_max_H(self, obj):
-        return self._to_float(obj.max_X)
+    def prepare_Max_Z(self, obj):
+        return self._to_float(obj.Max_X)
     
-    def prepare_min_H(self, obj):
-        return self._to_float(obj.max_X)
+    def prepare_Min_Z(self, obj):
+        return self._to_float(obj.Max_X)
       
     def get_model(self):
         """Let haystack know which model we are indexing"""

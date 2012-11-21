@@ -26,44 +26,44 @@ class EquationSearchForm(SearchForm):
     page     = forms.IntegerField(required=False)
     
     #Search Fields    
-    population    = forms.CharField(required=False, label='Population')
-    ecosystem     = forms.CharField(required=False, label='Ecosystem')
-    genus         = forms.CharField(required=False, label='Genus')
-    species       = forms.CharField(required=False, label='Species')
-    country       = forms.CharField(required=False, label='Country')
+    Population    = forms.CharField(required=False, label='Population')
+    Ecosystem     = forms.CharField(required=False, label='Ecosystem')
+    Genus         = forms.CharField(required=False, label='Genus')
+    Species       = forms.CharField(required=False, label='Species')
+    Country       = forms.CharField(required=False, label='Country')
 
 
-    biome_FAO                       = forms.CharField(required=False, label='Biome (FAO)')
-    biome_UDVARDY                   = forms.CharField(required=False, label='Biome (UDVARDY)')
-    biome_WWF                       = forms.CharField(required=False, label='Biome (WWF)')
-    division_BAILEY                 = forms.CharField(required=False, label='Division (BAILEY)') 
-    biome_HOLDRIDGE                 = forms.CharField(required=False, label='Biome (HOLDRIDGE)')
+    Biome_FAO                       = forms.CharField(required=False, label='Biome (FAO)')
+    Biome_UDVARDY                   = forms.CharField(required=False, label='Biome (UDVARDY)')
+    Biome_WWF                       = forms.CharField(required=False, label='Biome (WWF)')
+    Division_BAILEY                 = forms.CharField(required=False, label='Division (BAILEY)') 
+    Biome_HOLDRIDGE                 = forms.CharField(required=False, label='Biome (HOLDRIDGE)')
      
     X                               = forms.CharField(required=False, label='X')
-    unit_X                          = forms.CharField(required=False, label='Unit X')
+    Unit_X                          = forms.CharField(required=False, label='Unit X')
     Z                               = forms.CharField(required=False, label='Z')
-    unit_Z                          = forms.CharField(required=False, label='Unit Z') 
+    Unit_Z                          = forms.CharField(required=False, label='Unit Z') 
     W                               = forms.CharField(required=False, label='W')
-    unit_W                          = forms.CharField(required=False, label='Unit W')
+    Unit_W                          = forms.CharField(required=False, label='Unit W')
     U                               = forms.CharField(required=False, label='U')
-    unit_U                          = forms.CharField(required=False, label='Unit U') 
+    Unit_U                          = forms.CharField(required=False, label='Unit U') 
     V                               = forms.CharField(required=False, label='V')
-    unit_V                          = forms.CharField(required=False, label='Unit V')
+    Unit_V                          = forms.CharField(required=False, label='Unit V')
     
-    min_X__gte                      = forms.DecimalField(required=False, label='Min X From')
-    min_X__lte                      = forms.DecimalField(required=False, label='Min X To')
+    Min_X__gte                      = forms.DecimalField(required=False, label='Min X From')
+    Min_X__lte                      = forms.DecimalField(required=False, label='Min X To')
  
-    max_X__gte                      = forms.DecimalField(required=False, label='Max X From')
-    max_X__lte                      = forms.DecimalField(required=False, label='Max X To')
+    Max_X__gte                      = forms.DecimalField(required=False, label='Max X From')
+    Max_X__lte                      = forms.DecimalField(required=False, label='Max X To')
 
-    min_H__gte                      = forms.DecimalField(required=False, label='Min H From')
-    min_H__lte                      = forms.DecimalField(required=False, label='Min H To')
+    Min_Z__gte                      = forms.DecimalField(required=False, label='Min Z From')
+    Min_Z__lte                      = forms.DecimalField(required=False, label='Min Z To')
 
-    max_H__gte                      = forms.DecimalField(required=False, label='Max H From')
-    max_H__lte                      = forms.DecimalField(required=False, label='Max H To')
+    Max_Z__gte                      = forms.DecimalField(required=False, label='Max Z From')
+    Max_Z__lte                      = forms.DecimalField(required=False, label='Max Z To')
     
-    output                          = forms.CharField(required=False, label='Output')
-    unit_Y                          = forms.CharField(required=False, label='Unit Y')
+    Output                          = forms.CharField(required=False, label='Output')
+    Unit_Y                          = forms.CharField(required=False, label='Unit Y')
     
     B                               = forms.BooleanField(required=False, label='B')
     Bd                              = forms.BooleanField(required=False, label='Bd')
@@ -77,11 +77,11 @@ class EquationSearchForm(SearchForm):
     T                               = forms.BooleanField(required=False, label='T')
     F                               = forms.BooleanField(required=False, label='F')
     
-    equation_y                      = forms.CharField(required=False, label='Equation')
+    Equation                        = forms.CharField(required=False, label='Equation')
     
-    author                          = forms.CharField(required=False, label='Author')
-    year                            = forms.IntegerField(required=False, label='Year')
-    reference                       = forms.CharField(required=False, label='Reference') 
+    Author                          = forms.CharField(required=False, label='Author')
+    Year                            = forms.IntegerField(required=False, label='Year')
+    Reference                       = forms.CharField(required=False, label='Reference') 
 
 
     def search(self):

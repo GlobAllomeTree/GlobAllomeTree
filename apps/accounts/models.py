@@ -10,7 +10,7 @@ from django.db import models
 class UserProfile(models.Model):
     
     DATA_MAY_PROVIDE_CHOICES = (('no_data',             'No data available'),
-                                ('species_data',        'Species data'),
+                                ('Species_data',        'Species data'),
                                 ('wood_density',        'Wood Density'),
                                 ('allometric_equation', 'Allometric Equation'),
                                 ('reports',             'Reports and scientific literature containing new allometric equations'),
