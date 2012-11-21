@@ -39,7 +39,7 @@
     title: Canadian Journal of Forest Research
     description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat.
     site_url: http://www.nrcresearchpress.com/journal/cjfr
-    feed_url: http://www.tandfonline.com/action/showFeed?ui=0&mi=5owgcl&ai=15t&jc=sfor20&type=etoc&feed=rss
+    feed_url: http://www.nrcresearchpress.com/action/showFeed?ui=1ab&mi=3b2pbw&ai=s0&jc=cjfr&type=etoc&feed=rss
     
 - model: journals.journal
   pk: 7

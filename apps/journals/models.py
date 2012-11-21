@@ -13,15 +13,23 @@ class Journal(models.Model):
     def __unicode__(self):
         return self.title
 
-    def title_upper(self):
+    def latest_articles(self):
+        return self.articles.order_by('-published')[:2]
 
-        return self.title.upper()
+    def recent_articles(self):
+        return self.articles.order_by('-published')[:20]
 
-    def feed_items(self):
-        feed = feedparser.parse(self.feed_url)
-        for i, entry in enumerate(feed.entries[:]):
-            try:
-                feed.entries[i].published_datetime = datetime.fromtimestamp(mktime(entry.published_parsed))
-            except AttributeError:
-                pass
-        return feed
+class Article(models.Model):
+    title       = models.CharField(max_length=510)
+    summary     = models.TextField(null=True, blank=True)
+    url         = models.URLField(unique=True)
+    published   = models.DateTimeField(null=True)
+    journal     = models.ForeignKey(Journal, related_name='articles')
+
+    class Meta:
+        ordering = ['-published']
+
+    def __unicode__(self):
+        return self.title
+
+
