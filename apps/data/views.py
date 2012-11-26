@@ -115,7 +115,7 @@ def export(request):
     sqs = form.search()
    
     response = HttpResponse(mimetype='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=tree_equations.csv.txt'
+    response['Content-Disposition'] = 'attachment; filename=DB-tree-equations.csv.txt'
     writer = csv.writer(response)
     # Write headers to CSV file
     headers = []
