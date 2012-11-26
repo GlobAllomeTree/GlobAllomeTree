@@ -7,12 +7,12 @@
     <div class="journal">
         <p>{{ journal.description|striptags }}</p>
         <ul>
-            {% for entry in journal.feed_items.entries|slice:":20" %}
+            {% for article in journal.recent_articles %}
                 <li class="article" >
-                    <a href="{{entry.link}}" >{{ entry.title|truncatewords:20 }}</a>
-                    <span class="pull-right">{{ entry.published_datetime|date:"SHORT_DATE_FORMAT" }}</span>
-                    <div>{{ entry.summary|truncatewords:45|striptags }}</div>
-                    <a class="article-page-link pull-right" href="{{entry.link}}" >Go to the article page >></a>
+                    <a href="{{article.url}}" >{{ article.title|truncatewords:20 }}</a>
+                    <span class="pull-right">{{ article.published|date:"SHORT_DATE_FORMAT" }}</span>
+                    <div>{{ article.summary|truncatewords:45|striptags }}</div>
+                    <a class="article-page-link pull-right" href="{{article.link}}" >Go to the article page >></a>
                     <div class="clearfix"></div>
                 </li>
             {% endfor %}
