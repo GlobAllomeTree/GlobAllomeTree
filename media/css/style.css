@@ -72,10 +72,6 @@ a img {
 
 /* Header */
 
-#main-header .container #title {
-	background: url(../images/logo.png) no-repeat left center;
-        padding-left: 95px;
-}
 
 #title h1 {
     font-weight: bold;
