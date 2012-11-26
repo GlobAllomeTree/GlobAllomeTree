@@ -130,7 +130,10 @@ def export(request):
         for field in TreeEquation._meta.fields:
             val = getattr(obj, field.name)
             if type(val) == bool:
-                val_in_utf8 = unicode(val).encode("utf-8").upper()
+                if val:
+                    val_in_utf8 = 1
+                else:
+                    val_in_utf8 = 0
             elif val is None:
                 val_in_utf8 = 'na'
             else:
