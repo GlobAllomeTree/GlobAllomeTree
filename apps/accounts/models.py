@@ -75,11 +75,11 @@ http://globallometree.com/admin/accounts/userprofile/%s/
                       """
 Dear %s,
 
-Your account has been approved at globallometree.com
+Your account has been approved at www.globallometree.com
 
 You may login at the following link:
 
-http://globallometree.com/accounts/login/
+http://www.globallometree.com/accounts/login/
 
 """ % instance.username, 
                     'no-reply@globallometree.com',

@@ -55,14 +55,14 @@ A new user has registered for your website. This user needs your approval to log
 
 To allow the user to log in you can follow these steps:
 
-1) Go to the new Django User: http://globallometree.com/admin/auth/user/%s/
+1) Go to the new Django User: http://www.globallometree.com/admin/auth/user/%s/
 2) Click the active checkbox on the user settings
 3) Click save
 4) The user will be automatically notified their account has been activated
 
 
 You may also view the new user's profile at:
-http://globallometree.com/admin/accounts/userprofile/%s/
+http://www.globallometree.com/admin/accounts/userprofile/%s/
                                               
 
 """ % (user.id, user.get_profile().id), 
