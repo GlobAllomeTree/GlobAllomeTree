@@ -115,7 +115,7 @@ def export(request):
     sqs = form.search()
    
     response = HttpResponse(mimetype='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=tree_equations.csv'
+    response['Content-Disposition'] = 'attachment; filename=tree_equations.csv.txt'
     writer = csv.writer(response)
     # Write headers to CSV file
     headers = []
@@ -128,6 +128,14 @@ def export(request):
         obj = TreeEquation.objects.get(pk=result.id)
         row = []
         for field in TreeEquation._meta.fields:
-            row.append(unicode(getattr(obj, field.name)).encode("utf-8"))
+            val = getattr(obj, field.name)
+            if type(val) == bool:
+                val_in_utf8 = unicode(val).encode("utf-8").upper()
+            elif val is None:
+                val_in_utf8 = 'na'
+            else:
+                val_in_utf8 = unicode(val).encode("utf-8")
+
+            row.append(val_in_utf8)
         writer.writerow(row)
     return response
