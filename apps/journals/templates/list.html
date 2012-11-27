@@ -9,7 +9,7 @@
             <div class="row">
         {% endif %}
         <div class="span6" >
-            <div class="journal well clearfix" style="height:290px;">
+            <div class="journal well clearfix" style="height:240px;">
                 <h4>{{ journal.title }}</h4>
                 <p>{{ journal.description }}</p>
                 <ul>
@@ -23,7 +23,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="/journals/{{ journal.id }}" class="btn btn-success pull-right clearfix" >Read more >></a>
+                <a href="/journals/{{ journal.id }}" class="btn-small btn-success pull-right clearfix" >Read more >></a>
             </div>
         </div>
         {% if not forloop.counter0|divisibleby:2 %}
