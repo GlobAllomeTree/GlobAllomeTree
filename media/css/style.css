@@ -1,244 +1,103 @@
-/*
+/* 
+ * https://kuler.adobe.com/#themeID/545778
+ * DARK GREEN #147A00
+ * BRIGHT GREEN #29FF00
+ * BRIGHT BLUE #009CFC
+ * BLUE PURPLE #40536C
+ * LEMON YELLOW #FFF422
+ * BRICK RED #94090D
+ *
+ */
+
 body {
-	margin: 0px;
-	padding: 0px;
-	font: 13px Arial, Helvetica, sans-serif;
-	color: #212121;
-}
-
-
-h1, h2, h3 {
-	margin-top: 0px;
-}
-
-h1 {
-	font-size: 2.4em;
-}
-
-h2 {
-	font-size: 1.8em;
-}
-
-h3 {
-	font-size: 1.4em;
-}
-
-p, ol, ul {
-	margin-bottom: 1.8em;
-	line-height: 160%;
+	color:#40536C;
 }
 
 a {
-	color: #175500;
+	color: #147A00;
 }
 
 a:hover {
 	text-decoration: none;
-	color: #FF0000;
+	color: #29FF00;
 }
 
-a img {
-	border: none;
-}
-*/
 /* Header */
 
-/*#headerOuter {
-        background: url(../images/img01.jpg) repeat-x bottom;
-        width:100%;
-        height:100px;
+header {
+	background-color: #ccddcc;
+	margin-bottom:14px;
+	border-bottom: 1px solid #EFEFEF;
+	height:90px;
+
 }
 
-#header {
-	width: 1060px;
-	height: 95px;
-	margin: 0px auto;
-	background: #699C4D;
+.container {
+	width: 1060px;	
+}
+
+#header-trees {
+	position:absolute;
+	top:0px;
+	left:160px;
+	z-index:1;
+}
+
+header .container {
 	position:relative;
 }
 
-#header a {
-	text-decoration: none;
-	color: #FFFFFF;
+header h1 {
+    font-size: 35px;
+    font-weight:normal;
+    color:#147A00;
+    position:absolute;
+	top:10px;
+	left:10px;
+	z-index:2;
+	text-shadow: 2px 2px 3px #60738C;
+	font-family: serif;
 }
 
-
-#user-links {
-    float:right;
-    color:#9BC56F;
-    height:30px;
-    padding:5px;
-}*/
-
-/* Header */
-
-
-#title h1 {
-    font-weight: bold;
-    font-size: 40px;
-}
-
-#logo2 {
-	float: right;
-	background: url(../images/totale2.jpg) no-repeat left center;
-	width:322px;
-	height:55px;
-}
-
-#logo h1 {
-	padding: 22px 0px 0px 0px;
-}
-
-/* Menu */
-
-/*#menu {
+#logo-cirad {
 	position:absolute;
-	bottom:0px;
-	right:0px;
-	
-	background: #243F12;
-	border-top: 2px #9BC56F solid;
-	
-	text-shadow: 1px 1px 2px gray;
+	top:7px;
+	right:10px;
+	z-index:1;
 }
 
-#menu ul {
-	margin: 0px 0 0 0;
-	padding: 0px 0px 0px 0px;
-	list-style: none;
-	line-height: normal;
+#logo-fao {
+	position:absolute;
+	top:7px;
+	right:95px;
+	z-index:1;
 }
 
-#menu li {
-	float: left;
-	margin: 0px 0px 0px 1px;
-}
-
-#menu a {
-	display: block;
-	width: auto;
-	height: 28px;
-	padding: 12px 18px 0px 20px;
-	background: url(../images/img02.jpg) no-repeat right 50%;
-}
-
-#menu a:hover {
-	text-decoration: underline;
-}
-
-#menu .first {
-	background: none;
-}
-
-#menu .active a {
-}
-
-.column3  {
-	float:left;
-	width:265px;
-	padding:15px;
-	background: #699c4d;
-	height:250px;
-}
-
-.column3_center  {
-	float:left;
-	width:265px;
-	padding:15px;
-	margin-left:7px;
-	margin-right:8px;
-	background: #699c4d;
-	height:250px;
-}
-
-.column2_left  {
-	float:left;
-	margin-top:40px;
-	padding:15px;
-	width:406px;
-	background: #699c4d;
-	margin-bottom:10px;
-}
-
-.column2_right  {
-	float:right;
-	margin-top:40px;
-	padding:15px;
-	width:406px;
-	background: #699c4d;
-margin-bottom:10px;
-}
-
-.column2_left  ul li{
-	padding-left:5px;
-	line-height:140%;
-}
-
-.column2_right  ul li{
-	margin-left:-25px;
+#logo-tuscia {
+	position:absolute;
+	top:7px;
+	right:200px;
+	z-index:1;
 }
 
 
-
-.column3  h3 {
-	text-shadow: 1px 1px 2px black;
-	color:white;
+.header-summary {
+	color:#40536C;
+    position:absolute;
+	top:60px;
+	left:10px;
+	z-index:2;
+	text-shadow: 2px 2px 3px #60738C;
 }
 
-.column3_center  h3 {
-	text-shadow: 1px 1px 2px black;
-	color:white;
+/* Navbar */
+.navbar .nav li a {
+	color:#40536C;
 }
 
-.column2_right  h3{
-	text-shadow: 1px 1px 2px black;
-	color: white;
+.navbar .nav li a:hover {
+	color:#94090D;
 }
-
-.column2_left  h3{
-	text-shadow: 1px 1px 2px black;
-	color: white;
-}
-
-.column2_right  h4{
-	text-shadow: 1px 1px 2px black;
-	color: white;
-}
-
-.column2_left  h4{
-	text-shadow: 1px 1px 2px black;
-	color: white;
-}
-
-
-#content_docs {
-	float: left;
-	width: 1060px;
-}
-
-#content_links {
-	float: left;
-	width: 1060px;
-}
-
-#content_links ul li{
-	margin-left:10px;
-	padding:15px;
-	text-shadow: 1px 1px 2px gray;
-	font-size:25px;
-	text-decoration:none;
-
-}
-
-#content_links ul li a { 
-	text-decoration:none;
-
-}
-
-#content_links ul li a:hover { 
-	color: #699c4d;
-
-}*/
 
 /*  Forms */
 
@@ -274,30 +133,6 @@ margin-bottom:10px;
 
 
 
-/* Page */
-/*
-#page {
-	width: 1060px;
-	margin: 0px auto;
-	padding: 30px 0px;
-}
-
-#page_2 {
-	width: 1060px;
-	margin: 0px auto;
-}
-
-#map {
-	width: 1060px;
-	margin: 0px auto;
-}
-
-#map_canvas {
-	margin: 0px auto;
-	float: right;
-}
-
-*/
 #TreeEquation_id {
 	width: 500px;
 	margin: 0px auto;
@@ -315,34 +150,6 @@ margin-bottom:10px;
 #content_TreeEquation {
 	width: auto;
 }
-/*
-.post {
-	margin: 0px 0px 30px 0px;
-}
-
-.post .title {
-	margin: 0px;
-	padding: 0px 0px 5px 0px;
-	border-bottom: #BFC9AE solid 1px;
-	color: #232F01;
-	text-shadow: 1px 1px 2px gray;
-}
-
-.post .title a {
-	color: #232F01;
-}
-
-.post .entry {
-	line-height:normal;
-}
-
-.post .meta {
-	font-weight: bold;
-}
-
-.post .byline {
-	margin: 0px;
-}*/
 
 /* Sidebar */
 
@@ -435,37 +242,6 @@ margin-bottom:10px;
 #search #s {
 	width: 160px;
 }
-
-/* Footer */
-
-/*#footer {
-	clear: both;
-	width: 1056px;
-	height: 55px;
-	margin: 0px auto 30px auto;
-	color: #FFFFFF;
-	background: #699C4D;
-	padding:4px;
-	position:relative;
-}
-
-#footer p {
-	margin: 0px;
-	padding: 19px 0px 0px 0px;
-	text-align: center;
-	line-height: normal;
-	font-size: smaller;
-}
-
-#footer a {
-	color: #FFFFFF;
-}
-
-#copy {
-    position:absolute;
-    bottom:6px;
-    left:6px;   
-}*/
 
 
 /* Search Form */
@@ -610,23 +386,17 @@ fieldset {
 
 /* Bootstrap tweeks */
 
-body {
-    padding-top: 45px;
-}
-
 .footer {
     padding: 60px 0;
     margin-top: 70px;
     border-top: 1px solid #E5E5E5;
     background-color: whiteSmoke;
 }
-/*
-.navbar .nav > li > a {    
-   line-height: 40px;
-}
 
-/* Change the brand color 
-.navbar .brand {
-   padding: 8px 50px 12px 20px;
-   color:#f89406
-}*/
+
+/* login form */
+
+#login-form {
+	width:380px;
+}
+	

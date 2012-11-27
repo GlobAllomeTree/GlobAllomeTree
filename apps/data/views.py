@@ -80,6 +80,11 @@ class EquationSearchView(SearchView):
     def extra_context(self):
         return {'is_page_data' : True}
 
+    def create_response(self, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect('/accounts/login/')
+        return super(EquationSearchView, self).create_response( *args, **kwargs)
+
 def autocomplete(request, field): 
     term    = request.GET.get('term') 
     sqs     = SearchQuerySet()
