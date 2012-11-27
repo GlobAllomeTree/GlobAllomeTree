@@ -70,8 +70,6 @@ def submit_data(request):
                               {'is_page_data': True, }))
 
 
-
-
 class EquationSearchView(SearchView):
     
     def __name__(self):
@@ -93,22 +91,13 @@ def autocomplete(request, field):
     sqs    = SearchQuerySet().facet(field).filter(**kwargs)
 
     result_counts = sqs.facet_counts()['fields'][field]
-    result_list = []
+    
+    result = {'options':[]}
 
     for result_count in result_counts:
+        result['options'].append(result_count[0])
 
-        if len(result_count[0]) > 120:
-            display_value = result_count[0][0:120] + '...'
-        else:
-            display_value = result_count[0]
-
-        result_list.append({
-            'value'  : result_count[0],
-            'display_value': display_value,
-            'count'  : result_count[1]
-        })
-
-    return HttpResponse(json.dumps(result_list))
+    return HttpResponse(json.dumps(result), mimetype='application/json; charset=utf8')
 
 from .forms import EquationSearchForm
 def export(request):

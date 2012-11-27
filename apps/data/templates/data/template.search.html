@@ -21,16 +21,16 @@
                              'Output'];
 
         $.each(autocompletes, function (index, field) {
-            console.log(field, $( "#id_" + field ));
-            $( "#id_" + field ).autocomplete({
-            source: "/data/autocomplete/" + field + "/",
+
+            $( "#id_" + field ).attr('autocomplete', 'off');
+            $( "#id_" + field ).typeahead({
+            source: function ( query, process) {
+                return $.get("/data/autocomplete/" + field + "/", { term: query }, function (data) {
+                    return process(data.options);
+                });
+            },
             minLength: 2
-            }).data( "autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li></li>" )
-                    .data( "item.autocomplete", item )
-                    .append( '<a><span class="auto_count">' + item.count + "</span>" + item.display_value + "</a>" )
-                    .appendTo( ul );
-            };
+            });
         });
         
     });
@@ -55,8 +55,8 @@
                     <a target="_blank" href="/data/export/{{form.export_link}}" class="btn btn-succcess" id="exportButton">Export Results</a>
                 </div>
 	           
-               <h3 style="color:#243F12;margin-bottom:0px;">Your current search</h3>
-               <h4 style="color:#75AA3B;margin:2px 0px 6px 2px;">Equations found: {{ page.paginator.count}} </h4>
+               <h3>Your current search</h3>
+               <h4>Equations found: {{ page.paginator.count}} </h4>
 
     	       <table>
         	       {% for item in form.current_search_summary %}
@@ -68,13 +68,14 @@
         	       {% endfor %}
     	       </table>
 	       </div>
+
 	    {% endif %}
 
         <h3>Equations</h3>
 
-	    <form method="get" action="." id="searchForm">
+	    <form method="get" action="." id="searchForm" autocomplete="off">
 	       
-    	    <div id="search-box">    
+    	    <div id="search-box" style="clear:both;">    
                 
                 <ul class="nav nav-tabs">                   
                     <li><a href="#keyword" data-toggle="tab" class="active">Keyword</a></li>
@@ -461,11 +462,11 @@
     					<th>Equation</th>
     					<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
     					<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
-    					<th><a href="{{form.sort_link_country_order}}">Country</a></th>
+    					<th><a href="{{form.sort_link_Country_order}}">Country</a></th>
     					<th>Components</th>
     					<th><a href="{{form.sort_link_Output_order}}">Output</a></th>
     					<th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
-    					<th><a href="{{form.sort_link_author_order}}">Author</a></th>
+    					<th><a href="{{form.sort_link_Author_order}}">Author</a></th>
     			    </tr>
 			    </thead>
 			    <tbody>
@@ -474,11 +475,11 @@
                        <td>{{ result.object.Equation}}</td>
                        <td>{{ result.object.Genus}}</td>
                        <td>{{ result.object.Species}}</td>
-                       <td>{{ result.object.country.common_name}}</td>
+                       <td>{{ result.object.Country.common_name}}</td>
                        <td>{{ result.object.components_string}}</td>
                        <td>{{ result.object.Output}}</td>
                        <td>{{ result.object.Biome_FAO }}</td>
-                       <td>{{ result.object.author }}</td>
+                       <td>{{ result.object.Author }}</td>
                     </tr>
                   {% endfor %}
 			     </tbody>

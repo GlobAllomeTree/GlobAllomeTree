@@ -279,6 +279,15 @@ header h1 {
     display:block;
 }
 
+#currentSearch h3 {
+	font-size:18px;
+	line-height: 18px;
+	margin:0px;
+}
+
+#currentSearch h4 {
+	font-size:14px;
+}
 
 .smallInputs label {
     float:left;
@@ -322,7 +331,7 @@ th {
     font-weight:bold;
     line-height: 2em;
     color: #FFF;
-    background-color: #243F12;
+    background-color: #345A30;
    
 }
 
@@ -367,14 +376,19 @@ tbody tr:nth-child(2n) {
 	border-radius: 4px;
 	padding:10px;
 	margin-right:5px;
-	background-color: #E5FFD6;
+	background-color: #ddeedd;
 	-moz-box-shadow: 5px 5px 5px #bbb;
 	-webkit-box-shadow: 5px 5px 5px #bbb;
 	box-shadow: 5px 5px 5px #bbb;
 }
 
 #currentSearch  tbody tr:nth-child(2n) {
-    background-color: #D1FFB7;
+    background-color: #eeffee;
+}
+
+#currentSearch  tbody td,
+#currentSearch  tbody th {
+	border-bottom: 1px solid #ccddcc
 }
 
 #exportButton:hover {
