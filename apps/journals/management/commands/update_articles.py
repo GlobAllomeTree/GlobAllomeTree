@@ -34,4 +34,4 @@ class Command(BaseCommand):
                     i = i+1
                     j = j+1
             self.stdout.write('Imported {0} articles from {1}\n'.format(j, journal))
-        self.stdout.write('Imported {0} articles in total\n'.format(i, journal))
+        self.stdout.write('Imported {0} articles in total\n'.format(i))

@@ -14,10 +14,10 @@ def docs(request):
     					      context_instance = RequestContext(request,
     					      {'is_page_docs': True }))
 
-def links(request):
-    return render_to_response('links.html',
+def contributors(request):
+    return render_to_response('contributors.html',
     					       context_instance = RequestContext(request,
-    					       {'is_page_links': True, }))
+    					       {'is_page_contributors': True, }))
 
 def principles(request):
     return render_to_response('principles.html',
