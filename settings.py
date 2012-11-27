@@ -104,6 +104,7 @@ INSTALLED_APPS = (
     'cms.plugins.link',
     'cms.plugins.picture',
     'cms.plugins.text',
+    'cms.plugins.teaser',
 )
 
 # Override the server-derived value of SCRIPT_NAME 
