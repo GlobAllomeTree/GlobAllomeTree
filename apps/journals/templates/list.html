@@ -9,7 +9,7 @@
             <div class="row">
         {% endif %}
         <div class="span6" >
-            <div class="journal well clearfix" style="height:240px;">
+            <div class="journal well clearfix" style="height:200px;">
                 <h4>{{ journal.title }}</h4>
                 <p>{{ journal.description }}</p>
                 <ul>
@@ -17,9 +17,9 @@
                         <li>
                             <span class="date">{{ article.published|date:"SHORT_DATE_FORMAT" }}</span>
                             {% if article.published_datetime|date:"SHORT_DATE_FORMAT" %}
-                                &nbsp;-&nbsp;
                             {% endif %}
-                            <a href="{{ article.url }}" >{{ article.title|striptags }}</a>
+                            <span>-</span>
+                            <a href="{{ article.url }}" >{{ article.title|striptags|truncatewords:10 }}</a>
                         </li>
                     {% endfor %}
                 </ul>
