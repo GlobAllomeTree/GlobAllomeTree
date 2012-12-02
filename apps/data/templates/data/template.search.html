@@ -430,8 +430,9 @@
     	            
 	    </form>
 	  
-	   
-        {% if page.object_list %}
+	    {% if no_query_entered %}
+            <!-- NO QUERY YET -->
+        {% elif page.object_list %}
          <br>
          <br>
             <div style="float:left;width:100px;border-right: 1px solid #9BC56F;"> 

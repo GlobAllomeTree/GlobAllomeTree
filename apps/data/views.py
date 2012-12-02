@@ -76,7 +76,11 @@ class EquationSearchView(SearchView):
         return "EquationSearchView"
 
     def extra_context(self):
-        return {'is_page_data' : True}
+
+        no_query_entered = not bool(len(self.request.GET.keys()))
+
+        return {'is_page_data' : True,
+                'no_query_entered' : no_query_entered}
 
     def create_response(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
