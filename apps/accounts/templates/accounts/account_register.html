@@ -16,7 +16,7 @@
 
 {%block content %}
 
-<div id="page">
+<div id="page" class="narrow-page">
 
 	{% if form.has_errors %}
 	    form.non_field_errors
@@ -57,8 +57,6 @@
 			{% with form.country as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 			{% with form.education as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 			{% with form.field_subject as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.subregion as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.region as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 		</fieldset>
 		<br>
 		<fieldset>

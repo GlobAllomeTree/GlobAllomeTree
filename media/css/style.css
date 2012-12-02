@@ -36,6 +36,10 @@ header {
 	width: 1060px;	
 }
 
+.narrow-page { 
+	padding:0px 60px;
+}
+
 #header-trees {
 	position:absolute;
 	top:0px;
