@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} 
+
+{% block script %}
+
+
+{% endblock %}
+
+
+{% block content %}
+<div id="page" class="narrow-page">
+    <div class="row">
+        <div class="span6">
+              <h4>How to submit data</h4>
+              <p>
+                <ul>
+                    <li>The file should be encoded as <strong>UTF-8</strong></li>
+                    <li>The file should be saved in <strong>CSV</strong> format with <strong>TAB</strong> seperators between fields</li>
+                    <li>When there is no data available for a field it should be marked using <strong>na</strong></li>
+                    <li>True and False fields should be marked as <strong>TRUE</strong> and <strong>FALSE</strong></li>
+                    <li>The file may be created using the <strong>Fantallometrik</strong> software available under the Software section  of this website</li>
+                    </li>
+                </ul>
+                    After your data is submitted, it will be professionally reviewed before being added to the GlobAllomeTree database.
+              </p>
+        </div>
+        <div class="span6">
+            <div class="well clearfix">
+                <div id="page" >
+                    {% crispy form %}
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+{% endblock %}

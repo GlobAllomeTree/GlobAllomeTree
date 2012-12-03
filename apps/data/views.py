@@ -3,15 +3,58 @@ import json
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template.defaultfilters import slugify
+from django.template import RequestContext
+from django.views.generic.edit import FormView
+from django.views.generic.base import TemplateView
+
 
 from haystack.views import SearchView
 from haystack.query import SearchQuerySet
 
-from django.template import RequestContext
+from .forms import DataSubmissionForm
+from .models import TreeEquation, Country, DataSubmission
 
 
-from .models import TreeEquation, Country
+
+class DataSubmissionView(FormView):
+    template_name = 'data/template.submit_data.html'
+    form_class = DataSubmissionForm
+    success_url = '/data/submit-data/complete/'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/accounts/login/')
+        return super(DataSubmissionView, self).dispatch(request, *args, **kwargs)
+
+
+    def form_valid(self, form):      
+        ds = DataSubmission()
+        ds.submitted_file = form.cleaned_data['file']
+        ds.submitted_notes = form.cleaned_data['notes']
+        ds.user = self.request.user
+        ds.imported = False
+        ds.save()
+
+        return super(DataSubmissionView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(DataSubmissionView, self).get_context_data(**kwargs)
+        context['is_page_data'] = True
+        return context
+
+
+
+
+class DataSubmissionCompleteView(TemplateView):
+    template_name = 'data/template.submit_data_complete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DataSubmissionCompleteView, self).get_context_data(**kwargs)
+        context['is_page_data'] = True
+        return context
+
+
+
 
 
 def continents_map(request):
@@ -35,7 +78,7 @@ def geo_map(request):
 
 def geo_map_id(request, geo_id):
     country = Country.objects.get(iso_3166_1_2_letter_code = geo_id)
-    return HttpResponseRedirect('/data/search/?country=' + country.common_name)
+    return HttpResponseRedirect('/data/search/?Country=' + country.common_name)
     
 def database(request):
     return render_to_response('database.html',
@@ -64,10 +107,6 @@ def species(request, selected_Genus=None):
                                'is_page_data' : True }))
 
 
-def submit_data(request):
-    return render_to_response('continents_map.html',
-                              context_instance = RequestContext(request,
-                              {'is_page_data': True, }))
 
 
 class EquationSearchView(SearchView):

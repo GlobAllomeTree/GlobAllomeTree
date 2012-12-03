@@ -2,7 +2,7 @@ from django.conf.urls.defaults import patterns, url
 from haystack.query import SearchQuerySet
 from haystack.views import search_view_factory
 from .forms import EquationSearchForm
-from .views import EquationSearchView
+from .views import EquationSearchView, DataSubmissionView, DataSubmissionCompleteView
 
 sqs = SearchQuerySet()
 
@@ -19,7 +19,8 @@ urlpatterns = patterns('apps.data.views',
 
     url(r'^export/$', 'export'),
             
-    url(r'^submit-data/$', 'submit_data'),
+    url(r'^submit-data/$', DataSubmissionView.as_view()),
+    url(r'^submit-data/complete/$', DataSubmissionCompleteView.as_view()),
 
     #Searchable list of equations                   
     url(r'^search/$', search_view_factory(
