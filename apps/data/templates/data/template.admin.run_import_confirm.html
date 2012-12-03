@@ -25,10 +25,20 @@
     {% else %}
     
 	    {% if show_import_summary %}
-			<h3>Data Imported</h3>
+			
 
-			<p>Total rows imported: {{total_rows_imported}}</p>
-			<p>Missed Rows:
+			{% if  import_reset %}
+				<h3 style="color:red">Data NOT Imported</h3>
+				<p>The data was not imported since there were errors on some rows. The import has been reset. If you want to import the good rows anyway, re-run the 
+			    import with the "Allow Partial Import" checkbox checked.</p>
+				<p>Total OK rows: {{total_rows_imported}}</p>
+
+			{% else %}
+				<h3>Data Imported</h3>
+				<p>Total rows imported: {{total_rows_imported}}</p>
+			{% endif %}
+			
+			<p>Rows with errors:
 				<ul>
 				{% for row in missed_rows %}
 					<li>Row:{{ row.line_number }} Exception: {{ row.exception }}</li>
@@ -67,10 +77,16 @@
 			    	{% for obj in queryset %}
 				   		 <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk|unlocalize }}" />
 				    {% endfor %}
+				    
 				    <input type="hidden" name="action" value="run_import" />
 				    <input type="hidden" name="post" value="yes" />
 				    <input type="hidden" name="run" value="yes" />
+				    <p>
+				    <h3>Run Import</h3>
+				    <input type="checkbox" name="import_good_rows_anyway" value="yes" /> 
+					<strong>Allow Partial Import</strong> (Import good rows even if not all rows be imported.)</p>
 				    <input type="submit" value="{% trans "Yes, run the import" %}" />
+				    <p style="font-size:90%">Please note: The import can take a VERY long time to run. Please press the submit button once and wait for the page to finish loading.</p>
 			    </div>
 		    </form>
 

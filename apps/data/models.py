@@ -31,6 +31,9 @@ class DataSubmission(models.Model):
     user = models.ForeignKey(User)
     imported = models.BooleanField()
 
+    def __unicode__(self):
+        import pdb; pdb.set_trace()
+        return u"%s by %s" % (self.submitted_file, self.user)
 
 
 class TreeEquation(models.Model):
@@ -41,7 +44,8 @@ class TreeEquation(models.Model):
             ('Stand', 'Stand'),
      )
 
-    ID                              = models.IntegerField(primary_key=True)	
+    ID                              = models.IntegerField(primary_key=True)
+    data_submission                 = models.ForeignKey(DataSubmission, blank=True, null=True)
     IDequation                      = models.IntegerField(null=True, blank=True)
     Population                      = models.CharField(max_length=255, null=True, blank=True, choices=POPULATION_CHOICES)
     Ecosystem                       = models.CharField(max_length=255, null=True, blank=True)    

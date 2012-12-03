@@ -13,10 +13,10 @@ from . import models
 
 
 class TreeEquationAdmin(admin.ModelAdmin):
-    list_display = ('ID', 'Population', 'Ecosystem', 'Country', 'Species', 'Genus',  'Equation')
+    list_display = ('ID', 'data_submission', 'Country', 'Species', 'Genus',  'Equation')
     ordering = ["ID"]
     search_fields  = ['ID','Country']
-    list_filter = ['Country']
+    list_filter = ['data_submission', 'Country']
 
 
 
@@ -118,6 +118,11 @@ class DataSubmissionAdmin(admin.ModelAdmin):
            'F'
         ]
 
+
+        dont_import_fields = [
+            'data_submission'
+        ]
+
         missed_countries = []
         missed_rows = []
         headers = None
@@ -128,10 +133,10 @@ class DataSubmissionAdmin(admin.ModelAdmin):
         for country in models.Country.objects.all():
             self.countries.append(country)
         self.country_mappings = {}
-
         line_number = 0
         total_rows_imported = 0
         run_verified = request.POST.get('run', False)
+
         try:
             submitted_file = codecs.open(settings.MEDIA_ROOT + '/' + str(data_submission.submitted_file), 'r', encoding='utf-8-sig', errors='strict')
         
@@ -157,7 +162,7 @@ class DataSubmissionAdmin(admin.ModelAdmin):
                             unknown_headers.append(key)
 
                     for key in tree_eq_fields:
-                        if key not in headers:
+                        if key not in headers and key not in dont_import_fields:
                             missing_headers.append(key)
                 
                     context['ok_headers'] = ok_headers
@@ -183,8 +188,11 @@ class DataSubmissionAdmin(admin.ModelAdmin):
 
                 #actually run the import
                 if run_verified:
+                    
+
                     try:
-                        tree_equation = models.TreeEquation(Country=country)
+                        tree_equation = models.TreeEquation(Country=country, 
+                                                            data_submission=data_submission)
                         for key in headers:
                             if key == 'Country':
                                 continue
@@ -216,11 +224,22 @@ class DataSubmissionAdmin(admin.ModelAdmin):
                         missed_rows.append({'line_number' : line_number,
                                             'exception'   : str(e)})
 
+            if run_verified and len(missed_rows) == 0:
+                data_submission.imported = True
+                data_submission.save()
+            elif run_verified and len(missed_rows) > 0:
+                if request.POST.get('import_good_rows_anyway', False):
+                    data_submission.imported = True
+                    data_submission.save()
+                else:
+                    context['import_reset'] = True
+                    #We missed some rows... so reset everything
+                    for eq in models.TreeEquation.objects.filter(data_submission = data_submission):
+                        eq.delete()                
 
         except UnicodeDecodeError:
             errors.append("The submitted file is not in the encoding utf-8 (utf-8-sig). Please convert and re-upload the file in utf-8 encoding and try again")
 
-       
         if len(missed_countries):
             errors.append('The following country names in the csv file could not be matched to the country database: %s' %\
                             ', '.join(missed_countries)

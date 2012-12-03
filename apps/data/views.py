@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
-
+from django.core.mail import mail_managers
 
 from haystack.views import SearchView
 from haystack.query import SearchQuerySet
@@ -35,6 +35,18 @@ class DataSubmissionView(FormView):
         ds.imported = False
         ds.save()
 
+        mail_managers('New Globallometree Data Submission', """
+
+A new data file has been submitted to http://www.globallometree.org/ 
+
+It was submitted by the user %s
+
+To review this file and import it, please go to:
+
+http://www.globallometree.org/admin/data/datasubmission/%s/
+            """ % (ds.user, ds.id)) 
+
+
         return super(DataSubmissionView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -52,8 +64,6 @@ class DataSubmissionCompleteView(TemplateView):
         context = super(DataSubmissionCompleteView, self).get_context_data(**kwargs)
         context['is_page_data'] = True
         return context
-
-
 
 
 

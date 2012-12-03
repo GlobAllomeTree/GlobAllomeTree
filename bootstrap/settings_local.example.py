@@ -12,16 +12,17 @@ DATABASES = {
 }
 
 
-
+#These people get error logs
 ADMINS = (
      ('Admin Name', 'example@gmail.com'),
 )
 
-MANAGERS = ADMINS
+#These people get notices of new users... data submissions, etc...
+MANAGERS = (
+     ('Manager Name', 'example@gmail.com'),
+)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 SECRET_KEY = ''
-
-NEW_USER_NOTIFY_EMAIL = 'example@gmail.com'
