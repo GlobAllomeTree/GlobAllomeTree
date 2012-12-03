@@ -32,7 +32,6 @@ class DataSubmission(models.Model):
     imported = models.BooleanField()
 
     def __unicode__(self):
-        import pdb; pdb.set_trace()
         return u"%s by %s" % (self.submitted_file, self.user)
 
 

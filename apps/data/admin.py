@@ -15,9 +15,9 @@ from . import models
 
 class TreeEquationAdmin(admin.ModelAdmin):
     list_display = ('ID', 'data_submission', 'Country', 'Species', 'Genus',  'Equation')
-    ordering = ["ID"]
-    search_fields  = ['ID',]
-    list_filter = ['data_submission', 'Country']
+    ordering = ("ID",)
+    search_fields  = ('ID',)
+    list_filter = ('data_submission', 'Country')
 
 
 
