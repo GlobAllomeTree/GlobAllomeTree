@@ -1,5 +1,6 @@
 import codecs
 import difflib
+from time import sleep
 from decimal import Decimal
 from decimal import getcontext
 getcontext().prec = 10
@@ -219,6 +220,9 @@ class DataSubmissionAdmin(admin.ModelAdmin):
                                     setattr(tree_equation, key, val)
                     
                         tree_equation.save()
+                        #Give elasticsearch 1/10th of a second to index the record on save
+                        #tring not to overload the server
+                        sleep(0.1)
                         total_rows_imported += 1
                     except Exception, e:
                         missed_rows.append({'line_number' : line_number,
