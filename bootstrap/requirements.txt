@@ -3,7 +3,9 @@ django==1.4
 requests==0.13.2
 -e git+https://github.com/toastdriven/pyelasticsearch.git@3bfe1a90eab6c2dfb0989047212f4bc9fb814803#egg=pyelasticsearch
 django-grappelli==2.4.0
-gunicorn==0.14.6
+greenlet==0.4.0
+gevent==0.13.8
+gunicorn==0.16.1
 psycopg2==2.4.5
 south==0.7.6
 django-cms==2.3.3
