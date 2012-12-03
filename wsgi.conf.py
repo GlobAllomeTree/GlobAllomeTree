@@ -1,3 +1,3 @@
-bind = "127.0.0.1:8000"
+bind = "unix:///tmp/globallometree.gunicorn.sock"
 workers = 2
 worker_class = "gevent"
