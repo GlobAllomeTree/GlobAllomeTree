@@ -61,9 +61,9 @@ A new user has been correctly approved for your website.
 
 You can view the user's information here:
 Django User
-http://globallometree.com/admin/auth/user/%s/
+http://globallometree.org/admin/auth/user/%s/
 User Profile
-http://globallometree.com/admin/accounts/userprofile/%s/
+http://globallometree.org/admin/accounts/userprofile/%s/
 
 """ % (instance.id, instance.get_profile().id),
                      fail_silently=False)
@@ -73,14 +73,14 @@ http://globallometree.com/admin/accounts/userprofile/%s/
                       """
 Dear %s,
 
-Your account has been approved at www.globallometree.com
+Your account has been approved at www.globallometree.org
 
 You may login at the following link:
 
-http://www.globallometree.com/accounts/login/
+http://www.globallometree.org/accounts/login/
 
 """ % instance.username, 
-                    'no-reply@globallometree.com',
+                    'no-reply@globallometree.org',
                      [instance.email], 
                      fail_silently=False)
             
