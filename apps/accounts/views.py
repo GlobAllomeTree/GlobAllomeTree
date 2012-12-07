@@ -66,7 +66,6 @@ http://www.globallometree.com/admin/accounts/userprofile/%s/
                                               
 
 """ % (user.id, user.get_profile().id), 
-                    'no-reply@globallometree.com',
                      fail_silently=False)
             
             return HttpResponseRedirect('/accounts/approval-pending/')

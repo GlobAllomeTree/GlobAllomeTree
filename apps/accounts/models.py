@@ -66,7 +66,6 @@ User Profile
 http://globallometree.com/admin/accounts/userprofile/%s/
 
 """ % (instance.id, instance.get_profile().id),
-                    'no-reply@globallometree.com',
                      fail_silently=False)
         
         #Mail the new user
