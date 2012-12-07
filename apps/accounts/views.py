@@ -9,7 +9,7 @@ from . import models
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import mail_managers
 
 def register(request):
     
@@ -47,7 +47,7 @@ def register(request):
                                               )
             user_profile.save()
              
-            send_mail('Globallometree New User "%s" requires approval' % user.username,
+            mail_managers('Globallometree New User "%s" requires approval' % user.username,
                       """
 Dear Globallometree Admin,
 
@@ -67,7 +67,6 @@ http://www.globallometree.com/admin/accounts/userprofile/%s/
 
 """ % (user.id, user.get_profile().id), 
                     'no-reply@globallometree.com',
-                     settings.MANAGERS, 
                      fail_silently=False)
             
             return HttpResponseRedirect('/accounts/approval-pending/')

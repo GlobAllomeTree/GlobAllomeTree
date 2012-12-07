@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import mail_managers, send_mail
 from django.db import models
 
 
@@ -53,7 +53,7 @@ def user_pre_save(sender, instance, signal, *args, **kwargs):
     
     if compare_user.is_active != instance.is_active and instance.is_active == True:
         #Mail the admin
-        send_mail('Globallometree New User "%s" APPROVED' % instance.username,
+        mail_managers('Globallometree New User "%s" APPROVED' % instance.username,
                       """
 Dear Globallometree Admin,
 
@@ -67,7 +67,6 @@ http://globallometree.com/admin/accounts/userprofile/%s/
 
 """ % (instance.id, instance.get_profile().id),
                     'no-reply@globallometree.com',
-                     settings.MANAGERS, 
                      fail_silently=False)
         
         #Mail the new user
