@@ -9,7 +9,7 @@ from . import models
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import mail_managers
 
 def register(request):
     
@@ -47,7 +47,7 @@ def register(request):
                                               )
             user_profile.save()
              
-            send_mail('Globallometree New User "%s" requires approval' % user.username,
+            mail_managers('Globallometree New User "%s" requires approval' % user.username,
                       """
 Dear Globallometree Admin,
 
@@ -55,19 +55,17 @@ A new user has registered for your website. This user needs your approval to log
 
 To allow the user to log in you can follow these steps:
 
-1) Go to the new Django User: http://www.globallometree.com/admin/auth/user/%s/
+1) Go to the new Django User: http://www.globallometree.org/admin/auth/user/%s/
 2) Click the active checkbox on the user settings
 3) Click save
 4) The user will be automatically notified their account has been activated
 
 
 You may also view the new user's profile at:
-http://www.globallometree.com/admin/accounts/userprofile/%s/
+http://www.globallometree.org/admin/accounts/userprofile/%s/
                                               
 
 """ % (user.id, user.get_profile().id), 
-                    'no-reply@globallometree.com',
-                     [settings.NEW_USER_NOTIFY_EMAIL], 
                      fail_silently=False)
             
             return HttpResponseRedirect('/accounts/approval-pending/')

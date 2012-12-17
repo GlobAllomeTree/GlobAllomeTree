@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import mail_managers, send_mail
 from django.db import models
 
 
@@ -53,7 +53,7 @@ def user_pre_save(sender, instance, signal, *args, **kwargs):
     
     if compare_user.is_active != instance.is_active and instance.is_active == True:
         #Mail the admin
-        send_mail('Globallometree New User "%s" APPROVED' % instance.username,
+        mail_managers('Globallometree New User "%s" APPROVED' % instance.username,
                       """
 Dear Globallometree Admin,
 
@@ -61,13 +61,11 @@ A new user has been correctly approved for your website.
 
 You can view the user's information here:
 Django User
-http://globallometree.com/admin/auth/user/%s/
+http://globallometree.org/admin/auth/user/%s/
 User Profile
-http://globallometree.com/admin/accounts/userprofile/%s/
+http://globallometree.org/admin/accounts/userprofile/%s/
 
 """ % (instance.id, instance.get_profile().id),
-                    'no-reply@globallometree.com',
-                     [settings.NEW_USER_NOTIFY_EMAIL], 
                      fail_silently=False)
         
         #Mail the new user
@@ -75,14 +73,14 @@ http://globallometree.com/admin/accounts/userprofile/%s/
                       """
 Dear %s,
 
-Your account has been approved at www.globallometree.com
+Your account has been approved at www.globallometree.org
 
 You may login at the following link:
 
-http://www.globallometree.com/accounts/login/
+http://www.globallometree.org/accounts/login/
 
 """ % instance.username, 
-                    'no-reply@globallometree.com',
+                    'no-reply@globallometree.org',
                      [instance.email], 
                      fail_silently=False)
             

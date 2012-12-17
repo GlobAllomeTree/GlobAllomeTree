@@ -105,7 +105,10 @@ INSTALLED_APPS = (
     'cms.plugins.picture',
     'cms.plugins.text',
     'cms.plugins.teaser',
+    'crispy_forms',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 # Override the server-derived value of SCRIPT_NAME 
 # See http://code.djangoproject.com/wiki/BackwardsIncompatibleChanges#lighttpdfastcgiandothers

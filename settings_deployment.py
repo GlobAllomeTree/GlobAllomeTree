@@ -12,12 +12,3 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-
-ADMINS = (
-     ('Tom Gruner', 'tom.gruner@gmail.com'),
-)
-
-MANAGERS = ADMINS
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
