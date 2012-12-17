@@ -432,4 +432,11 @@ fieldset {
 #login-form {
 	width:380px;
 }
-	
+
+/* contributors */
+.contributor-title {
+    display: inline;
+}
+.contributor-logo {
+    margin: 0 10px 10px 0;
+}
