@@ -12,7 +12,7 @@
                     <a href="{{article.url}}" >{{ article.title|truncatewords:20 }}</a>
                     <span class="pull-right">{{ article.published|date:"SHORT_DATE_FORMAT" }}</span>
                     <div>{{ article.summary|truncatewords:45|striptags }}</div>
-                    <a class="article-page-link pull-right" href="{{article.link}}" >Go to the article page >></a>
+                    <a class="article-page-link pull-right" href="{{article.url}}" >Go to the article page >></a>
                     <div class="clearfix"></div>
                 </li>
             {% endfor %}

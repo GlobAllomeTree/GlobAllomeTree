@@ -2,42 +2,42 @@
   pk: 1
   fields:
     title: Forest Ecology and Management
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: Forest Ecology and Management publishes scientific articles that link forest ecology with forest management, and that apply biological and ecological knowledge to the management and conservation of man-made and natural forests. The scope of the journal includes all forest ecosystems of the world.
     site_url: http://www.journals.elsevier.com/forest-ecology-and-management/
     feed_url: http://rss.sciencedirect.com/publication/science/03781127
 - model: journals.journal
   pk: 2
   fields:
     title: Scandinavian Journal of Forest Research
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: The Scandinavian Journal of Forest Research publishes original articles relevant to forests and forestry of boreal and temperate regions, including the forestry-to-wood production chain. The journal publishes papers of international interest in the entire fields of forest research from basic to more applied subjects including: wood science and technology, silviculture, forest utilization, forest planning, management and economics and marketing.
     site_url: http://www.tandfonline.com/toc/sfor20/current
     feed_url: http://www.tandfonline.com/action/showFeed?ui=0&mi=5owgcl&ai=15t&jc=sfor20&type=etoc&feed=rss
 - model: journals.journal
   pk: 3
   fields:
     title: South Africa journal of Botany
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: Official Journal of the South African Association of Botanists.  The South African Journal of Botany publishes original papers that deal with the classification, biodiversity, morphology, physiology, molecular biology, ecology, biotechnology, ethnobotany and other botanically related aspects of species that are of importance to southern Africa. Manuscripts dealing with significant new findings on other species of the world and general botanical principles will also be considered and are encouraged.
     site_url: http://www.journals.elsevier.com/south-african-journal-of-botany/
     feed_url: http://rss.sciencedirect.com/publication/science/02546299
 - model: journals.journal
   pk: 4
   fields:
     title: Biomass and Bioenergy
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: Biomass and Bioenergy is an international journal publishing original research papers and short communications, review articles and case studies on biological resources, chemical and biological processes, and biomass products for new renewable sources of energy, food and materials. Key areas covered by the journal:  1) Biomass, 2) Biological Residues,  3) Bioenergy Processes,  4) Bioenergy Utilization,  4) Biomass and the Environment.
     site_url: http://www.journals.elsevier.com/biomass-and-bioenergy/
     feed_url: http://rss.sciencedirect.com/publication/science/09619534
 - model: journals.journal
   pk: 5
   fields:
     title: Agriculture, Ecosystems & Environment
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: Agriculture, Ecosystems & Environment publishes scientific articles dealing with the interface between agroecosystems and the natural environment, specifically how agriculture influences the environment and how changes in that environment impact agroecosystems. Preference is given to papers from experimental and observational research at the field, system or landscape level, complemented as appropriate by dynamic and statistical modelling, that bridge scientific disciplines, integrate knowledge, and are placed in an international or wide comparative context.
     site_url: http://www.journals.elsevier.com/agriculture-ecosystems-and-environment/
     feed_url: http://rss.sciencedirect.com/publication/science/01678809
 - model: journals.journal
   pk: 6
   fields:
     title: Canadian Journal of Forest Research
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: Published since 1971, this monthly journal features articles, reviews, notes and commentaries on all aspects of forest science, including biometrics and mensuration, conservation, disturbance, ecology, economics, entomology, fire, genetics, management, operations, pathology, physiology, policy, remote sensing, social science, soil, silviculture, wildlife and wood science, contributed by internationally respected scientists.
     site_url: http://www.nrcresearchpress.com/journal/cjfr
     feed_url: http://www.nrcresearchpress.com/action/showFeed?ui=1ab&mi=3b2pbw&ai=s0&jc=cjfr&type=etoc&feed=rss
     
@@ -45,27 +45,27 @@
   pk: 7
   fields:
     title: Journal of Forestry Research
-    description: The Journal of Forestry Research offers articles dealing with all aspects of forestry.
+    description: The Journal of Forestry Research offers articles dealing with all aspects of forestry. It is primarily a medium for reporting original theoretical and experimental research, as well as technical reviews. Approximately 65 per cent of the papers published in the journal are by international researchers; the balance is contributed by Chinese scientists, professors and doctoral degree students.
     site_url: http://www.springer.com/life+sciences/forestry/journal/11676
     feed_url: http://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=11676&channel-name=Journal%20of%20Forestry%20Research
 - model: journals.journal
   pk: 8
   fields:
     title: Journal of Tropical Forest Science
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: The Journal of Tropical Forest Science is an international reviewed journal concerning the science, technology and development of tropical forests and forest products. The journal welcomes articles reporting original fundamental or applied research on tropical forest biology, ecology, chemistry, management, silviculture, conservation, utilization and product development. The copyright belongs to the Forest Research Institute Malaysia (FRIM)
     site_url: http://www.frim.gov.my/?page_id=1826
     feed_url: http://www.frim.gov.my/?feed=rss&lang=en
 - model: journals.journal
   pk: 9
   fields:
     title: Annals of Forest Science
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: Annals of Forest Science publishes every year eight issues with original research articles and review papers. The journal covers a broad scope including ecology and ecophysiology, genetics and improvement, tree physiology, damages to forests, wood quality, and silviculture. The biological and ecological bases of a sustainable forest management are an important topic for the journal. All forest ecosystems of the world under boreal, temperate and tropical climates may be addressed.
     site_url: http://www.afs-journal.org/
     feed_url: http://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=13595&channel-name=Annals%20of%20Forest%20Science
 - model: journals.journal
   pk: 10
   fields:
     title: South African Forestry Journal
-    description: Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+    description: The  South African Forestry Journal is one of the leading forestry journals in the Southern Hemisphere. The journal publishes scientific articles in forest science and management of fast-growing, planted or natural forests in the Southern Hemisphere and the tropics. Papers are also encouraged on related disciplines such as environmental aspects of forestry, social forestry, agroforestry, forest engineering and management as well as the goods and services that are derived from forests as a whole.
     site_url: http://www.tandfonline.com/toc/tsfs17/current
     feed_url: http://www.tandfonline.com/action/showFeed?ui=0&mi=5owgcl&ai=25j&jc=tsfs20&type=etoc&feed=rss

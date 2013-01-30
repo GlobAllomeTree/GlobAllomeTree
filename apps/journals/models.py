@@ -17,7 +17,7 @@ class Journal(models.Model):
         return self.articles.order_by('-published')[:2]
 
     def recent_articles(self):
-        return self.articles.order_by('-published')[:20]
+        return self.articles.order_by('-published')[:10]
 
 class Article(models.Model):
     title       = models.CharField(max_length=510)
