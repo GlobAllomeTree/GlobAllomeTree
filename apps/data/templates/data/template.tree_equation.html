@@ -4,122 +4,103 @@
 
 {% block script %}	
   
-  <script type='text/javascript' src='https://www.google.com/jsapi'></script>
-  
-  <script type='text/javascript'>
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
 
+        google.load('visualization', '1', {'packages': ['geochart']});
+        google.setOnLoadCallback(drawRegionsMap);
+    
+        function drawRegionsMap() {
+            var data = new google.visualization.DataTable();
+            data.addRows(1);
+            data.addColumn('string', 'Country');
+            data.setValue(0, 0, '{{ tree_equation.country }}');
+        
+            var options = {region: '002', width: '400', };
+        
+            var container = document.getElementById('regions_map_canvas');
+            var geochart = new google.visualization.GeoChart(container);
+            geochart.draw(data, options);
+        }
 
-   google.load('visualization', '1', {'packages': ['geochart']});
-   google.setOnLoadCallback(drawRegionsMap);
-
-  
-   function drawRegionsMap() {
-
-      var data = new google.visualization.DataTable();
-      data.addRows(1);
-      data.addColumn('string', 'Country');
-      data.setValue(0, 0, '{{ tree_equation.country }}');
-
-	var options = {region: '002', width: '400', };
-
-      var container = document.getElementById('regions_map_canvas');
-      var geochart = new google.visualization.GeoChart(container);
-      geochart.draw(data, options);
-   }
-
-   
-   </script>
-   
-   {% if tree_equation.Latitude %}
-   <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeYuEKNTghtouEoy-USjrJff3A32F9DP4&sensor=false">
     </script>
-	<script type="text/javascript">
+   
+    {% if tree_equation.Latitude %}
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeYuEKNTghtouEoy-USjrJff3A32F9DP4&sensor=false">
+    </script>
+    <script type="text/javascript">
 	$(function () {
 
-      var mapOptions = {
-          center: new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }}),
-          zoom: 11,
-          mapTypeId: google.maps.MapTypeId.HYBRID,
-          panControl: true,
-	      zoomControl: true,
-	      scaleControl: true
+            var mapOptions = {
+                center: new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }}),
+                zoom: 11,
+                mapTypeId: google.maps.MapTypeId.HYBRID,
+                panControl: true,
+                zoomControl: true,
+                scaleControl: true
+            };
+            var map = new google.maps.Map(document.getElementById("point_map_canvas"), mapOptions);
+            
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }}),
+                map: map
+            });
+        });
+    </script>
+    {% else %}
+    <script type="text/javascript">
+        $(function () {
+            $("#point_map_canvas").html('Precise location not available');
+        });
+    </script>
+    {% endif %}
 
-       };
-       var map = new google.maps.Map(document.getElementById("point_map_canvas"), mapOptions);
-
-       var marker = new google.maps.Marker({
-		  position: new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }}),
-		  map: map
-		});
-   
-   });
-  </script>
-  {% else %}
-	  <script type="text/javascript">
-	  	$(function () {
-	  		$("#point_map_canvas").html('Precise location not available');
-	     });
-	</script>
-  {% endif %}
-
-  <style>
-      #TreeEquation_id table td {
-          white-space:wrap;
-      }
-  </style>
+    <style>
+        #TreeEquation_id table td {
+            white-space:wrap;
+        }
+    </style>
 
 {% endblock %}
 
 
 {% block content %}
-
 <div id="page_2">
-
-	<div id="TreeEquation_id">
-
-		<table>
-			<tr class="odd"> <td> ID: </td> <td> {{ tree_equation.ID }} </td> </tr>		
- 			<tr class="odd">  <td> Population: </td> <td> {{ tree_equation.Population }} </td> </tr>
-			<tr class="even"> <td> Ecosystem: </td> <td> {{ tree_equation.Ecosystem }} </td> </tr>
-			<tr class="odd">  <td> Country: </td> <td> {{ tree_equation.country.common_name }} </td> </tr>			
-			<tr class="even"> <td> Species: </td> <td> {{ tree_equation.Genus }} {{ tree_equation.Species }} </td> </tr>
-			<tr class="odd">  <td> Biome FAO: </td> <td> {{ tree_equation.Biome_FAO }} </td> </tr>
-			<tr class="even"> <td> Biome UDVARDY: </td> <td> {{ tree_equation.Biome_UDVARDY }} </td> </tr>
-			<tr class="odd">  <td> Biome WWF: </td> <td> {{ tree_equation.Biome_WWF }} </td> </tr>	
-			<tr class="even"> <td> Division Bailey: </td> <td> {{ tree_equation.Division_BAILEY }} </td> </tr>	
-			<tr class="odd">  <td> Biome Holdridge: </td> <td> {{ tree_equation.Biome_HOLDRIDGE }} </td> </tr>	
-			<tr class="even">  <td> Output: </td> <td> {{ tree_equation.Output }} </td> </tr>	
-			<tr class="odd">  <td> Equation: </td> <td> {{ tree_equation.Equation }} </td> </tr>	
-			<tr class="even">  <td> Reference: </td> <td> {{ tree_equation.reference }} </td> </tr>	
-			<tr class="odd">  <td> ID Location: </td> <td> {{ tree_equation.ID_Location }} </td> </tr>	
-			<tr class="even">  <td> Group Location: </td> <td> {{ tree_equation.Group_Location }} </td> </tr>			
-			<tr class="odd">  <td> Location: </td> <td> {{ tree_equation.Location }} </td> </tr>			
-			<tr class="even">  <td> Latitude: </td> <td> {{ tree_equation.Latitude }} </td> </tr>
-			<tr class="odd">  <td> Longitude: </td> <td> {{ tree_equation.Longitude }} </td> </tr>				
-			<tr class="even">  <td> Temperature: </td> <td> {{ tree_equation.temperature }} </td> </tr>	
-			<tr class="odd">  <td> Potential evapotransp.: </td> <td> {{ tree_equation.potential_evapotranspiration }} </td> </tr>	
-			<tr class="even">  <td> Precipitation: </td> <td> {{ tree_equation.precipitation }} </td> </tr>	
-			<tr class="odd">  <td> Sunshine fraction: </td> <td> {{ tree_equation.sunshine_fraction}} </td> </tr>	
-			<tr class="even">  <td> Wind: </td> <td> {{ tree_equation.wind }} </td> </tr>			
-			<tr class="odd">  <td> Water vapor pressure: </td> <td> {{ tree_equation.water_vapor_pressure }} </td> </tr>		
-			<tr class="even">  <td> Temp MIN: </td> <td> {{ tree_equation.temp_MIN }} </td> </tr>
-			<tr class="odd">  <td> Temp MAX: </td> <td> {{ tree_equation.temp_MAX }} </td> </tr>	
-		</table>
-	
-	</div>
-
-	<div id="regions_map_canvas" style="float:right"></div>
-	<div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
-	<div style="clear:both;"></div>
-
+    <div id="TreeEquation_id">
+        <table>
+            <tr class="odd"> <td> ID: </td> <td> {{ tree_equation.ID }} </td> </tr>		
+            <tr class="odd">  <td> Population: </td> <td> {{ tree_equation.Population }} </td> </tr>
+            <tr class="even"> <td> Ecosystem: </td> <td> {{ tree_equation.Ecosystem }} </td> </tr>
+            <tr class="odd">  <td> Country: </td> <td> {{ tree_equation.country.common_name }} </td> </tr>			
+            <tr class="even"> <td> Species: </td> <td> {{ tree_equation.Genus }} {{ tree_equation.Species }} </td> </tr>
+            <tr class="odd">  <td> Biome FAO: </td> <td> {{ tree_equation.Biome_FAO }} </td> </tr>
+            <tr class="even"> <td> Biome UDVARDY: </td> <td> {{ tree_equation.Biome_UDVARDY }} </td> </tr>
+            <tr class="odd">  <td> Biome WWF: </td> <td> {{ tree_equation.Biome_WWF }} </td> </tr>	
+            <tr class="even"> <td> Division Bailey: </td> <td> {{ tree_equation.Division_BAILEY }} </td> </tr>	
+            <tr class="odd">  <td> Biome Holdridge: </td> <td> {{ tree_equation.Biome_HOLDRIDGE }} </td> </tr>	
+            <tr class="even">  <td> Output: </td> <td> {{ tree_equation.Output }} </td> </tr>	
+            <tr class="odd">  <td> Equation: </td> <td> {{ tree_equation.Equation }} </td> </tr>	
+            <tr class="even">  <td> Reference: </td> <td> {{ tree_equation.reference }} </td> </tr>	
+            <tr class="odd">  <td> ID Location: </td> <td> {{ tree_equation.ID_Location }} </td> </tr>	
+            <tr class="even">  <td> Group Location: </td> <td> {{ tree_equation.Group_Location }} </td> </tr>			
+            <tr class="odd">  <td> Location: </td> <td> {{ tree_equation.Location }} </td> </tr>			
+            <tr class="even">  <td> Latitude: </td> <td> {{ tree_equation.Latitude }} </td> </tr>
+            <tr class="odd">  <td> Longitude: </td> <td> {{ tree_equation.Longitude }} </td> </tr>				
+            <tr class="even">  <td> Temperature: </td> <td> {{ tree_equation.temperature }} </td> </tr>	
+            <tr class="odd">  <td> Potential evapotransp.: </td> <td> {{ tree_equation.potential_evapotranspiration }} </td> </tr>	
+            <tr class="even">  <td> Precipitation: </td> <td> {{ tree_equation.precipitation }} </td> </tr>	
+            <tr class="odd">  <td> Sunshine fraction: </td> <td> {{ tree_equation.sunshine_fraction}} </td> </tr>	
+            <tr class="even">  <td> Wind: </td> <td> {{ tree_equation.wind }} </td> </tr>			
+            <tr class="odd">  <td> Water vapor pressure: </td> <td> {{ tree_equation.water_vapor_pressure }} </td> </tr>		
+            <tr class="even">  <td> Temp MIN: </td> <td> {{ tree_equation.temp_MIN }} </td> </tr>
+            <tr class="odd">  <td> Temp MAX: </td> <td> {{ tree_equation.temp_MAX }} </td> </tr>	
+        </table>
+    </div>
+    <div id="regions_map_canvas" style="float:right"></div>
+    <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
+    <div style="clear:both;"></div>
 </div>
-
-
-
-
-
-
 {% endblock %}
 
 

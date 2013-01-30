@@ -30,6 +30,7 @@ class Command(BaseCommand):
                         published = published,
                         journal = journal
                     )
+                    # TODO: django.db.utils.DatabaseError: value too long for type character varying(200)
                     article.save()
                     i = i+1
                     j = j+1
