@@ -22,7 +22,7 @@ class Journal(models.Model):
 class Article(models.Model):
     title       = models.CharField(max_length=510)
     summary     = models.TextField(null=True, blank=True)
-    url         = models.URLField(unique=True)
+    url         = models.URLField(max_length=400, unique=True)
     published   = models.DateTimeField(null=True)
     journal     = models.ForeignKey(Journal, related_name='articles')
 
