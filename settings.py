@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# Django settings for fantallometrik project.
+# Django settings for globallometree project.
 
 import os.path
+gettext = lambda s: s
 
-BASE_PATH = os.path.dirname(__file__)
+BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
@@ -30,7 +31,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = BASE_PATH +'/media'
+MEDIA_ROOT = os.path.join(BASE_PATH, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -56,11 +57,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'cms.middleware.multilingual.MultilingualURLMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.middleware.common.CommonMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
@@ -98,7 +99,6 @@ INSTALLED_APPS = (
     'cms',
     'mptt',
     'menus',
-    'south',
     'sekizai',
     'cms.plugins.file',
     'cms.plugins.link',
@@ -115,8 +115,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap'
 FORCE_SCRIPT_NAME = ''
 
 #Static files configuration
-STATIC_ROOT = BASE_PATH + "/static_collected"
-STATIC_URL  = '/static/'
+STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
+STATIC_URL = '/static/'
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 HAYSTACK_CONNECTIONS = {

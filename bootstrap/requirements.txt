@@ -5,7 +5,7 @@ requests==0.13.2
 django-grappelli==2.4.0
 psycopg2==2.4.5
 south==0.7.6
-django-cms==2.3.3
+django-cms==2.3.5
 PIL==1.1.7
 django-classy-tags==0.3.4.1
 django-mptt==0.5.2
