@@ -2,7 +2,7 @@ from django import forms
 from haystack.forms import SearchForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
-from .models import TreeEquation
+from .models import TreeEquation, Country
 
 class DataSubmissionForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -42,8 +42,26 @@ class EquationSearchForm(SearchForm):
         if not kwargs.get('initial', False):
             kwargs['initial'] = {}
         kwargs['initial']['page'] = 1
-        return super(EquationSearchForm, self).__init__(*args, **kwargs)
 
+        super(EquationSearchForm, self).__init__(*args, **kwargs)
+
+        for select_name, select_label in (('Biome_FAO', 'Biome (FAO)'),
+                                          ('Biome_UDVARDY', 'Biome (UDVARDY)'),
+                                          ('Biome_WWF','Biome (WWF)'),
+                                          ('Division_BAILEY', 'Division (BAILEY)' ),
+                                          ('Biome_HOLDRIDGE','Biome (HOLDRIDGE)'),
+                                          ('Ecosystem','Ecosystem'),
+                                          ('Population','Population'),
+                                          ('Country','Country'),
+                                         ):
+
+            if select_name == 'Country':
+                country_ids = TreeEquation.objects.distinct('Country').values_list('Country', flat=True)
+                choices = [('', '')] + list(Country.objects.filter(pk__in = country_ids).values_list('common_name', 'common_name'))
+            else:
+                choices = [('', '')] + list(TreeEquation.objects.distinct(select_name).values_list(select_name, select_name))
+
+            self.fields[select_name] = forms.ChoiceField(choices=choices, required=False, label=select_label)
 
 
     #Full Text
@@ -54,18 +72,9 @@ class EquationSearchForm(SearchForm):
     page     = forms.IntegerField(required=False)
     
     #Search Fields    
-    Population    = forms.CharField(required=False, label='Population')
-    Ecosystem     = forms.CharField(required=False, label='Ecosystem')
     Genus         = forms.CharField(required=False, label='Genus')
     Species       = forms.CharField(required=False, label='Species')
-    Country       = forms.CharField(required=False, label='Country')
 
-
-    Biome_FAO                       = forms.CharField(required=False, label='Biome (FAO)')
-    Biome_UDVARDY                   = forms.CharField(required=False, label='Biome (UDVARDY)')
-    Biome_WWF                       = forms.CharField(required=False, label='Biome (WWF)')
-    Division_BAILEY                 = forms.CharField(required=False, label='Division (BAILEY)') 
-    Biome_HOLDRIDGE                 = forms.CharField(required=False, label='Biome (HOLDRIDGE)')
      
     X                               = forms.CharField(required=False, label='X')
     Unit_X                          = forms.CharField(required=False, label='Unit X')
