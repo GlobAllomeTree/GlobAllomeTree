@@ -192,69 +192,84 @@
             
                     <div class="tab-pane" id="components">
                          
-                        <div class="floatedCheckBoxBlock {% if form.B.errors %}error{% endif %}">
-                        {{ form.B.errors }}
-                        {{ form.B }}<label for="id_B">B</label>
-                        </div>
-                    
-            
-                        <div class="floatedCheckBoxBlock {% if form.Bd.errors %}error{% endif %}">
-                        {{ form.Bd.errors }}
-                        {{ form.Bd }}<label for="id_Bd">Bd</label>
-                        </div>
-                    
+                        <div style="float:left;width:350px"> 
+                            <div class="{% if form.B.errors %}error{% endif %}">
+                            {{ form.B.errors }}
+                            <label for="id_B" class="floatedLabel"><span style="font-weight:bold;">B</span> - Bark</label>
+                            {{ form.B }}
+                            </div>
                         
-                        <div class="floatedCheckBoxBlock {% if form.Bg.errors %}error{% endif %}">
-                        {{ form.Bg.errors }}
-                        {{ form.Bg }}<label for="id_Bg">Bg</label>
-                        </div>    
+                
+                            <div class="{% if form.Bd.errors %}error{% endif %}">
+                            {{ form.Bd.errors }}
+                            <label for="id_Bd" class="floatedLabel"> <span style="font-weight:bold;">Bd</span> - Dead branches</label>
+                            {{ form.Bd }}
+                            </div>
+                        
+                            
+                            <div class="{% if form.Bg.errors %}error{% endif %}">
+                            {{ form.Bg.errors }}
+                            <label for="id_Bg" class="floatedLabel"> <span style="font-weight:bold;">Bg</span> - Big branches</label>
+                            {{ form.Bg }}
+                            </div>    
+                           
+                
+                            <div class="{% if form.Bt.errors %}error{% endif %}">
+                            {{ form.Bt.errors }}
+                            <label for="id_Bt" class="floatedLabel"> <span style="font-weight:bold;">Bt</span> - Thin Branches </label>
+                            {{ form.Bt }}
+                            </div>
                        
-            
-                        <div class="floatedCheckBoxBlock {% if form.Bt.errors %}error{% endif %}">
-                        {{ form.Bt.errors }}
-                        {{ form.Bt }}<label for="id_Bt">Bt</label>
+                            <div class="{% if form.L.errors %}error{% endif %}">
+                            {{ form.L.errors }}
+                            <label for="id_L" class="floatedLabel"> <span style="font-weight:bold;">L</span> - Leaves </label>
+                            {{ form.L }}
+                            </div>            
+                                       
+                            <div class="{% if form.Rb.errors %}error{% endif %}">
+                            {{ form.Rb.errors }}
+                            <label for="id_Rb" class="floatedLabel"> <span style="font-weight:bold;">Rb</span> - Large roots </label>
+                            {{ form.Rb }}
+                            </div>   
+                                
+                                
+                            <div class="{% if form.Rf.errors %}error{% endif %}">
+                            {{ form.Rf.errors }}
+                            <label for="id_Rf" class="floatedLabel"> <span style="font-weight:bold;">Rf</span> - Fine roots</label>
+                            {{ form.Rf }}
+                            </div>
+                                
+                            <div class="{% if form.Rm.errors %}error{% endif %}">
+                            {{ form.Rm.errors }}
+                            <label for="id_Rm" class="floatedLabel"> <span style="font-weight:bold;">Rm</span> - Medium roots</label>
+                            {{ form.Rm }}
+                            </div>
+                
+                            <div class="{% if form.S.errors %}error{% endif %}">
+                            {{ form.S.errors }}
+                            <label for="id_S" class="floatedLabel"> <span style="font-weight:bold;">S</span> - Stump</label>
+                            {{ form.S }}
+                            </div>
+                                
+                              
+                            <div class="{% if form.T.errors %}error{% endif %}">
+                            {{ form.T.errors }}
+                            <label for="id_T" class="floatedLabel"> <span style="font-weight:bold;">T</span> - Trunks</label>
+                            {{ form.T }}
+                            </div>
+                      
+                
+                            <div class="{% if form.F.errors %}error{% endif %}">
+                            {{ form.F.errors }}
+                            <label for="id_F" class="floatedLabel"> <span style="font-weight:bold;">F</span> - Fruit</label>
+                            {{ form.F }}
+                            </div>
                         </div>
-                   
-                        <div class="floatedCheckBoxBlock {% if form.L.errors %}error{% endif %}">
-                        {{ form.L.errors }}
-                        {{ form.L }}<label for="id_L">L</label>
+                        <div style="float:left;width:600px;padding:20px">
+                            <img src="/media/images/components.png" width="600" height="420" />
                         </div>
-                    
-            
-                                   
-                        <div class="floatedCheckBoxBlock {% if form.Rb.errors %}error{% endif %}">
-                        {{ form.Rb.errors }}
-                        {{ form.Rb }}<label for="id_Rb">Rb</label>
-                        </div>   
-                            
-                            
-                        <div class="floatedCheckBoxBlock {% if form.Rf.errors %}error{% endif %}">
-                        {{ form.Rf.errors }}
-                        {{ form.Rf }}<label for="id_Rf">Rf</label>
-                        </div>
-                            
-                        <div class="floatedCheckBoxBlock {% if form.Rm.errors %}error{% endif %}">
-                        {{ form.Rm.errors }}
-                        {{ form.Rm }}<label for="id_Rm">Rm</label>
-                        </div>
-            
-                        <div class="floatedCheckBoxBlock {% if form.S.errors %}error{% endif %}">
-                        {{ form.S.errors }}
-                        {{ form.S }} <label for="id_S">S</label>
-                        </div>
-                            
-                          
-                        <div class="floatedCheckBoxBlock {% if form.T.errors %}error{% endif %}">
-                        {{ form.T.errors }}
-                        {{ form.T }}<label for="id_T">T</label>
-                        </div>
-                  
-            
-                        <div class="floatedCheckBoxBlock {% if form.F.errors %}error{% endif %}">
-                        {{ form.F.errors }}
-                        {{ form.F }}<label for="id_F">F</label>
-                        </div>
-            
+
+
                         <div style="clear:both"></div>
                
                     </div>
@@ -479,7 +494,7 @@
 			    <tbody>
                 {% for result in page.object_list %}
                     <tr>
-                       <td>{{ result.object.Equation}}</td>
+                       <td>{{ result.object.Substitute_equation}}</td>
                        <td>{{ result.object.Genus}}</td>
                        <td>{{ result.object.Species}}</td>
                        <td>{{ result.object.Country.common_name}}</td>

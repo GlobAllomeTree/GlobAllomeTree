@@ -35,8 +35,16 @@ class CountryChoiceField(forms.ModelChoiceField):
          return obj.common_name
 
 
+COMPONENT_CHOICES = (
+            ('', ''),
+            ('No', 'No'),
+            ('Yes', 'Yes')
+        )
+
 class EquationSearchForm(SearchForm):
     
+    
+
     def __init__(self, *args, **kwargs):
         #Add on initial arguments
         if not kwargs.get('initial', False):
@@ -102,18 +110,18 @@ class EquationSearchForm(SearchForm):
     Output                          = forms.CharField(required=False, label='Output')
     Unit_Y                          = forms.CharField(required=False, label='Unit Y')
     
-    B                               = forms.BooleanField(required=False, label='B')
-    Bd                              = forms.BooleanField(required=False, label='Bd')
-    Bg                              = forms.BooleanField(required=False, label='Bg')
-    Bt                              = forms.BooleanField(required=False, label='Bt')
-    L                               = forms.BooleanField(required=False, label='L')
-    Rb                              = forms.BooleanField(required=False, label='Rb')
-    Rf                              = forms.BooleanField(required=False, label='Rf')
-    Rm                              = forms.BooleanField(required=False, label='Rm')
-    S                               = forms.BooleanField(required=False, label='S')
-    T                               = forms.BooleanField(required=False, label='T')
-    F                               = forms.BooleanField(required=False, label='F')
-    
+    B                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='B - Bark')
+    Bd                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bd - Dead branches')
+    Bg                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bg - Big branches')
+    Bt                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bt - Thin branches')
+    L                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='L - Dead branches')
+    Rb                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rb - Large roots')
+    Rf                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rf - Fine roots')
+    Rm                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rm - Medium roots')
+    S                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='S - Stump')
+    T                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='T - Trunks' )
+    F                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='F - Fruit')
+
     Equation                        = forms.CharField(required=False, label='Equation')
     
     Author                          = forms.CharField(required=False, label='Author')
@@ -147,14 +155,21 @@ class EquationSearchForm(SearchForm):
             val = self.cleaned_data.get(field, False)
             if val: 
                 
-                if field == 'Equation' and val:
-                    val = TreeEquation.objects.filter(Equation__icontains=val).values_list('ID', flat=True)
+                if field == 'Equation':
+                    id_list = list(TreeEquation.objects.filter(Equation__icontains=val).values_list('ID', flat=True))
+                    id_list += list(TreeEquation.objects.filter(Substitute_equation__icontains=val).values_list('ID', flat=True))
                     field = 'id__in'
+                    val = id_list
 
+                elif field in  ['B', 'Bd', 'Bg', 'Bt', 'L', 'Rb', 'Rf', 'Rm', 'S', 'T', 'F']:
+                    if val == 'Yes':
+                        val = 1
+                    elif val == 'No':
+                        val = 0
+               
                 kwargs = {field : val}
                 sqs = sqs.filter(**kwargs)
                 
-           
         return sqs
         
         
