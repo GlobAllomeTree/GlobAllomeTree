@@ -14,3 +14,4 @@ html5lib==0.95
 feedparser==5.1.2
 pyyaml==3.10
 django-crispy-forms==1.2.2
+gunicorn==0.16.1

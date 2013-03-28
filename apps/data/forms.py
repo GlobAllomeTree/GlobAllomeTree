@@ -2,7 +2,7 @@ from django import forms
 from haystack.forms import SearchForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
-
+from .models import TreeEquation
 
 class DataSubmissionForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -134,8 +134,15 @@ class EquationSearchForm(SearchForm):
         
             if field in ['q', 'order_by', 'page']:
                 continue
-            if self.cleaned_data.get(field, False): 
-                kwargs = {field : self.cleaned_data.get(field)}
+
+            val = self.cleaned_data.get(field, False)
+            if val: 
+                
+                if field == 'Equation' and val:
+                    val = TreeEquation.objects.filter(Equation__icontains=val).values_list('ID', flat=True)
+                    field = 'id__in'
+
+                kwargs = {field : val}
                 sqs = sqs.filter(**kwargs)
                 
            
