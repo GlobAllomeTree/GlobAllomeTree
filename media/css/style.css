@@ -283,6 +283,15 @@ header h1 {
     display:block;
 }
 
+#searchForm  input[type="checkbox"] {
+	margin-top:-3px;
+	margin-right:10px;
+}
+
+#searchForm #components select {
+	width:70px;
+}
+
 #currentSearch h3 {
 	font-size:18px;
 	line-height: 18px;

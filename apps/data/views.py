@@ -137,6 +137,9 @@ class EquationSearchView(SearchView):
         return super(EquationSearchView, self).create_response( *args, **kwargs)
 
 def autocomplete(request, field): 
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login/')
+        
     term    = request.GET.get('term') 
     sqs     = SearchQuerySet()
     
@@ -154,7 +157,11 @@ def autocomplete(request, field):
 
 from .forms import EquationSearchForm
 def export(request):
-    
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login/')
+
+    ignore_fields = ['data_submission',]
+
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
 
@@ -162,11 +169,13 @@ def export(request):
     sqs = form.search()
    
     response = HttpResponse(mimetype='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=DB-tree-equations.csv.txt'
-    writer = csv.writer(response)
+    response['Content-Disposition'] = 'attachment; filename=db-equations.txt'
+    writer = csv.writer(response, delimiter='\t')
     # Write headers to CSV file
     headers = []
     for field in TreeEquation._meta.fields:
+        if field.name in ignore_fields:
+            continue
         headers.append(field.name)
     writer.writerow(headers)
     # Write data to CSV file
@@ -175,14 +184,16 @@ def export(request):
         obj = TreeEquation.objects.get(pk=result.id)
         row = []
         for field in TreeEquation._meta.fields:
+            if field.name in ignore_fields:
+                continue
             val = getattr(obj, field.name)
             if type(val) == bool:
                 if val:
-                    val_in_utf8 = 1
+                    val_in_utf8 = 'True'
                 else:
-                    val_in_utf8 = 0
-            elif val is None:
-                val_in_utf8 = 'na'
+                    val_in_utf8 = 'False'
+            elif val in [None, '']:
+                val_in_utf8 = 'None'
             else:
                 val_in_utf8 = unicode(val).encode("utf-8")
 
