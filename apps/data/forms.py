@@ -114,7 +114,7 @@ class EquationSearchForm(SearchForm):
     Bd                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bd - Dead branches')
     Bg                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bg - Big branches')
     Bt                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bt - Thin branches')
-    L                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='L - Dead branches')
+    L                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='L - Leaves')
     Rb                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rb - Large roots')
     Rf                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rf - Fine roots')
     Rm                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rm - Medium roots')

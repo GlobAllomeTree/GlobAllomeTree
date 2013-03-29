@@ -50,7 +50,7 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     T                               = indexes.BooleanField(model_attr='T')
     F                               = indexes.BooleanField(model_attr='F')
     
-    Equation                      = indexes.NgramField(model_attr='Equation', null=True)
+    Equation                        = indexes.NgramField(model_attr='Equation', null=True)
     
     Author                          = indexes.CharField(model_attr='Author', null=True, faceted=True, indexed=True)
     
