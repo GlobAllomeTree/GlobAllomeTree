@@ -91,6 +91,15 @@
                 <div class="tab-content" >
                
     	            <div class="tab-pane active" id="keyword">
+                        <p class="search-help-text">
+                            Search allometric equations by keyword. 
+                            This searches accross several text fields. <br>
+                            Example searches: <a href="?q=Acacia">Acacia</a>,
+                               <a href="?q=Zambia">Zambia</a>,
+                               <a href="?q=Bellefontaine">Bellefontaine</a>, 
+                               <a href="?q=Glutinosum">Glutinosum</a>,
+                               <a href="?q=rainforest">rainforest</a>
+                        </p>
     	                <div {% if form.q.errors %} class="error" {% endif %}>
                             {{ form.q.errors }}
                             <label  class="floatedLabel" for="id_q">Keyword</label>
@@ -98,7 +107,12 @@
                         </div>
     	            </div>
     	            <div class="tab-pane" id="identification">
-            	                  
+            	       <p class="search-help-text">
+                            Search allometric equations by tree ecosystem and population. <br>
+                            Example searches: 
+                               <a href="?Ecosystem=Plantation">Ecosystem: Plantation</a>,
+                               <a href="?Population=STAND">Population: STAND</a>
+                        </p>
                         <div {% if form.Ecosystem.errors %} class="error" {% endif %}>
                         {{ form.Ecosystem.errors }}
                         <label for="id_Ecosystem" class="floatedLabel">Ecosystem</label>
@@ -117,7 +131,12 @@
     	     
             
                     <div class="tab-pane" id="taxonomy">
-
+                        <p class="search-help-text">
+                            Search allometric equations by tree genus or species. <br>
+                            Example searches: 
+                               <a href="?Genus=Gmelina">Genus: Gmelina</a>,
+                               <a href="?Species=schweinfurthii">Species: schweinfurthii</a>
+                        </p>
 
             	  
                         <div {% if form.Genus.errors %} class="error" {% endif %}>
@@ -138,6 +157,12 @@
              
             
                     <div class="tab-pane" id="Location">
+                        <p class="search-help-text">
+                            Search allometric equations by tree location and biome. <br>
+                            Example searches: 
+                               <a href="?Biome_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
+                               <a href="?Country=Benin">Country: Benin</a>
+                        </p>
                         <div style="width:50%;float:left">
                             <div {% if form.country.errors %} class="error" {% endif %}>
                             {{ form.Country.errors }}
@@ -191,7 +216,12 @@
              
             
                     <div class="tab-pane" id="components">
-                         
+                        <p class="search-help-text">
+                            Search allometric equations by tree components such as branch diameter, leaves, stump and fruit. <br>
+                            Example searches: 
+                               <a href="?B=Yes&amp;Rf=Yes">B Bark: Yes + Rf Fine Roots: Yes</a>,
+                               <a href="?F=No&amp;S=Yes">F Fruit: No +  S Stump: Yes</a>
+                        </p>
                         <div style="float:left;width:350px"> 
                             <div class="{% if form.B.errors %}error{% endif %}">
                             {{ form.B.errors }}
@@ -276,7 +306,12 @@
              
             
                     <div class="tab-pane" id="input_Output">
-                        
+                        <p class="search-help-text">
+                            Search allometric equations by equation input and output characteristics. <br>
+                            Example searches: 
+                               <a href="?Output=Biomass">Output: Biomass</a>,
+                               <a href="?Unit_X=cm&amp;Min_X__gte=10&amp;Min_X__lte=50">Unit X: cm + Min X From: 10 + Min X To: 50</a>
+                        </p>
                         <div style="float:left;width:24%" class="smallInputs">
                            
                             <div class="{% if form.U.errors %}error{% endif %}">
@@ -400,7 +435,12 @@
              
             
                     <div class="tab-pane" id="allometry">
-
+                        <p class="search-help-text">
+                            Search inside the equation <br>
+                            Example searches: 
+                               <a href="?Equation=log(H)">Equation contains: log(H)</a>,
+                               <a href="?Equation=DBH^2">Equation contains: DBH^2</a>
+                        </p>
       
                         <div {% if form.Equation.errors %} class="error" {% endif %}>
                         {{ form.Equation.errors }}
@@ -412,7 +452,13 @@
              
             
                     <div class="tab-pane" id="reference">
-            
+                        <p class="search-help-text">
+                            Search allometric equations by author, year, and reference. <br>
+                            Example searches: 
+                               <a href="?Author=Henry+M.">Author: Henry M.</a>,
+                               <a href="?Reference=Pieper,+Y.+%26+Laumans">Reference: Pieper, Y. &amp; Laumans,</a>
+                               <a href="?Year=2004">Year: 2004</a>
+                        </p>
             
                         <div {% if form.Author.errors %} class="error" {% endif %}>
                         {{ form.Author.errors }}
