@@ -68,10 +68,10 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     Country_order                   = indexes.CharField(model_attr='Country__common_name', null=True, indexed=False)
 
     #autocomplete lookups
-    Genus_auto                      = indexes.EdgeNgramField(model_attr='Genus')
-    Species_auto                    = indexes.EdgeNgramField(model_attr='Species')
-    Author_auto                     = indexes.EdgeNgramField(model_attr='Author')
-    Reference_auto                  = indexes.EdgeNgramField(model_attr='Reference')
+    Genus_auto                      = indexes.EdgeNgramField(model_attr='Genus', null=True)
+    Species_auto                    = indexes.EdgeNgramField(model_attr='Species', null=True)
+    Author_auto                     = indexes.EdgeNgramField(model_attr='Author', null=True)
+    Reference_auto                  = indexes.EdgeNgramField(model_attr='Reference', null=True)
 
     def _to_float(self, val):
         if val is None:
