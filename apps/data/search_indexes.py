@@ -67,22 +67,11 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     Output_order                    = indexes.CharField(model_attr='Output', null=True, indexed=False)
     Country_order                   = indexes.CharField(model_attr='Country__common_name', null=True, indexed=False)
 
-
     #autocomplete lookups
-    Population_auto                 = indexes.EdgeNgramField(model_attr='Population')
-    Ecosystem_auto                  = indexes.EdgeNgramField(model_attr='Ecosystem') 
     Genus_auto                      = indexes.EdgeNgramField(model_attr='Genus')
     Species_auto                    = indexes.EdgeNgramField(model_attr='Species')
-    Country_auto                    = indexes.EdgeNgramField(model_attr='Country', null=True,)
-    Biome_FAO_auto                  = indexes.EdgeNgramField(model_attr='Biome_FAO')
-    Biome_UDVARDY_auto              = indexes.EdgeNgramField(model_attr='Biome_UDVARDY')
-    Biome_WWF_auto                  = indexes.EdgeNgramField(model_attr='Biome_WWF')
-    Division_BAILEY_auto            = indexes.EdgeNgramField(model_attr='Division_BAILEY')
-    Biome_HOLDRIDGE_auto            = indexes.EdgeNgramField(model_attr='Biome_HOLDRIDGE')
     Author_auto                     = indexes.EdgeNgramField(model_attr='Author')
-    Reference_auto                  = indexes.EdgeNgramField(model_attr='Reference') 
-    Output_auto                     = indexes.EdgeNgramField(model_attr='Output') 
-
+    Reference_auto                  = indexes.EdgeNgramField(model_attr='Reference')
 
     def _to_float(self, val):
         if val is None:
