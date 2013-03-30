@@ -31,9 +31,9 @@ urlpatterns = patterns('',
     (r'^docs/$', docs),
     (r'^contributors/$', contributors),
     (r'^principles/$', principles),
-    (r'^software/$', software),
-    (r'^about/$', about),
-    (r'^database/$', database),
+#    (r'^software/$', software),
+#    (r'^about/$', about),
+#    (r'^database/$', database),
     url(r'^', include('cms.urls')),
 )
 

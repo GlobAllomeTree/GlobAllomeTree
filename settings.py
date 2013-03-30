@@ -57,7 +57,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'cms.middleware.multilingual.MultilingualURLMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -98,13 +98,13 @@ INSTALLED_APPS = (
     'south',
     'cms',
     'mptt',
-    'menus',
     'sekizai',
     'cms.plugins.file',
     'cms.plugins.link',
     'cms.plugins.picture',
     'cms.plugins.text',
     'cms.plugins.teaser',
+    'plugins.linkbox',
     'crispy_forms',
 )
 
