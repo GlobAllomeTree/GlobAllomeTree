@@ -139,7 +139,7 @@ class DataSubmissionAdmin(admin.ModelAdmin):
         run_verified = request.POST.get('run', False)
 
         try:
-            submitted_file = codecs.open(settings.MEDIA_ROOT + '/' + str(data_submission.submitted_file), 'r', encoding='utf-8', errors='strict')
+            submitted_file = codecs.open(settings.MEDIA_ROOT + '/' + str(data_submission.submitted_file), 'r', encoding=settings.DATA_EXPORT_ENCODING, errors='strict')
         
             for line in submitted_file:
                 line_number += 1
@@ -242,7 +242,7 @@ class DataSubmissionAdmin(admin.ModelAdmin):
                         eq.delete()                
 
         except UnicodeDecodeError:
-            errors.append("The submitted file is not in the encoding utf-8. Please convert and re-upload the file in utf-8 encoding and try again")
+            errors.append("The submitted file is not in the encoding %s. Please convert and re-upload the file then try again" % settings.DATA_EXPORT_ENCODING)
 
         if len(missed_countries):
             errors.append('The following country names in the csv file could not be matched to the country database: %s' %\

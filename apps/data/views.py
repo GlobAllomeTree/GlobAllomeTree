@@ -7,6 +7,7 @@ from django.template import RequestContext
 from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
 from django.core.mail import mail_managers
+from django.conf import settings
 
 from haystack.views import SearchView
 from haystack.query import SearchQuerySet
@@ -52,6 +53,7 @@ http://www.globallometree.org/admin/data/datasubmission/%s/
     def get_context_data(self, **kwargs):
         context = super(DataSubmissionView, self).get_context_data(**kwargs)
         context['is_page_data'] = True
+        context['export_encoding'] = settings.DATA_EXPORT_ENCODING_NAME
         return context
 
 
@@ -63,6 +65,7 @@ class DataSubmissionCompleteView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DataSubmissionCompleteView, self).get_context_data(**kwargs)
         context['is_page_data'] = True
+
         return context
 
 
@@ -176,7 +179,7 @@ def export(request):
     for field in TreeEquation._meta.fields:
         if field.name in ignore_fields:
             continue
-        headers.append(field.name)
+        headers.append(field.name.encode(settings.DATA_EXPORT_ENCODING))
     writer.writerow(headers)
     # Write data to CSV file
     
@@ -187,16 +190,17 @@ def export(request):
             if field.name in ignore_fields:
                 continue
             val = getattr(obj, field.name)
+
             if type(val) == bool:
                 if val:
-                    val_in_utf8 = 'True'
+                    val = 'True'
                 else:
-                    val_in_utf8 = 'False'
+                    val = 'False'
             elif val in [None, '']:
-                val_in_utf8 = 'None'
-            else:
-                val_in_utf8 = unicode(val).encode("utf-8")
+                val = 'None'
+           
+            val_encoded = unicode(val).encode(settings.DATA_EXPORT_ENCODING)
 
-            row.append(val_in_utf8)
+            row.append(val_encoded)
         writer.writerow(row)
     return response

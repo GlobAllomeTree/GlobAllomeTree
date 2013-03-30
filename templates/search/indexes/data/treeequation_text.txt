@@ -7,3 +7,12 @@
 {{object.Family}}
 {{object.Country.common_name}}
 {{object.Country.formal_name}}
+{{object.Division_BAILEY}}
+{{object.Population }}
+{{object.Continent}}
+{{object.Biome_WWF}}
+{{object.Biome_HOLDRIDGE }}
+{{object.Output}}
+{{object.Author}}
+{{object.Year}}
+{{object.Reference}}

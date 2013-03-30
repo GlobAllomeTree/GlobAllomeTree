@@ -270,6 +270,11 @@ header h1 {
 /* Search Form */
 
 
+.search-help-text {
+	color:#777;
+	font-size:12px;
+}
+
 #searchForm .floatedLabel {
     float:left;
     width:160px;
@@ -308,7 +313,7 @@ header h1 {
     width:50px;
 }
 
-.smallInputs input {
+.smallInputs input, #input_Output select {
     float:left;
     width:80px;
 }

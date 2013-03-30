@@ -127,6 +127,10 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+#Encoding used for export and import of data
+DATA_EXPORT_ENCODING = 'utf-8'
+DATA_EXPORT_ENCODING_NAME = 'Utf-8'
+
 if os.path.exists(os.path.join(BASE_PATH, 'prod')):
     STAGE = 'prod'
     INITIAL_DATA_DIR = '/opt/apps/globallometree_initial_data/'

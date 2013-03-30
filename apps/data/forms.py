@@ -61,6 +61,13 @@ class EquationSearchForm(SearchForm):
                                           ('Ecosystem','Ecosystem'),
                                           ('Population','Population'),
                                           ('Country','Country'),
+                                          ('Output','Output'),
+                                          ('Unit_U','Unit U'),
+                                          ('Unit_V','Unit V'),
+                                          ('Unit_W','Unit W'),
+                                          ('Unit_X','Unit X'),
+                                          ('Unit_Y','Unit Y'),
+                                          ('Unit_Z','Unit Z'),
                                          ):
 
             if select_name == 'Country':
