@@ -80,6 +80,7 @@ TEMPLATE_DIRS = (
 
 CMS_TEMPLATES = (
     ('cms/basic_page.html', 'CMS basic page'),
+    ('cms/home_page.html', 'CMS home page'),
 )
 
 INSTALLED_APPS = (

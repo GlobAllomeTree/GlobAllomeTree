@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load cms_tags %}
+
+{% block content %}
+
+<div id="database" class="narrow-page">
+    <div class="row">
+        <div class="span12">
+            <div id="carousel" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="active item">
+                        <img src="media/images/carousel/locatelli-1.jpg" alt="">
+                    </div>
+                    <div class="item">
+                        <img src="media/images/carousel/locatelli-2.jpg" alt="">
+                    </div>
+                    <div class="item">
+                        <img src="media/images/carousel/locatelli-3.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <p class="lead">
+                <strong>{% placeholder basic_page_content %}</strong>
+            </p>        
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            {% placeholder left_column %}
+        </div>
+        <div class="span6">
+            {% placeholder right_column %}
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('.carousel').carousel({
+            interval: 4500
+        })
+    </script>
+</div>
+
+{% endblock %}
