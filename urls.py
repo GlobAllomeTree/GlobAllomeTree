@@ -15,28 +15,17 @@ TreeEquation_list = {
 }
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^test_project/', include('test_project.foo.urls')),
-
     ('^admin/', include(admin.site.urls)),
     #(r'^grappelli/', include('grappelli.urls')),
     ('^data/', include('apps.data.urls')),
     ('^accounts/', include('apps.accounts.urls')),
     ('^journals/', include('apps.journals.urls')),
-#    (r'^$', start_page),
     (r'^continents/$', continents_map),
     (r'^continent_002/$', list_detail.object_list, TreeEquation_list),
     (r'^geo_map/$', geo_map),
-    (r'^geo_map_([A-Za-z]+)/$', geo_map_id),   
-    (r'^docs/$', docs),
-    (r'^contributors/$', contributors),
-    (r'^principles/$', principles),
-#    (r'^software/$', software),
-#    (r'^about/$', about),
-#    (r'^database/$', database),
+    (r'^geo_map_([A-Za-z]+)/$', geo_map_id),
     url(r'^', include('cms.urls')),
 )
-
 
 #THIS IS FOR DEVELOPMENT  MEDIA
 # -----------------------------------

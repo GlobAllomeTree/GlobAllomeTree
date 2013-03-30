@@ -1,3 +1,5 @@
+Skipping settings_secret.py since the file does not exist
+Skipping settings_secret.py since the file does not exist
 [
     {
         "pk": 2, 
@@ -25,6 +27,27 @@
         "model": "text.text", 
         "fields": {
             "body": "GlobAllomeTree is the international platform for tree allometric equations to support volume, biomass and carbon stock assessment for trees and forests. The platform allows accessing:"
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "text.text", 
+        "fields": {
+            "body": "<h4>Tutorial for the Software Fantallometrik</h4>\n<p>\n    The tutorial provides information on how to install and utilize the free software Fantallometrik.\n    Relying on the structure of the software, the tutorial is articulated into three modules: 1) comparison\n    of tree allometric equation; 2) assessment of volume, biomass and carbon stock; 3) insertion of new\n    allometric equation. Details of the software functions for each modules are provided. In the appendix\n    the reader can find a description of the structure of the input files required by the software, a list\n    of the functions used to assess biomass and carbon stock and maps of the five ecological zone\n    classifications.\n</p>\n<h4>Tutorial for data insertion</h4>\n<p>\n    The tutorial provides detailed information on the database structure and about the procedures\n    and methodology for entering the data. Additional useful information is also provided such as how\n    to search articles, reports and documents containing allometric equations; how to manage the\n    references using RIS format reference management software; how to geo-reference and to spatialize\n    the data using the most common GIS software.\n</p>\n<h4>Fantallometrik</h4>\n<p>\n    Fantallometrik software is the first tool for calculating volume, biomass and carbon that takes\n    into account the existing allometric equations at the continental level. It is a robust tool aimed at\n    facilitating and improving the calculations carried out by scientific research, forest companies, NGOs\n    and forestry institutions. With Fantallometrik it is possible 1) to assess volume, biomass and carbon\n    stocks for the different tree compartments, 2) to compare existing allometric equations and control\n    the quality and reliability of the equations, 3) to enter new allometric equations.\n</p>\n<h4>Manual for building tree volume and biomass allometric equations</h4>\n<p>\n    Jointly published by FAO and the French research centre CIRAD, the Manual for building\ntree volume and biomass allometric equations is the first tool to provide all the necessary\ninformation from the field up to the biomass estimation. The appropriate development and\nuse of the tree allometric equations are particularly important when assessing forest carbon stocks and carbon stock changes. This will help national policymakers to make informed\ndecisions regarding bioenergy development and climate change mitigation activities\n</p>"
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "text.text", 
+        "fields": {
+            "body": "<ul>\n<li><strong>How do I make this?</strong>\n<ul><li>You can do it in this way</li></ul>\n</li><li><strong>How can I make this other thing?</strong>\n<ul><li class=\"spacer_li\">You can make it in this other way</li></ul>\n</li></ul>"
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "text.text", 
+        "fields": {
+            "body": "<h4>Institutions</h4>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.unitus.it/\">\n                <img alt=\"Tuscia University\" class=\"contributor-logo\" src=\"/media/images/logos/logo-tuscia-50.png\">\n                </a><h4 class=\"contributor-title\"><a href=\"http://www.unitus.it/\"></a><a href=\"http://www3.unitus.it/\">UNITUS - DIBAF</a></h4>\n            \n            <p>Universit\u00e0 degli Studi della Tuscia</p>\n            <p>Department for Innovation in Biological, Agro-food and Forest systems</p>\n            <address>Via S. Camillo de Lellis, 01100 Viterbo, Italy</address>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.cirad.fr/\">\n                <img alt=\"Cirad\" class=\"contributor-logo\" src=\"/media/images/logos/logo-cirad-50.png\">\n                <h4 class=\"contributor-title\">CIRAD</h4>\n            </a>\n            <p>A French research centre working with developing countries to tackle international agricultural and development issues</p>\n            <address>42, rue Scheffer, 75116 Paris, France</address>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.fao.org\">\n                <img alt=\"FAO\" class=\"contributor-logo\" src=\"/media/images/logos/logo-fao-50.png\">\n                </a><h4 class=\"contributor-title\"><a href=\"http://www.fao.org\"></a><a href=\"http://www.fao.org/\">FAO</a></h4>\n            \n            <p>Food and Agriculture Organization of the United Nations</p>\n            <address>Viale delle Terme di Caracalla, Rome 00153, Italy</address>\n        </div>\n    </div>\n</div>\n<h4>Projects</h4>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.carboafrica.net/index_en.asp\">\n                <img alt=\"CarboAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-carboafrica-50.jpg\">\n                <h4 class=\"contributor-title\">CarboAfrica</h4>\n            </a>\n            <p>Quantification, understanding and prediction of carbon cycle and other CHG gases in Sub-Saharan Africa</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.climafrica.net/\">\n                <img alt=\"ClimAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-climafrica-50.png\">\n                <h4 class=\"contributor-title\">ClimAfrica</h4>\n            </a>\n            <p>Climate change predictions in Sub-Saharan Africa: impacts and adaptations</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.geocarbon.net/\">\n                <img alt=\"GeoCarbon\" class=\"contributor-logo\" src=\"/media/images/logos/logo-geocarbon-50.jpg\">\n                <h4 class=\"contributor-title\">GeoCarbon</h4>\n            </a>\n            <p>A European FP7 project with a global perspective, with the ultimate aim to lay the foundations for an operational Global Carbon Observing and Analysis System in support to both science and policy</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <img alt=\"GeoCarbon\" class=\"contributor-logo\" src=\"/media/images/logos/logo-unredd-50.png\">\n            <h4><a href=\"http://www.un-redd.org\">UN-REDD</a></h4>\n            <p>The United Nations collaborative programme on reducing emissions from deforestation and forest degradation in developing countries</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <h4><a href=\"http://www7.nancy.inra.fr/foret_bois_lerfob/projets_passes_et_en_cours/projets_en_cours/anr_emerge\">ANR Emerge</a></h4>\n            <p>The French National Research Agency. Project-based funding to advance French research</p>\n        </div>\n    </div>\n</div>"
         }
     }, 
     {
@@ -132,6 +155,30 @@
             "url": "", 
             "image": "", 
             "link_text": "get software", 
+            "page_link": 4
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "linkbox.linkbox", 
+        "fields": {
+            "description": "Frequently asked questions about the database and the software.", 
+            "title": "FAQs", 
+            "url": "/faq", 
+            "image": "", 
+            "link_text": "go", 
+            "page_link": null
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "linkbox.linkbox", 
+        "fields": {
+            "description": "This section provides you the links to the last published articles in scientific journals where most of the tree allometric equations were found.", 
+            "title": "Scientific literature", 
+            "url": "/journals", 
+            "image": "", 
+            "link_text": "go", 
             "page_link": null
         }
     }, 
@@ -344,7 +391,7 @@
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-03-30T14:29:36.323", 
+            "changed_date": "2013-03-30T19:22:13.680", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -354,6 +401,91 @@
             "position": 1, 
             "placeholder": 13, 
             "plugin_type": "LinkBoxPlugin"
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-03-30T19:35:52.681", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-03-30T19:35:05.912", 
+            "lft": 1, 
+            "tree_id": 15, 
+            "position": 0, 
+            "placeholder": 14, 
+            "plugin_type": "TextPlugin"
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-03-30T19:38:14.041", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-03-30T19:37:16.298", 
+            "lft": 1, 
+            "tree_id": 16, 
+            "position": 0, 
+            "placeholder": 15, 
+            "plugin_type": "LinkBoxPlugin"
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-03-30T19:39:50.955", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-03-30T19:38:20.192", 
+            "lft": 1, 
+            "tree_id": 17, 
+            "position": 0, 
+            "placeholder": 16, 
+            "plugin_type": "LinkBoxPlugin"
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-03-30T19:48:43.457", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-03-30T19:44:55.912", 
+            "lft": 1, 
+            "tree_id": 18, 
+            "position": 0, 
+            "placeholder": 17, 
+            "plugin_type": "TextPlugin"
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-03-30T19:54:52.792", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-03-30T19:53:13.165", 
+            "lft": 1, 
+            "tree_id": 19, 
+            "position": 0, 
+            "placeholder": 20, 
+            "plugin_type": "TextPlugin"
         }
     }, 
     {
@@ -497,6 +629,111 @@
         }
     }, 
     {
+        "pk": 6, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 2, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2013-03-30T19:34:21.327", 
+            "lft": 1, 
+            "in_navigation": false, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "globallometree", 
+            "publication_end_date": null, 
+            "moderator_state": 0, 
+            "template": "cms/basic_page.html", 
+            "tree_id": 6, 
+            "placeholders": [
+                14, 
+                15, 
+                16
+            ], 
+            "changed_date": "2013-03-30T19:42:26.224", 
+            "limit_visibility_in_menu": null, 
+            "parent": null, 
+            "publisher_state": 1, 
+            "soft_root": false, 
+            "publication_date": "2013-03-30T19:42:26.216", 
+            "publisher_public": null, 
+            "level": 0, 
+            "changed_by": "globallometree", 
+            "publisher_is_draft": true, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 2, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2013-03-30T19:44:43.673", 
+            "lft": 1, 
+            "in_navigation": false, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "globallometree", 
+            "publication_end_date": null, 
+            "moderator_state": 0, 
+            "template": "cms/basic_page.html", 
+            "tree_id": 7, 
+            "placeholders": [
+                17, 
+                18, 
+                19
+            ], 
+            "changed_date": "2013-03-30T19:49:18.539", 
+            "limit_visibility_in_menu": null, 
+            "parent": null, 
+            "publisher_state": 1, 
+            "soft_root": false, 
+            "publication_date": "2013-03-30T19:49:18.533", 
+            "publisher_public": null, 
+            "level": 0, 
+            "changed_by": "globallometree", 
+            "publisher_is_draft": true, 
+            "published": true
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "cms.page", 
+        "fields": {
+            "rght": 2, 
+            "navigation_extenders": "", 
+            "site": 1, 
+            "creation_date": "2013-03-30T19:52:55.901", 
+            "lft": 1, 
+            "in_navigation": false, 
+            "reverse_id": null, 
+            "login_required": false, 
+            "created_by": "globallometree", 
+            "publication_end_date": null, 
+            "moderator_state": 0, 
+            "template": "cms/basic_page.html", 
+            "tree_id": 8, 
+            "placeholders": [
+                20, 
+                21, 
+                22
+            ], 
+            "changed_date": "2013-03-30T19:56:42.393", 
+            "limit_visibility_in_menu": null, 
+            "parent": null, 
+            "publisher_state": 1, 
+            "soft_root": false, 
+            "publication_date": "2013-03-30T19:56:42.387", 
+            "publisher_public": null, 
+            "level": 0, 
+            "changed_by": "globallometree", 
+            "publisher_is_draft": true, 
+            "published": true
+        }
+    }, 
+    {
         "pk": 2, 
         "model": "cms.title", 
         "fields": {
@@ -570,6 +807,63 @@
             "path": "about", 
             "meta_description": "", 
             "slug": "about"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Documents", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2013-03-30T19:34:21.541", 
+            "page": 6, 
+            "path": "docs", 
+            "meta_description": "", 
+            "slug": "docs"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Frequently asked questions", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2013-03-30T19:44:43.715", 
+            "page": 7, 
+            "path": "faq", 
+            "meta_description": "", 
+            "slug": "faq"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "cms.title", 
+        "fields": {
+            "menu_title": "", 
+            "redirect": "", 
+            "meta_keywords": "", 
+            "page_title": "", 
+            "language": "en", 
+            "title": "Contributors", 
+            "has_url_overwrite": false, 
+            "application_urls": "", 
+            "creation_date": "2013-03-30T19:52:55.939", 
+            "page": 8, 
+            "path": "contributors", 
+            "meta_description": "", 
+            "slug": "contributors"
         }
     }
 ]
