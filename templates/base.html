@@ -46,14 +46,15 @@
                     </a>
                     <div class="nav-collapse collapse" style="height: 0px; ">
                         <ul class="nav">
-                            <li {% if is_page_home %}class="active" {% endif %}><a href="/">Home</a></li>
-                            <li {% if is_page_about %}class="active" {% endif %}><a href="/about/">About</a></li>
-                            <li {% if is_page_data %}class="active" {% endif %}><a href="/database">Data</a></li>
+                            {% page_attribute "slug" as slug %}
+                            <li {% if is_page_home or slug == 'home' %}class="active" {% endif %}><a href="/">Home</a></li>
+                            <li {% if is_page_about or slug == 'about' %}class="active" {% endif %}><a href="/about/">About</a></li>
+                            <li {% if is_page_data or slug == 'database' %}class="active" {% endif %}><a href="/database">Data</a></li>
                             <!--<li {% if is_page_maps %}class="active" {% endif %}><a href="/geo_map">Maps</a></li>-->
-                            <li {% if is_page_software %}class="active" {% endif %}><a href="/software">Software</a></li>
+                            <li {% if is_page_software or slug == 'software' %}class="active" {% endif %}><a href="/software">Software</a></li>
                             <!--<li {% if is_page_principles %}class="active" {% endif %}><a href="/principles">Principles</a></li>-->
-                            <li {% if is_page_docs %}class="active" {% endif %}><a href="/docs">Documents</a></li>
-                            <li {% if is_page_contributors %}class="active" {% endif %}><a href="/contributors">Contributors</a></li>
+                            <li {% if is_page_docs or slug == 'docs' %}class="active" {% endif %}><a href="/docs">Documents</a></li>
+                            <li {% if is_page_contributors or slug == 'contributors' %}class="active" {% endif %}><a href="/contributors">Contributors</a></li>
                         </ul>
                                        
                             {% if user.is_authenticated %}
