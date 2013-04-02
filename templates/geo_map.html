@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Fantallometrik{% endblock %}
+{% block title %}Globallometree{% endblock %}
 
 {% block script %}
 
@@ -11,50 +11,76 @@
 
     function drawVisualization() {
       var data = new google.visualization.DataTable();
-      data.addRows(6);
-      data.addColumn('string', 'continents');
-      data.addColumn('string', 'Continents');
-      data.setValue(0, 0, '002');
-      data.setValue(0, 1, 'Africa');
-      data.setValue(1, 0, '142');
-      data.setValue(1, 1, 'Asia');
-      data.setValue(2, 0, '150');
-      data.setValue(2, 1, 'Europe');
-      data.setValue(3, 0, '019');
-      data.setValue(3, 1, 'America');
-      data.setValue(4, 0, '009');
-      data.setValue(4, 1, 'Australia');
-
+      var countriesWithData = [];
       var data2 = new google.visualization.DataTable();
       data2.addRows({{ country_list|length }});
       data2.addColumn('string', 'Country');
-		{% for country in country_list %}
-	      data2.setValue({{ forloop.counter0 }}, 0, '{{ country }}');
+      data2.addColumn('number', 'Equations');
+		  {% for country in country_list %}
+	      data2.setValue({{ forloop.counter0 }}, 0, "{{ country.name|safe }}");
+        data2.setValue({{ forloop.counter0 }}, 1, {{ country.count }});
+        countriesWithData.push('{{ country.code }}');
 	   	{% endfor %}	
 
 
-      var geochart = new google.visualization.GeoChart(
-          document.getElementById('visualization'));
+      var geochart = new google.visualization.GeoChart(document.getElementById('visualization'));
 
- 		var options = {region: 'world', resolution: 'continents', height: 550}; 
+ 		  var options = {region: 'world', resolution: 'subcontinents', height: 550}; 
+      
 
-		google.visualization.events.addListener(geochart, 'regionClick', function(
-eventData) {
+      var regionNames = { '015' :  'Northern Africa',
+        '011' : 'Western Africa',
+        '017' : 'Middle Africa',
+        '014' : 'Eastern Africa  ',
+        '018' : 'Southern Africa',
+        '154' : 'Northern Europe',
+        '155' : 'Western Europe',
+        '151' : 'Eastern Europe',
+        '039' : 'Southern Europe',
+        '021' : 'Northern America',
+        '029' : 'Caribbean',
+        '013' : 'Central America',
+        '005' : 'South America',
+        '143' : 'Central Asia    ',
+        '030' : 'Eastern Asia',
+        '034' : 'Southern Asia',
+        '035' : 'South-Eastern Asia',
+        '145' : 'Western Asia',
+        '053' : 'Australia and New Zealand',
+        '054' : 'Melanesia',
+        '057' : 'Micronesia',
+        '061' : 'Polynesia' };
 
-		 	var options = {region: eventData['region'] }; 
+      /* Since the same handler is used for continents and countries, we keep track of the region selected */
+  		google.visualization.events.addListener(geochart, 'regionClick', function(eventData) {
+           
+           var continentCheck = /^\d+$/;
+           var isContinent = continentCheck.test(eventData['region']);
+           
+           if (isContinent) {
+              var options = {region: eventData['region']}; 
+              geochart.draw(data2, options);
+              $('#regionName').html('Region: ' + regionNames[eventData['region']] );
+              $('#resetMap').show();
+           } else {
+              var hasData = false;
+              var clickedCode = eventData['region'];
+              for(var i = 0; i < countriesWithData.length; i++) {
+                if (clickedCode == countriesWithData[i]) {
+                  hasData = true;
+                  break;
+                } 
+              }
+              
+              if (hasData) {
+                  window.location = ("/geo_map_" + clickedCode); 
+              } else {
+                  alert('No data available for country ' + clickedCode);
+              }
+           } 
+      }); 
 
-			 geochart.draw(data2, options);
-
-		google.visualization.events.addListener(geochart, 'regionClick', function(
-eventData) {
-
- 	      window.location =  ("/geo_map_"+eventData['region']); 
-
-  }); 
-
-  }); 
-
-      geochart.draw(data, options);
+      geochart.draw(data2, options);
     }
     
 
@@ -65,8 +91,9 @@ eventData) {
 
     {% block content %}
 <div id="map" class="narrow-page">
-	<div id="visualization">
-	</div>
+  <h3 id="regionName">Select a Region</h3>
+  <p id="resetMap" style="display:none;"><a href="/geo_map">Reset map</a></p>
+	<div id="visualization">Loading....	</div>
 </div>
 {% endblock %}
 

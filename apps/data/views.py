@@ -14,7 +14,7 @@ from haystack.query import SearchQuerySet
 
 from .forms import DataSubmissionForm
 from .models import TreeEquation, Country, DataSubmission
-
+from django.db import connection
 
 
 class DataSubmissionView(FormView):
@@ -83,11 +83,27 @@ def tree_equation_id(request, id):
                                'is_page_data' : True})) 
 
 def geo_map(request):
-    country_list = TreeEquation.objects.values_list('Country__common_name',flat=True).distinct
+    query = 'SELECT "Country_id", COUNT(1) AS id_count FROM data_treeequation GROUP BY "Country_id"';
+    cursor = connection.cursor()
+    cursor.execute(query)
+    countries = cursor.fetchall()
+
+    country_list = []
+
+    for country_id, count in countries:
+        if country_id is not None:
+            country = Country.objects.get(pk=country_id)
+            name = country.formal_name or country.common_name
+            country_list.append({ 'name' : name,
+                                  'count' : int(count),
+                                  'code' : country.iso_3166_1_2_letter_code.upper()
+                                })
+
     return render_to_response('geo_map.html',
                                context_instance = RequestContext(request,
                                 {'country_list': country_list,
-                                 'is_page_data' : True }))
+                                 'is_page_data' : True,
+                                 }))
 
 def geo_map_id(request, geo_id):
     country = Country.objects.get(iso_3166_1_2_letter_code = geo_id)
