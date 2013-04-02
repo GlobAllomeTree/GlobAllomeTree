@@ -1,4 +1,30 @@
+Skipping settings_secret.py since the file does not exist
+Skipping settings_secret.py since the file does not exist
 [
+    {
+        "pk": 22, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/Tutorial_fantallometrik_ENG2.pdf", 
+            "title": "Download the software tutorial"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/Tutorial_database-draft7.pdf", 
+            "title": "Dowload the data insertion tutorial"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/tarifs_en_web_20jan_red.pdf", 
+            "title": "Dowload the manual"
+        }
+    }, 
     {
         "pk": 2, 
         "model": "text.text", 
@@ -31,7 +57,7 @@
         "pk": 17, 
         "model": "text.text", 
         "fields": {
-            "body": "<h4>Tutorial for the Software Fantallometrik</h4>\n<p>\n    The tutorial provides information on how to install and utilize the free software Fantallometrik.\n    Relying on the structure of the software, the tutorial is articulated into three modules: 1) comparison\n    of tree allometric equation; 2) assessment of volume, biomass and carbon stock; 3) insertion of new\n    allometric equation. Details of the software functions for each modules are provided. In the appendix\n    the reader can find a description of the structure of the input files required by the software, a list\n    of the functions used to assess biomass and carbon stock and maps of the five ecological zone\n    classifications.\n</p>\n<h4>Tutorial for data insertion</h4>\n<p>\n    The tutorial provides detailed information on the database structure and about the procedures\n    and methodology for entering the data. Additional useful information is also provided such as how\n    to search articles, reports and documents containing allometric equations; how to manage the\n    references using RIS format reference management software; how to geo-reference and to spatialize\n    the data using the most common GIS software.\n</p>\n<h4>Fantallometrik</h4>\n<p>\n    Fantallometrik software is the first tool for calculating volume, biomass and carbon that takes\n    into account the existing allometric equations at the continental level. It is a robust tool aimed at\n    facilitating and improving the calculations carried out by scientific research, forest companies, NGOs\n    and forestry institutions. With Fantallometrik it is possible 1) to assess volume, biomass and carbon\n    stocks for the different tree compartments, 2) to compare existing allometric equations and control\n    the quality and reliability of the equations, 3) to enter new allometric equations.\n</p>\n<h4>Manual for building tree volume and biomass allometric equations</h4>\n<p>\n    Jointly published by FAO and the French research centre CIRAD, the Manual for building\ntree volume and biomass allometric equations is the first tool to provide all the necessary\ninformation from the field up to the biomass estimation. The appropriate development and\nuse of the tree allometric equations are particularly important when assessing forest carbon stocks and carbon stock changes. This will help national policymakers to make informed\ndecisions regarding bioenergy development and climate change mitigation activities\n</p>"
+            "body": "<h4>Tutorial for the Software Fantallometrik</h4>\n<p>\n    The tutorial provides information on how to install and utilize the free software Fantallometrik.\n    Relying on the structure of the software, the tutorial is articulated into three modules: 1) comparison\n    of tree allometric equation; 2) assessment of volume, biomass and carbon stock; 3) insertion of new\n    allometric equation. Details of the software functions for each modules are provided. In the appendix\n    the reader can find a description of the structure of the input files required by the software, a list\n    of the functions used to assess biomass and carbon stock and maps of the five ecological zone\n    classifications.\n</p>"
         }
     }, 
     {
@@ -46,6 +72,20 @@
         "model": "text.text", 
         "fields": {
             "body": "<h4>Institutions</h4>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.unitus.it/\">\n                <img alt=\"Tuscia University\" class=\"contributor-logo\" src=\"/media/images/logos/logo-tuscia-50.png\">\n                </a><h4 class=\"contributor-title\"><a href=\"http://www.unitus.it/\"></a><a href=\"http://www3.unitus.it/\">UNITUS - DIBAF</a></h4>\n            \n            <p>Universit\u00e0 degli Studi della Tuscia</p>\n            <p>Department for Innovation in Biological, Agro-food and Forest systems</p>\n            <address>Via S. Camillo de Lellis, 01100 Viterbo, Italy</address>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.cirad.fr/\">\n                <img alt=\"Cirad\" class=\"contributor-logo\" src=\"/media/images/logos/logo-cirad-50.png\">\n                <h4 class=\"contributor-title\">CIRAD</h4>\n            </a>\n            <p>A French research centre working with developing countries to tackle international agricultural and development issues</p>\n            <address>42, rue Scheffer, 75116 Paris, France</address>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.fao.org\">\n                <img alt=\"FAO\" class=\"contributor-logo\" src=\"/media/images/logos/logo-fao-50.png\">\n                </a><h4 class=\"contributor-title\"><a href=\"http://www.fao.org\"></a><a href=\"http://www.fao.org/\">FAO</a></h4>\n            \n            <p>Food and Agriculture Organization of the United Nations</p>\n            <address>Viale delle Terme di Caracalla, Rome 00153, Italy</address>\n        </div>\n    </div>\n</div>\n<h4>Projects</h4>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.carboafrica.net/index_en.asp\">\n                <img alt=\"CarboAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-carboafrica-50.jpg\">\n                <h4 class=\"contributor-title\">CarboAfrica</h4>\n            </a>\n            <p>Quantification, understanding and prediction of carbon cycle and other CHG gases in Sub-Saharan Africa</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.climafrica.net/\">\n                <img alt=\"ClimAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-climafrica-50.png\">\n                <h4 class=\"contributor-title\">ClimAfrica</h4>\n            </a>\n            <p>Climate change predictions in Sub-Saharan Africa: impacts and adaptations</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.geocarbon.net/\">\n                <img alt=\"GeoCarbon\" class=\"contributor-logo\" src=\"/media/images/logos/logo-geocarbon-50.jpg\">\n                <h4 class=\"contributor-title\">GeoCarbon</h4>\n            </a>\n            <p>A European FP7 project with a global perspective, with the ultimate aim to lay the foundations for an operational Global Carbon Observing and Analysis System in support to both science and policy</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <img alt=\"GeoCarbon\" class=\"contributor-logo\" src=\"/media/images/logos/logo-unredd-50.png\">\n            <h4><a href=\"http://www.un-redd.org\">UN-REDD</a></h4>\n            <p>The United Nations collaborative programme on reducing emissions from deforestation and forest degradation in developing countries</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <h4><a href=\"http://www7.nancy.inra.fr/foret_bois_lerfob/projets_passes_et_en_cours/projets_en_cours/anr_emerge\">ANR Emerge</a></h4>\n            <p>The French National Research Agency. Project-based funding to advance French research</p>\n        </div>\n    </div>\n</div>"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "text.text", 
+        "fields": {
+            "body": "<h4>Tutorial for data insertion</h4>\n<p>\n    The tutorial provides detailed information on the database structure and about the procedures\n    and methodology for entering the data. Additional useful information is also provided such as how\n    to search articles, reports and documents containing allometric equations; how to manage the\n    references using RIS format reference management software; how to geo-reference and to spatialize\n    the data using the most common GIS software.\n</p>"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "text.text", 
+        "fields": {
+            "body": "<h4>Fantallometrik</h4>\n<p>\n    Fantallometrik software is the first tool for calculating volume, biomass and carbon that takes\n    into account the existing allometric equations at the continental level. It is a robust tool aimed at\n    facilitating and improving the calculations carried out by scientific research, forest companies, NGOs\n    and forestry institutions. With Fantallometrik it is possible 1) to assess volume, biomass and carbon\n    stocks for the different tree compartments, 2) to compare existing allometric equations and control\n    the quality and reliability of the equations, 3) to enter new allometric equations.\n</p>\n<h4>Manual for building tree volume and biomass allometric equations</h4>\n<p>\n    Jointly published by FAO and the French research centre CIRAD, the Manual for building\ntree volume and biomass allometric equations is the first tool to provide all the necessary\ninformation from the field up to the biomass estimation. The appropriate development and\nuse of the tree allometric equations are particularly important when assessing forest carbon stocks and carbon stock changes. This will help national policymakers to make informed\ndecisions regarding bioenergy development and climate change mitigation activities\n</p>"
         }
     }, 
     {
@@ -102,7 +142,7 @@
         "fields": {
             "description": "", 
             "title": "Tutorial", 
-            "url": "#", 
+            "url": "/docs/", 
             "image": "", 
             "link_text": "download the tutorial", 
             "page_link": null
@@ -304,7 +344,7 @@
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-03-29T19:20:05.258", 
+            "changed_date": "2013-04-02T02:56:57.312", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -406,7 +446,7 @@
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-03-30T19:35:52.681", 
+            "changed_date": "2013-04-02T02:39:48.125", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -484,6 +524,91 @@
             "position": 0, 
             "placeholder": 20, 
             "plugin_type": "TextPlugin"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-02T02:38:11.614", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-02T02:37:14.339", 
+            "lft": 1, 
+            "tree_id": 20, 
+            "position": 1, 
+            "placeholder": 14, 
+            "plugin_type": "FilePlugin"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-02T02:40:42.319", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-02T02:40:03.735", 
+            "lft": 1, 
+            "tree_id": 21, 
+            "position": 2, 
+            "placeholder": 14, 
+            "plugin_type": "TextPlugin"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-02T02:41:47.814", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-02T02:40:54.274", 
+            "lft": 1, 
+            "tree_id": 22, 
+            "position": 3, 
+            "placeholder": 14, 
+            "plugin_type": "FilePlugin"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-02T02:42:27.690", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-02T02:42:03.895", 
+            "lft": 1, 
+            "tree_id": 23, 
+            "position": 4, 
+            "placeholder": 14, 
+            "plugin_type": "TextPlugin"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-02T02:43:47.271", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-02T02:42:47.443", 
+            "lft": 1, 
+            "tree_id": 24, 
+            "position": 5, 
+            "placeholder": 14, 
+            "plugin_type": "FilePlugin"
         }
     }, 
     {
