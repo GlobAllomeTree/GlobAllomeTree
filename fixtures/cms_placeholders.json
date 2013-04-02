@@ -94,5 +94,77 @@
             "slot": "right_column", 
             "default_width": null
         }
-    }
+    }, 
+    {
+        "pk": 14, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "basic_page_content", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "left_column", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "right_column", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "basic_page_content", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "left_column", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "right_column", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "basic_page_content", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "left_column", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "right_column", 
+            "default_width": null
+        }
+    },
 ]
