@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div id="journal-detail" class="narrow-page">
     <div class="page-header">
         <h3>{{ journal.title }}</h3>
     </div>
@@ -20,4 +21,5 @@
         <a href="/journals" class="btn btn-success pull-left" ><< Back to the journals list </a>
         <a href="{{ journal.site_url }}" class="btn btn-success pull-right" >Go to the journal page >></a>
     </div>
+</div>
 {% endblock %}
