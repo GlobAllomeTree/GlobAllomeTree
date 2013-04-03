@@ -78,7 +78,7 @@
                         <tr class="odd"> <td> Ecosystem: </td> <td> {{ tree_equation.Ecosystem }} </td> </tr>
                     </table>
                 </div>
-                <div class="tab-pane active" id="taxonomy">
+                <div class="tab-pane" id="taxonomy">
                     <table>
                         <tr class="odd"> <td> Family: </td> <td> {{ tree_equation.Family }} </td> </tr>
                         <tr class="even">  <td> Genus: </td> <td> {{ tree_equation.Genus }} </td> </tr>
@@ -86,7 +86,9 @@
                         <tr class="even">  <td> Species group: </td> <td> {{ tree_equation.Group_Species }} </td> </tr>
                     </table>
                 </div>
-                <div class="tab-pane active" id="Location">
+                <div class="tab-pane" id="Location">
+                    <div id="regions_map_canvas" style="float:right"></div>
+                    <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
                     <table>
                         <tr class="odd"> <td> Continent: </td> <td> {{ tree_equation.Continent }} </td> </tr>
                         <tr class="even">  <td> Country: </td> <td> {{ tree_equation.Country }} </td> </tr>
@@ -102,27 +104,20 @@
                     <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
                     <div style="clear:both;"></div>
                 </div>
-                <div class="tab-pane active" id="components">
+                <div class="tab-pane" id="components">
                     <table>
                         <tr class="odd">
                             <td> Components: </td>
                             <td>
-                                {{ tree_equation.B }}
-                                {{ tree_equation.Bd }}
-                                {{ tree_equation.Bg }}
-                                {{ tree_equation.Bt }}
-                                {{ tree_equation.L }}
-                                {{ tree_equation.Rb }}
-                                {{ tree_equation.Rf }}
-                                {{ tree_equation.Rm }}
-                                {{ tree_equation.S }}
-                                {{ tree_equation.T }}
-                                {{ tree_equation.F }}
+                                {{ tree_equation.components_string }}
                             </td>
+                            <div style="float:left;width:600px;padding:20px">
+                            <img src="/media/images/components.jpg" width="600" />
+                            </div>
                         </tr>
                     </table>
                 </div>
-                <div class="tab-pane active" id="input_Output">
+                <div class="tab-pane" id="input_Output">
                     <table>
                         <tr class="odd"> <td> X: </td> <td> {{ tree_equation.X }} </td> </tr>
                         <tr class="even">  <td> Unit X: </td> <td> {{ tree_equation.Unit_X }} </td> </tr>
@@ -145,14 +140,14 @@
                         <tr class="even"> <td> Veg component: </td> <td> {{ tree_equation.Veg_Component }} </td> </tr>
                     </table>
                 </div>
-                <div class="tab-pane active" id="allometry">
+                <div class="tab-pane" id="allometry">
                     <table>
                         <tr class="odd"> <td> Equation: </td> <td> {{ tree_equation.Equation }} </td> </tr>
                         <tr class="even">  <td> Sample size: </td> <td> {{ tree_equation.Sample_size }} </td> </tr>
                         <tr class="odd"> <td> R2: </td> <td> {{ tree_equation.R2 }} </td> </tr>
                     </table>
                 </div>
-                <div class="tab-pane active" id="allometry">
+                <div class="tab-pane" id="allometry">
                     <table>
                         <tr class="odd"> <td> Label: </td> <td> {{ tree_equation.Label }} </td> </tr>
                         <tr class="even">  <td> Author: </td> <td> {{ tree_equation.Author }} </td> </tr>
@@ -160,6 +155,8 @@
                         <tr class="even">  <td> Reference: </td> <td> {{ tree_equation.Reference }} </td> </tr>
                     </table>
                 </div>
+            </div>
+            <div id="tree-equation-footer">
             </div>
         </div>
     </div>

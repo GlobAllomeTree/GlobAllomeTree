@@ -246,7 +246,8 @@ header h1 {
 	margin-bottom: 0px;
 }
 
-#search-submit-holder {
+#search-submit-holder,
+#tree-equation-footer {
 	height:30px;
 	padding:5px;
 	background-color: #f4f4f4;
