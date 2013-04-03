@@ -4,4 +4,6 @@
 settings_local.py
 static_collected/*
 media/cms_page_media/*
+media/data_submissions/*
+
 
