@@ -64,8 +64,8 @@
             <h3>Equation {{ tree_equation.ID }}</h3>
         </div>
         <div id="tree-equation" style="clear:both;">
-            <ul class="nav nav-tabs">                   
-                <li><a href="#identification" data-toggle="tab" class="active">Identification</a></li>
+            <ul class="nav nav-tabs" >                   
+                <li><a href="#identification" data-toggle="tab" class="active" >Identification</a></li>
                 <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
                 <li><a href="#Location" data-toggle="tab">Location</a></li>
                 <li><a href="#components" data-toggle="tab">Components</a></li>
@@ -114,11 +114,11 @@
                             <td>
                                 {{ tree_equation.components_string }}
                             </td>
-                            <div style="float:left;width:600px;padding:20px">
-                            <img src="/media/images/components.jpg" width="600" />
-                            </div>
                         </tr>
                     </table>
+                    <div style="width:600px;padding:20px">
+                        <img src="/media/images/components.jpg" width="600" />
+                    </div>
                 </div>
                 <div class="tab-pane" id="input_Output">
                     <table>
