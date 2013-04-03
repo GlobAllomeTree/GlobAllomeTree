@@ -61,6 +61,9 @@
 {% block content %}
     <div id="page_2">
         <div id="tree-equation" style="clear:both;">
+            <div class="page-header">
+                <h3>Equation {{ tree_equation.ID }}</h3>
+            </div>
             <ul class="nav nav-tabs">                   
                 <li><a href="#identification" data-toggle="tab">Identification</a></li>
                 <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
@@ -147,7 +150,7 @@
                         <tr class="odd"> <td> R2: </td> <td> {{ tree_equation.R2 }} </td> </tr>
                     </table>
                 </div>
-                <div class="tab-pane" id="allometry">
+                <div class="tab-pane" id="reference">
                     <table>
                         <tr class="odd"> <td> Label: </td> <td> {{ tree_equation.Label }} </td> </tr>
                         <tr class="even">  <td> Author: </td> <td> {{ tree_equation.Author }} </td> </tr>
