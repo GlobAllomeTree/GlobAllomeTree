@@ -14,11 +14,12 @@
             data.addColumn('string', 'Country');
             data.setValue(0, 0, '{{ tree_equation.Country.iso_3166_1_2_letter_code }}');
         
-            var options = {region: '002', width: '400', };
+            var options = { width: '400',backgroundColor : {stroke : '#bbb'}, datalessRegionColor : 'FCFCFC' };
         
             var container = document.getElementById('regions_map_canvas');
             var geochart = new google.visualization.GeoChart(container);
             geochart.draw(data, options);
+            window.geochart = geochart;
         }
     </script>
     {% if tree_equation.Latitude %}
@@ -109,6 +110,7 @@
                 <div class="tab-pane" id="Location">
                     <div style="float:right;width:400px;">
                         <div id="regions_map_canvas"></div>
+                        <br><br>
                         <div id="point_map_canvas_holder"></div>
                     </div>
                     <table>
