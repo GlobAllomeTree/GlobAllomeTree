@@ -12,7 +12,7 @@
             var data = new google.visualization.DataTable();
             data.addRows(1);
             data.addColumn('string', 'Country');
-            data.setValue(0, 0, '{{ tree_equation.country }}');
+            data.setValue(0, 0, '{{ tree_equation.Country.iso_3166_1_2_letter_code }}');
         
             var options = {region: '002', width: '400', };
         
