@@ -9,6 +9,7 @@ from django.contrib import admin
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from . import models
 
@@ -219,12 +220,13 @@ class DataSubmissionAdmin(admin.ModelAdmin):
 
                                     setattr(tree_equation, key, val)
                     
+                        tree_equation.clean_fields() #Triggers Validation error for fields that are not correct
                         tree_equation.save()
                         #Give elasticsearch 1/10th of a second to index the record on save
                         #tring not to overload the server
-                        sleep(0.1)
+                        #sleep(0.1)
                         total_rows_imported += 1
-                    except Exception, e:
+                    except ValidationError as e:
                         missed_rows.append({'line_number' : line_number,
                                             'exception'   : str(e)})
 
