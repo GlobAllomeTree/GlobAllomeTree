@@ -229,21 +229,25 @@ header h1 {
 
 /* Search */
 
-#search-box {
+#search-box, #tree-equation {
 	padding:1px 1px;
 	background-color: #ccddcc;
 	border-radius: 4px;
 }
-#search-box .tab-pane {
+#search-box .tab-pane,
+#tree-equation .tab-pane
+{
 	background-color: #fff;
 	padding:10px;
 }
 
-#search-box .nav-tabs {
+#search-box .nav-tabs,
+#tree-equation .nav-tabs {
 	margin-bottom: 0px;
 }
 
-#search-submit-holder {
+#search-submit-holder,
+#tree-equation-footer {
 	height:30px;
 	padding:5px;
 	background-color: #f4f4f4;

@@ -3,10 +3,8 @@
 {% block title %}Fantallometrik{% endblock %}
 
 {% block script %}	
-  
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
-
         google.load('visualization', '1', {'packages': ['geochart']});
         google.setOnLoadCallback(drawRegionsMap);
     
@@ -22,9 +20,7 @@
             var geochart = new google.visualization.GeoChart(container);
             geochart.draw(data, options);
         }
-
     </script>
-   
     {% if tree_equation.Latitude %}
     <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeYuEKNTghtouEoy-USjrJff3A32F9DP4&sensor=false">
@@ -55,53 +51,116 @@
         });
     </script>
     {% endif %}
-
     <style>
         #TreeEquation_id table td {
             white-space:wrap;
         }
     </style>
-
 {% endblock %}
-
 
 {% block content %}
-<div id="page_2">
-    <div id="TreeEquation_id">
-        <table>
-            <tr class="odd"> <td> ID: </td> <td> {{ tree_equation.ID }} </td> </tr>		
-            <tr class="odd">  <td> Population: </td> <td> {{ tree_equation.Population }} </td> </tr>
-            <tr class="even"> <td> Ecosystem: </td> <td> {{ tree_equation.Ecosystem }} </td> </tr>
-            <tr class="odd">  <td> Country: </td> <td> {{ tree_equation.country.common_name }} </td> </tr>			
-            <tr class="even"> <td> Species: </td> <td> {{ tree_equation.Genus }} {{ tree_equation.Species }} </td> </tr>
-            <tr class="odd">  <td> Biome FAO: </td> <td> {{ tree_equation.Biome_FAO }} </td> </tr>
-            <tr class="even"> <td> Biome UDVARDY: </td> <td> {{ tree_equation.Biome_UDVARDY }} </td> </tr>
-            <tr class="odd">  <td> Biome WWF: </td> <td> {{ tree_equation.Biome_WWF }} </td> </tr>	
-            <tr class="even"> <td> Division Bailey: </td> <td> {{ tree_equation.Division_BAILEY }} </td> </tr>	
-            <tr class="odd">  <td> Biome Holdridge: </td> <td> {{ tree_equation.Biome_HOLDRIDGE }} </td> </tr>	
-            <tr class="even">  <td> Output: </td> <td> {{ tree_equation.Output }} </td> </tr>	
-            <tr class="odd">  <td> Equation: </td> <td> {{ tree_equation.Equation }} </td> </tr>	
-            <tr class="even">  <td> Reference: </td> <td> {{ tree_equation.reference }} </td> </tr>	
-            <tr class="odd">  <td> ID Location: </td> <td> {{ tree_equation.ID_Location }} </td> </tr>	
-            <tr class="even">  <td> Group Location: </td> <td> {{ tree_equation.Group_Location }} </td> </tr>			
-            <tr class="odd">  <td> Location: </td> <td> {{ tree_equation.Location }} </td> </tr>			
-            <tr class="even">  <td> Latitude: </td> <td> {{ tree_equation.Latitude }} </td> </tr>
-            <tr class="odd">  <td> Longitude: </td> <td> {{ tree_equation.Longitude }} </td> </tr>				
-            <tr class="even">  <td> Temperature: </td> <td> {{ tree_equation.temperature }} </td> </tr>	
-            <tr class="odd">  <td> Potential evapotransp.: </td> <td> {{ tree_equation.potential_evapotranspiration }} </td> </tr>	
-            <tr class="even">  <td> Precipitation: </td> <td> {{ tree_equation.precipitation }} </td> </tr>	
-            <tr class="odd">  <td> Sunshine fraction: </td> <td> {{ tree_equation.sunshine_fraction}} </td> </tr>	
-            <tr class="even">  <td> Wind: </td> <td> {{ tree_equation.wind }} </td> </tr>			
-            <tr class="odd">  <td> Water vapor pressure: </td> <td> {{ tree_equation.water_vapor_pressure }} </td> </tr>		
-            <tr class="even">  <td> Temp MIN: </td> <td> {{ tree_equation.temp_MIN }} </td> </tr>
-            <tr class="odd">  <td> Temp MAX: </td> <td> {{ tree_equation.temp_MAX }} </td> </tr>	
-        </table>
+    <div id="page_2">
+        <div class="page-header">
+            <h3>Equation {{ tree_equation.ID }}</h3>
+        </div>
+        <div id="tree-equation" style="clear:both;">
+            <ul class="nav nav-tabs" >                   
+                <li  class="active"><a href="#identification" data-toggle="tab">Identification</a></li>
+                <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
+                <li><a href="#Location" data-toggle="tab">Location</a></li>
+                <li><a href="#components" data-toggle="tab">Components</a></li>
+                <li><a href="#input_Output" data-toggle="tab">Input/Output</a></li>
+                <li><a href="#allometry" data-toggle="tab">Allometry</a></li>
+                <li><a href="#reference" data-toggle="tab">Reference</a></li>
+            </ul>
+            <div class="tab-content" >
+                <div class="tab-pane active" id="identification">
+                    <table>
+                        <tr class="odd"> <td> ID: </td> <td> {{ tree_equation.ID }} </td> </tr>
+                        <tr class="even">  <td> Population: </td> <td> {{ tree_equation.Population }} </td> </tr>
+                        <tr class="odd"> <td> Ecosystem: </td> <td> {{ tree_equation.Ecosystem }} </td> </tr>
+                    </table>
+                </div>
+                <div class="tab-pane" id="taxonomy">
+                    <table>
+                        <tr class="odd"> <td> Family: </td> <td> {{ tree_equation.Family }} </td> </tr>
+                        <tr class="even">  <td> Genus: </td> <td> {{ tree_equation.Genus }} </td> </tr>
+                        <tr class="odd"> <td> Species: </td> <td> {{ tree_equation.Species }} </td> </tr>
+                        <tr class="even">  <td> Species group: </td> <td> {{ tree_equation.Group_Species }} </td> </tr>
+                    </table>
+                </div>
+                <div class="tab-pane" id="Location">
+                    <div id="regions_map_canvas" style="float:right"></div>
+                    <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
+                    <table>
+                        <tr class="odd"> <td> Continent: </td> <td> {{ tree_equation.Continent }} </td> </tr>
+                        <tr class="even">  <td> Country: </td> <td> {{ tree_equation.Country }} </td> </tr>
+                        <tr class="odd"> <td> Location: </td> <td> {{ tree_equation.Location }} </td> </tr>
+                        <tr class="even">  <td> Location group: </td> <td> {{ tree_equation.Group_Location }} </td> </tr>
+                        <tr class="odd"> <td> Biome FAO: </td> <td> {{ tree_equation.Biome_FAO }} </td> </tr>
+                        <tr class="even">  <td> Biome UDVARDY: </td> <td> {{ tree_equation.Biome_UDVARDY }} </td> </tr>
+                        <tr class="odd"> <td> Biome WWF: </td> <td> {{ tree_equation.Biome_WWF }} </td> </tr>
+                        <tr class="even"> <td> Biome HOLDRIDGE: </td> <td> {{ tree_equation.Biome_HOLDRIDGE }} </td> </tr>
+                        <tr class="odds">  <td> Division BAILEY: </td> <td> {{ tree_equation.Division_BAILEY }} </td> </tr>
+                    </table>
+                    <div id="regions_map_canvas" style="float:right"></div>
+                    <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="tab-pane" id="components">
+                    <table>
+                        <tr class="odd">
+                            <td> Components: </td>
+                            <td>
+                                {{ tree_equation.components_string }}
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="width:600px;padding:20px">
+                        <img src="/media/images/components.jpg" width="600" />
+                    </div>
+                </div>
+                <div class="tab-pane" id="input_Output">
+                    <table>
+                        <tr class="odd"> <td> X: </td> <td> {{ tree_equation.X }} </td> </tr>
+                        <tr class="even">  <td> Unit X: </td> <td> {{ tree_equation.Unit_X }} </td> </tr>
+                        <tr class="odd"> <td> Unit Y: </td> <td> {{ tree_equation.Unit_Y }} </td> </tr>
+                        <tr class="even">  <td> Z: </td> <td> {{ tree_equation.Z }} </td> </tr>
+                        <tr class="odd"> <td> Unit Z: </td> <td> {{ tree_equation.Unit_Z }} </td> </tr>
+                        <tr class="even">  <td> W: </td> <td> {{ tree_equation.W }} </td> </tr>
+                        <tr class="odd"> <td> Unit_W: </td> <td> {{ tree_equation.Unit_W }} </td> </tr>
+                        <tr class="even"> <td> U: </td> <td> {{ tree_equation.U }} </td> </tr>
+                        <tr class="odd">  <td> Unit_U: </td> <td> {{ tree_equation.Unit_U }} </td> </tr>
+                        <tr class="odd"> <td> V: </td> <td> {{ tree_equation.V }} </td> </tr>
+                        <tr class="even">  <td> Unit V: </td> <td> {{ tree_equation.Unit_V }} </td> </tr>
+                        <tr class="odd"> <td> Min X: </td> <td> {{ tree_equation.Min_X }} </td> </tr>
+                        <tr class="even">  <td> Max X: </td> <td> {{ tree_equation.Max_X }} </td> </tr>
+                        <tr class="odd"> <td> Min Z: </td> <td> {{ tree_equation.Min_Z }} </td> </tr>
+                        <tr class="even">  <td> Max Z: </td> <td> {{ tree_equation.Max_Z }} </td> </tr>
+                        <tr class="odd"> <td> Output: </td> <td> {{ tree_equation.Output }} </td> </tr>
+                        <tr class="even"> <td> Output TR: </td> <td> {{ tree_equation.Output_TR }} </td> </tr>
+                        <tr class="odd"> <td> Age: </td> <td> {{ tree_equation.Age }} </td> </tr>
+                        <tr class="even"> <td> Veg component: </td> <td> {{ tree_equation.Veg_Component }} </td> </tr>
+                    </table>
+                </div>
+                <div class="tab-pane" id="allometry">
+                    <table>
+                        <tr class="odd"> <td> Equation: </td> <td> {{ tree_equation.Equation }} </td> </tr>
+                        <tr class="even">  <td> Sample size: </td> <td> {{ tree_equation.Sample_size }} </td> </tr>
+                        <tr class="odd"> <td> R2: </td> <td> {{ tree_equation.R2 }} </td> </tr>
+                    </table>
+                </div>
+                <div class="tab-pane" id="reference">
+                    <table>
+                        <tr class="odd"> <td> Label: </td> <td> {{ tree_equation.Label }} </td> </tr>
+                        <tr class="even">  <td> Author: </td> <td> {{ tree_equation.Author }} </td> </tr>
+                        <tr class="odd"> <td> Year: </td> <td> {{ tree_equation.Year }} </td> </tr>
+                        <tr class="even">  <td> Reference: </td> <td> {{ tree_equation.Reference }} </td> </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="tree-equation-footer">
+            </div>
+        </div>
     </div>
-    <div id="regions_map_canvas" style="float:right"></div>
-    <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
-    <div style="clear:both;"></div>
-</div>
 {% endblock %}
-
-
-
