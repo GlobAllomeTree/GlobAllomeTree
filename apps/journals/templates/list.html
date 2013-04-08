@@ -5,12 +5,10 @@
     <div class="page-header">
         <h3>Top ten Journals</h3>
     </div>
-    {% for journal in journals %}
-        {% if forloop.counter0|divisibleby:2 %}
-            <div class="row">
-        {% endif %}
+    <div class="row">
         <div class="span6" >
-            <div class="journal well clearfix" style="height:340px;">
+        {% for journal in journals %}
+            <div class="journal well clearfix" style="">
                 <h4>{{ journal.title }}</h4>
                 <p>{{ journal.description }}</p>
                 <ul>
@@ -26,13 +24,11 @@
                 </ul>
                 <a href="/journals/{{ journal.id }}" class="btn-small btn-success pull-right clearfix" >Read more >></a>
             </div>
+            {% if forloop.counter == forloop.revcounter or forloop.counter|add:1 == forloop.revcounter %}
+                </div><div class="span6" >
+            {% endif %}
+        {% endfor %}
         </div>
-        {% if not forloop.counter0|divisibleby:2 %}
-            </div>
-        {% endif %}
-        {% if forloop.counter0|divisibleby:2 and forloop.last %}
-            </div>
-        {% endif %}
-    {% endfor %}
+    </div>
 </div>
 {% endblock %}
