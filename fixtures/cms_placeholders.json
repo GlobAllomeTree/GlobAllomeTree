@@ -166,5 +166,29 @@
             "slot": "right_column", 
             "default_width": null
         }
+    }, 
+    {
+        "pk": 23, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "basic_page_content", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "left_column", 
+            "default_width": null
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "cms.placeholder", 
+        "fields": {
+            "slot": "right_column", 
+            "default_width": null
+        }
     }
 ]
