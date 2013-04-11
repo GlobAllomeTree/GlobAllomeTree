@@ -15,6 +15,7 @@ from haystack.query import SearchQuerySet
 from .forms import DataSubmissionForm
 from .models import TreeEquation, Country, DataSubmission
 from django.db import connection
+from .kill_gremlins import kill_gremlins
 
 
 class DataSubmissionView(FormView):
@@ -175,6 +176,8 @@ def autocomplete(request, field):
     return HttpResponse(json.dumps(result), mimetype='application/json; charset=utf8')
 
 from .forms import EquationSearchForm
+
+
 def export(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
@@ -215,7 +218,24 @@ def export(request):
             elif val in [None, '']:
                 val = 'None'
            
-            val_encoded = unicode(val).encode(settings.DATA_EXPORT_ENCODING)
+            if type(val) != unicode:
+                val = unicode(val)
+
+            try:
+                val_encoded = val.encode(settings.DATA_EXPORT_ENCODING)
+            except:
+                val = kill_gremlins(val)
+                try:
+                    val_encoded = val.encode(settings.DATA_EXPORT_ENCODING)
+                except:
+
+                    val_encoded = ''
+                    for letter in val:
+                        try:
+                            letter = letter.encode(settings.DATA_EXPORT_ENCODING)
+                        except:
+                            letter = '?'
+                        val_encoded += letter
 
             row.append(val_encoded)
         writer.writerow(row)
