@@ -1,0 +1,8 @@
+# production
+
+run forticlient with the following parameters:
+
+then
+
+ssh root@www.globallometree.org
+# pw: *13!46!cy*
