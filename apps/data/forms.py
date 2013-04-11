@@ -132,7 +132,7 @@ class EquationSearchForm(SearchForm):
     Equation                        = forms.CharField(required=False, label='Equation')
     
     Author                          = forms.CharField(required=False, label='Author')
-    Year                            = forms.IntegerField(required=False, label='Year')
+    Year                            = forms.CharField(required=False, label='Year')
     Reference                       = forms.CharField(required=False, label='Reference') 
 
 
