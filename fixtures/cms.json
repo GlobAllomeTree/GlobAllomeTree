@@ -1,11 +1,9 @@
-Skipping settings_secret.py since the file does not exist
-Skipping settings_secret.py since the file does not exist
 [
     {
         "pk": 22, 
         "model": "file.file", 
         "fields": {
-            "file": "cms_page_media/6/Tutorial_fantallometrik_ENG2.pdf", 
+            "file": "cms_page_media/6/Tutorial_fantallometrik_ENG3.vers3.ct.pdf", 
             "title": "Download the software tutorial"
         }
     }, 
@@ -13,16 +11,56 @@ Skipping settings_secret.py since the file does not exist
         "pk": 24, 
         "model": "file.file", 
         "fields": {
-            "file": "cms_page_media/6/Tutorial_database-draft7.pdf", 
-            "title": "Dowload the data insertion tutorial"
+            "file": "cms_page_media/6/Tutorial_database7.pdf", 
+            "title": "Dowload the tutorial for tree allometric equation database development"
         }
     }, 
     {
         "pk": 26, 
         "model": "file.file", 
         "fields": {
-            "file": "cms_page_media/6/tarifs_en_web_20jan_red.pdf", 
-            "title": "Dowload the manual"
+            "file": "cms_page_media/6/tarifs_en_web_20jan_red_1.pdf", 
+            "title": "Dowload the manual in English"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/tarifs-electronic-versionCencia.pdf", 
+            "title": "Download the manual in French"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/tarifs_sp_22mar_web.pdf", 
+            "title": "Download the manual in Spanish"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/Summary_AE_EN_screen_28novFINAL.pdf", 
+            "title": "Download the summary in English"
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/Summary_AE_FR_Screen_27novFINAL.pdf", 
+            "title": "Download the summary in French"
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "file.file", 
+        "fields": {
+            "file": "cms_page_media/6/Summary_AE_SP_06feb.pdf", 
+            "title": "Download the summary in Spanish"
         }
     }, 
     {
@@ -71,14 +109,14 @@ Skipping settings_secret.py since the file does not exist
         "pk": 21, 
         "model": "text.text", 
         "fields": {
-            "body": "<h4>Institutions</h4>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.unitus.it/\">\n                <img alt=\"Tuscia University\" class=\"contributor-logo\" src=\"/media/images/logos/logo-tuscia-50.png\">\n                </a><h4 class=\"contributor-title\"><a href=\"http://www.unitus.it/\"></a><a href=\"http://www3.unitus.it/\">UNITUS - DIBAF</a></h4>\n            \n            <p>Universit\u00e0 degli Studi della Tuscia</p>\n            <p>Department for Innovation in Biological, Agro-food and Forest systems</p>\n            <address>Via S. Camillo de Lellis, 01100 Viterbo, Italy</address>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.cirad.fr/\">\n                <img alt=\"Cirad\" class=\"contributor-logo\" src=\"/media/images/logos/logo-cirad-50.png\">\n                <h4 class=\"contributor-title\">CIRAD</h4>\n            </a>\n            <p>A French research centre working with developing countries to tackle international agricultural and development issues</p>\n            <address>42, rue Scheffer, 75116 Paris, France</address>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.fao.org\">\n                <img alt=\"FAO\" class=\"contributor-logo\" src=\"/media/images/logos/logo-fao-50.png\">\n                </a><h4 class=\"contributor-title\"><a href=\"http://www.fao.org\"></a><a href=\"http://www.fao.org/\">FAO</a></h4>\n            \n            <p>Food and Agriculture Organization of the United Nations</p>\n            <address>Viale delle Terme di Caracalla, Rome 00153, Italy</address>\n        </div>\n    </div>\n</div>\n<h4>Projects</h4>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.carboafrica.net/index_en.asp\">\n                <img alt=\"CarboAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-carboafrica-50.jpg\">\n                <h4 class=\"contributor-title\">CarboAfrica</h4>\n            </a>\n            <p>Quantification, understanding and prediction of carbon cycle and other CHG gases in Sub-Saharan Africa</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.climafrica.net/\">\n                <img alt=\"ClimAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-climafrica-50.png\">\n                <h4 class=\"contributor-title\">ClimAfrica</h4>\n            </a>\n            <p>Climate change predictions in Sub-Saharan Africa: impacts and adaptations</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <a href=\"http://www.geocarbon.net/\">\n                <img alt=\"GeoCarbon\" class=\"contributor-logo\" src=\"/media/images/logos/logo-geocarbon-50.jpg\">\n                <h4 class=\"contributor-title\">GeoCarbon</h4>\n            </a>\n            <p>A European FP7 project with a global perspective, with the ultimate aim to lay the foundations for an operational Global Carbon Observing and Analysis System in support to both science and policy</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <img alt=\"UN-REDD\" class=\"contributor-logo\" src=\"/media/images/logos/logo-unredd-50.png\">\n            <h4><a href=\"http://www.un-redd.org\">UN-REDD</a></h4>\n            <p>The United Nations collaborative programme on reducing emissions from deforestation and forest degradation in developing countries</p>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"span12\">\n        <div class=\"well clearfix\">\n            <img alt=\"ANR Emerge\" class=\"contributor-logo\" src=\"/media/images/logos/anr-emerge-50.gif\">\n            <h4><a href=\"http://www7.nancy.inra.fr/foret_bois_lerfob/projets_passes_et_en_cours/projets_en_cours/anr_emerge\">ANR Emerge</a></h4>\n            <p>The French National Research Agency. Project-based funding to advance French research</p>\n        </div>\n    </div>\n</div>"
+            "body": "<div class=\"row\">\n      <div class=\"span6\"><h4>Institutions</h4>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.unitus.it/\">\n                <img alt=\"Tuscia University\" class=\"contributor-logo\" src=\"/media/images/logos/logo-tuscia-50.png\">\n                <h4 class=\"contributor-title\">UNITUS - DIBAF</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.cirad.fr/\">\n                <img alt=\"Cirad\" class=\"contributor-logo\" src=\"/media/images/logos/logo-cirad-50.png\">\n                <h4 class=\"contributor-title\">CIRAD</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.fao.org\">\n                <img alt=\"FAO\" class=\"contributor-logo\" src=\"/media/images/logos/logo-fao-50.png\">\n                <h4 class=\"contributor-title\">FAO</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n            <a href=\"http://www7.nancy.inra.fr/foret_bois_lerfob/projets_passes_et_en_cours/projets_en_cours/anr_emerge\">\n                <img alt=\"ANR Emerge\" class=\"contributor-logo\" src=\"/media/images/logos/anr-emerge-50.gif\">\n                <h4 class=\"contributor-title\">ANR Emerge</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.inra.fr/\">\n              <img alt=\"INRA\" class=\"contributor-logo\" src=\"/media/images/logos/inra-50.jpg\">\n              <h4 class=\"contributor-title\">INRA</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.kfri.res.in/\">\n              <img alt=\"KFRI\" class=\"contributor-logo\" src=\"/media/images/logos/kfri-50.jpg\">\n              <h4 class=\"contributor-title\">KFRI</h4>\n            </a>\n        </div>\n  </div>\n  <div class=\"row\">\n      <div class=\"span6\">\n        <h4>Projects</h4>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.carboafrica.net/index_en.asp\">\n                <img alt=\"CarboAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-carboafrica-50.jpg\">\n                <h4 class=\"contributor-title\">CarboAfrica</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.climafrica.net/\">\n                <img alt=\"ClimAfrica\" class=\"contributor-logo\" src=\"/media/images/logos/logo-climafrica-50.png\">\n                <h4 class=\"contributor-title\">ClimAfrica</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n            <a href=\"http://www.geocarbon.net/\">\n                <img alt=\"GeoCarbon\" class=\"contributor-logo\" src=\"/media/images/logos/logo-geocarbon-50.jpg\">\n                <h4 class=\"contributor-title\">GeoCarbon</h4>\n            </a>\n        </div>\n        <div class=\"well clearfix\">\n          <a href=\"http://www.un-redd.org\">\n            <img alt=\"UN-REDD\" class=\"contributor-logo\" src=\"/media/images/logos/logo-unredd-50.jpg\">\n            <h4 class=\"contributor-title\">UN-REDD</h4>\n          </a>\n        </div>\n        <div class=\"well clearfix\">\n          <a href=\"http://www.fao.org/gtos/\">\n            <img alt=\"GTOS\" class=\"contributor-logo\" src=\"/media/images/logos/gtos-50.gif\">\n            <h4 class=\"contributor-title\">GTOS</h4>\n          </a>\n        </div>\n  </div>\n</div></div>"
         }
     }, 
     {
         "pk": 23, 
         "model": "text.text", 
         "fields": {
-            "body": "<h4>Tutorial for data insertion</h4>\n<p>\n    The tutorial provides detailed information on the database structure and about the procedures\n    and methodology for entering the data. Additional useful information is also provided such as how\n    to search articles, reports and documents containing allometric equations; how to manage the\n    references using RIS format reference management software; how to geo-reference and to spatialize\n    the data using the most common GIS software.\n</p>"
+            "body": "<h4>Tutorial for Tree Allometric Equation Database Development</h4>\n<p>\n    The tutorial provides detailed information on the database structure and about the procedures\n    and methodology for entering the data. Additional useful information is also provided such as how\n    to search articles, reports and documents containing allometric equations; how to manage the\n    references using RIS format reference management software; how to geo-reference and to spatialize\n    the data using the most common GIS software.\n</p>"
         }
     }, 
     {
@@ -92,7 +130,7 @@ Skipping settings_secret.py since the file does not exist
         "pk": 27, 
         "model": "text.text", 
         "fields": {
-            "body": "<div class=\"alert alert-block\">\n<button class=\"close\" type=\"button\">\u00d7</button>\n FANTALLOMETRIK\u00a0 Software (c) is a free software and works only under windows operating systems. It is required to accept a license agreement before downloading. Please read carefully the instructions in the tutorial before using the software. \n</div>\n<h4>Terms of Use and user rights</h4>\n<h5>Data usage and citation</h5>\n<p>\nOn the use of the Fantallometrik Software: Software for assessing tree volume, biomass and carbon stock. This End User License Agreement accompanies the Fantallometrik software and all related documentation. It refers to this current software version and any upgrades or modified versions of it licensed by FAO/CIRAD/UNITUS. Please read this Agreement carefully before starting the installation. By installing this software you (the User) accept all the terms and conditions of this Agreement.\n</p>\n<p>\nFantallometrik software is copyrighted. All rights reserved. The user is responsible for any breach of copyright it may commit. Nothing contained in this Agreement shall be deemed to convey to the User any title or ownership in the software or the related documentation. The software is freely accessible and the use of the software constitutes an agreement between FAO, CIRAD, UNITUS and users and the user\u2019s acceptance of the following terms and conditions and the disclaimer.\n</p>\n<p>\nUsers are responsible for the interpretation and use they make of the data and results. Reproduction of the data for resale or other commercial purposes is prohibited. Users interested in developing any derived products are asked\n</p>\n<p>\nReproduction of the software for resale or other commercial purposes and the development of derived products are prohibited without prior written permission of the copyright holder. Applications for such permission should be addressed by email to globallometree@fao.org or by mail to: The coordinator of GlobAllomeTree - Forest Department - Food and Agriculture organization of the United Nations, Vialle delle Terme di Caracalla, 00153 Rome, Italy.\n</p>\n<p>\nUsers are requested to acknowledge the use of the software; this will allow us to gauge the interest and usefulness of our services. Please refer to the software documentation for suggested form of acknowledgement and preferred citation.\n</p>\n<p>\nFAO, CIRAD and UNITUS kindly request that you send us one reprints or PDF of any publication that uses the software from the website. This will help us to determine the type and level of use of the data we distribute.\n</p>\n<p>\nExpect with permission in writing from FAO, CIRAD and UNITUS, the user\n</p>\n<p>\nCannot modify, adapt, translate, reverse engineer, decompile, disassemble, or otherwise attempt to discover the source code of the software\nCannot circulate or redistribute Fantallometrik software\nCannot store Fantallometrik software in a shared electronic archive or database.\nIf the user has the right to modify, reproduce or redistribute the software in accordance with these terms and conditions, the user must ensure that all such material or information is clearly attributed to FAO, CIRAD and UNITUS and bears a notation that it is copyrighted.\n</p>\n<p>\nAll reasonable precautions have been taken by FAO, CIRAD and UNITUS to verify the information contained in this software. However, the software is being distributed without warranty of any kind, either express or implied. The responsibility for the use of the software lies with the User. In no event shall the FAO, CIRAD and UNITUS be liable for damages arising from its use.\n</p>\n"
+            "body": "<div class=\"alert alert-block\">\n<button class=\"close\" type=\"button\">\u00d7</button>\n FANTALLOMETRIK\u00a0 Software (c) is a free software and works only under windows operating systems. It is required to accept a license agreement before downloading. Please read carefully the instructions in the tutorial before using the software. \n</div>\n<h4>Terms of Use and user rights</h4>\n<p>\nOn the use of the Fantallometrik Software: Software for assessing tree volume, biomass and carbon stock. This End User License Agreement accompanies the Fantallometrik software and all related documentation. It refers to this current software version and any upgrades or modified versions of it licensed by FAO/CIRAD/UNITUS. Please read this Agreement carefully before starting the installation. By installing this software you (the User) accept all the terms and conditions of this Agreement.\n</p>\n<p>\nFantallometrik software is copyrighted. All rights reserved. The user is responsible for any breach of copyright it may commit. Nothing contained in this Agreement shall be deemed to convey to the User any title or ownership in the software or the related documentation. The software is freely accessible and the use of the software constitutes an agreement between FAO, CIRAD, UNITUS and users and the user\u2019s acceptance of the following terms and conditions and the disclaimer.\n</p>\n<p>\nUsers are responsible for the interpretation and use they make of the data and results. Reproduction of the data for resale or other commercial purposes is prohibited. Users interested in developing any derived products are asked\n</p>\n<p>\nReproduction of the software for resale or other commercial purposes and the development of derived products are prohibited without prior written permission of the copyright holder. Applications for such permission should be addressed by email to globallometree@fao.org or by mail to: The coordinator of GlobAllomeTree - Forest Department - Food and Agriculture organization of the United Nations, Vialle delle Terme di Caracalla, 00153 Rome, Italy.\n</p>\n<p>\nUsers are requested to acknowledge the use of the software; this will allow us to gauge the interest and usefulness of our services. Please refer to the software documentation for suggested form of acknowledgement and preferred citation.\n</p>\n<p>\nFAO, CIRAD and UNITUS kindly request that you send us one reprints or PDF of any publication that uses the software from the website. This will help us to determine the type and level of use of the data we distribute.\n</p>\n<p>\nExpect with permission in writing from FAO, CIRAD and UNITUS, the user\n</p>\n<p>\nCannot modify, adapt, translate, reverse engineer, decompile, disassemble, or otherwise attempt to discover the source code of the software\nCannot circulate or redistribute Fantallometrik software\nCannot store Fantallometrik software in a shared electronic archive or database.\nIf the user has the right to modify, reproduce or redistribute the software in accordance with these terms and conditions, the user must ensure that all such material or information is clearly attributed to FAO, CIRAD and UNITUS and bears a notation that it is copyrighted.\n</p>\n<p>\nAll reasonable precautions have been taken by FAO, CIRAD and UNITUS to verify the information contained in this software. However, the software is being distributed without warranty of any kind, either express or implied. The responsibility for the use of the software lies with the User. In no event shall the FAO, CIRAD and UNITUS be liable for damages arising from its use.\n</p>\n"
         }
     }, 
     {
@@ -521,7 +559,7 @@ Skipping settings_secret.py since the file does not exist
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-04-08T16:46:27.212", 
+            "changed_date": "2013-04-11T17:24:49.240", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -538,7 +576,7 @@ Skipping settings_secret.py since the file does not exist
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-04-02T02:38:11.614", 
+            "changed_date": "2013-04-11T17:42:37.045", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -555,7 +593,7 @@ Skipping settings_secret.py since the file does not exist
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-04-02T02:40:42.319", 
+            "changed_date": "2013-04-11T17:45:32.175", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -572,7 +610,7 @@ Skipping settings_secret.py since the file does not exist
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-04-02T02:41:47.814", 
+            "changed_date": "2013-04-11T17:46:39.312", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -606,7 +644,7 @@ Skipping settings_secret.py since the file does not exist
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-04-02T02:43:47.271", 
+            "changed_date": "2013-04-11T17:48:33.781", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
@@ -623,14 +661,14 @@ Skipping settings_secret.py since the file does not exist
         "model": "cms.cmsplugin", 
         "fields": {
             "rght": 2, 
-            "changed_date": "2013-04-03T20:05:11.017", 
+            "changed_date": "2013-04-11T17:32:43.135", 
             "parent": null, 
             "language": "en", 
             "level": 0, 
             "creation_date": "2013-04-03T19:46:51.658", 
             "lft": 1, 
             "tree_id": 25, 
-            "position": 0, 
+            "position": 1, 
             "placeholder": 23, 
             "plugin_type": "TextPlugin"
         }
@@ -649,6 +687,108 @@ Skipping settings_secret.py since the file does not exist
             "tree_id": 26, 
             "position": 1, 
             "placeholder": 23, 
+            "plugin_type": "FilePlugin"
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-11T16:37:30.404", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-11T16:37:30.389", 
+            "lft": 1, 
+            "tree_id": 27, 
+            "position": 0, 
+            "placeholder": 21, 
+            "plugin_type": "LinkBoxPlugin"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-11T17:49:13.632", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-11T17:48:44.970", 
+            "lft": 1, 
+            "tree_id": 28, 
+            "position": 6, 
+            "placeholder": 14, 
+            "plugin_type": "FilePlugin"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-11T17:49:55.690", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-11T17:49:30.879", 
+            "lft": 1, 
+            "tree_id": 29, 
+            "position": 7, 
+            "placeholder": 14, 
+            "plugin_type": "FilePlugin"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-11T17:51:51.478", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-11T17:51:23.959", 
+            "lft": 1, 
+            "tree_id": 30, 
+            "position": 8, 
+            "placeholder": 14, 
+            "plugin_type": "FilePlugin"
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-11T17:52:24.786", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-11T17:52:05.242", 
+            "lft": 1, 
+            "tree_id": 31, 
+            "position": 9, 
+            "placeholder": 14, 
+            "plugin_type": "FilePlugin"
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "cms.cmsplugin", 
+        "fields": {
+            "rght": 2, 
+            "changed_date": "2013-04-11T17:52:52.813", 
+            "parent": null, 
+            "language": "en", 
+            "level": 0, 
+            "creation_date": "2013-04-11T17:52:32.551", 
+            "lft": 1, 
+            "tree_id": 32, 
+            "position": 10, 
+            "placeholder": 14, 
             "plugin_type": "FilePlugin"
         }
     }, 
