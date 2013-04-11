@@ -96,9 +96,9 @@
                                   countries: ['FM', 'GU', 'KI', 'MH', 'MP', 'NR', 'PW']},
 
                           '061' : {  name: 'Polynesia', 
-                                  countries: ['AS', 'CK', 'NU', 'PF', 'PN', 'TK', 'TO', 'TV', 'WF', 'WS']},
+                                  countries: ['AS', 'CK', 'NU', 'PF', 'PN', 'TK', 'TO', 'TV', 'WF', 'WS']}
 
-                        }
+                        };
 
       for (region in regionNames) {
           var regionData = regionNames[region];
@@ -108,7 +108,7 @@
 
               var countryCode = regionData.countries[i];
               if (equationData[countryCode]) dataArray.push([equationData[countryCode]['countryName'], 
-                                                             equationData[countryCode]['equationCount'],]);
+                                                             equationData[countryCode]['equationCount']]);
           }
 
           regionNames[region]['data'] = google.visualization.arrayToDataTable(dataArray);
