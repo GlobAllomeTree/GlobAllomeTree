@@ -12,13 +12,14 @@
             var data = new google.visualization.DataTable();
             data.addRows(1);
             data.addColumn('string', 'Country');
-            data.setValue(0, 0, '{{ tree_equation.country }}');
+            data.setValue(0, 0, '{{ tree_equation.Country.iso_3166_1_2_letter_code }}');
         
-            var options = {region: '002', width: '400', };
+            var options = { width: '400',backgroundColor : {stroke : '#bbb'}, datalessRegionColor : 'FCFCFC' };
         
             var container = document.getElementById('regions_map_canvas');
             var geochart = new google.visualization.GeoChart(container);
             geochart.draw(data, options);
+            window.geochart = geochart;
         }
     </script>
     {% if tree_equation.Latitude %}
@@ -26,22 +27,39 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeYuEKNTghtouEoy-USjrJff3A32F9DP4&sensor=false">
     </script>
     <script type="text/javascript">
-	$(function () {
+     $(function () {
 
-            var mapOptions = {
-                center: new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }}),
-                zoom: 11,
-                mapTypeId: google.maps.MapTypeId.HYBRID,
-                panControl: true,
-                zoomControl: true,
-                scaleControl: true
-            };
-            var map = new google.maps.Map(document.getElementById("point_map_canvas"), mapOptions);
+        var map = null;
+        //var initialBounds = null;
+    	$('#locationTab').click(function () {
+                if (map == null) {
+                    $('#point_map_canvas_holder').html('');
+                    $('#point_map_canvas_holder').html('<div style="width:400px;height:300px;" id="point_map_canvas"></div>');
+
+                    var center =  new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }});
+                    var mapOptions = {
+                        center: center,
+                        zoom: 11,
+                        mapTypeId: google.maps.MapTypeId.HYBRID,
+                        panControl: true,
+                        zoomControl: true,
+                        scaleControl: true
+                    };
+                    map = new google.maps.Map(document.getElementById("point_map_canvas"), mapOptions);
+                    
+                    var marker = new google.maps.Marker({
+                        position: center,
+                        map: map
+                    });
             
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }}),
-                map: map
+                } else {
+                    //Timeout until the tab appears so the map can be redrawn correctly
+                    setTimeout( function () {google.maps.event.trigger(map, 'resize');} , 200); 
+                    
+                }
+            
             });
+
         });
     </script>
     {% else %}
@@ -67,7 +85,7 @@
             <ul class="nav nav-tabs" >                   
                 <li  class="active"><a href="#identification" data-toggle="tab">Identification</a></li>
                 <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
-                <li><a href="#Location" data-toggle="tab">Location</a></li>
+                <li><a href="#Location" data-toggle="tab" id="locationTab">Location</a></li>
                 <li><a href="#components" data-toggle="tab">Components</a></li>
                 <li><a href="#input_Output" data-toggle="tab">Input/Output</a></li>
                 <li><a href="#allometry" data-toggle="tab">Allometry</a></li>
@@ -90,8 +108,11 @@
                     </table>
                 </div>
                 <div class="tab-pane" id="Location">
-                    <div id="regions_map_canvas" style="float:right"></div>
-                    <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
+                    <div style="float:right;width:400px;">
+                        <div id="regions_map_canvas"></div>
+                        <br><br>
+                        <div id="point_map_canvas_holder"></div>
+                    </div>
                     <table>
                         <tr class="odd"> <td> Continent: </td> <td> {{ tree_equation.Continent }} </td> </tr>
                         <tr class="even">  <td> Country: </td> <td> {{ tree_equation.Country }} </td> </tr>
@@ -103,8 +124,7 @@
                         <tr class="even"> <td> Biome HOLDRIDGE: </td> <td> {{ tree_equation.Biome_HOLDRIDGE }} </td> </tr>
                         <tr class="odds">  <td> Division BAILEY: </td> <td> {{ tree_equation.Division_BAILEY }} </td> </tr>
                     </table>
-                    <div id="regions_map_canvas" style="float:right"></div>
-                    <div style="width:400px;height:300px;float:right;clear:right" id="point_map_canvas" ></div>
+                   
                     <div style="clear:both;"></div>
                 </div>
                 <div class="tab-pane" id="components">

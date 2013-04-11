@@ -7,17 +7,17 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     
     id                              = indexes.IntegerField(model_attr='ID')
 
-    Population                      = indexes.CharField(model_attr='Population', null=True, faceted=True)
-    Ecosystem                       = indexes.CharField(model_attr='Ecosystem', null=True, faceted=True)
-    Genus                           = indexes.CharField(model_attr='Genus', null=True, faceted=True)
-    Species                         = indexes.CharField(model_attr='Species', null=True, faceted=True)
-    Country                         = indexes.CharField(model_attr='Country__common_name', null=True, faceted=True)
+    Population                      = indexes.CharField(model_attr='Population', null=True)
+    Ecosystem                       = indexes.CharField(model_attr='Ecosystem', null=True)
+    Genus                           = indexes.CharField(model_attr='Genus', null=True)
+    Species                         = indexes.CharField(model_attr='Species', null=True)
+    Country                         = indexes.CharField(model_attr='Country__common_name', null=True)
     
-    Biome_FAO                       = indexes.CharField(model_attr='Biome_FAO', null=True, faceted=True)
-    Biome_UDVARDY                   = indexes.CharField(model_attr='Biome_UDVARDY', null=True, faceted=True)
-    Biome_WWF                       = indexes.CharField(model_attr='Biome_WWF', null=True, faceted=True) 
-    Division_BAILEY                 = indexes.CharField(model_attr='Division_BAILEY', null=True, faceted=True) 
-    Biome_HOLDRIDGE                 = indexes.CharField(model_attr='Biome_HOLDRIDGE', null=True, faceted=True)
+    Biome_FAO                       = indexes.CharField(model_attr='Biome_FAO', null=True)
+    Biome_UDVARDY                   = indexes.CharField(model_attr='Biome_UDVARDY', null=True)
+    Biome_WWF                       = indexes.CharField(model_attr='Biome_WWF', null=True) 
+    Division_BAILEY                 = indexes.CharField(model_attr='Division_BAILEY', null=True) 
+    Biome_HOLDRIDGE                 = indexes.CharField(model_attr='Biome_HOLDRIDGE', null=True)
      
     X                               = indexes.CharField(model_attr='X', null=True)
     Unit_X                          = indexes.CharField(model_attr='Unit_X', null=True)
@@ -35,7 +35,7 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     Min_Z                           = indexes.FloatField(model_attr='Min_Z',null=True)
     Max_Z                           = indexes.FloatField(model_attr='Max_Z',null=True)
     
-    Output                          = indexes.CharField(model_attr='Output', null=True, faceted=True)
+    Output                          = indexes.CharField(model_attr='Output', null=True)
     Unit_Y                          = indexes.CharField(model_attr='Unit_Y', null=True)
     
     B                               = indexes.BooleanField(model_attr='B')
@@ -52,11 +52,11 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     
     Equation                        = indexes.NgramField(model_attr='Equation', null=True)
     
-    Author                          = indexes.CharField(model_attr='Author', null=True, faceted=True, indexed=True)
+    Author                          = indexes.CharField(model_attr='Author', null=True, indexed=True)
     
    
-    Year                            = indexes.IntegerField(model_attr='Year', null=True)
-    Reference                       = indexes.CharField(model_attr='Reference', null=True, faceted=True) 
+    Year                            = indexes.CharField(model_attr='Year', null=True)
+    Reference                       = indexes.CharField(model_attr='Reference', null=True) 
     
 
     #ordering

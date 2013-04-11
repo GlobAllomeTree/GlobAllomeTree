@@ -37,16 +37,11 @@ class DataSubmission(models.Model):
 
 class TreeEquation(models.Model):
     
-    POPULATION_CHOICES = (
-            ('Tree', 'Tree'),
-            ('Sprout', 'Sprout'),
-            ('Stand', 'Stand'),
-     )
-
+  
     ID                              = models.IntegerField(primary_key=True)
     data_submission                 = models.ForeignKey(DataSubmission, blank=True, null=True)
     IDequation                      = models.IntegerField(null=True, blank=True)
-    Population                      = models.CharField(max_length=255, null=True, blank=True, choices=POPULATION_CHOICES)
+    Population                      = models.CharField(max_length=255, null=True, blank=True)
     Ecosystem                       = models.CharField(max_length=255, null=True, blank=True)    
     Continent                       = models.CharField(max_length=100, null=True, blank=True)    
     Country                         = models.ForeignKey(Country, blank=True, null=True)
@@ -98,12 +93,12 @@ class TreeEquation(models.Model):
     ID_Group                        = models.IntegerField(null=True, blank=True)
     Equation                        = models.CharField(max_length=500, null=True, blank=True) 
     Substitute_equation             = models.CharField(max_length=500, null=True, blank=True) 
-    Top_dob                         = models.IntegerField(null=True, blank=True)
+    Top_dob                         = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
     Stump_height                    = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
     ID_REF                          = models.IntegerField(null=True, blank=True)
     Label                           = models.CharField(max_length=20, null=True, blank=True) 
     Author                          = models.CharField(max_length=200, null=True, blank=True) 
-    Year                            = models.IntegerField(null=True, blank=True)
+    Year                            = models.CharField(max_length=12, null=True, blank=True) 
     Reference                       = models.TextField(null=True, blank=True) 
     R2                              = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
     R2_Adjusted                     = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
@@ -113,7 +108,7 @@ class TreeEquation(models.Model):
     Bias_correction                 = models.DecimalField(null=True, blank=True, max_digits=16, decimal_places=10)
     Ratio_equation                  = models.NullBooleanField()
     Segmented_equation              = models.NullBooleanField()
-    Sample_size                     = models.IntegerField(null=True, blank=True)
+    Sample_size                     = models.CharField(max_length=150, null=True, blank=True) 
     Contributor                     = models.CharField(max_length=150, null=True, blank=True) 
     Name_operator                   = models.CharField(max_length=150, null=True, blank=True) 
 
