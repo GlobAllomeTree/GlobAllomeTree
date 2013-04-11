@@ -10,46 +10,110 @@
     google.load('visualization', '1', {packages: ['geochart']});
 
     function drawVisualization() {
-      var data = new google.visualization.DataTable();
-      var countriesWithData = [];
-      var data2 = new google.visualization.DataTable();
-      data2.addRows({{ country_list|length }});
-      data2.addColumn('string', 'Country');
-      data2.addColumn('number', 'Equations');
-		  {% for country in country_list %}
-	      data2.setValue({{ forloop.counter0 }}, 0, "{{ country.name|safe }}");
-        data2.setValue({{ forloop.counter0 }}, 1, {{ country.count }});
-        countriesWithData.push('{{ country.code }}');
-	   	{% endfor %}	
-
-
+      var emptyData = google.visualization.arrayToDataTable([['empty'],['0']]);
+      
       var geochart = new google.visualization.GeoChart(document.getElementById('visualization'));
 
  		  var options = {region: 'world', resolution: 'subcontinents', height: 550}; 
       
+      var equationData = {};
+      var countriesWithData = [];
+      
+      {% for country in country_list %}
+      equationData['{{ country.code }}'] = { countryName : "{{ country.name|safe }}",
+                                                            equationCount: {{ country.count }} };
+      countriesWithData.push('{{ country.code }}');
+      {% endfor %} 
 
-      var regionNames = { '015' :  'Northern Africa',
-        '011' : 'Western Africa',
-        '017' : 'Middle Africa',
-        '014' : 'Eastern Africa  ',
-        '018' : 'Southern Africa',
-        '154' : 'Northern Europe',
-        '155' : 'Western Europe',
-        '151' : 'Eastern Europe',
-        '039' : 'Southern Europe',
-        '021' : 'Northern America',
-        '029' : 'Caribbean',
-        '013' : 'Central America',
-        '005' : 'South America',
-        '143' : 'Central Asia    ',
-        '030' : 'Eastern Asia',
-        '034' : 'Southern Asia',
-        '035' : 'South-Eastern Asia',
-        '145' : 'Western Asia',
-        '053' : 'Australia and New Zealand',
-        '054' : 'Melanesia',
-        '057' : 'Micronesia',
-        '061' : 'Polynesia' };
+      var regionNames = { '015' :  { name : 'Northern Africa',
+                                     countries : ['DZ', 'EG', 'EH', 'LY', 'MA', 'SD', 'TN']},
+
+                          '011' : {  name : 'Western Africa',
+                                     countries: ['BF', 'BJ', 'CI', 'CV', 'GH', 'GM', 'GN', 
+                                                 'GW', 'LR', 'ML', 'MR', 'NE', 'NG', 'SH', 'SL', 'SN', 'TG']},
+                          '017' : {  name : 'Middle Africa',
+                                     countries: ['AO', 'CD', 'ZR', 'CF', 'CG', 'CM', 'GA', 'GQ', 'ST', 'TD']},
+
+                          '014' : {  name : 'Eastern Africa  ',
+                                     countries: ['BI', 'DJ', 'ER', 'ET', 'KE', 'KM', 'MG', 'MU', 'MW', 'MZ',
+                                                 'RE', 'RW', 'SC', 'SO', 'TZ', 'UG', 'YT', 'ZM', 'ZW']},
+
+                          '018' : {  name: 'Southern Africa', 
+                                     countries: ['BW', 'LS', 'NA', 'SZ', 'ZA' ]},
+
+                          '154' : {  name: 'Northern Europe', 
+                                  countries: ['GG', 'JE', 'AX', 'DK', 'EE', 'FI', 'FO', 'GB', 'IE', 'IM', 
+                                              'IS', 'LT', 'LV', 'NO', 'SE', 'SJ']},
+
+                          '155' : {  name: 'Western Europe', 
+                                  countries: ['AT', 'BE', 'CH', 'DE', 'DD', 'FR', 'FX', 'LI', 'LU', 'MC', 'NL']},
+
+                          '151' : {  name: 'Eastern Europe', 
+                                  countries: ['BG', 'BY', 'CZ', 'HU', 'MD', 'PL', 'RO', 'RU', 'SU', 'SK', 'UA']},
+
+                          '039' : {  name: 'Southern Europe', 
+                                  countries: ['AD', 'AL', 'BA', 'ES', 'GI', 'GR', 'HR', 'IT', 'ME', 'MK', 'MT', 
+                                              'CS', 'RS', 'PT', 'SI', 'SM', 'VA', 'YU']},
+
+                          '021' : {  name: 'Northern America', 
+                                  countries: ['BM', 'CA', 'GL', 'PM', 'US']},
+
+                          '029' : {  name: 'Caribbean', 
+                                  countries: ['AG', 'AI', 'AN', 'AW', 'BB', 'BL', 'BS', 'CU', 'DM', 'DO', 'GD', 
+                                               'GP', 'HT', 'JM', 'KN', 'KY', 'LC', 'MF', 'MQ', 'MS', 'PR', 'TC', 
+                                               'TT', 'VC', 'VG', 'VI']},
+
+                          '013' : {  name: 'Central America', 
+                                  countries: ['BZ', 'CR', 'GT', 'HN', 'MX', 'NI', 'PA', 'SV']},
+
+                          '005' : {  name: 'South America', 
+                                  countries: ['AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'FK', 'GF', 'GY', 'PE', 'PY',
+                                             'SR', 'UY', 'VE']},
+
+                          '143' : {  name: 'Central Asia', 
+                                  countries: ['TM', 'TJ', 'KG', 'KZ', 'UZ']},
+
+                          '030' : {  name: 'Eastern Asia', 
+                                  countries: ['CN', 'HK', 'JP', 'KP', 'KR', 'MN', 'MO', 'TW']},
+
+                          '034' : {  name: 'Southern Asia', 
+                                  countries: ['AF', 'BD', 'BT', 'IN', 'IR', 'LK', 'MV', 'NP', 'PK']},
+
+                          '035' : {  name: 'South-Eastern Asia', 
+                                  countries: ['BN', 'ID', 'KH', 'LA', 'MM', 'BU', 'MY', 'PH', 'SG', 'TH', 'TL', 'TP', 'VN']},
+
+                          '145' : {  name: 'Western Asia', 
+                                  countries: ['AE', 'AM', 'AZ', 'BH', 'CY', 'GE', 'IL', 'IQ', 'JO', 'KW', 'LB', 'OM', 
+                                          'PS', 'QA', 'SA', 'NT', 'SY', 'TR', 'YE', 'YD']},
+
+                          '053' : {  name: 'Australia and New Zealand', 
+                                  countries: ['AU', 'NF', 'NZ']},
+
+                          '054' : {  name: 'Melanesia', 
+                                  countries: ['FJ', 'NC', 'PG', 'SB', 'VU']},
+
+                          '057' : {  name: 'Micronesia', 
+                                  countries: ['FM', 'GU', 'KI', 'MH', 'MP', 'NR', 'PW']},
+
+                          '061' : {  name: 'Polynesia', 
+                                  countries: ['AS', 'CK', 'NU', 'PF', 'PN', 'TK', 'TO', 'TV', 'WF', 'WS']},
+
+                        }
+
+      for (region in regionNames) {
+          var regionData = regionNames[region];
+          var dataArray = [['Country', 'Equations']];
+
+          for (i in regionData.countries ) {
+
+              var countryCode = regionData.countries[i];
+              if (equationData[countryCode]) dataArray.push([equationData[countryCode]['countryName'], 
+                                                             equationData[countryCode]['equationCount'],]);
+          }
+
+          regionNames[region]['data'] = google.visualization.arrayToDataTable(dataArray);
+      }
+   
 
       /* Since the same handler is used for continents and countries, we keep track of the region selected */
   		google.visualization.events.addListener(geochart, 'regionClick', function(eventData) {
@@ -58,9 +122,9 @@
            var isContinent = continentCheck.test(eventData['region']);
            
            if (isContinent) {
-              var options = {region: eventData['region']}; 
-              geochart.draw(data2, options);
-              $('#regionName').html('Region: ' + regionNames[eventData['region']] );
+              var options = {region: eventData['region'], colorAxis: {colors: ['green', 'green']}, legend : false}; 
+              geochart.draw(regionNames[eventData['region']]['data'], options);
+              $('#regionName').html('Region: ' + regionNames[eventData['region']]['name'] );
               $('#resetMap').show();
            } else {
               var hasData = false;
@@ -80,7 +144,7 @@
            } 
       }); 
 
-      geochart.draw(data2, options);
+      geochart.draw(emptyData, options);
     }
     
 
