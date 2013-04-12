@@ -9,8 +9,8 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
 
     Population                      = indexes.CharField(model_attr='Population', null=True)
     Ecosystem                       = indexes.CharField(model_attr='Ecosystem', null=True)
-    Genus                           = indexes.CharField(model_attr='Genus', null=True)
-    Species                         = indexes.CharField(model_attr='Species', null=True)
+    Genus                           = indexes.CharField(model_attr='Genus', null=True, faceted=True)
+    Species                         = indexes.CharField(model_attr='Species', null=True, faceted=True)
     Country                         = indexes.CharField(model_attr='Country__common_name', null=True)
     
     Biome_FAO                       = indexes.CharField(model_attr='Biome_FAO', null=True)
@@ -52,11 +52,11 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     
     Equation                        = indexes.NgramField(model_attr='Equation', null=True)
     
-    Author                          = indexes.CharField(model_attr='Author', null=True, indexed=True)
+    Author                          = indexes.CharField(model_attr='Author', null=True, indexed=True, faceted=True)
     
    
     Year                            = indexes.CharField(model_attr='Year', null=True)
-    Reference                       = indexes.CharField(model_attr='Reference', null=True) 
+    Reference                       = indexes.CharField(model_attr='Reference', null=True, faceted=True) 
     
 
     #ordering
