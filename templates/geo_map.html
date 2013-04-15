@@ -21,7 +21,7 @@
       
       {% for country in country_list %}
       equationData['{{ country.code }}'] = { countryName : "{{ country.name|safe }}",
-                                                            equationCount: {{ country.count }} };
+                                            equationCount: {{ country.count }} };
       countriesWithData.push('{{ country.code }}');
       {% endfor %} 
 
@@ -102,13 +102,14 @@
 
       for (region in regionNames) {
           var regionData = regionNames[region];
-          var dataArray = [['Country', 'Equations']];
+          var dataArray = [['country', 'Country', 'Equations']];
 
           for (i in regionData.countries ) {
 
               var countryCode = regionData.countries[i];
-              if (equationData[countryCode]) dataArray.push([equationData[countryCode]['countryName'], 
-                                                             equationData[countryCode]['equationCount']]);
+              if (equationData[countryCode]) dataArray.push([ countryCode,
+                                                              equationData[countryCode]['countryName'], 
+                                                              equationData[countryCode]['equationCount']]);
           }
 
           regionNames[region]['data'] = google.visualization.arrayToDataTable(dataArray);
