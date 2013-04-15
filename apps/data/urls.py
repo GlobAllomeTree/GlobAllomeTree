@@ -32,5 +32,7 @@ urlpatterns = patterns('apps.data.views',
     ), name='haystack_search'), 
                        
     #Single equation
-    (r'^equation/(\d+)/$', 'tree_equation_id')
+    (r'^equation/(\d+)/$', 'tree_equation_id'),
+    #Single equation PDF
+    (r'^equation/(\d+)/pdf$', 'tree_equation_id_pdf')
 )

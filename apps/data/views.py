@@ -3,7 +3,8 @@ import json
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
+from django.template import RequestContext, Context
+from django.template.loader import get_template
 from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
 from django.core.mail import mail_managers
@@ -16,6 +17,10 @@ from .forms import DataSubmissionForm
 from .models import TreeEquation, Country, DataSubmission
 from django.db import connection
 from .kill_gremlins import kill_gremlins
+
+import cStringIO as StringIO
+import xhtml2pdf.pisa as pisa
+
 
 
 class DataSubmissionView(FormView):
@@ -82,6 +87,41 @@ def tree_equation_id(request, id):
                               context_instance = RequestContext(request,
                               {'tree_equation': tree_equation, 
                                'is_page_data' : True})) 
+
+def tree_equation_id_pdf(request, id):
+    tree_equation = TreeEquation.objects.get(ID=id)
+
+    template = get_template('data/template.tree_equation.pdf.html')
+
+   
+    html = template.render(Context({
+        'tree_equation': tree_equation
+    }))
+
+    def fetch_resources(uri, rel):
+        path = 'ERROR'
+        if uri[0:6] == 'static':
+            path = settings.STATIC_ROOT + uri[6:]
+        elif uri[0:5] == 'media':
+            path = settings.MEDIA_ROOT + uri[5:]
+        print uri, path
+        return path
+
+    buffer = StringIO.StringIO()
+    pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")),
+                      buffer,
+                      link_callback=fetch_resources)
+
+    pdf = buffer.getvalue()
+    buffer.close()
+    
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(mimetype='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=TreeEquation_%s.pdf' % tree_equation.ID
+
+    response.write(pdf)
+    return response
+
 
 def geo_map(request):
     query = 'SELECT "Country_id", COUNT(1) AS id_count FROM data_treeequation GROUP BY "Country_id"';
