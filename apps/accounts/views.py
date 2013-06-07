@@ -47,9 +47,9 @@ def register(request):
                                               )
             user_profile.save()
              
-            mail_managers('Globallometree New User "%s" requires approval' % user.username,
+            mail_managers('GlobAllomeTree New User "%s" requires approval' % user.username,
                       """
-Dear Globallometree Admin,
+Dear GlobAllomeTree Admin,
 
 A new user has registered for your website. This user needs your approval to log in.
 
