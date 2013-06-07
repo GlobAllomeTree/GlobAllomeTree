@@ -35,7 +35,7 @@
     <table>
         <tr class="odd"> <td style="font-weight:normal"> Equation: </td> <td style="font-weight:normal"> {{ tree_equation.Equation }} </td> </tr>
         <tr class="even">  <td style="font-weight:normal"> Sample size: </td> <td style="font-weight:normal"> {{ tree_equation.Sample_size }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> R2: </td> <td style="font-weight:normal"> {{ tree_equation.R2 }} </td> </tr>
+        <tr class="odd"> <td style="font-weight:normal"> R2: </td> <td style="font-weight:normal"> {{ tree_equation.R2|floatformat:"-2" }} </td> </tr>
     </table>
 
     <p class="section-header">Identification</p>
@@ -101,10 +101,10 @@
         <tr class="odd">  <td style="font-weight:normal"> Unit_U: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_U }} </td> </tr>
         <tr class="odd"> <td style="font-weight:normal"> V: </td> <td style="font-weight:normal"> {{ tree_equation.V }} </td> </tr>
         <tr class="even">  <td style="font-weight:normal"> Unit V: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_V }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Min X: </td> <td style="font-weight:normal"> {{ tree_equation.Min_X }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Max X: </td> <td style="font-weight:normal"> {{ tree_equation.Max_X }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Min Z: </td> <td style="font-weight:normal"> {{ tree_equation.Min_Z }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Max Z: </td> <td style="font-weight:normal"> {{ tree_equation.Max_Z }} </td> </tr>
+        <tr class="odd"> <td style="font-weight:normal"> Min X: </td> <td style="font-weight:normal"> {{ tree_equation.Min_X|floatformat:"-2" }} </td> </tr>
+        <tr class="even">  <td style="font-weight:normal"> Max X: </td> <td style="font-weight:normal"> {{ tree_equation.Max_X|floatformat:"-2" }} </td> </tr>
+        <tr class="odd"> <td style="font-weight:normal"> Min Z: </td> <td style="font-weight:normal"> {{ tree_equation.Min_Z|floatformat:"-2" }} </td> </tr>
+        <tr class="even">  <td style="font-weight:normal"> Max Z: </td> <td style="font-weight:normal"> {{ tree_equation.Max_Z|floatformat:"-2" }} </td> </tr>
         <tr class="odd"> <td style="font-weight:normal"> Output: </td> <td style="font-weight:normal"> {{ tree_equation.Output }} </td> </tr>
         <tr class="even"> <td style="font-weight:normal"> Output TR: </td> <td style="font-weight:normal"> {{ tree_equation.Output_TR }} </td> </tr>
         <tr class="odd"> <td style="font-weight:normal"> Age: </td> <td style="font-weight:normal"> {{ tree_equation.Age }} </td> </tr>

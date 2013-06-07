@@ -154,10 +154,10 @@
                         <tr class="odd">  <td> Unit_U: </td> <td> {{ tree_equation.Unit_U }} </td> </tr>
                         <tr class="odd"> <td> V: </td> <td> {{ tree_equation.V }} </td> </tr>
                         <tr class="even">  <td> Unit V: </td> <td> {{ tree_equation.Unit_V }} </td> </tr>
-                        <tr class="odd"> <td> Min X: </td> <td> {{ tree_equation.Min_X }} </td> </tr>
-                        <tr class="even">  <td> Max X: </td> <td> {{ tree_equation.Max_X }} </td> </tr>
-                        <tr class="odd"> <td> Min Z: </td> <td> {{ tree_equation.Min_Z }} </td> </tr>
-                        <tr class="even">  <td> Max Z: </td> <td> {{ tree_equation.Max_Z }} </td> </tr>
+                        <tr class="odd"> <td> Min X: </td> <td> {{ tree_equation.Min_X|floatformat:"-2" }} </td> </tr>
+                        <tr class="even">  <td> Max X: </td> <td> {{ tree_equation.Max_X|floatformat:"-2" }} </td> </tr>
+                        <tr class="odd"> <td> Min Z: </td> <td> {{ tree_equation.Min_Z|floatformat:"-2" }} </td> </tr>
+                        <tr class="even">  <td> Max Z: </td> <td> {{ tree_equation.Max_Z|floatformat:"-2" }} </td> </tr>
                         <tr class="odd"> <td> Output: </td> <td> {{ tree_equation.Output }} </td> </tr>
                         <tr class="even"> <td> Output TR: </td> <td> {{ tree_equation.Output_TR }} </td> </tr>
                         <tr class="odd"> <td> Age: </td> <td> {{ tree_equation.Age }} </td> </tr>
@@ -168,7 +168,7 @@
                     <table>
                         <tr class="odd"> <td> Equation: </td> <td> {{ tree_equation.Substitute_equation }} </td> </tr>
                         <tr class="even">  <td> Sample size: </td> <td> {{ tree_equation.Sample_size }} </td> </tr>
-                        <tr class="odd"> <td> R2: </td> <td> {{ tree_equation.R2 }} </td> </tr>
+                        <tr class="odd"> <td> R2: </td> <td> {{ tree_equation.R2|floatformat:"-2" }} </td> </tr>
                     </table>
                 </div>
                 <div class="tab-pane" id="reference">
