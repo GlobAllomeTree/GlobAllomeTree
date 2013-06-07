@@ -118,6 +118,32 @@
 		</fieldset>
 
 
+		<fieldset>
+			<legend>Globallometree Website Terms &amp; Conditions</legend>
+			<div id="toc">
+				{% include 'accounts/terms_and_conditions_website.html' %}
+			</div>
+			{% with form.accept_terms_website as field %}
+			 <label  class="required" for="id_{{ field.html_name }}">
+                  
+
+	              {% if field.errors %} 
+		             	<span class="error"> {{ field.errors|first|striptags }}</span> <br>
+		          {% endif %}
+
+		          {{ field|safe }}
+
+	                 <span class="required">*</span> 
+	              {{ field.label }}
+	          </label>
+		          
+
+
+			{% endwith %}
+		</fieldset>
+
+
+
 	<div class="submit_block">
 		<input type="submit" value="Register" class="btn"/>
 	</div>
