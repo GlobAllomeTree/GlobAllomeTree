@@ -25,7 +25,7 @@
 	<div style="float:left;width:70%">
 	
 	<h2>Register</h2>
-	<h4>Register to access Globallometree:</h4>
+	<h4>Register to access GlobAllomeTree:</h4>
 	    <ol>
 	        <li>Fill in the form below. Fields marked with an asterisk (*) are obligatory.</li>
 	        <li>Your registration will be reviewed by the GlobAllomeTree team.</li>
@@ -94,7 +94,7 @@
 		</fieldset>
 
 		<fieldset>
-			<legend>Software Terms &amp; Conditions</legend>
+			<legend>Fantallometrik Software Terms &amp; Conditions</legend>
 			<div id="toc">
 				{% include 'accounts/terms_and_conditions_software.html' %}
 			</div>
@@ -116,6 +116,32 @@
 
 			{% endwith %}
 		</fieldset>
+
+
+		<fieldset>
+			<legend>GlobAllomeTree Website Terms &amp; Conditions</legend>
+			<div id="toc">
+				{% include 'accounts/terms_and_conditions_website.html' %}
+			</div>
+			{% with form.accept_terms_website as field %}
+			 <label  class="required" for="id_{{ field.html_name }}">
+                  
+
+	              {% if field.errors %} 
+		             	<span class="error"> {{ field.errors|first|striptags }}</span> <br>
+		          {% endif %}
+
+		          {{ field|safe }}
+
+	                 <span class="required">*</span> 
+	              {{ field.label }}
+	          </label>
+		          
+
+
+			{% endwith %}
+		</fieldset>
+
 
 
 	<div class="submit_block">

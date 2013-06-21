@@ -1,7 +1,7 @@
 globallometree
 ==============
 
-Globallometree is the international platform to facilitate the calculation of volume, biomass and carbon stocks for forests and trees outside forests. The platform allows accessing and sharing data and tools to
+GlobAllomeTree is the international platform to facilitate the calculation of volume, biomass and carbon stocks for forests and trees outside forests. The platform allows accessing and sharing data and tools to
 
 1. provide access to continually updated databases containing tree allometric equation, conversion factors and wood densities per ecological zones, countries and continents
 2. facilitate access to the most relevant scientific literature

@@ -40,8 +40,9 @@ class RegistrationForm(forms.ModelForm):
     
     data_may_provide      = forms.ChoiceField(label='Data you may provide', choices=UserProfile.DATA_MAY_PROVIDE_CHOICES, required=False)
 
-    accept_terms_software = forms.BooleanField(label='I accept the terms and conditions related to software.')
-    accept_terms_databases   = forms.BooleanField(label='I accept the GlobAllomeTree databases Terms of Use and user rights.')
+    accept_terms_software = forms.BooleanField(label='I accept the Terms and Conditions related to the Fantallometrik Software.')
+    accept_terms_databases   = forms.BooleanField(label='I accept the GlobAllomeTree Databases Terms of Use and User Rights.')
+    accept_terms_website   = forms.BooleanField(label='I accept the GlobAllomeTree Website Terms and Conditions.')
    
     class Meta:
         model = User

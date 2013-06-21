@@ -8,6 +8,21 @@
     <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
     <script type="text/javascript" src="/media/js/libs/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#jump-to-eq-button').click(function() {
+                var eq =  $('#jump-to-eq-input').val();
+                if (eq == '') {
+                    alert('Please enter an Equation Id');
+                } else {
+                    window.location = 'http://www.globallometree.org/data/equation/' + eq + '/'
+                }
+            })
+        });
+      
+    </script>
+
     {% render_block "css" %}
 </head>
 <body>

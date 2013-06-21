@@ -53,9 +53,9 @@ def user_pre_save(sender, instance, signal, *args, **kwargs):
     
     if compare_user.is_active != instance.is_active and instance.is_active == True:
         #Mail the admin
-        mail_managers('Globallometree New User "%s" APPROVED' % instance.username,
+        mail_managers('GlobAllomeTree New User "%s" APPROVED' % instance.username,
                       """
-Dear Globallometree Admin,
+Dear GlobAllomeTree Admin,
 
 A new user has been correctly approved for your website.
 
@@ -69,7 +69,7 @@ http://globallometree.org/admin/accounts/userprofile/%s/
                      fail_silently=False)
         
         #Mail the new user
-        send_mail('Globallometree  account "%s" approved!' % instance.username,
+        send_mail('GlobAllomeTree  account "%s" approved!' % instance.username,
                       """
 Dear %s,
 

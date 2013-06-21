@@ -42,7 +42,7 @@ class DataSubmissionView(FormView):
         ds.imported = False
         ds.save()
 
-        mail_managers('New Globallometree Data Submission', """
+        mail_managers('New GlobAllomeTree Data Submission', """
 
 A new data file has been submitted to http://www.globallometree.org/ 
 
