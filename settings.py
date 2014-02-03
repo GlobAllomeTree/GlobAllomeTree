@@ -132,20 +132,7 @@ HAYSTACK_CONNECTIONS = {
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
-if os.path.exists(os.path.join(BASE_PATH, 'prod')):
-    STAGE = 'prod'
-    INITIAL_DATA_DIR = '/opt/apps/globallometree_initial_data/'
-    from settings_deployment import *
-else:
-    STAGE = 'dev'
-    try:
-        from settings_local import *
-    except Exception as e:
-        print "Failed to import settings_local. Copy ./bootstrap/settings_local.example.py to ./settings_local.py"
-        print "The error was %s" % e    
+
+from settings_local import *
 
 
-try:
-    from settings_secret import *
-except:
-    print "Skipping settings_secret.py since the file does not exist"
