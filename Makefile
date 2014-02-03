@@ -1,5 +1,5 @@
 #SHELL := /bin/bash
-deploy: clean install-utilities build run-elasticsearch
+deploy: clean install-utilities build
 
 clean:
 	@echo "Cleaning up containers"
@@ -23,6 +23,12 @@ build-web-server:
 # 	sudo mkdir -p /data/
 # 	sudo mkdir -p /data/mysql
 # 	docker run -d -name mysql_server -p 3306:3306 -v /data/mysql:/var/lib/mysql mysql
+
+run-elasticsearch:
+	sudo mkdir -p /opt/
+	sudo mkdir -p /opt/data/
+	sudo mkdir -p /opt/data/elasticsearch
+	docker run -d -name elasticsearch_server -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server
 
 run-web-server:
 #   need a bit of editing
