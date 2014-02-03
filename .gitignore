@@ -1,6 +1,7 @@
 *.pyc
 .project
 .pydev_project
+.vagrant
 settings_local.py
 static_collected/*
 media/cms_page_media/*

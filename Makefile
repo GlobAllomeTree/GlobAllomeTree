@@ -1,5 +1,5 @@
 #SHELL := /bin/bash
-deploy: clean build run-elasticsearch
+deploy: clean install-utilities build run-elasticsearch
 
 clean:
 	@echo "Cleaning up containers"
@@ -33,3 +33,6 @@ stop-web-server:
 
 dump-globallometree-database:
 	./server/export_globallometree_database.sh 
+
+install-utilities:
+	sudo apt-get install -y git 
