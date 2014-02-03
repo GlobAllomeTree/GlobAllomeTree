@@ -1,0 +1,25 @@
+import json
+from settings_base import *
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+#Only for use while running as docker
+#This gets back the environment that the container was created with
+#env.json is written in startup.sh
+try:
+    with open('/home/docker/env.json') as infile:
+        env = json.load(infile)
+except:
+    pass
+
+DATABASES = {
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'globallometreedb',        # Or path to database file if using sqlite3.
+        'USER': 'globallometree',         # Not used with sqlite3.
+        'PASSWORD': 'globallometree',                  # Not used with sqlite3.
+        'HOST': env['DB_PORT_3306_TCP_ADDR'],
+        'PORT': env['DB_PORT_3306_TCP_PORT'], # Set to empty string for default. Not used with sqlite3.
+    }
+}
