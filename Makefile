@@ -27,11 +27,21 @@ build-web-server:
 build-elasticsearch:
 	docker build -t elasticsearch_server github.com/GlobAllomeTree/docker-elasticsearch
 
+build-elasticsearch-local:
+	docker build -t elasticsearch_server /home/vagrant/synced/docker-elasticsearch
+
 run-elasticsearch:
 	sudo mkdir -p /opt/
 	sudo mkdir -p /opt/data/
 	sudo mkdir -p /opt/data/elasticsearch
 	docker run -d -name elasticsearch_server -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server
+
+run-elasticsearch-bash:
+	-@docker stop elasticsearch_server_bash 2>/dev/null || true
+	-@docker rm elasticsearch_server_bash 2>/dev/null || true
+	#https://github.com/dotcloud/docker/issues/514
+	#dpkg-divert --local --rename --add /sbin/mknod && ln -s /bin/true /sbin/mknod
+	docker run -i -t -name elasticsearch_server_bash -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server /bin/bash
 
 run-web-server:
 #   need a bit of editing
