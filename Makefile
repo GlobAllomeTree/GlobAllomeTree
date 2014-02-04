@@ -1,5 +1,5 @@
 #SHELL := /bin/bash
-deploy: clean install-utilities build run-elasticsearch
+deploy: clean install-utilities build
 
 clean:
 	@echo "Cleaning up containers"
