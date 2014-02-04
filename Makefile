@@ -1,5 +1,5 @@
 #SHELL := /bin/bash
-deploy: clean install-utilities build
+deploy: clean install-utilities build run
 
 clean:
 	@echo "Cleaning up containers"
@@ -11,7 +11,7 @@ run: clean run-elasticsearch
 stop:
 	docker stop elasticsearch_server
 
-build: build-ubuntu-base
+build: build-ubuntu-base build-elasticsearch
 
 build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
