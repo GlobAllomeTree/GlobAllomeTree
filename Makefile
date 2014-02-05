@@ -13,8 +13,6 @@ stop:
 
 build: build-ubuntu-base build-elasticsearch build-postgresql
 
-build-postgresql-local:
-	docker build -t postgresql_server /home/vagrant/synced/docker-postgresql
 
 build-postgresql:
 	docker build -t postgresql_server github.com/GlobAllomeTree/docker-postgresql
@@ -33,8 +31,7 @@ build-web-server:
 build-elasticsearch:
 	docker build -t elasticsearch_server github.com/GlobAllomeTree/docker-elasticsearch
 
-build-elasticsearch-local:
-	docker build -t elasticsearch_server /home/vagrant/synced/docker-elasticsearch
+
 
 run-elasticsearch:
 	sudo mkdir -p /opt/
@@ -63,5 +60,23 @@ stop-web-server:
 dump-globallometree-database:
 	./server/export_globallometree_database.sh 
 
+
+
+
+###### LOCAL UTILITIES ############### 
+
 install-utilities:
 	sudo apt-get install -y git 
+
+git-pull-all:
+	git pull
+	cd ../docker-postgresql && git pull
+	cd ../docker-elasticsearch && git pull
+	cd ../docker-ubuntu-base && git pull
+
+build-postgresql-local:
+	docker build -t postgresql_server /home/vagrant/synced/docker-postgresql
+
+build-elasticsearch-local:
+	docker build -t elasticsearch_server /home/vagrant/synced/docker-elasticsearch
+
