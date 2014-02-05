@@ -79,36 +79,36 @@ build-elasticsearch-local:
 
 git-pull-all:
 	@echo
-	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput sgr0
 	git pull
 	
 	@echo
-	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput sgr0
 	cd ../docker-postgresql && git pull
 	
 	@echo
-	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput sgr0
 	cd ../docker-elasticsearch && git pull
 	
 	@echo
-	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput sgr0
 	cd ../docker-ubuntu-base && git pull
 
 git-status-all:
 	@echo
-	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput sgr0
 	git status
 	
 	@echo
-	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput sgr0
 	cd ../docker-postgresql && git status
 	
 	@echo
-	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput sgr0
 	cd ../docker-elasticsearch && git status
 	
 	@echo
-	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput sgr0
 	cd ../docker-ubuntu-base && git status
 
 
