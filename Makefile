@@ -11,7 +11,13 @@ run: clean run-elasticsearch
 stop:
 	docker stop elasticsearch_server
 
-build: build-ubuntu-base build-elasticsearch
+build: build-ubuntu-base build-elasticsearch build-postgresql
+
+build-postgresql-local:
+	docker build -t postgresql_server /home/vagrant/synced/docker-postgresql
+
+build-postgresql:
+	docker build -t postgresql_server github.com/GlobAllomeTree/docker-postgresql
 
 build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
@@ -42,6 +48,10 @@ run-elasticsearch-bash:
 	#https://github.com/dotcloud/docker/issues/514
 	#dpkg-divert --local --rename --add /sbin/mknod && ln -s /bin/true /sbin/mknod
 	docker run -i -t -name elasticsearch_server_bash -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server /bin/bash
+
+run-postgresql:
+	docker run -d -p 5432:5432 -e POSTGRESQL_USER=docker -e POSTGRESQL_PASS=docker -e POSTGRESQL_DB=docker postgresql_server
+
 
 run-web-server:
 #   need a bit of editing

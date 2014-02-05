@@ -1,5 +1,7 @@
 from ubuntu_base
 
+MAINTAINER GlobAllomeTree "globallometree@fao.org"
+
 run apt-get install -y nginx
 
 # install uwsgi now because it takes a little while
