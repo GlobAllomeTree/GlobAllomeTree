@@ -1,0 +1,19 @@
+import json
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+with open('/home/docker/env.json') as infile:
+    env = json.load(infile)
+
+DATABASES = {
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env['POSTGRESQL_DB'],      
+        'USER': env['POSTGRESQL_USER'],        
+        'PASSWORD': env['POSTGRESQL_PASS'],                  
+        'HOST': env['DB_PORT_5432_TCP_ADDR'],
+        'PORT': env['DB_PORT_5432_TCP_PORT'], 
+    }
+}
+
