@@ -1,6 +1,9 @@
 SHELL := /bin/bash
-# RED :='\e[0;31m'
-# echo "${RED}
+
+#TODO: read in variables from the environment if they are already set
+POSTGRESQL_USER := 'globallometree'
+POSTGRESQL_PASS := 'globallometree'
+POSTGRESQL_DB := 'globallometree'
 
 deploy: clean install-utilities build run
 
@@ -36,27 +39,26 @@ build-elasticsearch:
 	docker build -t elasticsearch_server github.com/GlobAllomeTree/docker-elasticsearch
 
 
-
 run-elasticsearch:
 	sudo mkdir -p /opt/
 	sudo mkdir -p /opt/data/
 	sudo mkdir -p /opt/data/elasticsearch
 	docker run -d -name elasticsearch_server -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server
 
+
 run-elasticsearch-bash:
 	-@docker stop elasticsearch_server_bash 2>/dev/null || true
 	-@docker rm elasticsearch_server_bash 2>/dev/null || true
-	#https://github.com/dotcloud/docker/issues/514
-	#dpkg-divert --local --rename --add /sbin/mknod && ln -s /bin/true /sbin/mknod
 	docker run -i -t -name elasticsearch_server_bash -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server /bin/bash
 
+
 run-postgresql:
-	docker run -d -p 5432:5432 -e POSTGRESQL_USER=docker -e POSTGRESQL_PASS=docker -e POSTGRESQL_DB=docker postgresql_server
+	docker run -d -name postgresql_server -p 5432:5432 -v /opt/data/postgresql:/var/lib/postgresql -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} postgresql_server
 
 
 run-web-server:
-#   need a bit of editing
-#	docker run -d -name web_server -link mysql_server:db -p 8081:80 demo_server 
+	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -p 8082:80 -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server 
+
 
 stop-web-server:
 	docker stop web_server
@@ -93,6 +95,23 @@ git-pull-all:
 	@echo
 	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
 	cd ../docker-ubuntu-base && git pull
+
+git-push-all:
+	@echo
+	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput setaf 0
+	git push
+	
+	@echo
+	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput setaf 0
+	cd ../docker-postgresql && git push
+	
+	@echo
+	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput setaf 0
+	cd ../docker-elasticsearch && git push
+	
+	@echo
+	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
+	cd ../docker-ubuntu-base && git push
 
 git-status-all:
 	@echo

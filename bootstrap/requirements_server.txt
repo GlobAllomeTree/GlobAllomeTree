@@ -1,3 +1,0 @@
-greenlet==0.4.0
-gevent==0.13.8
-gunicorn==0.16.1
