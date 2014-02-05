@@ -53,6 +53,9 @@ run-elasticsearch-bash:
 
 
 run-postgresql:
+	sudo mkdir -p /opt/
+	sudo mkdir -p /opt/data/
+	sudo mkdir -p /opt/data/postgresql
 	docker run -d -name postgresql_server -p 5432:5432 -v /opt/data/postgresql:/var/lib/postgresql -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} postgresql_server
 
 
