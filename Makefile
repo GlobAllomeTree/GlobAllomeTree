@@ -1,18 +1,22 @@
-#SHELL := /bin/bash
+SHELL := /bin/bash
+# RED :='\e[0;31m'
+# echo "${RED}
+
 deploy: clean install-utilities build run
 
 clean:
 	@echo "Cleaning up containers"
 	-@docker stop elasticsearch_server 2>/dev/null || true
 	-@docker rm elasticsearch_server 2>/dev/null || true
+	-@docker stop postgresql_server 2>/dev/null || true
+	-@docker rm postgresql_server 2>/dev/null || true
 
-run: clean run-elasticsearch
+run: clean run-elasticsearch run-postgresql
 
 stop:
 	docker stop elasticsearch_server
 
 build: build-ubuntu-base build-elasticsearch build-postgresql
-
 
 build-postgresql:
 	docker build -t postgresql_server github.com/GlobAllomeTree/docker-postgresql
@@ -62,21 +66,50 @@ dump-globallometree-database:
 
 
 
-
 ###### LOCAL UTILITIES ############### 
 
 install-utilities:
 	sudo apt-get install -y git 
-
-git-pull-all:
-	git pull
-	cd ../docker-postgresql && git pull
-	cd ../docker-elasticsearch && git pull
-	cd ../docker-ubuntu-base && git pull
 
 build-postgresql-local:
 	docker build -t postgresql_server /home/vagrant/synced/docker-postgresql
 
 build-elasticsearch-local:
 	docker build -t elasticsearch_server /home/vagrant/synced/docker-elasticsearch
+
+git-pull-all:
+	@echo
+	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput setaf 0
+	git pull
+	
+	@echo
+	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput setaf 0
+	cd ../docker-postgresql && git pull
+	
+	@echo
+	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput setaf 0
+	cd ../docker-elasticsearch && git pull
+	
+	@echo
+	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
+	cd ../docker-ubuntu-base && git pull
+
+git-status-all:
+	@echo
+	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput setaf 0
+	git status
+	
+	@echo
+	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput setaf 0
+	cd ../docker-postgresql && git status
+	
+	@echo
+	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput setaf 0
+	cd ../docker-elasticsearch && git status
+	
+	@echo
+	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
+	cd ../docker-ubuntu-base && git status
+
+
 
