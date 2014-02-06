@@ -76,6 +76,7 @@ dump-globallometree-database:
 
 install-utilities:
 	sudo apt-get install -y git 
+	sudo apt-get install -y postgresql-client
 
 build-postgresql-local:
 	docker build -t postgresql_server_image /home/vagrant/synced/docker-postgresql
