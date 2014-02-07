@@ -23,7 +23,7 @@ stop:
 	docker stop elasticsearch_server
 	docker stop postgresql_server
 
-build: build-ubuntu-base build-elasticsearch build-postgresql
+build: build-ubuntu-base build-elasticsearch build-postgresql build-web-server
 
 build-postgresql:
 	docker build -t postgresql_server_image github.com/GlobAllomeTree/docker-postgresql
@@ -31,7 +31,7 @@ build-postgresql:
 build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
 
-build-web-server:
+v:
 	docker build -t web_server_image .
 
 

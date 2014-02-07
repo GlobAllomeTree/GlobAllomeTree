@@ -95,7 +95,6 @@ INSTALLED_APPS = (
     'apps.data',
     'apps.accounts',
     'apps.journals',
-    'gunicorn',
     'south',
     'cms',
     'mptt',
