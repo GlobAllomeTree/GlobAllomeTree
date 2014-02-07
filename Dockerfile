@@ -16,7 +16,7 @@ RUN LC_ALL=en_US.UTF-8 DEBIAN_FRONTEND=noninteractive  apt-get install -y libjpe
 
 # install our code
 # add from repository root
-# add . /home/docker/code/ 
+add . /home/docker/code/ 
 
 # setup all the configfiles
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
