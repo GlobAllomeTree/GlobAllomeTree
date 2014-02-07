@@ -60,7 +60,7 @@ run-postgresql:
 
 
 run-web-server:
-	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -v /home/vagrant/synced/globallometree:/home/docker/code  -p 8082:80 -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image 
+	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -v /home/vagrant/synced/globallometree:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image 
 
 stop-web-server:
 	docker stop web_server
