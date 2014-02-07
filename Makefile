@@ -31,7 +31,7 @@ build-postgresql:
 build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
 
-v:
+vbuild-web-server:
 	docker build -t web_server_image .
 
 
