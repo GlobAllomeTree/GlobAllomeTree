@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from haystack.query import SearchQuerySet
 from haystack.views import search_view_factory
 from .forms import EquationSearchForm
