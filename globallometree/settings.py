@@ -6,6 +6,12 @@ gettext = lambda s: s
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'mz098zxdurd#z4o2@adb672)fji^vb!_6sbw-1!^#4+4(55p+q'
+
+ALLOWED_HOSTS = []
+
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 # Local time zone for this installation. Choices can be found here:
@@ -18,6 +24,12 @@ TIME_ZONE = 'Europe/Zurich'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
 
 LANGUAGES = [
     ('en', 'English'),
@@ -67,9 +79,12 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'globallometree.urls'
+
+WSGI_APPLICATION = 'globallometree.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -84,28 +99,54 @@ CMS_TEMPLATES = (
 )
 
 INSTALLED_APPS = (
+    # django apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.messages',
     'django.contrib.sites',
-    #'grappelli',
+    # must go before django.contrib.admin
+    'djangocms_admin_style',  # cms
     'django.contrib.admin',
     'django.contrib.staticfiles',
+
+    # third party apps
     'haystack',
-    'apps.data',
-    'apps.accounts',
-    'apps.journals',
     'south',
+    'crispy_forms',
+    'filer',
+
+    # cms
+    'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'cms',
+    'menus',
     'mptt',
     'sekizai',
-    'cms.plugins.file',
+    'cms.stacks',
+
+    # django cms options
+
+    # 'cms.plugins.file',  # replaced by filer
+    'cms.plugins.flash',
+    'cms.plugins.googlemap',
     'cms.plugins.link',
-    'cms.plugins.picture',
-    'cms.plugins.text',
-    'cms.plugins.teaser',
-    'plugins.linkbox',
-    'crispy_forms',
+    # 'cms.plugins.picture',  # replaced by filer
+    'cms.plugins.snippet',
+    # 'cms.plugins.teaser',  # replaced by filer
+    # 'cms.plugins.video',  # replaced by filer
+    'cmsplugin_filer_file',
+    'cmsplugin_filer_folder',
+    'cmsplugin_filer_image',
+    'cmsplugin_filer_teaser',
+    'cmsplugin_filer_video',
+    # 'cms.plugins.twitter',
+
+    # project apps
+    'globallometree.apps.accounts',
+    'globallometree.apps.journals',
+    'globallometree.apps.data',
+
+    'globallometree.plugins.linkbox',
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
