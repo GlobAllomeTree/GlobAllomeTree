@@ -6,7 +6,7 @@ POSTGRESQL_PASS = globallometree
 POSTGRESQL_DB   = globallometree
 #DUMP_FILE is assumed to be in the one directory up from this file
 DUMP_FILE = ../globallometree.import.sql.gz
-PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server ./server/ip_for.sh)
+PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 
 deploy: clean install-utilities build run
 
@@ -122,7 +122,7 @@ create-db:
 	echo "CREATE DATABASE ${POSTGRESQL_DB} OWNER ${POSTGRESQL_USER};" | $(PSQL) postgres
 
 dump-db:
-	PGPASSWORD=$(POSTGRESQL_PASS) pg_dump -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server ./server/ip_for.sh) $(POSTGRESQL_DB) | gzip > ../$(POSTGRESQL_DB).dump.`date +'%Y_%m_%d'`.sql.gz
+	PGPASSWORD=$(POSTGRESQL_PASS) pg_dump -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh) $(POSTGRESQL_DB) | gzip > ../$(POSTGRESQL_DB).dump.`date +'%Y_%m_%d'`.sql.gz
 	@echo "database exported to ../${POSTGRESQL_DB}.`date +'%Y_%m_%d'`.sql.gz"
 
 #This does a full reset of postgres from a dump file
@@ -131,7 +131,7 @@ dump-db:
 reset-postgresql: clean-postgresql delete-postgres-data-directory run-postgresql sleep10 import-dump
 
 get-postgresql-ip:
-	@echo $(shell TAG=postgresql_server ./server/ip_for.sh)
+	@echo $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 
 #Hop into the shell and connect to the local database
 psql-shell:
