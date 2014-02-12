@@ -8,11 +8,11 @@ POSTGRESQL_DB   = globallometree
 DUMP_FILE = ../globallometree.import.sql.gz
 PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 
-deploy: clean install-utilities build init run
+deploy: clean install-utilities build init sleep10 run
 
 build: build-ubuntu-base build-elasticsearch build-postgresql build-web-server
 
-init: init-postgresql
+init: init-postgresql 
 
 clean: clean-elasticsearch clean-postgresql clean-web-server	
 
