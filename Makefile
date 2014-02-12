@@ -38,7 +38,7 @@ echo-vars:
 	@echo "POSTGRESQL_USER = '${POSTGRESQL_USER}'"
 	@echo "POSTGRESQL_PASS = '${POSTGRESQL_PASS}'"
 	@echo "POSTGRESQL_DB   = '${POSTGRESQL_DB}'"
-	
+
 ########################################### UBUNTU BASE IMAGE #########################################
 
 build-ubuntu-base:
@@ -189,8 +189,13 @@ reset-docker: remove-all-containers remove-all-images
 #
 
 install-utilities:
-	sudo apt-get install -y git 
-	sudo apt-get install -y postgresql-client
+	echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /tmp/pgdg.list
+	sudo cp /tmp/pgdg.list /etc/apt/sources.list.d/
+	wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+	sudo apt-get update
+	sudo apt-get upgrade
+	sudo apt-get install postgresql-client-9.3
+	sudo apt-get install -y git
 
 build-postgresql-local:
 	docker build -t postgresql_server_image ../docker-postgresql
