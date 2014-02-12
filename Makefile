@@ -7,6 +7,7 @@ POSTGRESQL_DB   = globallometree
 #DUMP_FILE is assumed to be in the one directory up from this file
 DUMP_FILE = ../globallometree.import.sql.gz
 PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
+PROJECT_ROOT := $(shell pwd)
 
 deploy: clean install-utilities build init sleep10 run
 
@@ -32,11 +33,16 @@ sleep10:
 sleep20:
 	sleep 20
 
+echo-vars:
+	@echo "PROJECT_ROOT = '${PROJECT_ROOT}'"
+	@echo "POSTGRESQL_USER = '${POSTGRESQL_USER}'"
+	@echo "POSTGRESQL_PASS = '${POSTGRESQL_PASS}'"
+	@echo "POSTGRESQL_DB   = '${POSTGRESQL_DB}'"
+	
 ########################################### UBUNTU BASE IMAGE #########################################
 
 build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
-
 
 ########################################### WEB SERVER #########################################
 
@@ -49,10 +55,15 @@ build-web-server:
 	docker build -t web_server_image .
 
 run-web-server: clean-web-server
-	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -v .:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image 
+	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image 
 
 stop-web-server:
 	docker stop web_server
+
+run-web-server-bash:
+	-@docker stop web_server_bash 2>/dev/null || true
+	-@docker rm web_server_bash 2>/dev/null || true
+	docker run -i -t -name web_server_bash -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image bash
 
 
 ############################################# ELASTICSEARCH  #############################################
