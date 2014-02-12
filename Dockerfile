@@ -31,6 +31,6 @@ RUN pip install -vr /home/docker/code/server/requirements.txt --allow-external P
 # RUN mkdir /home/docker/code/static_collected
 
 # set local settings
-RUN cp /home/docker/code/settings_local.py.server  /home/docker/code/settings_local.py
+RUN cp /home/docker/code/globallometry/settings_local.py.server  /home/docker/code/globallometry/settings_local.py
 
 CMD ["/bin/bash", "/home/docker/code/server/startup.sh"]
