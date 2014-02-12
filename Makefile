@@ -10,7 +10,7 @@ PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=p
 
 deploy: clean install-utilities build run
 
-build: build-ubuntu-base build-elasticsearch build-postgresql build-web-server
+build: build-ubuntu-base build-elasticsearch build-postgresql sleep10 create-db build-web-server
 
 clean: clean-elasticsearch clean-postgresql clean-web-server	
 
