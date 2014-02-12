@@ -127,10 +127,10 @@ INSTALLED_APPS = (
     # django cms options
 
     # 'cms.plugins.text',
-    # 'cms.plugins.file',  # replaced by filer
+    'cms.plugins.file',  # replaced by filer
     #'cms.plugins.flash',
     #'cms.plugins.googlemap',
-    #'cms.plugins.link',
+    'cms.plugins.link',
     #'cms.plugins.picture',  # replaced by filer
     #'cms.plugins.snippet',
     #'cms.plugins.teaser',  # replaced by filer
