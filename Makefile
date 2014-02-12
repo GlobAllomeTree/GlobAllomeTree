@@ -8,9 +8,11 @@ POSTGRESQL_DB   = globallometree
 DUMP_FILE = ../globallometree.import.sql.gz
 PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 
-deploy: clean install-utilities build run
+deploy: clean install-utilities build init run
 
-build: build-ubuntu-base build-elasticsearch build-postgresql sleep10 create-db build-web-server
+build: build-ubuntu-base build-elasticsearch build-postgresql build-web-server
+
+init: init-postgresql
 
 clean: clean-elasticsearch clean-postgresql clean-web-server	
 
@@ -88,6 +90,8 @@ clean-postgresql:
 build-postgresql:
 	docker build -t postgresql_server_image github.com/GlobAllomeTree/docker-postgresql
 
+init-postgresql: run-postgresql sleep10 create-db import-dump stop-postgresql 
+
 run-postgresql: clean-postgresql
 	sudo mkdir -p /opt/
 	sudo mkdir -p /opt/data/
@@ -125,7 +129,7 @@ dump-db:
 #This does a full reset of postgres from a dump file
 #To use a different dump file, override the DUMP_FILE variable when calling Make
 #ex) make reset-postgresql DUMP_FILE=../globallometree.import.sql.2.gz
-reset-postgresql: clean-postgresql delete-postgres-data-directory run-postgresql sleep10 import-dump
+reset-postgresql: clean-postgresql delete-postgres-data-directory init-postgresql
 
 get-postgresql-ip:
 	@echo $(shell TAG=postgresql_server_image ./server/ip_for.sh)
