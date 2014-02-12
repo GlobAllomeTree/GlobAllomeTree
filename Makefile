@@ -98,8 +98,6 @@ run-postgresql: clean-postgresql
 stop-postgresql:
 	docker stop postgresql_server
 
-dump-globallometree-database:
-	./server/export_globallometree_database.sh
 
 #Force postgres to reinitialize everything which happens in the docker postgresql startup.sh script if db is not initialized
 #TODO: Add a confirm here
@@ -116,10 +114,10 @@ import-dump:
 	gunzip -c $(DUMP_FILE) | $(PSQL)
 
 drop-db:
-	echo "DROP DATABASE  IF EXISTS  ${POSTGRESQL_DB};" | $(PSQL) postgres
+	echo "DROP DATABASE  IF EXISTS  ${POSTGRESQL_DB};" | $(PSQL) postgres 
 
 create-db:
-	echo "CREATE DATABASE ${POSTGRESQL_DB} OWNER ${POSTGRESQL_USER};" | $(PSQL) postgres
+	echo "CREATE DATABASE ${POSTGRESQL_DB} OWNER ${POSTGRESQL_USER} ENCODING 'UTF8' TEMPLATE template0; " | $(PSQL) postgres
 
 dump-db:
 	PGPASSWORD=$(POSTGRESQL_PASS) pg_dump -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh) $(POSTGRESQL_DB) | gzip > ../$(POSTGRESQL_DB).dump.`date +'%Y_%m_%d'`.sql.gz
