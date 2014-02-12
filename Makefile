@@ -46,7 +46,6 @@ clean-web-server:
 build-web-server:
 	docker build -t web_server_image .
 
-
 run-web-server: clean-web-server
 	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -v .:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image 
 
@@ -147,7 +146,7 @@ stop-all-containers:
 
 #http://stackoverflow.com/questions/17236796/how-to-remove-old-docker-io-containers
 #TODO: Add a confirm here
-remove-all-containers: stop-all-containers
+remove-all-containers:
 	docker rm `docker ps -notrunc -a -q`
 
 #http://jimhoskins.com/2013/07/27/remove-untagged-docker-images.html
@@ -157,10 +156,10 @@ remove-untagged-images:
 
 #http://techoverflow.net/blog/2013/10/22/docker-remove-all-images-and-containers/
 #TODO: Add a confirm here
-remove-all-images: remove-all-containers
+remove-all-images: 
 	docker rmi $(docker images -q)
 
-reset-docker: remove-all-images
+reset-docker: remove-all-containers remove-all-images
 	#other things we can reset?
 
 
