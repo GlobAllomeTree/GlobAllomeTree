@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}Fantallometrik{% endblock %}
 
@@ -78,7 +79,7 @@
 
 {% block content %}
     <div id="page_2">
-        <div style="float:right;"><a href="pdf"><img src="/media/images/pdficon.png" /> Download equation as PDF</a></div>
+        <div style="float:right;"><a href="pdf"><img src="{% static 'images/pdficon.png' %}" /> Download equation as PDF</a></div>
         <div class="page-header">
             <h3>Equation {{ tree_equation.ID }}</h3>
         </div>
@@ -138,7 +139,7 @@
                         </tr>
                     </table>
                     <div style="width:600px;padding:20px">
-                        <img src="/media/images/components.png" width="500" />
+                        <img src="{% static 'images/components.png' %}" width="500" />
                     </div>
                 </div>
                 <div class="tab-pane" id="input_Output">

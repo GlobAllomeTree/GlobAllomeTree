@@ -160,6 +160,8 @@ FORCE_SCRIPT_NAME = ''
 STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (os.path.join(BASE_PATH, 'global_static'), )
+
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 HAYSTACK_CONNECTIONS = {
     'default': {

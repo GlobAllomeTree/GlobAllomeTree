@@ -1,13 +1,13 @@
-{% load cms_tags sekizai_tags %}
+{% load cms_tags sekizai_tags staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GlobAllomeTree</title>
-    <link rel="stylesheet" type="text/css" href="/media/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
-    <script type="text/javascript" src="/media/js/libs/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <script type="text/javascript" src="{% static 'js/libs/jquery/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 
     <script type="text/javascript">
         $(function () {
@@ -43,20 +43,20 @@
         <div class="container" >
             <h1>GlobAllomeTree</h1>
             <p class="header-summary">Assessing volume, biomass and carbon stocks of trees and forests.</p>
-            <img src="/media/images/white_trees.png" alt="" id="header-trees" width="1400" height="81" style="width:1400px;height:81px;max-width:1400px;"/>
+            <img src="{% static '/images/white_trees.png' %}" alt="" id="header-trees" width="1400" height="81" style="width:1400px;height:81px;max-width:1400px;"/>
             <div id="logo-cirad" class="logo-image-link" title="CIRAD - Centre de coopération internationale en recherche agronomique pour le développement">
                 <a  href="http://www.cirad.fr/" target="_blank" >
-                    <img src="/media/images/logos/logo-cirad-75.png" alt="Cirad"  />
+                    <img src="{% static '/images/logos/logo-cirad-75.png' %}" alt="Cirad"  />
                 </a>
             </div>
             <div id="logo-fao" class="logo-image-link" title="FAO - Food and Agriculture Organization of the United Nations">
                 <a  href="http://www.fao.org/" target="_blank" >
-                    <img src="/media/images/logos/logo-fao-75.png" alt="FAO" />
+                    <img src="{% static '/images/logos/logo-fao-75.png' %}" alt="FAO" />
                 </a>
             </div>
             <div id="logo-tuscia" class="logo-image-link" title="UNITUS - DIBAF: Università degli Studi della Tuscia">
                 <a  href="http://www.unitus.it/" target="_blank" >
-                     <img src="/media/images/logos/logo-tuscia-75.png" alt="Tuscia University" />
+                     <img src="{% static '/images/logos/logo-tuscia-75.png' %}" alt="Tuscia University" />
                 </a>
             </div>
 

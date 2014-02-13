@@ -1,3 +1,5 @@
+ {% load staticfiles %}
+
  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
@@ -11,7 +13,7 @@
     -->
     <title>GlobAllomaTree Equation {{ tree_equation.ID }}</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" href="media/css/pdf.css" />
+    <link rel="stylesheet" href="{% static 'css/pdf.css' %}" />
     <style type="text/css">
 
          @page {
@@ -35,7 +37,7 @@
     <table>
         <tr class="odd"> <td style="font-weight:normal"> Equation: </td> <td style="font-weight:normal"> {{ tree_equation.Equation }} </td> </tr>
         <tr class="even">  <td style="font-weight:normal"> Sample size: </td> <td style="font-weight:normal"> {{ tree_equation.Sample_size }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> R2: </td> <td style="font-weight:normal"> {{ tree_equation.R2|floatformat:"-2" }} </td> </tr>
+        <tr class="odd"> <td style="font-weight:normalw"> R2: </td> <td style="font-weight:normal"> {{ tree_equation.R2|floatformat:"-2" }} </td> </tr>
     </table>
 
     <p class="section-header">Identification</p>
@@ -81,7 +83,7 @@
             <td style="font-weight:normal">
                 {{ tree_equation.components_string }}
                 <br />
-                <img src="media/images/components.jpg" width="200" alt=""></img>
+                <img src="{% static 'images/components.jpg' %}" width="200" alt=""></img>
             </td>
         </tr>
     </table>

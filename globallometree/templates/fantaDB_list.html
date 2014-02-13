@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}Fantallometrik{% endblock %}
 
 {% block script %}
 
-	<script type="text/javascript" language="javascript" src="/media/js/jquery.js"></script>
-	<script type="text/javascript" language="javascript" src="/media/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" language="javascript" src="/media/js/TableTools.min.js"></script>
-	<script type="text/javascript" language="javascript" src="/media/js/ColVis.min.js"></script>
+	<script type="text/javascript" language="javascript" src="{% static 'js/jquery.js' %}"></script>
+	<script type="text/javascript" language="javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<script type="text/javascript" language="javascript" src="{% static 'js/TableTools.min.js' %}"></script>
+	<script type="text/javascript" language="javascript" src="{% static 'js/ColVis.min.js' %}"></script>
 
 
 
@@ -21,7 +22,7 @@
 						{ "bVisible": false, "aTargets": [ 6, 7, 8, 9, 10, 11, 12 ] }
 					],
 				"oTableTools": {
-					"sSwfPath": "/media/swf/copy_cvs_xls.swf",
+					"sSwfPath": "{% static 'swf/copy_cvs_xls.swf' %}",
            			"aButtons": [
 						"copy",
                			{
