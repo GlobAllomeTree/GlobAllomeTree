@@ -146,7 +146,7 @@ INSTALLED_APPS = (
     'globallometree.apps.accounts',
     'globallometree.apps.journals',
     'globallometree.apps.data',
-
+    'globallometree.apps.original_theme',
     'globallometree.plugins.linkbox',
 )
 
@@ -159,8 +159,6 @@ FORCE_SCRIPT_NAME = ''
 #Static files configuration
 STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (os.path.join(BASE_PATH, 'global_static'), )
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 HAYSTACK_CONNECTIONS = {
