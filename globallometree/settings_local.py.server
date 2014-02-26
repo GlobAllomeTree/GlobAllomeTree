@@ -17,3 +17,11 @@ DATABASES = {
     }
 }
 
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://%s:%s' % (env['ES_PORT_9200_TCP_ADDR'], env['ES_PORT_9200_TCP_PORT']), 
+        'INDEX_NAME': 'globallometree',
+    },
+}
