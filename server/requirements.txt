@@ -4,7 +4,7 @@ requests==0.13.2
 -e git+https://github.com/toastdriven/pyelasticsearch.git@3bfe1a90eab6c2dfb0989047212f4bc9fb814803#egg=pyelasticsearch
 psycopg2==2.4.5
 south==0.7.6
-PIL==1.1.7
+#PIL==1.1.7 I think django cms now Pillow instead
 django-classy-tags==0.3.4.1
 django-mptt==0.5.2
 django-sekizai==0.7
