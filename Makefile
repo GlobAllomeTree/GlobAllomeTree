@@ -70,11 +70,7 @@ stop-web-server:
 run-web-server-bash:
 	-@docker stop web_server_bash 2>/dev/null || true
 	-@docker rm web_server_bash 2>/dev/null || true
-	docker run -i -t -name web_server_bash -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image bash
-
-
-
-
+	docker run -i -t -name web_server_bash -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image bash /home/docker/code/server/startup_bash.sh
 
 
 
@@ -132,7 +128,7 @@ clean-postgresql:
 build-postgresql:
 	docker build -t postgresql_server_image github.com/GlobAllomeTree/docker-postgresql
 
-init-postgresql: run-postgresql sleep10 create-db import-dump stop-postgresql 
+init-postgresql: run-postgresql sleep10 create-db import-db stop-postgresql 
 
 run-postgresql: clean-postgresql
 	sudo mkdir -p /opt/
@@ -153,9 +149,9 @@ delete-postgres-data-directory:
 #This uses env vars to avoid the password prompt
 #http://www.postgresql.org/docs/current/static/libpq-envars.html
 #To use a different dump file, override the DUMP_FILE variable when calling Make
-#ex) make import-dump DUMP_FILE=../globallometree.import.sql.2.gz
+#ex) make import-db DUMP_FILE=../globallometree.import.sql.2.gz
 #Note that $(PSQL) is defined at the beginning of the Makefile but evaluated when used below
-import-dump: 
+import-db: 
 	gunzip -c $(DUMP_FILE) | $(PSQL)
 
 drop-db:
@@ -163,6 +159,9 @@ drop-db:
 
 create-db:
 	echo "CREATE DATABASE ${POSTGRESQL_DB} OWNER ${POSTGRESQL_USER} ENCODING 'UTF8' TEMPLATE template0; " | $(PSQL) postgres
+
+reimport-db: drop-db create-db import-db
+
 
 dump-db:
 	PGPASSWORD=$(POSTGRESQL_PASS) pg_dump -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh) $(POSTGRESQL_DB) | gzip > ../$(POSTGRESQL_DB).dump.`date +'%Y_%m_%d'`.sql.gz
