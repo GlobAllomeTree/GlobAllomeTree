@@ -25,6 +25,10 @@ run: clean run-elasticsearch run-postgresql run-web-server
 stop: stop-web-server stop-elasticsearch stop-postgresql
 
 
+run-cache-server:
+	#http://ftp.gnu.org/old-gnu/Manuals/make-3.79.1/html_chapter/make_toc.html#TOC50
+	cd ../docker-cache && $(MAKE) run
+
 ########################################### UTILITIES ############################################
 
 sleep10:
@@ -43,6 +47,9 @@ echo-vars:
 
 build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
+
+
+
 
 ########################################### WEB SERVER #########################################
 
@@ -64,6 +71,13 @@ run-web-server-bash:
 	-@docker stop web_server_bash 2>/dev/null || true
 	-@docker rm web_server_bash 2>/dev/null || true
 	docker run -i -t -name web_server_bash -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image bash
+
+
+
+
+
+
+
 
 
 ############################################# ELASTICSEARCH  #############################################
@@ -90,6 +104,23 @@ run-elasticsearch-bash:
 	-@docker stop elasticsearch_server_bash 2>/dev/null || true
 	-@docker rm elasticsearch_server_bash 2>/dev/null || true
 	docker run -i -t -name elasticsearch_server_bash -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image /bin/bash
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ############################################# POSTGRES  #############################################
@@ -154,6 +185,10 @@ psql-admin-shell:
 	$(PSQL) postgres
 
 
+
+
+
+
 ############################################ DOCKER SHORTCUTS ##########################################
 
 stop-all-containers:
@@ -178,6 +213,9 @@ reset-docker: remove-all-containers remove-all-images
 	#other things we can reset?
 
 
+
+
+
 ########################### LOCAL UTILITIES FOR USE IN BUILDING IMAGES ############################ 
 
 #	All of these local commands assume that you have the following repositories checked out in parent dir
@@ -188,14 +226,45 @@ reset-docker: remove-all-containers remove-all-images
 #   ../globallometree
 #
 
-install-utilities:
+install-utilities: add-postgres-repo add-docker-repo apt-update
+	sudo apt-get install -y postgresql-client-9.3 git 
+
+apt-update:
+	sudo apt-get update
+
+apt-upgrade:
+	sudo apt-get upgrade
+
+create-pip-cache-dir:
+	sudo mkdir -p /opt &&
+	sudo mkdir -p /opt/cache
+	sudo mkdir -p /opt/cache/pip
+	sudo chown ${USER}.${USER} /opt/cache/pip
+
+run-pip-cache:
+	python -m pypicache.main  --port 8090 /opt/cache/pip
+
+install-squid:
+	sudo apt-get install -y squid-deb-proxy
+	#Add in custom miror domains like elasticsearch.org and postgresql.org
+	sudo cp server/squid-mirror-dstdomain /etc/squid-deb-proxy/mirror-dstdomain.acl.d/
+	sudo restart squid-deb-proxy
+
+install-docker: add-docker-repo
+	sudo apt-get install lxc-docker
+
+restart-squid:
+	sudo restart squid-deb-proxy
+
+add-postgres-repo:
 	echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /tmp/pgdg.list
 	sudo cp /tmp/pgdg.list /etc/apt/sources.list.d/
 	wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-	sudo apt-get update
-	sudo apt-get upgrade
-	sudo apt-get install postgresql-client-9.3
-	sudo apt-get install -y git
+
+add-docker-repo:
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+	sudo "echo deb http://get.docker.io/ubuntu docker main" > /tmp/docker.list
+	sudo cp /tmp/docker.list /etc/apt/sources.list.d/
 
 build-postgresql-local:
 	docker build -t postgresql_server_image ../docker-postgresql
@@ -203,6 +272,8 @@ build-postgresql-local:
 build-elasticsearch-local:
 	docker build -t elasticsearch_server_image ../docker-elasticsearch
 
+build-web-server-local: build-web-server
+	
 git-pull-all:
 	@echo
 	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput sgr0
