@@ -1,0 +1,480 @@
+/* 
+ * https://kuler.adobe.com/#themeID/545778
+ * DARK GREEN #147A00
+ * BRIGHT GREEN #29FF00
+ * BRIGHT BLUE #009CFC
+ * BLUE PURPLE #40536C
+ * LEMON YELLOW #FFF422
+ * BRICK RED #94090D
+ *
+ */
+
+body {
+	color:#40536C;
+}
+
+a {
+	color: #147A00;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #94090D	;
+}
+
+/* Header */
+
+header {
+	background-color: #ccddcc;
+	margin-bottom:14px;
+	border-bottom: 1px solid #EFEFEF;
+	height:90px;
+
+}
+
+.container {
+	width: 1060px;	
+}
+
+.narrow-page { 
+	padding:0px 60px;
+}
+
+#header-trees {
+	position:absolute;
+	top:9px;
+	left:-160px;
+	z-index:1;
+}
+
+header .container {
+	position:relative;
+}
+
+header h1 {
+    font-size: 35px;
+    font-weight:normal;
+    color:#147A00;
+    position:absolute;
+	top:10px;
+	left:10px;
+	z-index:2;
+	text-shadow: 2px 2px 3px #60738C;
+	font-family: serif;
+}
+
+#logo-cirad {
+	position:absolute;
+	top:7px;
+	right:80px;
+	z-index:1;
+}
+
+#logo-fao {
+	position:absolute;
+	top:7px;
+	right:165px;
+	z-index:1;
+}
+
+#logo-tuscia {
+	position:absolute;
+	top:7px;
+	right:270px;
+	z-index:1;
+}
+
+
+.header-summary {
+	color:#40536C;
+    position:absolute;
+	top:60px;
+	left:10px;
+	z-index:2;
+	text-shadow: 2px 2px 3px #60738C;
+}
+
+/* Navbar */
+.navbar .nav li a {
+	color:#40536C;
+}
+
+.navbar .nav li a:hover {
+	color:#94090D;
+}
+
+/*  Forms */
+
+
+.error {
+    color:red;
+}
+
+.field_wrapper {
+    padding:6px 0px 4px 0px;
+    clear:left;
+}
+
+.field_wrapper label {
+    width:140px;
+    float:left;
+}
+
+.field_input_block {
+    width:180px;
+    float:left;
+}
+
+.field_input_block input {
+    width:180px;
+}
+
+.submit_block {
+    text-align:right;
+    padding:10px;
+    clear:both;
+}
+
+
+
+#TreeEquation_id {
+	width: 500px;
+	margin: 0px auto;
+	font-size:17px;
+	float:left;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 570px;
+}
+
+#content_TreeEquation {
+	width: auto;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width: 300px;
+}
+
+#sidebar-bgtop {
+	height: 3px;
+}
+
+#sidebar-bgbtm {
+	height: 3px;
+}
+
+#sidebar-content {
+	padding: 20px;
+}
+
+#sidebar ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+#sidebar li ul {
+	margin-bottom: 1.8em;
+	padding-left: 20px;
+	list-style: none;
+}
+
+#sidebar h2 {
+	padding: 4px 20px;
+	background: #699C4D;
+	font-size: 1.2em;
+	color: #FFFFFF;
+}
+
+#sidebar a {
+	text-decoration: none;
+	color: #232F01;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+
+#smallbox_top { 
+	height: 14px; 
+	background: #fff url(../images/smallboxtop.gif) no-repeat; 
+	color: #000; 
+}
+	
+#smallbox { 
+	background: #fff url(../images/smallbox.gif) no-repeat bottom left; 
+	color: #444; 
+	padding: 1px 10px 10px 10px;  
+	margin-bottom:20px;
+
+}
+
+#smallbox h3 { 
+	text-shadow: 1px 1px 2px gray;
+	margin-bottom:-10px;
+}
+
+#smallbox p { 
+	text-align: justify;
+	line-height: 125%;
+}
+
+/* Search */
+
+#search-box, #tree-equation {
+	padding:1px 1px;
+	background-color: #ccddcc;
+	border-radius: 4px;
+}
+#search-box .tab-pane,
+#tree-equation .tab-pane
+{
+	background-color: #fff;
+	padding:10px;
+}
+
+#search-box .nav-tabs,
+#tree-equation .nav-tabs {
+	margin-bottom: 0px;
+}
+
+#search-submit-holder,
+#tree-equation-footer {
+	height:30px;
+	padding:5px;
+	background-color: #f4f4f4;
+	border-top: 1px solid #d9d9d9;
+	border-radius: 0px 0px 4px 4px;
+}
+
+#search form {
+	margin-bottom: 1.8em;
+	padding: 0px;
+}
+
+#search fieldset {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+
+#search #s {
+	width: 160px;
+}
+
+
+/* Search Form */
+
+
+.search-help-text {
+	color:#777;
+	font-size:12px;
+}
+
+#searchForm .floatedLabel {
+    float:left;
+    width:160px;
+    display:block;
+    clear:left;
+}
+
+#searchForm .floatedCheckBoxBlock {
+    float:left;
+    width:60px;
+    display:block;
+}
+
+#searchForm  input[type="checkbox"] {
+	margin-top:-3px;
+	margin-right:10px;
+}
+
+#searchForm #components select {
+	width:70px;
+}
+
+#currentSearch h3 {
+	font-size:18px;
+	line-height: 18px;
+	margin:0px;
+}
+
+#currentSearch h4 {
+	font-size:14px;
+}
+
+.smallInputs label {
+    float:left;
+    clear:left;
+    width:50px;
+}
+
+.smallInputs input, #input_Output select {
+    float:left;
+    width:80px;
+}
+
+
+.smallInputs2 label {
+    float:left;
+    clear:left;
+    width:80px;
+}
+
+.smallInputs2 label.middle {
+    float:left;
+    text-align:center;
+    width:60px;
+    clear:none;
+}
+
+.smallInputs2 input {
+    float:left;
+    width:80px;
+}
+
+/* Table */
+table {
+    border: 0;
+    padding: 0;
+    border-collapse: collapse;
+}
+th {
+    padding: 7px; /* NOTE: th padding must be set explicitly in order to support IE */
+    text-align: left;        
+    font-weight:bold;
+    line-height: 2em;
+    color: #FFF;
+    background-color: #345A30;
+   
+}
+
+.equationTable th {
+	 white-space:nowrap;
+}
+
+th a {
+	color:#fff;
+}
+
+tbody td {
+    padding: 7px;
+    line-height: 18px;
+    border-top: 1px solid #E0E0E0;
+}
+
+.equationTable td {
+	 white-space:nowrap;
+}
+
+tbody tr:nth-child(2n) {
+    background-color: #F5F3E5;
+}
+
+/* autocomplete */
+.auto_count {
+	display:block;
+	float:right;
+	color:#999;
+	width:40px;
+	text-align: right;
+}
+
+/* currentSearch */
+
+#currentSearch {
+	float:right;
+	width:500px;
+	margin-bottom:20px;
+	border:1px solid #243F12;
+	border-radius: 4px;
+	padding:10px;
+	margin-right:5px;
+	background-color: #ddeedd;
+	-moz-box-shadow: 5px 5px 5px #bbb;
+	-webkit-box-shadow: 5px 5px 5px #bbb;
+	box-shadow: 5px 5px 5px #bbb;
+}
+
+#currentSearch  tbody tr:nth-child(2n) {
+    background-color: #eeffee;
+}
+
+#currentSearch  tbody td,
+#currentSearch  tbody th {
+	border-bottom: 1px solid #ccddcc
+}
+
+#exportButton:hover {
+	color:#fff;
+}
+
+
+/* registration */
+
+fieldset {
+	padding:10px;
+}
+
+#toc {
+	margin:0px 0px 10px 0px;
+	padding:10px;
+	height:300px;
+	overflow:scroll;
+	border:1px solid #999;
+	background-color: #E5FFD6;
+
+}
+
+/* Journals */
+.article {
+    margin: 0 0 20px 0
+}
+
+/* Bootstrap tweeks */
+
+.footer {
+    padding: 60px 0;
+    margin-top: 70px;
+    border-top: 1px solid #E5E5E5;
+    background-color: whiteSmoke;
+}
+
+
+/* login form */
+
+#login-form {
+	width:380px;
+}
+
+/* contributors */
+.contributor-title {
+    display: inline;
+}
+.contributor-logo {
+    margin: 0 10px 10px 0;
+}
+
+/* Home carousel */
+.carousel {
+  .item {
+    .transition(.7s ease-in-out opacity);
+    left: 0 !important;
+  }
+  .next.left, .prev.right {
+    opacity: 1;
+    z-index: 1;
+  }
+  .active.left, .active.right {
+    opacity: 0;
+    z-index: 2;
+  }
+}
