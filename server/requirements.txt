@@ -21,3 +21,5 @@ djangocms-admin-style==0.2.0
 cmsplugin-filer==0.9.5
 django-filer==0.9.5
 djangocms-text-ckeditor==2.1.1
+
+django-bootstrap-themes==3.1.1

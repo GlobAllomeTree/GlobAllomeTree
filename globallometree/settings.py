@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     'haystack',
     'south',
     'crispy_forms',
+    'bootstrap_themes',
 #    'filer',
 
     # cms
