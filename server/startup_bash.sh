@@ -9,4 +9,5 @@ then
    cp /home/docker/code/globallometree/settings_local.py.server /home/docker/code/globallometree/settings_local.py
 fi
 
+cd /home/docker/code
 /bin/bash
