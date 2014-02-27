@@ -110,11 +110,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
 
-    # third party apps
     'haystack',
     'south',
     'crispy_forms',
-    'bootstrap_themes',
 #    'filer',
 
     # cms
@@ -147,7 +145,9 @@ INSTALLED_APPS = (
     'globallometree.apps.accounts',
     'globallometree.apps.journals',
     'globallometree.apps.data',
-    'globallometree.apps.original_theme',
+    'globallometree.apps.bootstrap_3_theme',
+    'bootstrap_themes',
+    # 'globallometree.apps.original_theme',
     'globallometree.plugins.linkbox',
 )
 
