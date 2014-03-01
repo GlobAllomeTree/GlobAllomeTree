@@ -6,36 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GlobAllomeTree</title>
     {% bootstrap_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-    {% bootstrap_javascript %}
-
-    <script type="text/javascript">
-        $(function () {
-            $('#jump-to-eq-button').click(function() {
-                var eq =  $('#jump-to-eq-input').val();
-                if (eq == '') {
-                    alert('Please enter an Equation Id');
-                } else {
-                    window.location = 'http://www.globallometree.org/data/equation/' + eq + '/'
-                }
-            })
-        });
-      
-    </script>
-
     {% render_block "css" %}
-
-    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-42545926-1']);
-        _gaq.push(['_trackPageview']);
-      
-        (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 </head>
 <body>
     {% cms_toolbar %}
@@ -63,49 +35,38 @@
         </div>
     </header>
      <div class="container">
-        <div class="navbar">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <div class="nav-collapse collapse" style="height: 0px; ">
-                        <ul class="nav">
-                            {% page_attribute "slug" as slug %}
-                            <li {% if is_page_home or slug == 'home' %}class="active" {% endif %}><a href="/">Home</a></li>
-                            <li {% if is_page_about or slug == 'about' %}class="active" {% endif %}><a href="/about/">About</a></li>
-                            <li {% if is_page_data or slug == 'database' %}class="active" {% endif %}><a href="/database">Data</a></li>
-                            <!--<li {% if is_page_maps %}class="active" {% endif %}><a href="/geo_map">Maps</a></li>-->
-                            <li {% if is_page_software or slug == 'software' or slug == 'download-fantallometrik' %}class="active" {% endif %}><a href="/software">Software</a></li>
-                            <!--<li {% if is_page_principles %}class="active" {% endif %}><a href="/principles">Principles</a></li>-->
-                            <li {% if is_page_docs or slug == 'docs' or slug == 'faq' %}class="active" {% endif %}><a href="/docs">Documents</a></li>
-                            <li {% if is_page_contributors or slug == 'contributors' %}class="active" {% endif %}><a href="/contributors">Contributors</a></li>
-                        </ul>
-                                       
-                            {% if user.is_authenticated %}
-                             <div class="btn-group pull-right" id="user-button-group">
-                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                   {{user.username}}
-                                  <span class="caret"></span>
-                                </a>
+
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        {% page_attribute "slug" as slug %}
+                        <li {% if is_page_home or slug == 'home' %}class="active" {% endif %}><a href="/">Home</a></li>
+                        <li {% if is_page_about or slug == 'about' %}class="active" {% endif %}><a href="/about/">About</a></li>
+                        <li {% if is_page_data or slug == 'database' %}class="active" {% endif %}><a href="/database">Data</a></li>
+                        <!--<li {% if is_page_maps %}class="active" {% endif %}><a href="/geo_map">Maps</a></li>-->
+                        <li {% if is_page_software or slug == 'software' or slug == 'download-fantallometrik' %}class="active" {% endif %}><a href="/software">Software</a></li>
+                        <!--<li {% if is_page_principles %}class="active" {% endif %}><a href="/principles">Principles</a></li>-->
+                        <li {% if is_page_docs or slug == 'docs' or slug == 'faq' %}class="active" {% endif %}><a href="/docs">Documents</a></li>
+                        <li {% if is_page_contributors or slug == 'contributors' %}class="active" {% endif %}><a href="/contributors">Contributors</a></li>
+                    </ul>
+                                   
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.username}} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                  <li><a href="/accounts/change-password/">Change Password</a></li>
-                                  <li><a href="/accounts/logout/">Logout</a></li>
+                                    <li><a href="/accounts/change-password/">Change Password</a></li>
+                                    <li><a href="/accounts/logout/">Logout</a></li>
                                 </ul>
-                              </div>
-                            {% else %}
-                            <ul class="nav pull-right"> 
-                              <li><a href="/accounts/login/">Log In</a></li>
-                              <li><a href="/accounts/register/">Register</a></li>
-                            </ul>
-                            {% endif %}
-                        </ul>
-                    </div>
+                            </li>
+                        {% else %}
+                            <li><a href="/accounts/login/">Log In</a></li>
+                            <li><a href="/accounts/register/">Register</a></li>
+                    {% endif %}
                 </div>
             </div>
-        </div>
+        </nav>
         {% block content %}{% endblock %}
     </div>
 
@@ -121,14 +82,37 @@
             </ul>
         </div>
     </footer>
-     <script type="text/javascript" src="{% static 'js/libs/jquery/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/jquery/jquery.min.js' %}"></script>
     {% bootstrap_javascript %}
+    <script type="text/javascript">
+        $(function () {
+            $('#jump-to-eq-button').click(function() {
+                var eq =  $('#jump-to-eq-input').val();
+                if (eq == '') {
+                    alert('Please enter an Equation Id');
+                } else {
+                    window.location = 'http://www.globallometree.org/data/equation/' + eq + '/'
+                }
+            })
+        });
+    </script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-42545926-1']);
+        _gaq.push(['_trackPageview']);
+      
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
     <script type="text/javascript">
         $(function() {
             $('.logo-image-link').tooltip({placement:'bottom'});
         });
     </script>
-    {% block script %}{% endblock %}
     {% render_block "js" %}
+    {% block script %}{% endblock %}
 </body>
 </html>
