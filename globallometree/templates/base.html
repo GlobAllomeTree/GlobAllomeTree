@@ -7,7 +7,9 @@
     <title>GlobAllomeTree</title>
     {% bootstrap_css %}
     {% render_block "css" %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    {% addtoblock "css" %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    {% endaddtoblock %}
 </head>
 <body>
     {% cms_toolbar %}
@@ -84,6 +86,7 @@
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     {% render_block "js" %}
+    {% addtoblock "js" %}
     {% bootstrap_javascript %}
     <script type="text/javascript">
         $(function () {
@@ -113,6 +116,8 @@
             $('.logo-image-link').tooltip({placement:'bottom'});
         });
     </script>
+    {% endaddtoblock "js" %}
+
     {% block script %}{% endblock %}
 </body>
 </html>
