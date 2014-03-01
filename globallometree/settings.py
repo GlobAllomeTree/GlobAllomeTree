@@ -146,7 +146,7 @@ INSTALLED_APPS = (
     'globallometree.apps.journals',
     'globallometree.apps.data',
     'globallometree.apps.bootstrap_3_theme',
-    'bootstrap_themes',
+    'bootstrap3',
     # 'globallometree.apps.original_theme',
     'globallometree.plugins.linkbox',
 )

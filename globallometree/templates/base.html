@@ -1,13 +1,14 @@
-{% load cms_tags sekizai_tags staticfiles bootstrap_themes %}
+{% load cms_tags sekizai_tags staticfiles bootstrap3  %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GlobAllomeTree</title>
-    {% bootstrap_styles theme='globallometree' type='min.css' %}
-    <script type="text/javascript" src="{% static 'js/libs/jquery/jquery.min.js' %}"></script>
-    {% bootstrap_script use_min=True %}
+    {% bootstrap_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    {% bootstrap_javascript %}
+
     <script type="text/javascript">
         $(function () {
             $('#jump-to-eq-button').click(function() {
@@ -120,8 +121,8 @@
             </ul>
         </div>
     </footer>
-
-   
+     <script type="text/javascript" src="{% static 'js/libs/jquery/jquery.min.js' %}"></script>
+    {% bootstrap_javascript %}
     <script type="text/javascript">
         $(function() {
             $('.logo-image-link').tooltip({placement:'bottom'});
