@@ -1,13 +1,21 @@
 # Makefile for managing the GlobAllomeTree dockers
 
+#  := evaluated later when run or used
+#   = evaluated immediately when encountered by parser
+
 SHELL := /bin/bash
 POSTGRESQL_USER = globallometree
 POSTGRESQL_PASS = globallometree
 POSTGRESQL_DB   = globallometree
+SECRET_KEY = secret
+
 #DUMP_FILE is assumed to be in the one directory up from this file
 DUMP_FILE = ../globallometree.import.sql.gz
 PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 PROJECT_ROOT := $(shell pwd)
+
+#This will get evaluated when used below
+WEB_SERVER_BASE_ENV := -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code -e SECRET_KEY=${SECRET_KEY}  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} 
 
 deploy: clean install-utilities build init sleep10 run
 
@@ -62,19 +70,37 @@ build-web-server:
 	docker build -t web_server_image .
 
 run-web-server: clean-web-server
-	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image 
+	#Run the webserver on port 8082
+	docker run -d -name web_server -p 8082:80 ${WEB_SERVER_BASE_ENV} web_server_image
 
 stop-web-server:
 	docker stop web_server
 
-run-web-server-bash:
+run-web-server-debug:
+	#Run a debug server on port 8083
 	-@docker stop web_server_bash 2>/dev/null || true
 	-@docker rm web_server_bash 2>/dev/null || true
-	docker run -i -t -name web_server_bash -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image bash /home/docker/code/server/startup_bash.sh
+	docker run -i -t -name web_server_bash -p 8083:8083 ${WEB_SERVER_BASE_ENV} web_server_image bash /home/docker/code/server/startup_bash.sh
 
+attach-web-server:
+	#Use lxc attach to attch to the webserver
+	$(MAKE) dock-attach CONTAINER=web_server
 
+django-manage:
+	#Run manage.py 
+	#Example)  django-manage COMMAND="collectstatic --noinput"
+	-@docker stop django_manage 2>/dev/null || true
+	-@docker rm django_manage 2>/dev/null || true
+	docker run -i -t -name django_manage ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" web_server_image bash /home/docker/code/server/startup_manage.sh
 
+django-runserver:
+	$(MAKE) run-web-server-debug
 
+django-collectstatic:
+	$(MAKE) django-manage COMMAND="collectstatic --noinput"
+
+django-rebuild-index:
+	$(MAKE) django-manage COMMAND="rebuild_index --noinput"
 
 ############################################# ELASTICSEARCH  #############################################
 
@@ -100,20 +126,6 @@ run-elasticsearch-bash:
 	-@docker stop elasticsearch_server_bash 2>/dev/null || true
 	-@docker rm elasticsearch_server_bash 2>/dev/null || true
 	docker run -i -t -name elasticsearch_server_bash -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image /bin/bash
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -186,8 +198,6 @@ psql-admin-shell:
 
 
 
-
-
 ############################################ DOCKER SHORTCUTS ##########################################
 
 stop-all-containers:
@@ -211,8 +221,10 @@ remove-all-images:
 reset-docker: remove-all-containers remove-all-images
 	#other things we can reset?
 
-
-
+dock-attach:
+	#Example) dock-attach CONTAINER=web_server
+	#Example) make dock-attach CONTAINER=c1997df1e28
+	sudo lxc-attach -n $(shell sudo docker inspect ${CONTAINER} | grep '"ID"' | sed 's/[^0-9a-z]//g') /bin/bash
 
 
 ########################### LOCAL UTILITIES FOR USE IN BUILDING IMAGES ############################ 
@@ -243,17 +255,8 @@ create-pip-cache-dir:
 run-pip-cache:
 	python -m pypicache.main  --port 8090 /opt/cache/pip
 
-install-squid:
-	sudo apt-get install -y squid-deb-proxy
-	#Add in custom miror domains like elasticsearch.org and postgresql.org
-	sudo cp server/squid-mirror-dstdomain /etc/squid-deb-proxy/mirror-dstdomain.acl.d/
-	sudo restart squid-deb-proxy
-
 install-docker: add-docker-repo
 	sudo apt-get install lxc-docker
-
-restart-squid:
-	sudo restart squid-deb-proxy
 
 add-postgres-repo:
 	echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /tmp/pgdg.list
