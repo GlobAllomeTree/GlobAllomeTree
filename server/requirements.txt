@@ -34,4 +34,6 @@ cmsplugin-filer==0.9.5
 django-filer==0.9.5
 djangocms-text-ckeditor==2.1.1
 
+
+####################### Frontend
 django-bootstrap3==3.0.0
