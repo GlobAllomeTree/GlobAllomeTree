@@ -1,13 +1,21 @@
 # Makefile for managing the GlobAllomeTree dockers
 
+#  := evaluated later when run or used
+#   = evaluated immediately when encountered by parser
+
 SHELL := /bin/bash
 POSTGRESQL_USER = globallometree
 POSTGRESQL_PASS = globallometree
 POSTGRESQL_DB   = globallometree
+SECRET_KEY = secret
+
 #DUMP_FILE is assumed to be in the one directory up from this file
 DUMP_FILE = ../globallometree.import.sql.gz
 PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 PROJECT_ROOT := $(shell pwd)
+
+#This will get evaluated when used below
+WEB_SERVER_BASE_ENV := -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code -e SECRET_KEY=${SECRET_KEY}  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} 
 
 deploy: clean install-utilities build init sleep10 run
 
@@ -24,6 +32,10 @@ run: clean run-elasticsearch run-postgresql run-web-server
 
 stop: stop-web-server stop-elasticsearch stop-postgresql
 
+
+run-cache-server:
+	#http://ftp.gnu.org/old-gnu/Manuals/make-3.79.1/html_chapter/make_toc.html#TOC50
+	cd ../docker-cache && $(MAKE) run
 
 ########################################### UTILITIES ############################################
 
@@ -44,6 +56,9 @@ echo-vars:
 build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
 
+
+
+
 ########################################### WEB SERVER #########################################
 
 
@@ -55,16 +70,37 @@ build-web-server:
 	docker build -t web_server_image .
 
 run-web-server: clean-web-server
-	docker run -d -name web_server -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image 
+	#Run the webserver on port 8082
+	docker run -d -name web_server -p 8082:80 ${WEB_SERVER_BASE_ENV} web_server_image
 
 stop-web-server:
 	docker stop web_server
 
-run-web-server-bash:
+run-web-server-debug:
+	#Run a debug server on port 8083
 	-@docker stop web_server_bash 2>/dev/null || true
 	-@docker rm web_server_bash 2>/dev/null || true
-	docker run -i -t -name web_server_bash -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code  -p 8082:80 -p 8083:8083  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} web_server_image bash
+	docker run -i -t -name web_server_bash -p 8083:8083 ${WEB_SERVER_BASE_ENV} web_server_image bash /home/docker/code/server/startup_bash.sh
 
+attach-web-server:
+	#Use lxc attach to attch to the webserver
+	$(MAKE) dock-attach CONTAINER=web_server
+
+django-manage:
+	#Run manage.py 
+	#Example)  django-manage COMMAND="collectstatic --noinput"
+	-@docker stop django_manage 2>/dev/null || true
+	-@docker rm django_manage 2>/dev/null || true
+	docker run -i -t -name django_manage ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" web_server_image bash /home/docker/code/server/startup_manage.sh
+
+django-runserver:
+	$(MAKE) run-web-server-debug
+
+django-collectstatic:
+	$(MAKE) django-manage COMMAND="collectstatic --noinput"
+
+django-rebuild-index:
+	$(MAKE) django-manage COMMAND="rebuild_index --noinput"
 
 ############################################# ELASTICSEARCH  #############################################
 
@@ -92,6 +128,9 @@ run-elasticsearch-bash:
 	docker run -i -t -name elasticsearch_server_bash -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image /bin/bash
 
 
+
+
+
 ############################################# POSTGRES  #############################################
 
 clean-postgresql:
@@ -101,7 +140,7 @@ clean-postgresql:
 build-postgresql:
 	docker build -t postgresql_server_image github.com/GlobAllomeTree/docker-postgresql
 
-init-postgresql: run-postgresql sleep10 create-db import-dump stop-postgresql 
+init-postgresql: run-postgresql sleep10 create-db import-db stop-postgresql 
 
 run-postgresql: clean-postgresql
 	sudo mkdir -p /opt/
@@ -122,9 +161,9 @@ delete-postgres-data-directory:
 #This uses env vars to avoid the password prompt
 #http://www.postgresql.org/docs/current/static/libpq-envars.html
 #To use a different dump file, override the DUMP_FILE variable when calling Make
-#ex) make import-dump DUMP_FILE=../globallometree.import.sql.2.gz
+#ex) make import-db DUMP_FILE=../globallometree.import.sql.2.gz
 #Note that $(PSQL) is defined at the beginning of the Makefile but evaluated when used below
-import-dump: 
+import-db: 
 	gunzip -c $(DUMP_FILE) | $(PSQL)
 
 drop-db:
@@ -132,6 +171,9 @@ drop-db:
 
 create-db:
 	echo "CREATE DATABASE ${POSTGRESQL_DB} OWNER ${POSTGRESQL_USER} ENCODING 'UTF8' TEMPLATE template0; " | $(PSQL) postgres
+
+reimport-db: drop-db create-db import-db
+
 
 dump-db:
 	PGPASSWORD=$(POSTGRESQL_PASS) pg_dump -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh) $(POSTGRESQL_DB) | gzip > ../$(POSTGRESQL_DB).dump.`date +'%Y_%m_%d'`.sql.gz
@@ -152,6 +194,8 @@ psql-shell:
 #Utility to hop into the postgres admin shell
 psql-admin-shell:
 	$(PSQL) postgres
+
+
 
 
 ############################################ DOCKER SHORTCUTS ##########################################
@@ -177,6 +221,11 @@ remove-all-images:
 reset-docker: remove-all-containers remove-all-images
 	#other things we can reset?
 
+dock-attach:
+	#Example) dock-attach CONTAINER=web_server
+	#Example) make dock-attach CONTAINER=c1997df1e28
+	sudo lxc-attach -n $(shell sudo docker inspect ${CONTAINER} | grep '"ID"' | sed 's/[^0-9a-z]//g') /bin/bash
+
 
 ########################### LOCAL UTILITIES FOR USE IN BUILDING IMAGES ############################ 
 
@@ -188,14 +237,36 @@ reset-docker: remove-all-containers remove-all-images
 #   ../globallometree
 #
 
-install-utilities:
+install-utilities: add-postgres-repo add-docker-repo apt-update
+	sudo apt-get install -y postgresql-client-9.3 git 
+
+apt-update:
+	sudo apt-get update
+
+apt-upgrade:
+	sudo apt-get upgrade
+
+create-pip-cache-dir:
+	sudo mkdir -p /opt &&
+	sudo mkdir -p /opt/cache
+	sudo mkdir -p /opt/cache/pip
+	sudo chown ${USER}.${USER} /opt/cache/pip
+
+run-pip-cache:
+	python -m pypicache.main  --port 8090 /opt/cache/pip
+
+install-docker: add-docker-repo
+	sudo apt-get install lxc-docker
+
+add-postgres-repo:
 	echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /tmp/pgdg.list
 	sudo cp /tmp/pgdg.list /etc/apt/sources.list.d/
 	wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-	sudo apt-get update
-	sudo apt-get upgrade
-	sudo apt-get install postgresql-client-9.3
-	sudo apt-get install -y git
+
+add-docker-repo:
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+	sudo "echo deb http://get.docker.io/ubuntu docker main" > /tmp/docker.list
+	sudo cp /tmp/docker.list /etc/apt/sources.list.d/
 
 build-postgresql-local:
 	docker build -t postgresql_server_image ../docker-postgresql
@@ -203,6 +274,8 @@ build-postgresql-local:
 build-elasticsearch-local:
 	docker build -t elasticsearch_server_image ../docker-elasticsearch
 
+build-web-server-local: build-web-server
+	
 git-pull-all:
 	@echo
 	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput sgr0

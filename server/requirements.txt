@@ -1,23 +1,40 @@
+#Python Library Requirements File
+
+
+######################## Django Core 
 django==1.6.2
--e git+https://github.com/toastdriven/django-haystack.git@433e154f76a450ffc095792c6f2e051ef508fc2d#egg=django-haystack
-requests==0.13.2
--e git+https://github.com/toastdriven/pyelasticsearch.git@3bfe1a90eab6c2dfb0989047212f4bc9fb814803#egg=pyelasticsearch
-psycopg2==2.4.5
-south==0.7.6
-PIL==1.1.7
-django-classy-tags==0.3.4.1
-django-mptt==0.5.2
-django-sekizai==0.7
-html5lib==0.95
-feedparser==5.1.2
-pyyaml==3.10
-django-crispy-forms==1.2.2
+psycopg2==2.5.2 #Requires the ubuntu package libpq-dev to be installed
+south==0.8.4
+
+
+######################## Django Extras 
+#Form Rendering
+django-crispy-forms==1.4.0
+
+
+######################## Search 
+django-haystack==2.1.0
+pyelasticsearch==0.6.1
+elasticstack==0.0.6
+
+
+######################## PDF Export of Search Result 
+reportlab==2.6
 xhtml2pdf==0.0.5
 reportlab==2.7
 
 
+######################## Parsing Journal Feeds
+feedparser==5.1.3
+
+
+######################## Django CMS 
 https://github.com/divio/django-cms/archive/3.0.0.beta3.tar.gz
 djangocms-admin-style==0.2.0
 cmsplugin-filer==0.9.5
 django-filer==0.9.5
 djangocms-text-ckeditor==2.1.1
+
+
+####################### Frontend
+django-bootstrap3==3.0.0

@@ -1,7 +1,7 @@
 from haystack import indexes
 from .models import TreeEquation
 
-class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
+class TreeEquationIndex(indexes.SearchIndex, indexes.Indexable):
     #Full Text Search
     text = indexes.CharField(document=True, use_template=True)
     
@@ -101,6 +101,6 @@ class TreeEquationIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
         """Let haystack know which model we are indexing"""
         return TreeEquation
     
-    def index_queryset(self):
+    def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()

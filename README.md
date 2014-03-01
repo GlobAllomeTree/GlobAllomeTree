@@ -1,4 +1,4 @@
-globallometree
+GlobAllomeTree
 ==============
 
 GlobAllomeTree is the international platform to facilitate the calculation of volume, biomass and carbon stocks for forests and trees outside forests. The platform allows accessing and sharing data and tools to
@@ -10,6 +10,3 @@ GlobAllomeTree is the international platform to facilitate the calculation of vo
 5. assess volume, biomass and carbon stocks in different tree compartments and forest plots considering all available allometric equations
 6. provide the statistical information
 7. share data with the fantallometrik community
-
-
-
