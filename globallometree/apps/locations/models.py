@@ -4,6 +4,9 @@ from django.db import models
 class Continent(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Country(models.Model):
     common_name = models.CharField(max_length=159, blank=True)
@@ -32,25 +35,43 @@ class Country(models.Model):
 class BiomeFAO(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class BiomeUdvardy(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
 
 
 class BiomeWWF(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class BiomeBailey(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class BiomeHoldridge(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True) 
+    name = models.CharField(max_length=200, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
 
 
 class LocationGroup(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Location(models.Model):
@@ -67,4 +88,7 @@ class Location(models.Model):
     biome_wwf = models.ForeignKey(BiomeWWF, blank=True, null=True)
     biome_bailey = models.ForeignKey(BiomeBailey, blank=True, null=True)
     biome_holdridge = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
-    country = models.ForeignKey(LocationGroup, blank=True, null=True)
+    group = models.ForeignKey(LocationGroup, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
