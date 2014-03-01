@@ -1,16 +1,38 @@
 from django.db import models
 from django.contrib.auth.models import User
+from globallometree.apps.taxonomy.models import Species
+from globallometree.apps.locations.models import Location
+from globallometree.apps.common.models import DataReference, Institution
+
+
+class AllometricEquationPopulation(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+
+
+class AllometricEquationEcosystem(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+
+
+class AllometricEquationSubmission(models.Model):
+    submitted_file = models.FileField(upload_to='data_submissions') # TODO: check if is better a more specific folder
+    submitted_notes = models.TextField(blank=True, null=True)
+    date_uploaded = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User)
+    imported = models.BooleanField()
+
+    def __unicode__(self):
+        return u"%s by %s" % (self.submitted_file, self.user)
+
 
 class AllometricEquation(models.Model):
+
     ID = models.IntegerField(primary_key=True)
-    data_submission = models.ForeignKey(DataSubmission, blank=True, null=True)
-    IDequation = models.IntegerField(null=True, blank=True)
-    Population = models.CharField(max_length=255, null=True, blank=True)
-    Ecosystem = models.CharField(max_length=255, null=True, blank=True)
+    IDequation = models.IntegerField(null=True, blank=True) # TODO: ask if needed
+
     X = models.CharField(max_length=20, null=True, blank=True)
     Unit_X = models.CharField(max_length=20, null=True, blank=True)
     Z = models.CharField(max_length=20, null=True, blank=True)
-    Unit_Z = models.CharField(max_length=20, null=True, blank=True) 
+    Unit_Z = models.CharField(max_length=20, null=True, blank=True)
     W = models.CharField(max_length=20, null=True, blank=True)
     Unit_W = models.CharField(max_length=20, null=True, blank=True)
     U = models.CharField(max_length=20, null=True, blank=True)
@@ -55,11 +77,6 @@ class AllometricEquation(models.Model):
     Stump_height = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10
     )
-    ID_REF = models.IntegerField(null=True, blank=True)
-    Label = models.CharField(max_length=20, null=True, blank=True) 
-    Author = models.CharField(max_length=200, null=True, blank=True) 
-    Year = models.CharField(max_length=12, null=True, blank=True) 
-    Reference = models.TextField(null=True, blank=True) 
     R2 = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10
     )
@@ -78,12 +95,32 @@ class AllometricEquation(models.Model):
     )
     Ratio_equation = models.NullBooleanField()
     Segmented_equation = models.NullBooleanField()
-    Sample_size = models.CharField(max_length=150, null=True, blank=True) 
-    Contributor = models.CharField(max_length=150, null=True, blank=True) 
-    Name_operator = models.CharField(max_length=150, null=True, blank=True)
+    Sample_size = models.CharField(max_length=150, null=True, blank=True)
+
+    # TODO: ask if population and ecosystem are specific to AllometricEquation
+    population = models.ForeignKey(
+        AllometricEquationPopulation, blank=True, null=True
+    )
+    ecosystem = models.ForeignKey(
+        AllometricEquationEcosystem, blank=True, null=True
+    )
     species = models.ManyToManyField(Species)
-    ID_Group = models.IntegerField(null=True, blank=True)
     locations = models.ManyToManyField(Location)
+
+    ID_REF = models.IntegerField(null=True, blank=True) # TODO: ask if needed
+    reference = models.ForeignKey(
+        DataReference, blank=True, null=True
+    )
+
+    contributor = models.ForeignKey(
+        Institution, blank=True, null=True
+    )
+
+    # TODO: ask if is not enough the user field in AllometricEquationSubmission
+    Name_operator = models.CharField(max_length=150, null=True, blank=True)
+    data_submission = models.ForeignKey(
+        AllometricEquationSubmission, blank=True, null=True
+    )
 
     def components_string(self):
         c_string = ''
@@ -98,13 +135,3 @@ class AllometricEquation(models.Model):
     class Meta:
         verbose_name ='Allometric Equation'
         verbose_name_plural = 'Allometric Equations'
-
-class DataSubmission(models.Model):
-    submitted_file = models.FileField(upload_to='data_submissions')
-    submitted_notes = models.TextField(blank=True, null=True)
-    date_uploaded = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(User)
-    imported = models.BooleanField()
-
-    def __unicode__(self):
-        return u"%s by %s" % (self.submitted_file, self.user)

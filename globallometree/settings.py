@@ -143,9 +143,13 @@ INSTALLED_APPS = (
     # 'cms.plugins.twitter',
 
     # project apps
+    'globallometree.apps.common',
     'globallometree.apps.accounts',
     'globallometree.apps.journals',
     'globallometree.apps.data',
+    'globallometree.apps.taxonomy',
+    'globallometree.apps.locations',
+    'globallometree.apps.allometric_equations',
     'globallometree.apps.original_theme',
     'globallometree.plugins.linkbox',
 )
@@ -173,7 +177,4 @@ HAYSTACK_CONNECTIONS = {
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
-
 from settings_local import *
-
-

@@ -1,7 +1,9 @@
 from django.db import models
 
+
 class Continent(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
+
 
 class Country(models.Model):
     common_name = models.CharField(max_length=159, blank=True)
@@ -26,20 +28,30 @@ class Country(models.Model):
         verbose_name ='Country'
         verbose_name_plural = 'Countries'
 
+
 class BiomeFAO(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
+
 
 class BiomeUdvardy(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
 
+
 class BiomeWWF(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
+
 
 class BiomeBailey(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
 
+
 class BiomeHoldridge(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True) 
+
+
+class LocationGroup(models.Model):
+    name = models.CharField(max_length=200, null=True, blank=True)
+
 
 class Location(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -55,3 +67,4 @@ class Location(models.Model):
     biome_wwf = models.ForeignKey(BiomeWWF, blank=True, null=True)
     biome_bailey = models.ForeignKey(BiomeBailey, blank=True, null=True)
     biome_holdridge = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
+    country = models.ForeignKey(LocationGroup, blank=True, null=True)

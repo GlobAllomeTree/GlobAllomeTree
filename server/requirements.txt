@@ -13,6 +13,7 @@ feedparser==5.1.2
 pyyaml==3.10
 django-crispy-forms==1.2.2
 xhtml2pdf==0.0.5
+reportlab==2.7
 
 
 https://github.com/divio/django-cms/archive/3.0.0.beta3.tar.gz
