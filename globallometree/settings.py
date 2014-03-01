@@ -4,11 +4,9 @@
 import os.path
 gettext = lambda s: s
 
-BASE_PATH = os.path.abspath(os.path.dirname(__file__))
+PROJECT_PATH = os.path.join(os.path.dirname(__file__))
+BASE_PATH = os.path.abspath(os.path.join(PROJECT_PATH, '../'))
 
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'mz098zxdurd#z4o2@adb672)fji^vb!_6sbw-1!^#4+4(55p+q'
 
 ALLOWED_HOSTS = []
 
@@ -90,7 +88,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_PATH, 'templates'),
+    os.path.join(PROJECT_PATH, 'templates'),
 )
 
 CMS_TEMPLATES = (
@@ -110,10 +108,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
 
-    'haystack',
+
     'south',
     'crispy_forms',
-#    'filer',
+
+    #search
+    'haystack',
+    'elasticstack',
 
     # cms
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
@@ -145,11 +146,15 @@ INSTALLED_APPS = (
     'globallometree.apps.accounts',
     'globallometree.apps.journals',
     'globallometree.apps.data',
+
     'globallometree.apps.bootstrap_3_theme',
     'bootstrap3',
     # 'globallometree.apps.original_theme',
+    'globallometree.apps.kibana_custom',
+    'globallometree.apps.kibana_src',
     'globallometree.plugins.linkbox',
 )
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
@@ -161,20 +166,12 @@ FORCE_SCRIPT_NAME = ''
 STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
 STATIC_URL = '/static/'
 
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
-        'INDEX_NAME': 'globallometree',
-    },
-}
 
 #Encoding used for export and import of data
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
-
+from settings_search import *
 from settings_local import *
 
 
