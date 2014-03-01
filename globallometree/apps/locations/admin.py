@@ -7,7 +7,7 @@ class ContinentAdmin(admin.ModelAdmin):
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('common_name', )
+    list_display = ('common_name', 'capital', 'continent')
     list_filter  = ('continent', )
 
 
