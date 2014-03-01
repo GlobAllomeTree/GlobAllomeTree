@@ -37,7 +37,7 @@
      <div class="container">
 
         <nav class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
+            <div class="container-fluid" id="nav-inner">
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         {% page_attribute "slug" as slug %}
@@ -82,7 +82,8 @@
             </ul>
         </div>
     </footer>
-    <script type="text/javascript" src="{% static 'js/libs/jquery/jquery.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    {% render_block "js" %}
     {% bootstrap_javascript %}
     <script type="text/javascript">
         $(function () {
@@ -112,7 +113,6 @@
             $('.logo-image-link').tooltip({placement:'bottom'});
         });
     </script>
-    {% render_block "js" %}
     {% block script %}{% endblock %}
 </body>
 </html>
