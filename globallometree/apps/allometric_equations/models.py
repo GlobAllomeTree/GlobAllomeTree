@@ -3,10 +3,12 @@ from django.contrib.auth.models import User
 from globallometree.apps.common.models import DataReference, Institution
 
 
+# TODO: remove the AllometricEquation prefix
 class AllometricEquationPopulation(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
 
+# TODO: remove the AllometricEquation prefix
 class AllometricEquationEcosystem(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 

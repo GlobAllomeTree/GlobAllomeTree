@@ -6,6 +6,8 @@ from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesG
 from globallometree.apps.allometric_equations.models import AllometricEquation
 from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup
+from globallometree.apps.allometric_equations.models import AllometricEquationPopulation, AllometricEquationEcosystem
+from globallometree.apps.common.models import DataReference, Institution
 
 class Command(BaseCommand):
     args = '<limit (optional)>'
@@ -22,7 +24,7 @@ class Command(BaseCommand):
         n = 0
         equationsInsterted = 0
         speciesGroupsInserted = 0
-        locationGroupInserted = 0
+        locationGroupsInserted = 0
         for orig_equation in TreeEquation.objects.all().iterator():
             if limit and n > limit: break;
             n = n + 1; 
@@ -138,63 +140,94 @@ class Command(BaseCommand):
             else:   
                 location_group = LocationGroup(name="Auto Created Group for Equation %s" % orig_equation.ID)
                 location_group.save()
-                locationGroupInserted = locationGroupInserted + 1
+                locationGroupsInserted = locationGroupsInserted + 1
 
             location_group.locations.add(location)
 
+######################################## COMMON ##################################################
+
+            if orig_equation.Contributor is None:
+                contributor = None
+            else:
+                contributor = Institution.objects.get_or_create(name=orig_equation.Population)[0]
+
+            if orig_equation.Reference is None:
+                reference = None
+            else:
+                reference = DataReference.objects.get_or_create(
+                    label=orig_equation.Label,
+                    author=orig_equation.Author,
+                    year=orig_equation.Year,
+                    reference=orig_equation.Reference
+            )[0]
+
 ######################################## EQUATION ################################################
+
+            if orig_equation.Population is None:
+                population = None
+            else:
+                population = AllometricEquationPopulation.objects.get_or_create(name=orig_equation.Population)[0]
+
+            if orig_equation.Ecosystem is None:
+                ecosystem = None
+            else:
+                ecosystem = AllometricEquationEcosystem.objects.get_or_create(name=orig_equation.Ecosystem)[0]
 
             try: 
                 new_equation = AllometricEquation.objects.get(IDequation=orig_equation.IDequation)
             except ObjectDoesNotExist:
                 new_equation = AllometricEquation(
-                    ID = orig_equation.ID,
-                    IDequation = orig_equation.IDequation,
-                    X = orig_equation.X,
-                    Unit_X = orig_equation.Unit_X, 
-                    Z = orig_equation.Z,
-                    Unit_Z = orig_equation.Unit_Z, 
-                    W = orig_equation.W, 
-                    Unit_W = orig_equation.Unit_W,
-                    U = orig_equation.U,
-                    Unit_U = orig_equation.Unit_U,
-                    V = orig_equation.V,
-                    Unit_V = orig_equation.Unit_V,
-                    Min_X = orig_equation.Min_X,
-                    Max_X = orig_equation.Max_X, 
-                    Min_Z = orig_equation.Min_Z, 
-                    Max_Z = orig_equation.Max_Z,
-                    Output = orig_equation.Output,
-                    Output_TR = orig_equation.Output_TR,
-                    Unit_Y = orig_equation.Unit_Y,
-                    Age = orig_equation.Age,
-                    Veg_Component = orig_equation.Veg_Component,
-                    B = orig_equation.B,
-                    Bd = orig_equation.Bd,
-                    Bg = orig_equation.Bg,
-                    Bt = orig_equation.Bt,
-                    L = orig_equation.L,
-                    Rb = orig_equation.Rb,
-                    Rf = orig_equation.Rf,
-                    Rm = orig_equation.Rm,
-                    S = orig_equation.S,
-                    T = orig_equation.T,
-                    F = orig_equation.F,
-                    Equation = orig_equation.Equation,
-                    Substitute_equation = orig_equation.Substitute_equation,
-                    Top_dob = orig_equation.Top_dob,
-                    Stump_height = orig_equation.Stump_height,
-                    R2 = orig_equation.R2,
-                    R2_Adjusted = orig_equation.R2_Adjusted,
-                    RMSE = orig_equation.RMSE,
-                    SEE = orig_equation.SEE,
-                    Corrected_for_bias = orig_equation.Corrected_for_bias,
-                    Bias_correction = orig_equation.Bias_correction,
-                    Ratio_equation = orig_equation.Ratio_equation,
-                    Segmented_equation = orig_equation.Segmented_equation,
-                    Sample_size = orig_equation.Sample_size,
-                    species_group = species_group,
-                    location_group = location_group
+                    ID=orig_equation.ID,
+                    IDequation=orig_equation.IDequation,
+                    X=orig_equation.X,
+                    Unit_X=orig_equation.Unit_X, 
+                    Z=orig_equation.Z,
+                    Unit_Z=orig_equation.Unit_Z, 
+                    W=orig_equation.W, 
+                    Unit_W=orig_equation.Unit_W,
+                    U=orig_equation.U,
+                    Unit_U=orig_equation.Unit_U,
+                    V=orig_equation.V,
+                    Unit_V=orig_equation.Unit_V,
+                    Min_X=orig_equation.Min_X,
+                    Max_X=orig_equation.Max_X, 
+                    Min_Z=orig_equation.Min_Z, 
+                    Max_Z=orig_equation.Max_Z,
+                    Output=orig_equation.Output,
+                    Output_TR=orig_equation.Output_TR,
+                    Unit_Y=orig_equation.Unit_Y,
+                    Age=orig_equation.Age,
+                    Veg_Component=orig_equation.Veg_Component,
+                    B=orig_equation.B,
+                    Bd=orig_equation.Bd,
+                    Bg=orig_equation.Bg,
+                    Bt=orig_equation.Bt,
+                    L=orig_equation.L,
+                    Rb=orig_equation.Rb,
+                    Rf=orig_equation.Rf,
+                    Rm=orig_equation.Rm,
+                    S=orig_equation.S,
+                    T=orig_equation.T,
+                    F=orig_equation.F,
+                    Equation=orig_equation.Equation,
+                    Substitute_equation=orig_equation.Substitute_equation,
+                    Top_dob=orig_equation.Top_dob,
+                    Stump_height=orig_equation.Stump_height,
+                    R2=orig_equation.R2,
+                    R2_Adjusted=orig_equation.R2_Adjusted,
+                    RMSE=orig_equation.RMSE,
+                    SEE=orig_equation.SEE,
+                    Corrected_for_bias=orig_equation.Corrected_for_bias,
+                    Bias_correction=orig_equation.Bias_correction,
+                    Ratio_equation=orig_equation.Ratio_equation,
+                    Segmented_equation=orig_equation.Segmented_equation,
+                    Sample_size=orig_equation.Sample_size,
+                    population=population,
+                    ecosystem=ecosystem,
+                    contributor=contributor,
+                    reference=reference,
+                    species_group=species_group,
+                    location_group=location_group
                 )
                 new_equation.save()
                 equationsInsterted = equationsInsterted + 1
@@ -204,6 +237,6 @@ class Command(BaseCommand):
                 # )
         self.stdout.write(
             'Inserted {0} AllometricEquation, {1} SpeciesGroup, {2} LocationGroup\n'
-            .format(equationsInsterted, speciesGroupsInserted, locationGroupInserted)
+            .format(equationsInsterted, speciesGroupsInserted, locationGroupsInserted)
         )
 
