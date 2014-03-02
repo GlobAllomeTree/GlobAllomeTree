@@ -48,11 +48,13 @@ class Command(BaseCommand):
             if orig_equation.ID_Species is None:
                 species = None
             else:
-                species = Species.objects.get_or_create(
+                species, species_created = Species.objects.get_or_create(
                     name=orig_equation.Species, 
                     genus=genus,
                     original_ID_Species=orig_equation.ID_Species
-                )[0]
+                )
+                if species_created:
+                    speciesInserted = speciesInserted + 1
 
             if species:
                 if orig_equation.Group_Species and orig_equation.ID_Group:
@@ -71,7 +73,6 @@ class Command(BaseCommand):
                 
                 #It appears some species may contain 'None' species, which don't get explicitly added
                 species_group.species.add(species)
-                speciesInserted = speciesInserted + 1
 
 ######################################## LOCATIONS ################################################
 
@@ -125,7 +126,7 @@ class Command(BaseCommand):
                     continent=continent
                 )[0]
 
-            location = Location.objects.get_or_create(
+            location, location_created = Location.objects.get_or_create(
                 original_ID_Location=orig_equation.ID_Location,
                 name=orig_equation.Location,
                 Latitude=orig_equation.Latitude,
@@ -136,7 +137,9 @@ class Command(BaseCommand):
                 division_bailey=division_bailey,
                 biome_holdridge=biome_holdridge,
                 country=country
-            )[0]
+            )
+            if location_created:
+                locationsInserted = locationsInserted + 1
 
             if orig_equation.Group_Location:
                 location_group, location_group_created = LocationGroup.objects.get_or_create(
@@ -153,7 +156,6 @@ class Command(BaseCommand):
                     newLocationGroupsInserted = newLocationGroupsInserted + 1
 
             location_group.locations.add(location)
-            locationsInserted = locationsInserted + 1
 
 ######################################## COMMON ##################################################
 
