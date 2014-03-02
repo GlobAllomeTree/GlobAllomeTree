@@ -8,8 +8,12 @@ south==0.8.4
 
 
 ######################## Django Extras 
-#Form Rendering
 django-crispy-forms==1.4.0
+django-extensions==1.3.3
+pygraphviz==1.2 #for shell plus graph models
+
+######################## Debugging
+ipdb==0.8 #Iron Python shell use: import ipdb; ipdb.set_trace() 
 
 
 ######################## Search 
@@ -18,8 +22,7 @@ pyelasticsearch==0.6.1
 elasticstack==0.0.6
 
 
-######################## PDF Export of Search Result 
-reportlab==2.6
+######################## PDF Export of Search Results 
 xhtml2pdf==0.0.5
 reportlab==2.7
 

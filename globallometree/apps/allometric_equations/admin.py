@@ -18,7 +18,7 @@ class AllometricEquationAdmin(admin.ModelAdmin):
     list_display = ('ID', 'data_submission',  'Equation')
     ordering = ("ID",)
     search_fields  = ('ID',)
-    list_filter = ('data_submission', 'species', 'locations')
+    list_filter = ('data_submission',)
 
 
 admin.site.register(AllometricEquationPopulation, AllometricEquationPopulationAdmin)

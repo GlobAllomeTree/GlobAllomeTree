@@ -102,6 +102,17 @@ django-collectstatic:
 django-rebuild-index:
 	$(MAKE) django-manage COMMAND="rebuild_index --noinput"
 
+
+#Graphing
+graph-all-models:
+	$(MAKE) django-manage COMMAND="graph_models -a -o all_models.png"
+	@echo "Image of all models created: all_models.png"
+
+
+graph-data-models:
+	$(MAKE) django-manage COMMAND="graph_models taxonomy allometric_equations locations common -o data_models.png"
+	@echo "Image of data models created: data_models.png"
+
 ############################################# ELASTICSEARCH  #############################################
 
 clean-elasticsearch:
@@ -182,7 +193,8 @@ dump-db:
 #This does a full reset of postgres from a dump file
 #To use a different dump file, override the DUMP_FILE variable when calling Make
 #ex) make reset-postgresql DUMP_FILE=../globallometree.import.sql.2.gz
-reset-postgresql: clean-postgresql delete-postgres-data-directory init-postgresql
+reset-postgresql: clean-postgresql delete-postgres-data-directory init-postgresql 
+	$(MAKE) run-postgresql
 
 get-postgresql-ip:
 	@echo $(shell TAG=postgresql_server_image ./server/ip_for.sh)

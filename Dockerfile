@@ -27,8 +27,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y nginx
 # install postgresql support for python / django 
 RUN DEBIAN_FRONTEND=noninteractive  apt-get install -y libpq-dev postgresql-client
 
-# install python imaging requirements 
-RUN DEBIAN_FRONTEND=noninteractive  apt-get install -y libjpeg62-dev zlib1g-dev libfreetype6-dev liblcms1-dev
+# install python imaging requirements and shell plus reqs 
+# graphviz graphviz-dev pkg-config added for shell plus graph models 
+# ipython-notebook added for shell plus ipython
+RUN DEBIAN_FRONTEND=noninteractive  apt-get install -y  libjpeg62-dev zlib1g-dev libfreetype6-dev liblcms1-dev graphviz graphviz-dev pkg-config ipython-notebook
 
 # install our code
 # add from repository root
@@ -41,10 +43,7 @@ RUN ln -s /home/docker/code/server/nginx.conf /etc/nginx/sites-enabled/
 RUN ln -s /home/docker/code/server/supervisor.conf /etc/supervisor/conf.d/
 
 # install pip requirements
-RUN pip install -vr /home/docker/code/server/requirements.txt --allow-external PIL --allow-unverified PIL --allow-external pyPdf --allow-unverified pyPdf
-
-# create a few folders 
-# RUN mkdir /home/docker/code/static_collected
+RUN pip install -vr /home/docker/code/server/requirements.txt --allow-external pyPdf --allow-unverified pyPdf
 
 # set local settings
 RUN cp /home/docker/code/globallometree/settings_local.py.server  /home/docker/code/globallometree/settings_local.py

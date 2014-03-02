@@ -68,13 +68,12 @@ class BiomeHoldridge(models.Model):
 
 
 class LocationGroup(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True)
-
-    def __unicode__(self):
-        return self.name
+    group_name = models.CharField(max_length=255, null=True, blank=True)
+    original_location_id = models.IntegerField(null=True, blank=True, help_text="The original location group id from the global import")
 
 
 class Location(models.Model):
+    location_group = models.ForeignKey(LocationGroup, blank=True, null=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     Latitude = models.DecimalField(
         null=True, blank=True, max_digits=12, decimal_places=9
@@ -88,7 +87,6 @@ class Location(models.Model):
     biome_wwf = models.ForeignKey(BiomeWWF, blank=True, null=True)
     biome_bailey = models.ForeignKey(BiomeBailey, blank=True, null=True)
     biome_holdridge = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
-    group = models.ForeignKey(LocationGroup, blank=True, null=True)
 
     def __unicode__(self):
         return self.name

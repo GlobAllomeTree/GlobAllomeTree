@@ -27,7 +27,7 @@ class AllometricEquationSubmission(models.Model):
 class AllometricEquation(models.Model):
 
     ID = models.IntegerField(primary_key=True)
-    IDequation = models.IntegerField(null=True, blank=True) # TODO: ask if needed
+    IDequation = models.IntegerField(null=True, blank=True) 
 
     X = models.CharField(max_length=20, null=True, blank=True)
     Unit_X = models.CharField(max_length=20, null=True, blank=True)
@@ -97,17 +97,18 @@ class AllometricEquation(models.Model):
     Segmented_equation = models.NullBooleanField()
     Sample_size = models.CharField(max_length=150, null=True, blank=True)
 
-    # TODO: ask if population and ecosystem are specific to AllometricEquation
+    
     population = models.ForeignKey(
         AllometricEquationPopulation, blank=True, null=True
     )
     ecosystem = models.ForeignKey(
         AllometricEquationEcosystem, blank=True, null=True
     )
-    species = models.ManyToManyField(Species)
-    locations = models.ManyToManyField(Location)
 
-    ID_REF = models.IntegerField(null=True, blank=True) # TODO: ask if needed
+    species = models.ForeignKey('taxonomy.SpeciesGroup')
+    location = models.ForeignKey('locations.LocationGroup')
+
+    ID_REF = models.IntegerField(null=True, blank=True) 
     reference = models.ForeignKey(
         DataReference, blank=True, null=True
     )
@@ -116,7 +117,7 @@ class AllometricEquation(models.Model):
         Institution, blank=True, null=True
     )
 
-    # TODO: ask if is not enough the user field in AllometricEquationSubmission
+    
     Name_operator = models.CharField(max_length=150, null=True, blank=True)
     data_submission = models.ForeignKey(
         AllometricEquationSubmission, blank=True, null=True

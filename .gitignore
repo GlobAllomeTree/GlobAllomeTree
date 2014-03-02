@@ -10,3 +10,5 @@ media/data_submissions/*
 media
 .DS_Store
 /src
+*_models.png
+reset_db.sh
