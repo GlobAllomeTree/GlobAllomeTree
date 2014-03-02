@@ -201,7 +201,7 @@ class Command(BaseCommand):
                 # self.stdout.write(
                 #     'Created a new AllometricEquation record: ID = {0}, IDequation = {1}\n'
                 #     .format(orig_equation.ID, orig_equation.IDequation)
-                # )s
+                # )
         self.stdout.write(
             'Inserted {0} AllometricEquation, {1} SpeciesGroup, {2} LocationGroup\n'
             .format(equationsInsterted, speciesGroupsInserted, locationGroupsInseted)
