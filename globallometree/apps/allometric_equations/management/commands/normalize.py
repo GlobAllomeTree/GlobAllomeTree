@@ -21,8 +21,13 @@ class Command(BaseCommand):
 
         n = 0
         equationsInsterted = 0
-        speciesGroupsInserted = 0
-        locationGroupsInserted = 0
+        speciesInserted = 0
+        originalSpeciesGroupsInserted = 0
+        newSpeciesGroupsInserted = 0
+        locationsInserted = 0
+        originalLocationGroupsInserted = 0
+        newLocationGroupsInserted = 0
+
         for orig_equation in TreeEquation.objects.all().iterator():
             if limit and n > limit: break;
             n = n + 1; 
@@ -49,21 +54,24 @@ class Command(BaseCommand):
                     original_ID_Species=orig_equation.ID_Species
                 )[0]
 
-            if orig_equation.Group_Species and orig_equation.ID_Group:
-                species_group = SpeciesGroup.objects.get_or_create(
-                    original_ID_Group=orig_equation.ID_Group,
-                    name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
-                )[0]
+            if species:
+                if orig_equation.Group_Species and orig_equation.ID_Group:
+                    species_group, species_group_created = SpeciesGroup.objects.get_or_create(
+                        original_ID_Group=orig_equation.ID_Group,
+                        name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
+                    )
+                    if species_group_created:
+                        originalSpeciesGroupsInserted = originalSpeciesGroupsInserted + 1
+                else:
+                    species_group, species_group_created = SpeciesGroup.objects.get_or_create(
+                        name="Auto Created Group for equation ID %s" % orig_equation.ID
+                    )
+                    if species_group_created:
+                        newSpeciesGroupsInserted = newSpeciesGroupsInserted + 1
                 
-                if species:
-                    #It appears some species may contain 'None' species, which don't get explicitly added
-                    species_group.species.add(species)
-            else:
-                if species:
-                    species_group = SpeciesGroup(name="Auto Created Group for equation ID %s" % orig_equation.ID)
-                    species_group.save()
-                    species_group.species.add(species)
-                    speciesGroupsInserted = speciesGroupsInserted + 1
+                #It appears some species may contain 'None' species, which don't get explicitly added
+                species_group.species.add(species)
+                speciesInserted = speciesInserted + 1
 
 ######################################## LOCATIONS ################################################
 
@@ -131,15 +139,20 @@ class Command(BaseCommand):
             )[0]
 
             if orig_equation.Group_Location:
-                location_group = LocationGroup.objects.get_or_create(
+                location_group, location_group_created = LocationGroup.objects.get_or_create(
                     original_Group_Location=orig_equation.Group_Location,
                     name="Auto Created Group for original Group_Location %s" % orig_equation.Group_Location
-                )[0]
+                )
+                if location_group_created:
+                    originalLocationGroupsInserted = originalLocationGroupsInserted + 1
             else:   
-                location_group = LocationGroup(name="Auto Created Group for Equation %s" % orig_equation.ID)
-                location_group.save()
-                locationGroupsInserted = locationGroupsInserted + 1
+                location_group, location_group_created = LocationGroup.objects.get_or_create(
+                    name="Auto Created Group for Equation %s" % orig_equation.ID
+                )
+                if location_group_created:
+                    newLocationGroupsInserted = newLocationGroupsInserted + 1
 
+            locationsInserted = locationsInserted + 1
             location_group.locations.add(location)
 
 ######################################## COMMON ##################################################
@@ -229,12 +242,16 @@ class Command(BaseCommand):
                 )
                 new_equation.save()
                 equationsInsterted = equationsInsterted + 1
-                # self.stdout.write(
-                #     'Created a new AllometricEquation record: ID = {0}, IDequation = {1}\n'
-                #     .format(orig_equation.ID, orig_equation.IDequation)
-                # )
+
         self.stdout.write(
-            'Inserted {0} AllometricEquation, {1} SpeciesGroup, {2} LocationGroup\n'
-            .format(equationsInsterted, speciesGroupsInserted, locationGroupsInserted)
+            'Inserted: {0} AllometricEquation, {1} Species, '
+            '{2} original SpeciesGroup, {3} new SpeciesGroup, {4} Locations, '
+            '{5} original LocationGroup, {6} new LocationGroup\n' 
+            .format(
+                equationsInsterted, speciesInserted,
+                originalSpeciesGroupsInserted, newSpeciesGroupsInserted,
+                locationsInserted, originalLocationGroupsInserted,
+                newLocationGroupsInserted
+            )
         )
 
