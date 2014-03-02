@@ -22,8 +22,8 @@ class LocationInline(admin.TabularInline):
     raw_id_fields = ('location',)
 
 class LocationGroupAdmin(admin.ModelAdmin):
-    list_display = ('group_name', 'original_Group_Location', 'modified')
-    search_fields = ('group_name', 'original_Group_Location')
+    list_display = ('name', 'original_Group_Location', 'modified')
+    search_fields = ('name', 'original_Group_Location')
     exclude = ('locations',)
     inlines = [
     	 LocationInline,

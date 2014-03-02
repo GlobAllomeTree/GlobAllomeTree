@@ -22,7 +22,7 @@ class Command(BaseCommand):
         n = 0
         equationsInsterted = 0
         speciesGroupsInserted = 0
-        locationGroupsInseted = 0
+        locationGroupInserted = 0
         for orig_equation in TreeEquation.objects.all().iterator():
             if limit and n > limit: break;
             n = n + 1; 
@@ -138,7 +138,7 @@ class Command(BaseCommand):
             else:   
                 location_group = LocationGroup(name="Auto Created Group for Equation %s" % orig_equation.ID)
                 location_group.save()
-                locationGroupsInseted = locationGroupsInseted + 1
+                locationGroupInserted = locationGroupInserted + 1
 
             location_group.locations.add(location)
 
@@ -204,6 +204,6 @@ class Command(BaseCommand):
                 # )
         self.stdout.write(
             'Inserted {0} AllometricEquation, {1} SpeciesGroup, {2} LocationGroup\n'
-            .format(equationsInsterted, speciesGroupsInserted, locationGroupsInseted)
+            .format(equationsInsterted, speciesGroupsInserted, locationGroupInserted)
         )
 
