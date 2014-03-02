@@ -91,9 +91,8 @@ class LocationGroup(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     group_name = models.CharField(max_length=255, null=True, blank=True)
-    location = models.ManyToManyField('locations.Location', verbose_name="List of Locations", blank=True, null=True)
+    locations = models.ManyToManyField('locations.Location', verbose_name="List of Locations", blank=True, null=True)
     original_Group_Location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")
-
 
 
 class Location(models.Model):

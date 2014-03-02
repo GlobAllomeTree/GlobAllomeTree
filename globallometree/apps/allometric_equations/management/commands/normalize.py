@@ -109,7 +109,9 @@ class Command(BaseCommand):
                                                                      group_name="Auto Created Group for original Group_Location %s" % orig_equation.Group_Location)[0]
             else:   
                 location_group = LocationGroup(group_name="Auto Created Group for Equation %s" % orig_equation.ID)
-           
+                location_group.save()
+                
+            location_group.locations.add(location) 
 
 ######################################## EQUATION ################################################       
 
