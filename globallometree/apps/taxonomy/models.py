@@ -44,11 +44,6 @@ class Species(models.Model):
 class SpeciesGroup(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    group_name = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
     species = models.ManyToManyField('taxonomy.Species', verbose_name="List of Species", blank=True, null=True)
     original_ID_Group = models.IntegerField(null=True, blank=True, help_text="The original ID_Group from the global import")
-
-
-
-
-

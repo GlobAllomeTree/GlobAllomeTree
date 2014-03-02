@@ -90,10 +90,9 @@ class BiomeHoldridge(models.Model):
 class LocationGroup(models.Model):    
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    group_name = models.CharField(max_length=255, null=True, blank=True)
-    location = models.ManyToManyField('locations.Location', verbose_name="List of Locations", blank=True, null=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    locations = models.ManyToManyField('locations.Location', verbose_name="List of Locations", blank=True, null=True)
     original_Group_Location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")
-
 
 
 class Location(models.Model):
@@ -113,7 +112,6 @@ class Location(models.Model):
     division_bailey = models.ForeignKey(DivisionBailey, blank=True, null=True)
     biome_holdridge = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
     original_ID_Location = models.IntegerField(null=True, blank=True, help_text="The original ID_Location from the global import")
-
 
     def __unicode__(self):
         return self.name

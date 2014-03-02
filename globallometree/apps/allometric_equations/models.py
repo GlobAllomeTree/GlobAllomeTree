@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from globallometree.apps.taxonomy.models import Species
-from globallometree.apps.locations.models import Location
 from globallometree.apps.common.models import DataReference, Institution
 
 

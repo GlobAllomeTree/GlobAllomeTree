@@ -28,8 +28,8 @@ class SpeciesInline(admin.TabularInline):
 
 
 class SpeciesGroupAdmin(admin.ModelAdmin):
-    list_display = ('group_name', 'original_ID_Group', 'modified')
-    search_fields  = ('group_name','original_ID_Group', )
+    list_display = ('name', 'original_ID_Group', 'modified')
+    search_fields  = ('name','original_ID_Group', )
     read_only_fields = ('created', 'modified')
     inlines = [
         SpeciesInline,
