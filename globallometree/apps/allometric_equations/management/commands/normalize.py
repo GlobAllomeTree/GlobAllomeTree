@@ -1,6 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.core.exceptions import ObjectDoesNotExist
-from optparse import make_option
+from django.core.management.base import BaseCommand
 from globallometree.apps.data.models import TreeEquation
 from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
 from globallometree.apps.allometric_equations.models import AllometricEquation
@@ -175,7 +173,7 @@ class Command(BaseCommand):
 
             try: 
                 new_equation = AllometricEquation.objects.get(IDequation=orig_equation.IDequation)
-            except ObjectDoesNotExist:
+            except AllometricEquation.DoesNotExist:
                 new_equation = AllometricEquation(
                     ID=orig_equation.ID,
                     IDequation=orig_equation.IDequation,
