@@ -152,8 +152,8 @@ class Command(BaseCommand):
                 if location_group_created:
                     newLocationGroupsInserted = newLocationGroupsInserted + 1
 
-            locationsInserted = locationsInserted + 1
             location_group.locations.add(location)
+            locationsInserted = locationsInserted + 1
 
 ######################################## COMMON ##################################################
 
