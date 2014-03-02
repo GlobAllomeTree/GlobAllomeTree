@@ -25,7 +25,9 @@ class AllometricEquationSubmission(models.Model):
 
 
 class AllometricEquation(models.Model):
-
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True, verbose_name="Last modified")
+    
     ID = models.IntegerField(primary_key=True)
     IDequation = models.IntegerField(null=True, blank=True) 
 
@@ -105,8 +107,8 @@ class AllometricEquation(models.Model):
         AllometricEquationEcosystem, blank=True, null=True
     )
 
-    species = models.ForeignKey('taxonomy.SpeciesGroup')
-    location = models.ForeignKey('locations.LocationGroup')
+    species_group = models.ForeignKey('taxonomy.SpeciesGroup',null=True, blank=True)
+    location_group = models.ForeignKey('locations.LocationGroup',null=True, blank=True)
 
     ID_REF = models.IntegerField(null=True, blank=True) 
     reference = models.ForeignKey(

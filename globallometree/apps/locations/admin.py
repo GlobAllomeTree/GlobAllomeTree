@@ -1,9 +1,9 @@
 from django.contrib import admin
 from globallometree.apps.locations.models import Continent, Country, Location, LocationGroup
+from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 
 class ContinentAdmin(admin.ModelAdmin):
     list_display = ('name', )
-    list_filter  = ('name', )
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -12,12 +12,31 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class LocationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'biome_fao', 'country', 'modified')
+    list_filter  = ('biome_fao','country')
+
+
+class BiomeFAOAdmin(admin.ModelAdmin):
     list_display = ('name', )
-    list_filter  = ('country', 'biome_fao', 'biome_udvardy', 'biome_wwf', 'biome_bailey', 'biome_holdridge')
 
+class BiomeUdvardyAdmin(admin.ModelAdmin):
+    list_display = ('name', )
 
+class BiomeWWFAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+
+class DivisionBaileyAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+
+class BiomeHoldridgeAdmin(admin.ModelAdmin):
+    list_display = ('name', )    
 
 
 admin.site.register(Continent, ContinentAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(BiomeFAO, BiomeFAOAdmin)
+admin.site.register(BiomeUdvardy, BiomeUdvardyAdmin)
+admin.site.register(BiomeWWF, BiomeWWFAdmin)
+admin.site.register(DivisionBailey, DivisionBaileyAdmin)
+admin.site.register(BiomeHoldridge, BiomeHoldridgeAdmin)

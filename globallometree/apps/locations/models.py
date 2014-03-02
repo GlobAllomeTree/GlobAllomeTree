@@ -38,12 +38,20 @@ class BiomeFAO(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Biome FAO'
+        verbose_name_plural = 'Biome FAO List'
+
 
 class BiomeUdvardy(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Biome Udvardy'
+        verbose_name_plural = 'Biome Udvardy List'
 
 
 class BiomeWWF(models.Model):
@@ -52,12 +60,20 @@ class BiomeWWF(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Biome WWF'
+        verbose_name_plural = 'Biome WWF List'
 
-class BiomeBailey(models.Model):
+
+class DivisionBailey(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Division Bailey'
+        verbose_name_plural = 'Division Bailey List'
 
 
 class BiomeHoldridge(models.Model):
@@ -66,14 +82,23 @@ class BiomeHoldridge(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Biome Holdridge'
+        verbose_name_plural = 'Biome Holdridge List'
 
-class LocationGroup(models.Model):
+
+class LocationGroup(models.Model):    
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     group_name = models.CharField(max_length=255, null=True, blank=True)
-    original_location_id = models.IntegerField(null=True, blank=True, help_text="The original location group id from the global import")
+    location = models.ManyToManyField('locations.Location', verbose_name="List of Locations", blank=True, null=True)
+    original_Group_Location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")
+
 
 
 class Location(models.Model):
-    location_group = models.ForeignKey(LocationGroup, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     Latitude = models.DecimalField(
         null=True, blank=True, max_digits=12, decimal_places=9
@@ -85,8 +110,10 @@ class Location(models.Model):
     biome_fao = models.ForeignKey(BiomeFAO, blank=True, null=True)
     biome_udvardy = models.ForeignKey(BiomeUdvardy, blank=True, null=True)
     biome_wwf = models.ForeignKey(BiomeWWF, blank=True, null=True)
-    biome_bailey = models.ForeignKey(BiomeBailey, blank=True, null=True)
+    division_bailey = models.ForeignKey(DivisionBailey, blank=True, null=True)
     biome_holdridge = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
+    original_ID_Location = models.IntegerField(null=True, blank=True, help_text="The original ID_Location from the global import")
+
 
     def __unicode__(self):
         return self.name

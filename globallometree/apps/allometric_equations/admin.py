@@ -15,7 +15,7 @@ class AllometricEquationSubmissionAdmin(admin.ModelAdmin):
 
 
 class AllometricEquationAdmin(admin.ModelAdmin):
-    list_display = ('ID', 'data_submission',  'Equation')
+    list_display = ('ID', 'Equation','data_submission', 'modified')
     ordering = ("ID",)
     search_fields  = ('ID',)
     list_filter = ('data_submission',)
