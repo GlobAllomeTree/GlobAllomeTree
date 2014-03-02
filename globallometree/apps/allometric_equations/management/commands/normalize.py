@@ -149,7 +149,7 @@ class Command(BaseCommand):
             if orig_equation.Contributor is None:
                 contributor = None
             else:
-                contributor = Institution.objects.get_or_create(name=orig_equation.Population)[0]
+                contributor = Institution.objects.get_or_create(name=orig_equation.Contributor)[0]
 
             if orig_equation.Reference is None:
                 reference = None
