@@ -18,8 +18,30 @@
       ]
     },
     "filter": {
-      "list": {},
-      "ids": []
+      "list": {
+        "0": {
+          "type": "terms",
+          "field": "Genus_exact",
+          "value": "pinus",
+          "mandate": "must",
+          "active": true,
+          "alias": "",
+          "id": 0
+        },
+        "1": {
+          "type": "terms",
+          "field": "Biome_FAO",
+          "value": "coniferous",
+          "mandate": "must",
+          "active": true,
+          "alias": "",
+          "id": 1
+        }
+      },
+      "ids": [
+        0,
+        1
+      ]
     }
   },
   "rows": [
@@ -37,7 +59,9 @@
           "type": "terms",
           "loadingEditor": false,
           "field": "Genus_exact",
-          "exclude": [],
+          "exclude": [
+            "unknown"
+          ],
           "missing": false,
           "other": true,
           "size": 15,
@@ -70,7 +94,9 @@
           "type": "terms",
           "loadingEditor": false,
           "field": "Species",
-          "exclude": [],
+          "exclude": [
+            "unknown"
+          ],
           "missing": false,
           "other": true,
           "size": 15,
@@ -95,6 +121,41 @@
           "tstat": "total",
           "valuefield": "",
           "title": "Species"
+        },
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "Biome_FAO",
+          "exclude": [
+            "unknown"
+          ],
+          "missing": false,
+          "other": true,
+          "size": 15,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "pie",
+          "counter_pos": "none",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "Biome"
         }
       ],
       "notice": false
@@ -195,7 +256,6 @@
       "enable": true
     }
   ],
-  "nav": [
-  ],
+  "nav": [],
   "refresh": false
 }
