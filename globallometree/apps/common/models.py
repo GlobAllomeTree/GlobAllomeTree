@@ -8,7 +8,7 @@ class DataReference(models.Model):
     reference = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
-        return u'%s - %s'(self.year, self.author)
+        return u'%s - %s' % (self.year, self.author)
 
 
 class Institution(models.Model):
