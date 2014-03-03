@@ -20,13 +20,13 @@ class Command(BaseCommand):
             limit = 0
 
         n = 0
-        equationsInsterted = 0
-        speciesInserted = 0
-        originalSpeciesGroupsInserted = 0
-        newSpeciesGroupsInserted = 0
-        locationsInserted = 0
-        originalLocationGroupsInserted = 0
-        newLocationGroupsInserted = 0
+        equations_insterted = 0
+        species_inserted = 0
+        original_species_groups_inserted = 0
+        new_species_groups_inserted = 0
+        locations_inserted = 0
+        original_location_groups_inserted = 0
+        new_location_groups_inserted = 0
 
         for orig_equation in TreeEquation.objects.all().iterator():
             if limit and n > limit: break;
@@ -54,7 +54,7 @@ class Command(BaseCommand):
                     original_ID_Species=orig_equation.ID_Species
                 )
                 if species_created:
-                    speciesInserted = speciesInserted + 1
+                    species_inserted = species_inserted + 1
 
             if species:
                 if orig_equation.Group_Species and orig_equation.ID_Group:
@@ -63,13 +63,13 @@ class Command(BaseCommand):
                         name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
                     )
                     if species_group_created:
-                        originalSpeciesGroupsInserted = originalSpeciesGroupsInserted + 1
+                        original_species_groups_inserted = original_species_groups_inserted + 1
                 else:
                     species_group, species_group_created = SpeciesGroup.objects.get_or_create(
-                        name="Auto Created Group for equation ID %s" % orig_equation.ID
+                        name="Auto Created Group for equation ID %s" % orig_equation.IDequation
                     )
                     if species_group_created:
-                        newSpeciesGroupsInserted = newSpeciesGroupsInserted + 1
+                        new_species_groups_inserted = new_species_groups_inserted + 1
                 
                 #It appears some species may contain 'None' species, which don't get explicitly added
                 species_group.species.add(species)
@@ -139,7 +139,7 @@ class Command(BaseCommand):
                 country=country
             )
             if location_created:
-                locationsInserted = locationsInserted + 1
+                locations_inserted = locations_inserted + 1
 
             if orig_equation.Group_Location:
                 location_group, location_group_created = LocationGroup.objects.get_or_create(
@@ -147,13 +147,13 @@ class Command(BaseCommand):
                     name="Auto Created Group for original Group_Location %s" % orig_equation.Group_Location
                 )
                 if location_group_created:
-                    originalLocationGroupsInserted = originalLocationGroupsInserted + 1
+                    original_location_groups_inserted = original_location_groups_inserted + 1
             else:   
                 location_group, location_group_created = LocationGroup.objects.get_or_create(
-                    name="Auto Created Group for Equation %s" % orig_equation.ID
+                    name="Auto Created Group for Equation %s" % orig_equation.IDequation
                 )
                 if location_group_created:
-                    newLocationGroupsInserted = newLocationGroupsInserted + 1
+                    new_location_groups_inserted = new_location_groups_inserted + 1
 
             location_group.locations.add(location)
 
@@ -243,17 +243,17 @@ class Command(BaseCommand):
                     location_group=location_group
                 )
                 new_equation.save()
-                equationsInsterted = equationsInsterted + 1
+                equations_insterted = equations_insterted + 1
 
         self.stdout.write(
             'Inserted: {0} AllometricEquation, {1} Species, '
             '{2} original SpeciesGroup, {3} new SpeciesGroup, {4} Locations, '
             '{5} original LocationGroup, {6} new LocationGroup\n' 
             .format(
-                equationsInsterted, speciesInserted,
-                originalSpeciesGroupsInserted, newSpeciesGroupsInserted,
-                locationsInserted, originalLocationGroupsInserted,
-                newLocationGroupsInserted
+                equations_insterted, species_inserted,
+                original_species_groups_inserted, new_species_groups_inserted,
+                locations_inserted, original_location_groups_inserted,
+                new_location_groups_inserted
             )
         )
 
