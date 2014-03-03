@@ -95,6 +95,10 @@ class LocationGroup(models.Model):
     original_Group_Location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")
 
 
+    def __unicode__(self):
+        return self.name
+
+        
 class Location(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

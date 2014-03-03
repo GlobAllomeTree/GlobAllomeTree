@@ -47,3 +47,8 @@ class SpeciesGroup(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True, verbose_name="Group Name")
     species = models.ManyToManyField('taxonomy.Species', verbose_name="List of Species", blank=True, null=True)
     original_ID_Group = models.IntegerField(null=True, blank=True, help_text="The original ID_Group from the global import")
+
+    def __unicode__(self):
+        return self.name
+
+        
