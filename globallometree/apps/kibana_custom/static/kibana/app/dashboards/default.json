@@ -4,7 +4,7 @@
     "query": {
       "list": {
         "0": {
-          "query": "*",
+          "query": "",
           "alias": "",
           "color": "#7EB26D",
           "id": 0,
@@ -18,30 +18,8 @@
       ]
     },
     "filter": {
-      "list": {
-        "0": {
-          "type": "terms",
-          "field": "Genus_exact",
-          "value": "pinus",
-          "mandate": "must",
-          "active": true,
-          "alias": "",
-          "id": 0
-        },
-        "1": {
-          "type": "terms",
-          "field": "Biome_FAO",
-          "value": "coniferous",
-          "mandate": "must",
-          "active": true,
-          "alias": "",
-          "id": 1
-        }
-      },
-      "ids": [
-        0,
-        1
-      ]
+      "list": {},
+      "ids": []
     }
   },
   "rows": [
@@ -245,7 +223,10 @@
       "notice": false,
       "query": "*",
       "pinned": true,
-      "history": [],
+      "history": [
+        "",
+        "Kiyono"
+      ],
       "remember": 10,
       "enable": true
     },
