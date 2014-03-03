@@ -8,7 +8,10 @@ class DataReference(models.Model):
     reference = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.year + ' ' + self.author
+        if self.year:
+            return self.year + ' ' + self.author
+        else:
+            return self.author
 
 
 class Institution(models.Model):
