@@ -102,16 +102,17 @@ django-collectstatic:
 django-rebuild-index:
 	$(MAKE) django-manage COMMAND="rebuild_index --noinput"
 
-
-#Graphing
+#Graphing	
 graph-all-models:
 	$(MAKE) django-manage COMMAND="graph_models -a -o all_models.png"
-	@echo "Image of all models created: all_models.png"
-
 
 graph-data-models:
-	$(MAKE) django-manage COMMAND="graph_models taxonomy allometric_equations locations common -o data_models.png"
-	@echo "Image of data models created: data_models.png"
+	$(MAKE) django-manage COMMAND="graph_models taxonomy allometric_equations wood_densities locations common -x modified,created -o data_models_phase_2.png"
+
+graph-p1-data-models:
+	$(MAKE) django-manage COMMAND="graph_models data -o data_models_phase_1.png"
+
+
 
 ############################################# ELASTICSEARCH  #############################################
 

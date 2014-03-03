@@ -151,8 +151,10 @@ INSTALLED_APPS = (
     'globallometree.apps.taxonomy',
     'globallometree.apps.locations',
     'globallometree.apps.allometric_equations',
+    'globallometree.apps.wood_densities',
     'globallometree.apps.bootstrap_3_theme', #our app must got first here for overrides
     'bootstrap3', 
+
     # 'globallometree.apps.original_theme',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
