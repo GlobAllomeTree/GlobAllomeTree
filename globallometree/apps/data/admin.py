@@ -263,6 +263,6 @@ class DataSubmissionAdmin(admin.ModelAdmin):
         return render_to_response('data/template.admin.run_import_confirm.html', context,
                                         context_instance=RequestContext(request))
 
-admin.site.register(models.Country)
-admin.site.register(models.DataSubmission, DataSubmissionAdmin)
-admin.site.register(models.TreeEquation, TreeEquationAdmin)
+# admin.site.register(models.Country)
+# admin.site.register(models.DataSubmission, DataSubmissionAdmin)
+# admin.site.register(models.TreeEquation, TreeEquationAdmin)

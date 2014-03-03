@@ -150,7 +150,7 @@ class Command(BaseCommand):
                     originalLocationGroupsInserted = originalLocationGroupsInserted + 1
             else:   
                 location_group, location_group_created = LocationGroup.objects.get_or_create(
-                    name="Auto Created Group for Equation %s" % orig_equation.ID
+                    name="Auto Created Group for equation ID %s" % orig_equation.ID
                 )
                 if location_group_created:
                     newLocationGroupsInserted = newLocationGroupsInserted + 1

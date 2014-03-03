@@ -139,6 +139,10 @@ class AllometricEquation(models.Model):
     def get_absolute_url(self):
         return '/data/equation/%s' % self.ID
 
+
+    def unicode(self):
+        return 'Equation %s' % self.ID
+
     class Meta:
         verbose_name ='Allometric Equation'
         verbose_name_plural = 'Allometric Equations'
