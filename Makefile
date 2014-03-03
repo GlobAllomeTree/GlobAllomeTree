@@ -265,7 +265,7 @@ add-postgres-repo:
 
 add-docker-repo:
 	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-	sudo "echo deb http://get.docker.io/ubuntu docker main" > /tmp/docker.list
+	echo "deb http://get.docker.io/ubuntu docker main" > /tmp/docker.list
 	sudo cp /tmp/docker.list /etc/apt/sources.list.d/
 
 build-postgresql-local:
