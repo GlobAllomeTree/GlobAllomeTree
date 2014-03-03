@@ -26,9 +26,7 @@ init: init-postgresql
 clean: clean-elasticsearch clean-postgresql clean-web-server	
 
 run: clean run-elasticsearch run-postgresql run-web-server
-	@echo
-	@echo "The server should now be running at http:/127.0.0.1:8082/"
-	@echo
+	docker ps
 
 stop: stop-web-server stop-elasticsearch stop-postgresql
 
@@ -57,8 +55,6 @@ build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
 
 
-
-
 ########################################### WEB SERVER #########################################
 
 
@@ -71,7 +67,7 @@ build-web-server:
 
 run-web-server: clean-web-server
 	#Run the webserver on port 8082
-	docker run -d -name web_server -p 8082:80 ${WEB_SERVER_BASE_ENV} web_server_image
+	docker run -d -name web_server -p 80:80 ${WEB_SERVER_BASE_ENV} web_server_image
 
 stop-web-server:
 	docker stop web_server
