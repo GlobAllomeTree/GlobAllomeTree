@@ -108,7 +108,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
 
-
+    #django add ons
+    'django_extensions',
     'south',
     'crispy_forms',
 
@@ -143,14 +144,19 @@ INSTALLED_APPS = (
     # 'cms.plugins.twitter',
 
     # project apps
+    'globallometree.apps.common',
     'globallometree.apps.accounts',
     'globallometree.apps.journals',
     'globallometree.apps.data',
+    'globallometree.apps.taxonomy',
+    'globallometree.apps.locations',
+    'globallometree.apps.allometric_equations',
+    'globallometree.apps.wood_densities',
+    'globallometree.apps.bootstrap_3_theme', #our app must got first here for overrides
+    'bootstrap3', 
 
-    'globallometree.apps.bootstrap_3_theme',
-    'bootstrap3',
     # 'globallometree.apps.original_theme',
-    'globallometree.apps.kibana_custom',
+    'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
     'globallometree.plugins.linkbox',
 )
@@ -171,7 +177,6 @@ STATIC_URL = '/static/'
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
+
 from settings_search import *
 from settings_local import *
-
-

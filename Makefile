@@ -26,9 +26,7 @@ init: init-postgresql
 clean: clean-elasticsearch clean-postgresql clean-web-server	
 
 run: clean run-elasticsearch run-postgresql run-web-server
-	@echo
-	@echo "The server should now be running at http:/127.0.0.1:8082/"
-	@echo
+	docker ps
 
 stop: stop-web-server stop-elasticsearch stop-postgresql
 
@@ -57,8 +55,6 @@ build-ubuntu-base:
 	docker build -t ubuntu_base github.com/GlobAllomeTree/docker-ubuntu-base
 
 
-
-
 ########################################### WEB SERVER #########################################
 
 
@@ -71,7 +67,7 @@ build-web-server:
 
 run-web-server: clean-web-server
 	#Run the webserver on port 8082
-	docker run -d -name web_server -p 8082:80 ${WEB_SERVER_BASE_ENV} web_server_image
+	docker run -d -name web_server -p 80:80 ${WEB_SERVER_BASE_ENV} web_server_image
 
 stop-web-server:
 	docker stop web_server
@@ -101,6 +97,18 @@ django-collectstatic:
 
 django-rebuild-index:
 	$(MAKE) django-manage COMMAND="rebuild_index --noinput"
+
+#Graphing	
+graph-all-models:
+	$(MAKE) django-manage COMMAND="graph_models -a -o all_models.png"
+
+graph-data-models:
+	$(MAKE) django-manage COMMAND="graph_models taxonomy allometric_equations wood_densities locations common -x modified,created -o data_models_phase_2.png"
+
+graph-p1-data-models:
+	$(MAKE) django-manage COMMAND="graph_models data -o data_models_phase_1.png"
+
+
 
 ############################################# ELASTICSEARCH  #############################################
 
@@ -182,7 +190,8 @@ dump-db:
 #This does a full reset of postgres from a dump file
 #To use a different dump file, override the DUMP_FILE variable when calling Make
 #ex) make reset-postgresql DUMP_FILE=../globallometree.import.sql.2.gz
-reset-postgresql: clean-postgresql delete-postgres-data-directory init-postgresql
+reset-postgresql: clean-postgresql delete-postgres-data-directory init-postgresql 
+	$(MAKE) run-postgresql
 
 get-postgresql-ip:
 	@echo $(shell TAG=postgresql_server_image ./server/ip_for.sh)
