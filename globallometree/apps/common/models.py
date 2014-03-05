@@ -6,12 +6,10 @@ class DataReference(models.Model):
     author = models.CharField(max_length=200, null=True, blank=True)
     year = models.CharField(max_length=12, null=True, blank=True)
     reference = models.TextField(null=True, blank=True)
+    # TODO: add original ID_REF
 
     def __unicode__(self):
-        if self.year:
-            return self.year + ' ' + self.author
-        else:
-            return self.author
+        return ('' if self.year is None else self.year + ' ') + self.author
 
 
 class Institution(models.Model):
