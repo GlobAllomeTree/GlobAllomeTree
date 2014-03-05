@@ -9,7 +9,7 @@ class DataReference(models.Model):
     # TODO: add original ID_REF
 
     def __unicode__(self):
-        return ('' if self.year is None else self.year + ' ') + self.author
+        return unicode('' if self.year is None else self.year + ' ') + self.author)
 
 
 class Institution(models.Model):

@@ -7,11 +7,15 @@ from globallometree.apps.common.models import DataReference, Institution
 class AllometricEquationPopulation(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
 
 # TODO: remove the AllometricEquation prefix
 class AllometricEquationEcosystem(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
 
 class AllometricEquationSubmission(models.Model):
     submitted_file = models.FileField(upload_to='data_submissions') # TODO: check if is better a more specific folder
@@ -134,6 +138,10 @@ class AllometricEquation(models.Model):
 
     def get_absolute_url(self):
         return '/data/equation/%s' % self.ID
+
+
+    def unicode(self):
+        return 'Equation %s' % self.ID
 
     class Meta:
         verbose_name ='Allometric Equation'

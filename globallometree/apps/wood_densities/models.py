@@ -4,6 +4,7 @@ from globallometree.apps.common.models import DataReference, Institution
 
 
 class WoodDensity(models.Model):
+    ID = models.IntegerField(primary_key=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True, verbose_name="Last modified")
 
@@ -27,6 +28,9 @@ class WoodDensity(models.Model):
     def get_absolute_url(self):
         return '/data/wood_density/%s' % self.ID
 
+    def unicode(self):
+        return 'Wood Density %s' % self.ID
+
     class Meta:
-        verbose_name ='Wood Density'
+        verbose_name = 'Wood Density'
         verbose_name_plural = 'Wood Densities'

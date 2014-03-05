@@ -246,7 +246,7 @@ dock-attach:
 #   ../globallometree
 #
 
-install-utilities: add-postgres-repo add-docker-repo apt-update
+install-utilities: add-postgres-repo apt-update
 	sudo apt-get install -y postgresql-client-9.3 git 
 
 apt-update:
@@ -264,18 +264,18 @@ create-pip-cache-dir:
 run-pip-cache:
 	python -m pypicache.main  --port 8090 /opt/cache/pip
 
-install-docker: add-docker-repo
-	sudo apt-get install lxc-docker
+# install-docker: add-docker-repo
+# 	sudo apt-get install lxc-docker
 
 add-postgres-repo:
 	echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /tmp/pgdg.list
 	sudo cp /tmp/pgdg.list /etc/apt/sources.list.d/
 	wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
-add-docker-repo:
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-	sudo "echo deb http://get.docker.io/ubuntu docker main" > /tmp/docker.list
-	sudo cp /tmp/docker.list /etc/apt/sources.list.d/
+# add-docker-repo:
+# 	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+# 	echo "deb http://get.docker.io/ubuntu docker main" > /tmp/docker.list
+# 	sudo cp /tmp/docker.list /etc/apt/sources.list.d/
 
 build-postgresql-local:
 	docker build -t postgresql_server_image ../docker-postgresql

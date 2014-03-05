@@ -4,7 +4,7 @@
     "query": {
       "list": {
         "0": {
-          "query": "*",
+          "query": "",
           "alias": "",
           "color": "#7EB26D",
           "id": 0,
@@ -37,7 +37,9 @@
           "type": "terms",
           "loadingEditor": false,
           "field": "Genus_exact",
-          "exclude": [],
+          "exclude": [
+            "unknown"
+          ],
           "missing": false,
           "other": true,
           "size": 15,
@@ -70,7 +72,9 @@
           "type": "terms",
           "loadingEditor": false,
           "field": "Species",
-          "exclude": [],
+          "exclude": [
+            "unknown"
+          ],
           "missing": false,
           "other": true,
           "size": 15,
@@ -95,6 +99,41 @@
           "tstat": "total",
           "valuefield": "",
           "title": "Species"
+        },
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "Biome_FAO",
+          "exclude": [
+            "unknown"
+          ],
+          "missing": false,
+          "other": true,
+          "size": 15,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "pie",
+          "counter_pos": "none",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "Biome"
         }
       ],
       "notice": false
@@ -184,7 +223,10 @@
       "notice": false,
       "query": "*",
       "pinned": true,
-      "history": [],
+      "history": [
+        "",
+        "Kiyono"
+      ],
       "remember": 10,
       "enable": true
     },
@@ -195,7 +237,6 @@
       "enable": true
     }
   ],
-  "nav": [
-  ],
+  "nav": [],
   "refresh": false
 }
