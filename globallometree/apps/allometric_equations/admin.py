@@ -9,8 +9,7 @@ from decimal import Decimal
 from decimal import getcontext
 getcontext().prec = 10
 from globallometree.apps.allometric_equations.models import (
-    AllometricEquation, AllometricEquationPopulation,
-    AllometricEquationEcosystem, AllometricEquationSubmission
+    AllometricEquation, Population, Ecosystem, Submission
 )
 from globallometree.apps.common.models import Institution, DataReference
 from globallometree.apps.taxonomy.models import (
@@ -21,15 +20,15 @@ from globallometree.apps.locations.models import (
 )
 
 
-class AllometricEquationPopulationAdmin(admin.ModelAdmin):
+class PopulationAdmin(admin.ModelAdmin):
     list_display = ('name', )
 
 
-class AllometricEquationEcosystemAdmin(admin.ModelAdmin):
+class EcosystemAdmin(admin.ModelAdmin):
     list_display = ('name', )
 
 
-class AllometricEquationSubmissionAdmin(admin.ModelAdmin):
+class SubmissionAdmin(admin.ModelAdmin):
     list_display = ('user', 'submitted_file', 'submitted_notes', 'imported')
     list_filter = ['user', 'imported']
 
@@ -263,7 +262,7 @@ class AllometricEquationAdmin(admin.ModelAdmin):
     list_filter = ('data_submission',)
 
 
-admin.site.register(AllometricEquationPopulation, AllometricEquationPopulationAdmin)
-admin.site.register(AllometricEquationEcosystem, AllometricEquationEcosystemAdmin)
-admin.site.register(AllometricEquationSubmission, AllometricEquationSubmissionAdmin)
+admin.site.register(Population, PopulationAdmin)
+admin.site.register(Ecosystem, EcosystemAdmin)
+admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(AllometricEquation, AllometricEquationAdmin)
