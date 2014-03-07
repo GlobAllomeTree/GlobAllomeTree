@@ -295,19 +295,19 @@ git-pull-all:
 
 git-push-all:
 	@echo
-	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput sgr0
 	git push
 	
 	@echo
-	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput sgr0
 	cd ../docker-postgresql && git push
 	
 	@echo
-	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput sgr0
 	cd ../docker-elasticsearch && git push
 	
 	@echo
-	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput sgr0
 	cd ../docker-ubuntu-base && git push
 
 git-status-all:
