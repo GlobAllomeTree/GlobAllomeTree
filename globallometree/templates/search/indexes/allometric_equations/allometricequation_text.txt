@@ -1,0 +1,4 @@
+
+{{object.ecosystem}}
+{{object.population }}
+{{object.Output}}
