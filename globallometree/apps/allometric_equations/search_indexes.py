@@ -4,7 +4,7 @@ from .models import AllometricEquation
 class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     #Full Text Search
     text = indexes.CharField(document=True, use_template=True)
-    
+
     id = indexes.IntegerField(model_attr='ID')
 
     Population = indexes.CharField(model_attr='population__name', null=True)
@@ -15,12 +15,11 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
 
     Country = indexes.MultiValueField()
     Biome_FAO = indexes.MultiValueField()
-    #indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True)
-    # Biome_UDVARDY = indexes.CharField(model_attr='location_group__locations__biome_udvardy__name', null=True)
-    # Biome_WWF = indexes.CharField(model_attr='location_group__locations__biome_wwf__name', null=True) 
-    # Division_BAILEY = indexes.CharField(model_attr='location_group__locations__division_bailey__name', null=True) 
-    # Biome_HOLDRIDGE = indexes.CharField(model_attr='location_group__locations__biome_holdridge__name', null=True)
-     
+    Biome_UDVARDY = indexes.MultiValueField()
+    Biome_WWF = indexes.MultiValueField()
+    Division_BAILEY = indexes.MultiValueField()
+    Biome_HOLDRIDGE = indexes.MultiValueField()
+
     X = indexes.CharField(model_attr='X', null=True)
     Unit_X = indexes.CharField(model_attr='Unit_X', null=True)
     Z = indexes.CharField(model_attr='Z', null=True)
@@ -31,15 +30,15 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     Unit_U = indexes.CharField(model_attr='Unit_U', null=True) 
     V = indexes.CharField(model_attr='V', null=True)
     Unit_V = indexes.CharField(model_attr='Unit_V', null=True)
-    
+
     Min_X = indexes.FloatField(model_attr='Min_X',null=True)
     Max_X = indexes.FloatField(model_attr='Max_X',null=True)
     Min_Z = indexes.FloatField(model_attr='Min_Z',null=True)
     Max_Z = indexes.FloatField(model_attr='Max_Z',null=True)
-    
+
     Output = indexes.CharField(model_attr='Output', null=True)
     Unit_Y = indexes.CharField(model_attr='Unit_Y', null=True)
-    
+
     B = indexes.BooleanField(model_attr='B')
     Bd = indexes.BooleanField(model_attr='Bd')
     Bg = indexes.BooleanField(model_attr='Bg')
@@ -51,20 +50,20 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     S = indexes.BooleanField(model_attr='S')
     T = indexes.BooleanField(model_attr='T')
     F = indexes.BooleanField(model_attr='F')
-    
+
     Equation = indexes.NgramField(model_attr='Equation', null=True)
-    
+
     Author = indexes.CharField(model_attr='reference__author', null=True, indexed=True, faceted=True)
     Year = indexes.CharField(model_attr='reference__year', null=True)
     Reference = indexes.CharField(model_attr='reference__reference', null=True, faceted=True) 
-    
+
     #ordering
     Author_order = indexes.CharField(model_attr='reference__author', null=True, indexed=False)
     # Biome_FAO_order = indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True,  indexed=False)
     # Genus_order = indexes.CharField(model_attr='species_group__species__genus__name', null=True, indexed=False)
     # Species_order = indexes.CharField(model_attr='species_group__species__name', null=True, indexed=False)
     Output_order = indexes.CharField(model_attr='Output', null=True, indexed=False)
-#    Country_order = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True, indexed=False)
+    # Country_order = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True, indexed=False)
 
     #autocomplete lookups
     # Genus_auto = indexes.EdgeNgramField(model_attr='species_group__species__genus__name', null=True)
@@ -133,4 +132,25 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
         return [('' if biome_fao is None else biome_fao.name) for biome_fao in [
             locations.biome_fao for locations in obj.locations_group.locations.all()
         ]]
-        
+
+    def prepare_Biome_UDVARDY(self, obj):
+        return [('' if biome_udvardy is None else biome_udvardy.name) for biome_udvardy in [
+            locations.biome_udvardy for locations in obj.locations_group.locations.all()
+        ]]
+    
+    def prepare_Biome_WWF(self, obj):
+        return [('' if biome_wwf is None else biome_wwf.name) for biome_wwf in [
+            locations.biome_wwf for locations in obj.locations_group.locations.all()
+        ]]
+
+
+    def prepare_Division_BAILEY(self, obj):
+        return [('' if division_bailey is None else division_bailey.name) for division_bailey in [
+            locations.division_bailey for locations in obj.locations_group.locations.all()
+        ]]
+
+
+    def prepare_Biome_HOLDRIDGE(self, obj):
+        return [('' if biome_holdridge is None else biome_holdridge.name) for biome_holdridge in [
+            locations.biome_holdridge for locations in obj.locations_group.locations.all()
+        ]]
