@@ -9,7 +9,8 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
 
     Population = indexes.CharField(model_attr='population__name', null=True)
     Ecosystem = indexes.CharField(model_attr='ecosystem__name', null=True)
-    # Genus = indexes.CharField(model_attr='species_group__species__genus__name', null=True, faceted=True)
+    Genus = indexes.MultiValueField()
+    #CharField(model_attr='species_group__species__genus__name', null=True, faceted=True)
     Species = indexes.MultiValueField()
     # Country = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True)
     
@@ -115,4 +116,19 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.population.name
 
     def prepare_Species(self, obj):
-        return [(species.name) for species in obj.species_group.species.all()]
+        return [species.name for species in obj.species_group.species.all()]
+
+    def prepare_Genus(self, obj):
+        return [('' if genus is None else genus.name) for genus in [
+            species.genus for species in obj.species_group.species.all()
+        ]]
+
+
+    # def prepare_location_group_locations_country_common_name(self, obj):
+    #     if obj.location_group is None:
+    #         return ''
+    #     else:
+    #         return [
+    #             ('' if location.country is None else location.country.common_name)
+    #             for location in obj.location_group.locations.all()
+    #         ]
