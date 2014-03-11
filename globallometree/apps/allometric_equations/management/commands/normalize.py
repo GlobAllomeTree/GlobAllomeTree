@@ -4,7 +4,7 @@ from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesG
 from globallometree.apps.allometric_equations.models import AllometricEquation
 from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup
-from globallometree.apps.allometric_equations.models import AllometricEquationPopulation, AllometricEquationEcosystem
+from globallometree.apps.allometric_equations.models import Population, Ecosystem
 from globallometree.apps.common.models import DataReference, Institution
 
 class Command(BaseCommand):
@@ -179,12 +179,12 @@ class Command(BaseCommand):
             if orig_equation.Population is None:
                 population = None
             else:
-                population = AllometricEquationPopulation.objects.get_or_create(name=orig_equation.Population)[0]
+                population = Population.objects.get_or_create(name=orig_equation.Population)[0]
 
             if orig_equation.Ecosystem is None:
                 ecosystem = None
             else:
-                ecosystem = AllometricEquationEcosystem.objects.get_or_create(name=orig_equation.Ecosystem)[0]
+                ecosystem = Ecosystem.objects.get_or_create(name=orig_equation.Ecosystem)[0]
 
             try: 
                 new_equation = AllometricEquation.objects.get(IDequation=orig_equation.IDequation)

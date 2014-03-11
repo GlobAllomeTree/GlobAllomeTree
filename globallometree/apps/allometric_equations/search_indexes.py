@@ -9,15 +9,15 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
 
     Population = indexes.CharField(model_attr='population__name', null=True)
     Ecosystem = indexes.CharField(model_attr='ecosystem__name', null=True)
-    Genus = indexes.CharField(model_attr='species_group__species__genus__name', null=True, faceted=True)
-    Species = indexes.CharField(model_attr='species_group__species__name', null=True, faceted=True)
-    Country = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True)
+    # Genus = indexes.CharField(model_attr='species_group__species__genus__name', null=True, faceted=True)
+    Species = indexes.MultiValueField()
+    # Country = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True)
     
-    Biome_FAO = indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True)
-    Biome_UDVARDY = indexes.CharField(model_attr='location_group__locations__biome_udvardy__name', null=True)
-    Biome_WWF = indexes.CharField(model_attr='location_group__locations__biome_wwf__name', null=True) 
-    Division_BAILEY = indexes.CharField(model_attr='location_group__locations__division_bailey__name', null=True) 
-    Biome_HOLDRIDGE = indexes.CharField(model_attr='location_group__locations__biome_holdridge__name', null=True)
+    # Biome_FAO = indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True)
+    # Biome_UDVARDY = indexes.CharField(model_attr='location_group__locations__biome_udvardy__name', null=True)
+    # Biome_WWF = indexes.CharField(model_attr='location_group__locations__biome_wwf__name', null=True) 
+    # Division_BAILEY = indexes.CharField(model_attr='location_group__locations__division_bailey__name', null=True) 
+    # Biome_HOLDRIDGE = indexes.CharField(model_attr='location_group__locations__biome_holdridge__name', null=True)
      
     X = indexes.CharField(model_attr='X', null=True)
     Unit_X = indexes.CharField(model_attr='Unit_X', null=True)
@@ -58,15 +58,15 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     
     #ordering
     Author_order = indexes.CharField(model_attr='reference__author', null=True, indexed=False)
-    Biome_FAO_order = indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True,  indexed=False)
-    Genus_order = indexes.CharField(model_attr='species_group__species__genus__name', null=True, indexed=False)
-    Species_order = indexes.CharField(model_attr='species_group__species__name', null=True, indexed=False)
+    # Biome_FAO_order = indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True,  indexed=False)
+    # Genus_order = indexes.CharField(model_attr='species_group__species__genus__name', null=True, indexed=False)
+    # Species_order = indexes.CharField(model_attr='species_group__species__name', null=True, indexed=False)
     Output_order = indexes.CharField(model_attr='Output', null=True, indexed=False)
 #    Country_order = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True, indexed=False)
 
     #autocomplete lookups
-    Genus_auto = indexes.EdgeNgramField(model_attr='species_group__species__genus__name', null=True)
-    Species_auto = indexes.EdgeNgramField(model_attr='species_group__species__name', null=True)
+    # Genus_auto = indexes.EdgeNgramField(model_attr='species_group__species__genus__name', null=True)
+    # Species_auto = indexes.EdgeNgramField(model_attr='species_group__species__name', null=True)
     Author_auto = indexes.EdgeNgramField(model_attr='reference__author', null=True)
     Reference_auto = indexes.EdgeNgramField(model_attr='reference__reference', null=True)
 
@@ -108,11 +108,11 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
         else:
             return obj.ecosystem.name
 
-    def prepare_location_group_locations_country_common_name(self, obj):
-        if obj.location_group is None:
+    def prepare_population_name(self, obj):
+        if obj.population is None:
             return ''
         else:
-            return [
-                ('' if location.country is None else location.country.common_name)
-                for location in obj.location_group.locations.all()
-            ]
+            return obj.population.name
+
+    def prepare_Species(self, obj):
+        return [(species.name) for species in obj.species_group.species.all()]
