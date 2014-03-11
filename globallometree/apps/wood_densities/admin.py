@@ -3,7 +3,7 @@ from globallometree.apps.wood_densities.models import WoodDensity
 
 
 class WoodDensityAdmin(admin.ModelAdmin):
-    raw_id_fields = ('species_group','location_group')
+    raw_id_fields = ('species_group','location_group','reference')
     list_display = ('ID', 'modified')
     ordering = ("ID",)
     search_fields  = ('ID',)
