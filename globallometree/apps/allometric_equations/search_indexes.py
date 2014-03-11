@@ -53,23 +53,35 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
 
     Equation = indexes.NgramField(model_attr='Equation', null=True)
 
-    Author = indexes.CharField(model_attr='reference__author', null=True, indexed=True, faceted=True)
+    Author = indexes.CharField(
+        model_attr='reference__author', null=True, indexed=True, faceted=True
+    )
     Year = indexes.CharField(model_attr='reference__year', null=True)
-    Reference = indexes.CharField(model_attr='reference__reference', null=True, faceted=True) 
+    Reference = indexes.CharField(
+        model_attr='reference__reference', null=True, faceted=True
+    ) 
 
     #ordering
-    Author_order = indexes.CharField(model_attr='reference__author', null=True, indexed=False)
+    Author_order = indexes.CharField(
+        model_attr='reference__author', null=True, indexed=False
+    )
     # Biome_FAO_order = indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True,  indexed=False)
     # Genus_order = indexes.CharField(model_attr='species_group__species__genus__name', null=True, indexed=False)
     # Species_order = indexes.CharField(model_attr='species_group__species__name', null=True, indexed=False)
-    Output_order = indexes.CharField(model_attr='Output', null=True, indexed=False)
+    Output_order = indexes.CharField(
+        model_attr='Output', null=True, indexed=False
+    )
     # Country_order = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True, indexed=False)
 
     #autocomplete lookups
     # Genus_auto = indexes.EdgeNgramField(model_attr='species_group__species__genus__name', null=True)
     # Species_auto = indexes.EdgeNgramField(model_attr='species_group__species__name', null=True)
-    Author_auto = indexes.EdgeNgramField(model_attr='reference__author', null=True)
-    Reference_auto = indexes.EdgeNgramField(model_attr='reference__reference', null=True)
+    Author_auto = indexes.EdgeNgramField(
+        model_attr='reference__author', null=True
+    )
+    Reference_auto = indexes.EdgeNgramField(
+        model_attr='reference__reference', null=True
+    )
 
     def _to_float(self, val):
         if val is None:
@@ -104,16 +116,10 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().objects.all()
 
     def prepare_ecosystem_name(self, obj):
-        if obj.ecosystem is None:
-            return ''
-        else:
-            return obj.ecosystem.name
+        return None if obj.ecosystem is None else obj.ecosystem.name
 
     def prepare_population_name(self, obj):
-        if obj.population is None:
-            return ''
-        else:
-            return obj.population.name
+        return None if obj.population is None else obj.population.name
 
     def prepare_Species(self, obj):
         return [species.name for species in obj.species_group.species.all()]
@@ -159,7 +165,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_Division_BAILEY(self, obj):
         return [
-                division_bailey.name for division_bailey in [
+            division_bailey.name for division_bailey in [
                     locations.division_bailey for locations in
                     obj.location_group.locations.all()
             ] if division_bailey is not None
