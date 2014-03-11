@@ -119,38 +119,41 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
         return [species.name for species in obj.species_group.species.all()]
 
     def prepare_Genus(self, obj):
-        return [('' if genus is None else genus.name) for genus in [
-            species.genus for species in obj.species_group.species.all()
-        ]]
+        return [
+            ('' if genus is None else genus.name) for genus in
+            [species.genus for species in obj.species_group.species.all()]
+        ]
 
     def prepare_Country(self, obj):
-        return [('' if country is None else country.name) for country in [
-            locations.country for locations in obj.locations_group.locations.all()
+        return [('' if country is None else country.common_name) for country in [
+                locations.country for locations in
+                obj.location_group.locations.all()
         ]]
 
     def prepare_Biome_FAO(self, obj):
         return [('' if biome_fao is None else biome_fao.name) for biome_fao in [
-            locations.biome_fao for locations in obj.locations_group.locations.all()
+                locations.biome_fao for locations in
+                obj.location_group.locations.all()
         ]]
 
     def prepare_Biome_UDVARDY(self, obj):
         return [('' if biome_udvardy is None else biome_udvardy.name) for biome_udvardy in [
-            locations.biome_udvardy for locations in obj.locations_group.locations.all()
+            locations.biome_udvardy for locations in obj.location_group.locations.all()
         ]]
     
     def prepare_Biome_WWF(self, obj):
         return [('' if biome_wwf is None else biome_wwf.name) for biome_wwf in [
-            locations.biome_wwf for locations in obj.locations_group.locations.all()
+            locations.biome_wwf for locations in obj.location_group.locations.all()
         ]]
 
 
     def prepare_Division_BAILEY(self, obj):
         return [('' if division_bailey is None else division_bailey.name) for division_bailey in [
-            locations.division_bailey for locations in obj.locations_group.locations.all()
+            locations.division_bailey for locations in obj.location_group.locations.all()
         ]]
 
 
     def prepare_Biome_HOLDRIDGE(self, obj):
         return [('' if biome_holdridge is None else biome_holdridge.name) for biome_holdridge in [
-            locations.biome_holdridge for locations in obj.locations_group.locations.all()
+            locations.biome_holdridge for locations in obj.location_group.locations.all()
         ]]
