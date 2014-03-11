@@ -9,12 +9,13 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
 
     Population = indexes.CharField(model_attr='population__name', null=True)
     Ecosystem = indexes.CharField(model_attr='ecosystem__name', null=True)
+
     Genus = indexes.MultiValueField()
-    #CharField(model_attr='species_group__species__genus__name', null=True, faceted=True)
     Species = indexes.MultiValueField()
-    # Country = indexes.CharField(model_attr='location_group__locations__country__common_name', null=True)
-    
-    # Biome_FAO = indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True)
+
+    Country = indexes.MultiValueField()
+    Biome_FAO = indexes.MultiValueField()
+    #indexes.CharField(model_attr='location_group__locations__biome_fao__name', null=True)
     # Biome_UDVARDY = indexes.CharField(model_attr='location_group__locations__biome_udvardy__name', null=True)
     # Biome_WWF = indexes.CharField(model_attr='location_group__locations__biome_wwf__name', null=True) 
     # Division_BAILEY = indexes.CharField(model_attr='location_group__locations__division_bailey__name', null=True) 
@@ -123,12 +124,13 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
             species.genus for species in obj.species_group.species.all()
         ]]
 
+    def prepare_Country(self, obj):
+        return [('' if country is None else country.name) for country in [
+            locations.country for locations in obj.locations_group.locations.all()
+        ]]
 
-    # def prepare_location_group_locations_country_common_name(self, obj):
-    #     if obj.location_group is None:
-    #         return ''
-    #     else:
-    #         return [
-    #             ('' if location.country is None else location.country.common_name)
-    #             for location in obj.location_group.locations.all()
-    #         ]
+    def prepare_Biome_FAO(self, obj):
+        return [('' if biome_fao is None else biome_fao.name) for biome_fao in [
+            locations.biome_fao for locations in obj.locations_group.locations.all()
+        ]]
+        
