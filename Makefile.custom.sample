@@ -1,0 +1,5 @@
+# Add custom vars in this file - rename it to Makefile.custom
+POSTGRESQL_USER = globallometree
+POSTGRESQL_PASS = globallometree_secret_pass
+POSTGRESQL_DB   = globallometree_db_name
+SECRET_KEY = super_secret_key_example

@@ -14,6 +14,9 @@ DUMP_FILE = ../globallometree.import.sql.gz
 PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 PROJECT_ROOT := $(shell pwd)
 
+#Create a file called Makefile.custom to overide the above settings on a per server basis
+-include Makefile.custom
+
 #This will get evaluated when used below
 WEB_SERVER_BASE_ENV := -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code -e SECRET_KEY=${SECRET_KEY}  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} 
 
