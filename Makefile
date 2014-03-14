@@ -7,7 +7,7 @@ SHELL := /bin/bash
 POSTGRESQL_USER = globallometree
 POSTGRESQL_PASS = globallometree
 POSTGRESQL_DB   = globallometree
-WEB_SERVER_PORT = 80
+WEB_SERVER_PORT = 8082
 ELASTICSEARCH_PORT = 9200
 SECRET_KEY = secret
 
