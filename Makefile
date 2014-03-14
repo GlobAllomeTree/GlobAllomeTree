@@ -129,7 +129,7 @@ run-elasticsearch: clean-elasticsearch
 	sudo mkdir -p /opt/
 	sudo mkdir -p /opt/data/
 	sudo mkdir -p /opt/data/elasticsearch
-	docker run -d -name elasticsearch_server -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image
+	docker run -d -name elasticsearch_server -p ${ELASTICSEARCH_PORT}:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image
 
 
 stop-elasticsearch:
