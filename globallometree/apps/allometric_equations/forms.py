@@ -1,9 +1,10 @@
 from django import forms
-from haystack.forms import SearchForm
+from haystack.forms import SearchForm as BaseSearchForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
-from .models import AllometricEquation
+from .models import AllometricEquation, Ecosystem, Population
 from globallometree.apps.locations.models import Country
+from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 
 class SubmissionForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -42,7 +43,7 @@ COMPONENT_CHOICES = (
             ('Yes', 'Yes')
         )
 
-class SearchForm(SearchForm):
+class SearchForm(BaseSearchForm):
 
     def __init__(self, *args, **kwargs):
         #Add on initial arguments
@@ -52,30 +53,64 @@ class SearchForm(SearchForm):
 
         super(SearchForm, self).__init__(*args, **kwargs)
 
-        for select_name, select_label in (('Biome_FAO', 'Biome (FAO)'),
-                                          ('Biome_UDVARDY', 'Biome (UDVARDY)'),
-                                          ('Biome_WWF','Biome (WWF)'),
-                                          ('Division_BAILEY', 'Division (BAILEY)' ),
-                                          ('Biome_HOLDRIDGE','Biome (HOLDRIDGE)'),
-                                          ('Ecosystem','Ecosystem'),
-                                          ('Population','Population'),
-                                          ('Country','Country'),
-                                          ('Output','Output'),
-                                          ('Unit_U','Unit U'),
-                                          ('Unit_V','Unit V'),
-                                          ('Unit_W','Unit W'),
-                                          ('Unit_X','Unit X'),
-                                          ('Unit_Y','Unit Y'),
-                                          ('Unit_Z','Unit Z'),
-                                         ):
+        for select_name, select_label in (
+            ('Biome_FAO', 'Biome (FAO)'),
+            ('Biome_UDVARDY', 'Biome (UDVARDY)'),
+            ('Biome_WWF','Biome (WWF)'),
+            ('Division_BAILEY', 'Division (BAILEY)' ),
+            ('Biome_HOLDRIDGE','Biome (HOLDRIDGE)'),
+            ('Ecosystem','Ecosystem'),
+            ('Population','Population'),
+            ('Country','Country'),
+            ('Output','Output'),
+            ('Unit_U','Unit U'),
+            ('Unit_V','Unit V'),
+            ('Unit_W','Unit W'),
+            ('Unit_X','Unit X'),
+            ('Unit_Y','Unit Y'),
+            ('Unit_Z','Unit Z'),
+        ):
 
             if select_name == 'Country':
-                country_ids = AllometricEquation.objects.distinct('Country').values_list('Country', flat=True)
-                choices = [('', '')] + list(Country.objects.filter(pk__in = country_ids).values_list('common_name', 'common_name'))
+                #country_ids = AllometricEquation.objects.distinct('Country').values_list('Country', flat=True)
+                choices = [('', '')] + list(Country.objects.all().values_list(
+                    'common_name', 'common_name'
+                ))
+            elif select_name == 'Biome_FAO':
+                choices = [('', '')] + list(BiomeFAO.objects.all().values_list(
+                    'name', 'name'
+                ))
+            elif select_name == 'Biome_UDVARDY':
+                choices = [('', '')] + list(BiomeUdvardy.objects.all().values_list(
+                    'name', 'name'
+                ))
+            elif select_name == 'Biome_WWF':
+                choices = [('', '')] + list(BiomeWWF.objects.all().values_list(
+                    'name', 'name'
+                ))
+            elif select_name == 'Division_BAILEY':
+                choices = [('', '')] + list(DivisionBailey.objects.all().values_list(
+                    'name', 'name'
+                ))
+            elif select_name == 'Biome_HOLDRIDGE':
+                choices = [('', '')] + list(BiomeHoldridge.objects.all().values_list(
+                    'name', 'name'
+                ))
+            elif select_name == 'Ecosystem':
+                choices = [('', '')] + list(Ecosystem.objects.all().values_list(
+                    'name', 'name'
+                ))
+            elif select_name == 'Population':
+                choices = [('', '')] + list(Population.objects.all().values_list(
+                    'name', 'name'
+                ))
             else:
-                choices = [('', '')] + list(AllometricEquation.objects.distinct(select_name).values_list(select_name, select_name))
+                choices = [('', '')] + list(AllometricEquation.objects
+                    .distinct(select_name).values_list(select_name, select_name))
 
-            self.fields[select_name] = forms.ChoiceField(choices=choices, required=False, label=select_label)
+            self.fields[select_name] = forms.ChoiceField(
+                choices=choices, required=False, label=select_label
+            )
 
 
     #Full Text
@@ -90,49 +125,49 @@ class SearchForm(SearchForm):
     Species       = forms.CharField(required=False, label='Species')
 
      
-    X                               = forms.CharField(required=False, label='X')
-    Unit_X                          = forms.CharField(required=False, label='Unit X')
-    Z                               = forms.CharField(required=False, label='Z')
-    Unit_Z                          = forms.CharField(required=False, label='Unit Z') 
-    W                               = forms.CharField(required=False, label='W')
-    Unit_W                          = forms.CharField(required=False, label='Unit W')
-    U                               = forms.CharField(required=False, label='U')
-    Unit_U                          = forms.CharField(required=False, label='Unit U') 
-    V                               = forms.CharField(required=False, label='V')
-    Unit_V                          = forms.CharField(required=False, label='Unit V')
+    X = forms.CharField(required=False, label='X')
+    Unit_X = forms.CharField(required=False, label='Unit X')
+    Z = forms.CharField(required=False, label='Z')
+    Unit_Z = forms.CharField(required=False, label='Unit Z') 
+    W = forms.CharField(required=False, label='W')
+    Unit_W = forms.CharField(required=False, label='Unit W')
+    U = forms.CharField(required=False, label='U')
+    Unit_U = forms.CharField(required=False, label='Unit U') 
+    V = forms.CharField(required=False, label='V')
+    Unit_V = forms.CharField(required=False, label='Unit V')
     
-    Min_X__gte                      = forms.DecimalField(required=False, label='Min X From')
-    Min_X__lte                      = forms.DecimalField(required=False, label='Min X To')
+    Min_X__gte = forms.DecimalField(required=False, label='Min X From')
+    Min_X__lte = forms.DecimalField(required=False, label='Min X To')
  
-    Max_X__gte                      = forms.DecimalField(required=False, label='Max X From')
-    Max_X__lte                      = forms.DecimalField(required=False, label='Max X To')
+    Max_X__gte = forms.DecimalField(required=False, label='Max X From')
+    Max_X__lte = forms.DecimalField(required=False, label='Max X To')
 
-    Min_Z__gte                      = forms.DecimalField(required=False, label='Min Z From')
-    Min_Z__lte                      = forms.DecimalField(required=False, label='Min Z To')
+    Min_Z__gte = forms.DecimalField(required=False, label='Min Z From')
+    Min_Z__lte = forms.DecimalField(required=False, label='Min Z To')
 
-    Max_Z__gte                      = forms.DecimalField(required=False, label='Max Z From')
-    Max_Z__lte                      = forms.DecimalField(required=False, label='Max Z To')
+    Max_Z__gte = forms.DecimalField(required=False, label='Max Z From')
+    Max_Z__lte = forms.DecimalField(required=False, label='Max Z To')
     
-    Output                          = forms.CharField(required=False, label='Output')
-    Unit_Y                          = forms.CharField(required=False, label='Unit Y')
+    Output = forms.CharField(required=False, label='Output')
+    Unit_Y = forms.CharField(required=False, label='Unit Y')
     
-    B                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='B - Bark')
-    Bd                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bd - Dead branches')
-    Bg                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bg - Big branches')
-    Bt                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bt - Thin branches')
-    L                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='L - Leaves')
-    Rb                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rb - Large roots')
-    Rf                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rf - Fine roots')
-    Rm                              = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rm - Medium roots')
-    S                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='S - Stump')
-    T                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='T - Trunks' )
-    F                               = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='F - Fruit')
+    B = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='B - Bark')
+    Bd = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bd - Dead branches')
+    Bg = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bg - Big branches')
+    Bt = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bt - Thin branches')
+    L = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='L - Leaves')
+    Rb = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rb - Large roots')
+    Rf = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rf - Fine roots')
+    Rm = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rm - Medium roots')
+    S = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='S - Stump')
+    T = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='T - Trunks' )
+    F = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='F - Fruit')
 
-    Equation                        = forms.CharField(required=False, label='Equation')
+    Equation = forms.CharField(required=False, label='Equation')
     
-    Author                          = forms.CharField(required=False, label='Author')
-    Year                            = forms.CharField(required=False, label='Year')
-    Reference                       = forms.CharField(required=False, label='Reference') 
+    Author = forms.CharField(required=False, label='Author')
+    Year = forms.CharField(required=False, label='Year')
+    Reference = forms.CharField(required=False, label='Reference') 
 
 
     def search(self):
@@ -198,7 +233,7 @@ class SearchForm(SearchForm):
             return self.sort_link(name.replace('sort_link_', ''))
         else:
             # Default behaviour
-            return SearchForm.__getattribute__(self, name)
+            return BaseSearchForm.__getattribute__(self, name)
 
     def sort_link(self, field_name):
         try:

@@ -15,7 +15,7 @@ urlpatterns = patterns('apps.allometric_equations.views',
     url(r'^submit/complete/$', SubmissionCompleteView.as_view()),
 
     #Searchable list of equations                   
-    url(r'^$', search_view_factory(
+    url(r'^search/$', search_view_factory(
         view_class=SearchView,
         template='allometric_equations/template.search.html',
         form_class=SearchForm,

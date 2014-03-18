@@ -13,7 +13,7 @@ from django.core.mail import mail_managers
 from django.conf import settings
 from django.db import connection
 
-from haystack.views import SearchView
+from haystack.views import SearchView as BaseSearchView
 from haystack.query import SearchQuerySet
 
 from .forms import SubmissionForm, SearchForm
@@ -143,9 +143,11 @@ def geo_map(request):
                                  'is_page_data' : True,
                                  }))
 
+
 def geo_map_id(request, geo_id):
     country = Country.objects.get(iso_3166_1_2_letter_code = geo_id)
     return HttpResponseRedirect('/allometric_equations?Country=' + country.common_name)
+
     
 def database(request):
     return render_to_response('database.html',
@@ -174,12 +176,10 @@ def species(request, selected_Genus=None):
                                'is_page_data' : True }))
 
 
-
-
-class EquationSearchView(SearchView):
+class SearchView(BaseSearchView):
     
     def __name__(self):
-        return "EquationSearchView"
+        return "SearchView"
 
     def extra_context(self):
 
@@ -191,7 +191,8 @@ class EquationSearchView(SearchView):
     def create_response(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseRedirect('/accounts/login/')
-        return super(EquationSearchView, self).create_response( *args, **kwargs)
+        return super(SearchView, self).create_response( *args, **kwargs)
+
 
 def autocomplete(request, field): 
     if not request.user.is_authenticated():
