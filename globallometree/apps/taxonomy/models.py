@@ -48,6 +48,26 @@ class SpeciesGroup(models.Model):
     species = models.ManyToManyField('taxonomy.Species', verbose_name="List of Species", blank=True, null=True)
     original_ID_Group = models.IntegerField(null=True, blank=True, help_text="The original ID_Group from the global import")
 
+    def species_string(self):
+        string = ''
+        for species in self.species.all():
+            if string != '': string += ', '
+            string += species.name
+        return string
+
+    def genera(self):
+        return list(set([
+            species.genus for species in
+                self.species.all() if species.genus is not None
+        ]))
+
+    def genera_string(self):
+        string = ''
+        for genus in self.genera():
+            if string != '': string += ', '
+            string += genus.name
+        return string
+
     def __unicode__(self):
         return self.name
 

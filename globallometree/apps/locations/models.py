@@ -94,6 +94,31 @@ class LocationGroup(models.Model):
     locations = models.ManyToManyField('locations.Location', verbose_name="List of Locations", blank=True, null=True)
     original_Group_Location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")
 
+    def countries(self):
+        return list(set([
+            location.country for location in
+                self.locations.all() if location.country is not None
+        ]))
+
+    def countries_string(self):
+        string = ''
+        for country in self.countries():
+            if string != '': string += ', '
+            string += country.common_name
+        return string
+
+    def biomes_fao(self):
+        return list(set([
+            location.biome_fao for location in
+                self.locations.all() if location.biome_fao is not None
+        ]))
+
+    def biomes_fao_string(self):
+        string = ''
+        for biome_fao in self.biomes_fao():
+            if string != '': string += ', '
+            string += biome_fao.name
+        return string
 
     def __unicode__(self):
         return self.name

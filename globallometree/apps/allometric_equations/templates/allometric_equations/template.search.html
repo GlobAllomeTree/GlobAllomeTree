@@ -491,9 +491,8 @@
                 
                 <input type="hidden" name="page" value="1">
                 <div id="search-submit-holder">
-                      <input id="searchButton" style="float:right" class="btn btn-succcess" type="submit" value="Search">
+                    <input id="searchButton" style="float:right" class="btn btn-succcess" type="submit" value="Search">
                 </div>
-
             </div>
     	            
 	    </form>
@@ -503,31 +502,11 @@
         {% elif page.object_list %}
          <br>
          <br>
-            <div style="float:left;width:100px;border-right: 1px solid #9BC56F;"> 
-    			<table class="equationTable" style="width:100%">
-    			 <thead>   
-    				<tr>
-    					<th><a href="{{form.sort_link_id}}">Id</a></th>
-    				</tr>
-    			 </thead>   
-                 <tbody>
-    				{% for result in page.object_list %}
-    				<tr>
-                         <td><a href="{{ result.object.get_absolute_url }}">{{ result.object.ID}}</a></td>
-                    </tr>
-                    {% endfor %}
-                 </tbody>
-                  <tfoot>   
-                    <tr>
-                        <th><a href="{{form.sort_link_id}">Id</a></th>
-                    </tr>
-                 </tfoot>   
-    			</table>
-			</div>	
-			<div style="float:left;width:959px;overflow-x:auto;">	
+			<div style="float:left;width:1030px;overflow-x:auto;">	
 				<table class="equationTable" style="width:500px;">
 				<thead>   
-    				<tr>	
+    				<tr>
+                        <th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}}">ID</a></th>
     					<th>Equation</th>
     					<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
     					<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
@@ -541,19 +520,21 @@
 			    <tbody>
                 {% for result in page.object_list %}
                     <tr>
-                       <td>{{ result.object.Substitute_equation}}</td>
-                       <td>{{ result.object.Genus}}</td>
-                       <td>{{ result.object.Species}}</td>
-                       <td>{{ result.object.Country.common_name}}</td>
-                       <td>{{ result.object.components_string}}</td>
-                       <td>{{ result.object.Output}}</td>
-                       <td>{{ result.object.Biome_FAO }}</td>
-                       <td>{{ result.object.Author }}</td>
+                        <td style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{ result.object.get_absolute_url }}">{{ result.object.ID}}</a></td>
+                        <td>{{ result.object.Substitute_equation }}</td>
+                        <td>{{ result.object.species_group.genera_string }}</td>
+                        <td>{{ result.object.species_group.species_string }}</td>
+                        <td>{{ result.object.location_group.countries_string }}</td>
+                        <td>{{ result.object.components_string}}</td>
+                        <td>{{ result.object.Output}}</td>
+                        <td>{{ result.object.location_group.biomes_fao_string }}</td>
+                        <td>{{ result.object.reference.author }}</td>
                     </tr>
                   {% endfor %}
 			     </tbody>
 			      <tfoot>   
-                   <tr> 
+                   <tr>
+                        <th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}">Id</a></th>
                         <th>Equation</th>
                         <th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
                         <th><a href="{{form.sort_link_Species_order}}">Species</a></th>

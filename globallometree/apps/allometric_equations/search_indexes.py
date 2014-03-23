@@ -134,7 +134,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_Country(self, obj):
         return [
             country.common_name for country in [
-                locations.country for locations in
+                location.country for location in
                 obj.location_group.locations.all()
             ] if country is not None
         ]
@@ -142,7 +142,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_Biome_FAO(self, obj):
         return [
             biome_fao.name for biome_fao in [
-                locations.biome_fao for locations in
+                location.biome_fao for location in
                 obj.location_group.locations.all()
             ] if biome_fao is not None
         ]
@@ -150,7 +150,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_Biome_UDVARDY(self, obj):
         return [
             biome_udvardy.name for biome_udvardy in [
-                locations.biome_udvardy for locations in
+                location.biome_udvardy for location in
                 obj.location_group.locations.all()
             ] if biome_udvardy is not None
         ]
@@ -158,7 +158,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_Biome_WWF(self, obj):
         return [
             biome_wwf.name for biome_wwf in [
-                locations.biome_wwf for locations in
+                location.biome_wwf for location in
                 obj.location_group.locations.all()
             ] if biome_wwf is not None
         ]
@@ -166,7 +166,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_Division_BAILEY(self, obj):
         return [
             division_bailey.name for division_bailey in [
-                    locations.division_bailey for locations in
+                    location.division_bailey for location in
                     obj.location_group.locations.all()
             ] if division_bailey is not None
         ]
@@ -174,7 +174,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_Biome_HOLDRIDGE(self, obj):
         return [
             biome_holdridge.name for biome_holdridge in [
-                locations.biome_holdridge for locations in
+                location.biome_holdridge for location in
                 obj.location_group.locations.all()
             ] if biome_holdridge is not None
         ]
