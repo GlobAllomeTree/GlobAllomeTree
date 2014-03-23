@@ -1,10 +1,13 @@
 from django import forms
 from haystack.forms import SearchForm as BaseSearchForm
+from haystack.inputs import AutoQuery
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
 from .models import AllometricEquation, Ecosystem, Population
-from globallometree.apps.locations.models import Country
-from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
+from globallometree.apps.locations.models import (
+    Country, BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
+)
+from globallometree.apps.taxonomy.models import Genus, Species
 
 class SubmissionForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -70,7 +73,6 @@ class SearchForm(BaseSearchForm):
             ('Unit_Y','Unit Y'),
             ('Unit_Z','Unit Z'),
         ):
-
             if select_name == 'Country':
                 #country_ids = AllometricEquation.objects.distinct('Country').values_list('Country', flat=True)
                 choices = [('', '')] + list(Country.objects.all().values_list(
@@ -112,7 +114,6 @@ class SearchForm(BaseSearchForm):
                 choices=choices, required=False, label=select_label
             )
 
-
     #Full Text
     q = forms.CharField(required=False, label='Keyword')
     
@@ -120,7 +121,7 @@ class SearchForm(BaseSearchForm):
     order_by = forms.CharField(required=False, widget=forms.HiddenInput())
     page     = forms.IntegerField(required=False)
     
-    #Search Fields    
+    #Search Fields
     Genus         = forms.CharField(required=False, label='Genus')
     Species       = forms.CharField(required=False, label='Species')
 
@@ -176,17 +177,16 @@ class SearchForm(BaseSearchForm):
             return self.searchqueryset.all()
 
         sqs = self.searchqueryset.all()
-        
+        # import pdb;pdb.set_trace()
         if self.cleaned_data.get('q'):
             sqs = sqs.auto_query(self.cleaned_data['q'])
-    
-        #import pdb;pdb.set_trace()
+
+
         # ORDERING 
         # Check to see if a order_by field was chosen.
         if self.cleaned_data.get('order_by'):
             sqs = sqs.order_by(self.cleaned_data.get('order_by'))
-            
-            
+        
         #Send search fields to the the sqs.filter
         for field in self.cleaned_data:
         
@@ -210,7 +210,7 @@ class SearchForm(BaseSearchForm):
                
                 kwargs = {field : val}
                 sqs = sqs.filter(**kwargs)
-                
+
         return sqs
         
         

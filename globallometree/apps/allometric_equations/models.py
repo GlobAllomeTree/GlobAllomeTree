@@ -9,11 +9,13 @@ class Population(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Ecosystem(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
 
 class Submission(models.Model):
     submitted_file = models.FileField(upload_to='data_submissions') # TODO: check if is better a more specific folder
@@ -100,7 +102,6 @@ class AllometricEquation(models.Model):
     Ratio_equation = models.NullBooleanField()
     Segmented_equation = models.NullBooleanField()
     Sample_size = models.CharField(max_length=150, null=True, blank=True)
-
     
     population = models.ForeignKey(
         Population, blank=True, null=True
