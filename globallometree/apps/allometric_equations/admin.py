@@ -255,7 +255,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         )
 
 class AllometricEquationAdmin(admin.ModelAdmin):
-    raw_id_fields = ('species_group','location_group')
+    raw_id_fields = ('species_group','location_group','reference')
     list_display = ('ID', 'Equation','data_submission', 'modified')
     ordering = ("ID",)
     search_fields  = ('ID',)

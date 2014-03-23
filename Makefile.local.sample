@@ -1,0 +1,7 @@
+# Add custom vars in this file - rename it to Makefile.custom
+POSTGRESQL_USER = globallometree
+POSTGRESQL_PASS = globallometree_secret_pass
+POSTGRESQL_DB   = globallometree_db_name
+SECRET_KEY = super_secret_key_example
+WEB_SERVER_PORT = 8081
+ELASTICSEARCH_PORT = 9201

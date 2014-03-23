@@ -7,12 +7,17 @@ SHELL := /bin/bash
 POSTGRESQL_USER = globallometree
 POSTGRESQL_PASS = globallometree
 POSTGRESQL_DB   = globallometree
+WEB_SERVER_PORT = 8082
+ELASTICSEARCH_PORT = 9200
 SECRET_KEY = secret
 
 #DUMP_FILE is assumed to be in the one directory up from this file
 DUMP_FILE = ../globallometree.import.sql.gz
 PSQL = PGPASSWORD=$(POSTGRESQL_PASS) psql -U $(POSTGRESQL_USER) -h $(shell TAG=postgresql_server_image ./server/ip_for.sh)
 PROJECT_ROOT := $(shell pwd)
+
+#Create a file called Makefile.local to overide the above settings on a per server basis
+-include Makefile.local
 
 #This will get evaluated when used below
 WEB_SERVER_BASE_ENV := -link postgresql_server:DB -link elasticsearch_server:ES -v ${PROJECT_ROOT}:/home/docker/code -e SECRET_KEY=${SECRET_KEY}  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} 
@@ -67,7 +72,7 @@ build-web-server:
 
 run-web-server: clean-web-server
 	#Run the webserver on port 8082
-	docker run -d -name web_server -p 80:80 ${WEB_SERVER_BASE_ENV} web_server_image
+	docker run -d -name web_server -p ${WEB_SERVER_PORT}:80 ${WEB_SERVER_BASE_ENV} web_server_image
 
 stop-web-server:
 	docker stop web_server
@@ -124,7 +129,7 @@ run-elasticsearch: clean-elasticsearch
 	sudo mkdir -p /opt/
 	sudo mkdir -p /opt/data/
 	sudo mkdir -p /opt/data/elasticsearch
-	docker run -d -name elasticsearch_server -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image
+	docker run -d -name elasticsearch_server -p ${ELASTICSEARCH_PORT}:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image
 
 
 stop-elasticsearch:
@@ -133,9 +138,7 @@ stop-elasticsearch:
 run-elasticsearch-bash:
 	-@docker stop elasticsearch_server_bash 2>/dev/null || true
 	-@docker rm elasticsearch_server_bash 2>/dev/null || true
-	docker run -i -t -name elasticsearch_server_bash -p 9200:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image /bin/bash
-
-
+	docker run -i -t -name elasticsearch_server_bash -p ${ELASTICSEARCH_PORT}:9200 -v /opt/data/elasticsearch:/var/lib/elasticsearch elasticsearch_server_image /bin/bash
 
 
 
@@ -304,19 +307,19 @@ git-pull-all:
 
 git-push-all:
 	@echo
-	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- GlobAllomeTree ----------------" && tput sgr0
 	git push
 	
 	@echo
-	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- PostgreSQL Docker ----------------" && tput sgr0
 	cd ../docker-postgresql && git push
 	
 	@echo
-	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- ElasticSearch Docker ----------------" && tput sgr0
 	cd ../docker-elasticsearch && git push
 	
 	@echo
-	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput setaf 0
+	@tput setaf 6 && echo "--------------- Ubuntu Base Docker ----------------" && tput sgr0
 	cd ../docker-ubuntu-base && git push
 
 git-status-all:

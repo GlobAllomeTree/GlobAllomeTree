@@ -14,3 +14,4 @@ media
 *models*.png
 reset_db.sh
 *.ignore
+Makefile.local
