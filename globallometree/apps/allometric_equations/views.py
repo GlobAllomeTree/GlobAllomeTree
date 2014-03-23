@@ -17,7 +17,7 @@ from haystack.views import SearchView as BaseSearchView
 from haystack.query import SearchQuerySet
 
 from .forms import SubmissionForm, SearchForm
-from .models import AllometricEquation, Population, Ecosystem, Submission
+from .models import AllometricEquation, Submission
 
 from globallometree.apps.common.kill_gremlins import kill_gremlins
 from globallometree.apps.locations.models import Country
@@ -79,16 +79,21 @@ def continents_map(request):
 
 def allometric_equation_id(request, id):
     allometric_equation = AllometricEquation.objects.get(ID=id)
-    return render_to_response('allometric_equationse.allometric_equation.html', 
-                              context_instance = RequestContext(request,
-                              {'allometric_equation': allometric_equation, 
-                               'is_page_data' : True})) 
+    return render_to_response(
+        'allometric_equations/template.allometric_equation.html', 
+        context_instance = RequestContext(
+            request, {
+                'allometric_equation': allometric_equation, 
+                'is_page_data' : True
+            }
+        )
+    ) 
 
 
 def allometric_equation_id_pdf(request, id):
     allometric_equation = AllometricEquation.objects.get(ID=id)
 
-    template = get_template('allometric_equationse.allometric_equation.pdf.html')
+    template = get_template('allometric_equations/template.allometric_equation.pdf.html')
 
    
     html = template.render(Context({
@@ -170,7 +175,7 @@ def species(request, selected_Genus=None):
     #Sort the list alphabetically by name
     genus_list.sort(key=lambda x : x['name'])
     
-    return render_to_response('allometric_equationse.species.html', 
+    return render_to_response('allometric_equations.species.html', 
                                context_instance = RequestContext(request,
                                {'genus_list': genus_list,
                                'is_page_data' : True }))

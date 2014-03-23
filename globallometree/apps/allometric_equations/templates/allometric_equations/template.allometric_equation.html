@@ -13,7 +13,7 @@
             var data = new google.visualization.DataTable();
             data.addRows(1);
             data.addColumn('string', 'Country');
-            data.setValue(0, 0, '{{ tree_equation.Country.iso_3166_1_2_letter_code }}');
+            data.setValue(0, 0, '{{ allometric_equation.Country.iso_3166_1_2_letter_code }}');
         
             var options = { width: '400',backgroundColor : {stroke : '#bbb'}, datalessRegionColor : 'FCFCFC' };
         
@@ -23,21 +23,19 @@
             window.geochart = geochart;
         }
     </script>
-    {% if tree_equation.Latitude %}
+    {% if allometric_equation.Latitude %}
     <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeYuEKNTghtouEoy-USjrJff3A32F9DP4&sensor=false">
     </script>
     <script type="text/javascript">
-     $(function () {
-
-        var map = null;
-        //var initialBounds = null;
-    	$('#locationTab').click(function () {
+        $(function () {
+            var map = null;
+            //var initialBounds = null;
+        	$('#locationTab').click(function () {
                 if (map == null) {
                     $('#point_map_canvas_holder').html('');
                     $('#point_map_canvas_holder').html('<div style="width:400px;height:300px;" id="point_map_canvas"></div>');
-
-                    var center =  new google.maps.LatLng({{ tree_equation.Latitude }}, {{ tree_equation.Longitude }});
+                    var center =  new google.maps.LatLng({{ allometric_equation.Latitude }}, {{ allometric_equation.Longitude }});
                     var mapOptions = {
                         center: center,
                         zoom: 11,
@@ -47,20 +45,15 @@
                         scaleControl: true
                     };
                     map = new google.maps.Map(document.getElementById("point_map_canvas"), mapOptions);
-                    
                     var marker = new google.maps.Marker({
                         position: center,
                         map: map
                     });
-            
                 } else {
                     //Timeout until the tab appears so the map can be redrawn correctly
                     setTimeout( function () {google.maps.event.trigger(map, 'resize');} , 200); 
-                    
                 }
-            
             });
-
         });
     </script>
     {% else %}
@@ -81,7 +74,7 @@
     <div id="page_2">
         <div style="float:right;"><a href="pdf"><img src="{% static 'images/pdficon.png' %}" /> Download equation as PDF</a></div>
         <div class="page-header">
-            <h3>Equation {{ tree_equation.ID }}</h3>
+            <h3>Equation {{ allometric_equation.ID }}</h3>
         </div>
         <div id="tree-equation" style="clear:both;">
             <ul class="nav nav-tabs" >                   
@@ -96,17 +89,17 @@
             <div class="tab-content" >
                 <div class="tab-pane active" id="identification">
                     <table>
-                        <tr class="odd"> <td> ID: </td> <td> {{ tree_equation.ID }} </td> </tr>
-                        <tr class="even">  <td> Population: </td> <td> {{ tree_equation.Population }} </td> </tr>
-                        <tr class="odd"> <td> Ecosystem: </td> <td> {{ tree_equation.Ecosystem }} </td> </tr>
+                        <tr class="odd"> <td> ID: </td> <td> {{ allometric_equation.ID }} </td> </tr>
+                        <tr class="even">  <td> Population: </td> <td> {{ allometric_equation.population }} </td> </tr>
+                        <tr class="odd"> <td> Ecosystem: </td> <td> {{ allometric_equation.ecosystem }} </td> </tr>
                     </table>
                 </div>
                 <div class="tab-pane" id="taxonomy">
                     <table>
-                        <tr class="odd"> <td> Family: </td> <td> {{ tree_equation.Family }} </td> </tr>
-                        <tr class="even">  <td> Genus: </td> <td> {{ tree_equation.Genus }} </td> </tr>
-                        <tr class="odd"> <td> Species: </td> <td> {{ tree_equation.Species }} </td> </tr>
-                        <tr class="even">  <td> Species group: </td> <td> {{ tree_equation.Group_Species }} </td> </tr>
+                        <tr class="odd"> <td> Family: </td> <td> {{ allometric_equation.species_group.families_string }} </td> </tr>
+                        <tr class="even">  <td> Genus: </td> <td> {{ allometric_equation.species_group.genera_string }} </td> </tr>
+                        <tr class="odd"> <td> Species: </td> <td> {{ allometric_equation.species_group.species_string }} </td> </tr>
+                        <tr class="even">  <td> Species group: </td> <td> {{ allometric_equation.species_group }} </td> </tr>
                     </table>
                 </div>
                 <div class="tab-pane" id="Location">
@@ -116,15 +109,15 @@
                         <div id="point_map_canvas_holder"></div>
                     </div>
                     <table>
-                        <tr class="odd"> <td> Continent: </td> <td> {{ tree_equation.Continent }} </td> </tr>
-                        <tr class="even">  <td> Country: </td> <td> {{ tree_equation.Country }} </td> </tr>
-                        <tr class="odd"> <td> Location: </td> <td> {{ tree_equation.Location }} </td> </tr>
-                        <tr class="even">  <td> Location group: </td> <td> {{ tree_equation.Group_Location }} </td> </tr>
-                        <tr class="odd"> <td> Biome FAO: </td> <td> {{ tree_equation.Biome_FAO }} </td> </tr>
-                        <tr class="even">  <td> Biome UDVARDY: </td> <td> {{ tree_equation.Biome_UDVARDY }} </td> </tr>
-                        <tr class="odd"> <td> Biome WWF: </td> <td> {{ tree_equation.Biome_WWF }} </td> </tr>
-                        <tr class="even"> <td> Biome HOLDRIDGE: </td> <td> {{ tree_equation.Biome_HOLDRIDGE }} </td> </tr>
-                        <tr class="odds">  <td> Division BAILEY: </td> <td> {{ tree_equation.Division_BAILEY }} </td> </tr>
+                        <tr class="odd"> <td> Continent: </td> <td> {{ allometric_equation.location_group.continents_string }} </td> </tr>
+                        <tr class="even">  <td> Country: </td> <td> {{ allometric_equation.location_group.countries_string }} </td> </tr>
+                        <tr class="odd"> <td> Location: </td> <td> {{ allometric_equation.location_group.locations_string }} </td> </tr>
+                        <tr class="even">  <td> Location group: </td> <td> {{ allometric_equation.location_group }} </td> </tr>
+                        <tr class="odd"> <td> Biome FAO: </td> <td> {{ allometric_equation.location_group.biomes_fao_string }} </td> </tr>
+                        <tr class="even">  <td> Biome UDVARDY: </td> <td> {{ allometric_equation.location_group.biomes_udvardy_string }} </td> </tr>
+                        <tr class="odd"> <td> Biome WWF: </td> <td> {{ allometric_equation.location_group.biomes_wwf_string }} </td> </tr>
+                        <tr class="even"> <td> Biome HOLDRIDGE: </td> <td> {{ allometric_equation.location_group.biomes_holdridge_string }} </td> </tr>
+                        <tr class="odds">  <td> Division BAILEY: </td> <td> {{ allometric_equation.location_group.divisions_bailey_string }} </td> </tr>
                     </table>
                    
                     <div style="clear:both;"></div>
@@ -134,7 +127,7 @@
                         <tr class="odd">
                             <td> Components: </td>
                             <td>
-                                {{ tree_equation.components_string }}
+                                {{ allometric_equation.components_string }}
                             </td>
                         </tr>
                     </table>
@@ -144,40 +137,40 @@
                 </div>
                 <div class="tab-pane" id="input_Output">
                     <table>
-                        <tr class="odd"> <td> X: </td> <td> {{ tree_equation.X }} </td> </tr>
-                        <tr class="even">  <td> Unit X: </td> <td> {{ tree_equation.Unit_X }} </td> </tr>
-                        <tr class="odd"> <td> Unit Y: </td> <td> {{ tree_equation.Unit_Y }} </td> </tr>
-                        <tr class="even">  <td> Z: </td> <td> {{ tree_equation.Z }} </td> </tr>
-                        <tr class="odd"> <td> Unit Z: </td> <td> {{ tree_equation.Unit_Z }} </td> </tr>
-                        <tr class="even">  <td> W: </td> <td> {{ tree_equation.W }} </td> </tr>
-                        <tr class="odd"> <td> Unit_W: </td> <td> {{ tree_equation.Unit_W }} </td> </tr>
-                        <tr class="even"> <td> U: </td> <td> {{ tree_equation.U }} </td> </tr>
-                        <tr class="odd">  <td> Unit_U: </td> <td> {{ tree_equation.Unit_U }} </td> </tr>
-                        <tr class="odd"> <td> V: </td> <td> {{ tree_equation.V }} </td> </tr>
-                        <tr class="even">  <td> Unit V: </td> <td> {{ tree_equation.Unit_V }} </td> </tr>
-                        <tr class="odd"> <td> Min X: </td> <td> {{ tree_equation.Min_X|floatformat:"-2" }} </td> </tr>
-                        <tr class="even">  <td> Max X: </td> <td> {{ tree_equation.Max_X|floatformat:"-2" }} </td> </tr>
-                        <tr class="odd"> <td> Min Z: </td> <td> {{ tree_equation.Min_Z|floatformat:"-2" }} </td> </tr>
-                        <tr class="even">  <td> Max Z: </td> <td> {{ tree_equation.Max_Z|floatformat:"-2" }} </td> </tr>
-                        <tr class="odd"> <td> Output: </td> <td> {{ tree_equation.Output }} </td> </tr>
-                        <tr class="even"> <td> Output TR: </td> <td> {{ tree_equation.Output_TR }} </td> </tr>
-                        <tr class="odd"> <td> Age: </td> <td> {{ tree_equation.Age }} </td> </tr>
-                        <tr class="even"> <td> Veg component: </td> <td> {{ tree_equation.Veg_Component }} </td> </tr>
+                        <tr class="odd"> <td> X: </td> <td> {{ allometric_equation.X }} </td> </tr>
+                        <tr class="even">  <td> Unit X: </td> <td> {{ allometric_equation.Unit_X }} </td> </tr>
+                        <tr class="odd"> <td> Unit Y: </td> <td> {{ allometric_equation.Unit_Y }} </td> </tr>
+                        <tr class="even">  <td> Z: </td> <td> {{ allometric_equation.Z }} </td> </tr>
+                        <tr class="odd"> <td> Unit Z: </td> <td> {{ allometric_equation.Unit_Z }} </td> </tr>
+                        <tr class="even">  <td> W: </td> <td> {{ allometric_equation.W }} </td> </tr>
+                        <tr class="odd"> <td> Unit_W: </td> <td> {{ allometric_equation.Unit_W }} </td> </tr>
+                        <tr class="even"> <td> U: </td> <td> {{ allometric_equation.U }} </td> </tr>
+                        <tr class="odd">  <td> Unit_U: </td> <td> {{ allometric_equation.Unit_U }} </td> </tr>
+                        <tr class="odd"> <td> V: </td> <td> {{ allometric_equation.V }} </td> </tr>
+                        <tr class="even">  <td> Unit V: </td> <td> {{ allometric_equation.Unit_V }} </td> </tr>
+                        <tr class="odd"> <td> Min X: </td> <td> {{ allometric_equation.Min_X|floatformat:"-2" }} </td> </tr>
+                        <tr class="even">  <td> Max X: </td> <td> {{ allometric_equation.Max_X|floatformat:"-2" }} </td> </tr>
+                        <tr class="odd"> <td> Min Z: </td> <td> {{ allometric_equation.Min_Z|floatformat:"-2" }} </td> </tr>
+                        <tr class="even">  <td> Max Z: </td> <td> {{ allometric_equation.Max_Z|floatformat:"-2" }} </td> </tr>
+                        <tr class="odd"> <td> Output: </td> <td> {{ allometric_equation.Output }} </td> </tr>
+                        <tr class="even"> <td> Output TR: </td> <td> {{ allometric_equation.Output_TR }} </td> </tr>
+                        <tr class="odd"> <td> Age: </td> <td> {{ allometric_equation.Age }} </td> </tr>
+                        <tr class="even"> <td> Veg component: </td> <td> {{ allometric_equation.Veg_Component }} </td> </tr>
                     </table>
                 </div>
                 <div class="tab-pane" id="allometry">
                     <table>
-                        <tr class="odd"> <td> Equation: </td> <td> {{ tree_equation.Substitute_equation }} </td> </tr>
-                        <tr class="even">  <td> Sample size: </td> <td> {{ tree_equation.Sample_size }} </td> </tr>
-                        <tr class="odd"> <td> R2: </td> <td> {{ tree_equation.R2|floatformat:"-2" }} </td> </tr>
+                        <tr class="odd"> <td> Equation: </td> <td> {{ allometric_equation.Substitute_equation }} </td> </tr>
+                        <tr class="even">  <td> Sample size: </td> <td> {{ allometric_equation.Sample_size }} </td> </tr>
+                        <tr class="odd"> <td> R2: </td> <td> {{ allometric_equation.R2|floatformat:"-2" }} </td> </tr>
                     </table>
                 </div>
                 <div class="tab-pane" id="reference">
                     <table>
-                        <tr class="odd"> <td> Label: </td> <td> {{ tree_equation.Label }} </td> </tr>
-                        <tr class="even">  <td> Author: </td> <td> {{ tree_equation.Author }} </td> </tr>
-                        <tr class="odd"> <td> Year: </td> <td> {{ tree_equation.Year }} </td> </tr>
-                        <tr class="even">  <td> Reference: </td> <td> {{ tree_equation.Reference }} </td> </tr>
+                        <tr class="odd"> <td> Label: </td> <td> {{ allometric_equation.reference.label }} </td> </tr>
+                        <tr class="even">  <td> Author: </td> <td> {{ allometric_equation.reference.author }} </td> </tr>
+                        <tr class="odd"> <td> Year: </td> <td> {{ allometric_equation.reference.year }} </td> </tr>
+                        <tr class="even">  <td> Reference: </td> <td> {{ allometric_equation.reference.reference }} </td> </tr>
                     </table>
                 </div>
             </div>

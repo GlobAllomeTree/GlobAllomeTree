@@ -135,7 +135,7 @@ class AllometricEquation(models.Model):
         return c_string
 
     def get_absolute_url(self):
-        return '/data/equation/%s' % self.ID
+        return '/allometric-equations/%s' % self.ID
 
 
     def unicode(self):
