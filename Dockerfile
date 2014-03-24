@@ -1,12 +1,13 @@
-from ubuntu_base
+FROM tomgruner/globallometree-base
 
-MAINTAINER GlobAllomeTree "globallometree@fao.org"
+MAINTAINER Thomas Gruner "tom.gruner@gmail.com"
 
 RUN mkdir -p /home && mkdir -p /home/docker && mkdir -p /home/docker/run && mkdir -p /home/docker/logs
 
 ENV BUILD 1
 ENV LC_ALL en_US.UTF-8
 
+#USE LOCAL CACHE
 #REQUIRES docker-proxy to be running on ports 8095 for pypi and 8096 for apt-cacher-ng
 #Setup Proxies (Comment Out the following lines if your proxy is not set up)
 #TODO: Make a clearer error message when proxy is not running
