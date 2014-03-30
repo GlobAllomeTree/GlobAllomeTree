@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from globallometree.apps.data.models import TreeEquation
 from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
-from globallometree.apps.allometric_equations.models import AllometricEquation
+from globallometree.apps.allometric_equations.models import AllometricEquation, Submission
 from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup
 from globallometree.apps.allometric_equations.models import Population, Ecosystem
@@ -175,6 +175,19 @@ class Command(BaseCommand):
                     original_ID_REF=orig_equation.ID_REF
             )[0]
 
+######################################## SUBMISSION ##############################################
+
+            if orig_equation.data_submission is None:
+                data_submission = None
+            else:
+                data_submission = Submission.objects.get_or_create(
+                    submitted_file=orig_equation.data_submission.submitted_file,
+                    submitted_notes=orig_equation.data_submission.submitted_notes,
+                    date_uploaded=orig_equation.data_submission.date_uploaded,
+                    user=orig_equation.data_submission.user,
+                    imported=orig_equation.data_submission.imported
+                )[0]
+
 ######################################## EQUATION ################################################
 
             if orig_equation.Population is None:
@@ -241,7 +254,8 @@ class Command(BaseCommand):
                     contributor=contributor,
                     reference=reference,
                     species_group=species_group,
-                    location_group=location_group
+                    location_group=location_group,
+                    data_submission=data_submission
                 )
                 new_equation.save()
                 equations_insterted = equations_insterted + 1
