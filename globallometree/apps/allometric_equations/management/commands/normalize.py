@@ -171,7 +171,8 @@ class Command(BaseCommand):
                     label=orig_equation.Label,
                     author=orig_equation.Author,
                     year=orig_equation.Year,
-                    reference=orig_equation.Reference
+                    reference=orig_equation.Reference,
+                    original_ID_REF=orig_equation.ID_REF
             )[0]
 
 ######################################## EQUATION ################################################
