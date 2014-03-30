@@ -5,7 +5,7 @@ WEB_BASE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 WEB_BASE_DIR := $(abspath $(patsubst %/,%,$(dir $(WEB_BASE_PATH))))
 
 #This will get evaluated when used below
-WEB_SERVER_BASE_ENV = --link postgresql_server:DB --link elasticsearch:ES -v ${WEB_BASE_DIR}:/home/docker/code -e SECRET_KEY=${SECRET_KEY}  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} 
+WEB_SERVER_BASE_ENV = --link postgresql_server:DB --link elasticsearch:ES -v ${WEB_BASE_DIR}:/opt/code -e SECRET_KEY=${SECRET_KEY}  -e POSTGRESQL_USER=${POSTGRESQL_USER} -e POSTGRESQL_PASS=${POSTGRESQL_PASS} -e POSTGRESQL_DB=${POSTGRESQL_DB} 
 
 
 ####################################### WEB SERVER #####################################
@@ -37,7 +37,7 @@ web-run-debug:
 	#Run a debug server on port 8083
 	-@docker stop web_server_debug 2>/dev/null || true
 	-@docker rm web_server_debug 2>/dev/null || true
-	docker run -i -t --name web_server_debug -p 8083:8083 ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /home/docker/code/server/startup_bash.sh
+	docker run -i -t --name web_server_debug -p 8083:8083 ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /opt/code/server/startup_bash.sh
 
 web-attach:
 	#Use lxc attach to attch to the webserver
@@ -51,7 +51,7 @@ django-manage:
 	#Example)  django-manage COMMAND="collectstatic --noinput"
 	-@docker stop django_manage 2>/dev/null || true
 	-@docker rm django_manage 2>/dev/null || true
-	docker run -i -t --name django_manage ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" web_server_image bash /home/docker/code/server/startup_manage.sh
+	docker run -i -t --name django_manage ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" web_server_image bash /opt/code/server/startup_manage.sh
 
 
 django-collectstatic:
