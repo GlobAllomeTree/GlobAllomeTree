@@ -19,6 +19,7 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
     Biome_WWF = indexes.MultiValueField()
     Division_BAILEY = indexes.MultiValueField()
     Biome_HOLDRIDGE = indexes.MultiValueField()
+    lat_lng = indexes.MultiValueField()
 
     X = indexes.CharField(model_attr='X', null=True)
     Unit_X = indexes.CharField(model_attr='Unit_X', null=True)
@@ -177,4 +178,11 @@ class AllometricEquationIndex(indexes.SearchIndex, indexes.Indexable):
                 location.biome_holdridge for location in
                 obj.location_group.locations.all()
             ] if biome_holdridge is not None
+        ]
+
+    def prepare_lat_lng(self, obj):
+        return [
+            '{0},{1}'.format(location.Latitude, location.Longitude)
+            for location in obj.location_group.locations.all()
+            if location.point() is not None
         ]
