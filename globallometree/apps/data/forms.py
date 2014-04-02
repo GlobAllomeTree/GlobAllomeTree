@@ -145,8 +145,7 @@ class EquationSearchForm(SearchForm):
         
         if self.cleaned_data.get('q'):
             sqs = sqs.auto_query(self.cleaned_data['q'])
-    
-        #import pdb;pdb.set_trace()
+
         # ORDERING 
         # Check to see if a order_by field was chosen.
         if self.cleaned_data.get('order_by'):

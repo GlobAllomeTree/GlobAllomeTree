@@ -3,21 +3,21 @@ from django.contrib.auth.models import User
 from globallometree.apps.common.models import DataReference, Institution
 
 
-# TODO: remove the AllometricEquation prefix
-class AllometricEquationPopulation(models.Model):
+class Population(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
 
-# TODO: remove the AllometricEquation prefix
-class AllometricEquationEcosystem(models.Model):
+
+class Ecosystem(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
 
-class AllometricEquationSubmission(models.Model):
+
+class Submission(models.Model):
     submitted_file = models.FileField(upload_to='data_submissions') # TODO: check if is better a more specific folder
     submitted_notes = models.TextField(blank=True, null=True)
     date_uploaded = models.DateField(auto_now_add=True)
@@ -102,13 +102,12 @@ class AllometricEquation(models.Model):
     Ratio_equation = models.NullBooleanField()
     Segmented_equation = models.NullBooleanField()
     Sample_size = models.CharField(max_length=150, null=True, blank=True)
-
     
     population = models.ForeignKey(
-        AllometricEquationPopulation, blank=True, null=True
+        Population, blank=True, null=True
     )
     ecosystem = models.ForeignKey(
-        AllometricEquationEcosystem, blank=True, null=True
+        Ecosystem, blank=True, null=True
     )
 
     species_group = models.ForeignKey('taxonomy.SpeciesGroup',null=True, blank=True)
@@ -123,10 +122,9 @@ class AllometricEquation(models.Model):
         Institution, blank=True, null=True
     )
 
-    
     Name_operator = models.CharField(max_length=150, null=True, blank=True)
     data_submission = models.ForeignKey(
-        AllometricEquationSubmission, blank=True, null=True
+        Submission, blank=True, null=True
     )
 
     def components_string(self):
@@ -137,7 +135,7 @@ class AllometricEquation(models.Model):
         return c_string
 
     def get_absolute_url(self):
-        return '/data/equation/%s' % self.ID
+        return '/allometric-equations/%s' % self.ID
 
 
     def unicode(self):

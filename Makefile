@@ -82,10 +82,3 @@ graph-data-models:
 graph-p1-data-models:
 	$(MAKE) django-manage COMMAND="graph_models data -o data_models_phase_1.png"
 
-
-
-
-
-
-
-

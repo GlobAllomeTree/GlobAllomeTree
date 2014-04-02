@@ -6,9 +6,10 @@ class DataReference(models.Model):
     author = models.CharField(max_length=200, null=True, blank=True)
     year = models.CharField(max_length=12, null=True, blank=True)
     reference = models.TextField(null=True, blank=True)
+    original_ID_REF = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
-        return u'%s - %s' % (self.year, self.author)
+        return unicode(('' if self.year is None else self.year + ' ') + self.author)
 
 
 class Institution(models.Model):
