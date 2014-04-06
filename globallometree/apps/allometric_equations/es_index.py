@@ -37,7 +37,12 @@ class AllometricEquationIndex(MappingType, Indexable):
                 # (de-stem, tokenize, parse, etc).
                 'Species': {'type': 'string', 
                             'index': 'not_analyzed'},
-                'Locations' : {'type': 'geo_point'}
+                            
+                'Locations' : {'type': 'geo_point',
+                               'geohash': True,
+                               'geohash_prefix': True,
+                               'geohash_precision': 8
+                               }
             }
         }
 

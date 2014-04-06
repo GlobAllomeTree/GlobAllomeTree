@@ -66,53 +66,71 @@ class Command(BaseCommand):
                             }
                         }))
 
-         #Returns something like:
-         #   {u'_shards': {u'failed': 0, u'successful': 5, u'total': 5},
-         # u'facets': {u'places': {u'_type': u'geo_cluster',
-         #                         u'clusters': [{u'bottom_right': {u'lat': 19.4412,
-         #                                                          u'lon': -155.0916},
-         #                                        u'center': {u'lat': 20.425166666666666,
-         #                                                    u'lon': -156.55726666666666},
-         #                                        u'top_left': {u'lat': 22.001,
-         #                                                      u'lon': -159.4302},
-         #                                        u'total': 6},
-         #                                       {u'bottom_right': {u'lat': -25.4699,
-         #                                                          u'lon': 30.9806},
-         #                                        u'center': {u'lat': -25.4699,
-         #                                                    u'lon': 30.9806},
-         #                                        u'top_left': {u'lat': -25.4699,
-         #                                                      u'lon': 30.9806},
-         #                                        u'total': 4},
-         #                                       {u'bottom_right': {u'lat': 11.427778,
-         #                                                          u'lon': 108.648889},
-         #                                        u'center': {u'lat': 13.009632638297871,
-         #                                                    u'lon': 105.82769434042552},
-         #                                        u'top_left': {u'lat': 13.8278,
-         #                                                      u'lon': 103.3587},
-         #                                        u'total': 47},
-         #                                       {u'bottom_right': {u'lat': -15.9,
-         #                                                          u'lon': 34.75},
-         #                                        u'center': {u'lat': 32.76972698529411,
-         #                                                    u'lon': 6.221211029411764},
-         #                                        u'top_left': {u'lat': 62.909,
-         #                                                      u'lon': -16.0482},
-         #                                        u'total': 136},
-         #                                       {u'bottom_right': {u'lat': -23.093885,
-         #                                                          u'lon': -56.036147},
-         #                                        u'center': {u'lat': 33.077651745364896,
-         #                                                    u'lon': -81.33346079166667},
-         #                                        u'top_left': {u'lat': 49.2333,
-         #                                                      u'lon': -124.6667},
-         #                                        u'total': 792}],
-         #                         u'factor': 0.4}},
-         # u'hits': {u'hits': [], u'max_score': 0.0, u'total': 421},
-         # u'timed_out': False,
-         # u'took': 10}
-         #
-         #
-         # Which is pretty close, but the total per cluster seems to be more than the overall possible total
-         #
-         #     
-                
+        #Returns something like:
+        #   {u'_shards': {u'failed': 0, u'successful': 5, u'total': 5},
+        # u'facets': {u'places': {u'_type': u'geo_cluster',
+        #                         u'clusters': [{u'bottom_right': {u'lat': 19.4412,
+        #                                                          u'lon': -155.0916},
+        #                                        u'center': {u'lat': 20.425166666666666,
+        #                                                    u'lon': -156.55726666666666},
+        #                                        u'top_left': {u'lat': 22.001,
+        #                                                      u'lon': -159.4302},
+        #                                        u'total': 6},
+        #          
+        #     ...
+        #
+        #                                       {u'bottom_right': {u'lat': -23.093885,
+        #                                                          u'lon': -56.036147},
+        #                                        u'center': {u'lat': 33.077651745364896,
+        #                                                    u'lon': -81.33346079166667},
+        #                                        u'top_left': {u'lat': 49.2333,
+        #                                                      u'lon': -124.6667},
+        #                                        u'total': 792}],
+        #                         u'factor': 0.4}},
+        # u'hits': {u'hits': [], u'max_score': 0.0, u'total': 421},
+        # u'timed_out': False,
+        # u'took': 10}
+        #
+        #
+        # Which is pretty close, but the total per cluster seems to be more than the overall possible total
+        #
+        #     
+            
+
+        pprint(es.search(search_type='count', #since we just want the facet counts returned
+                         body = { 
+                         "aggregations" : {
+                            "Locations-Grid" : {
+                                "geohash_grid" : {
+                                    "field" : "Locations",
+                                    "precision" : 2
+                                    }
+                                }
+                            }
+                        }))
+
+
+        #############################################################################
+        # {u'_shards': {u'failed': 0, u'successful': 5, u'total': 5},
+        #  u'aggregations': {u'Locations-Grid': {u'buckets': [{u'doc_count': 102,
+        #                                                      u'key': u'dn'},
+        #                                                     {u'doc_count': 68,
+        #                                                      u'key': u'dj'},
+        #                                                     {u'doc_count': 67,
+        #                                                      u'key': u'dq'},
+        #                                                     {u'doc_count': 22,
+        #                                                      u'key': u'ed'},
+        #                                                     {u'doc_count': 15,
+        #                                                      u'key': u'w6'},
+        #                                                     {u'doc_count': 13,
+        #                                                      u'key': u'd8'},
+        #                                                     {u'doc_count': 12,
+        #                                                      u'key': u'u4'},
+        #                                                     {u'doc_count': 11,
+        #                                                      u'key': u'ec'},
+                                                    
+        
+   
+
 
                  
