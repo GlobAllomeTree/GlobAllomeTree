@@ -10,14 +10,14 @@ then
 else
    echo ""
    echo ""
-   echo "Warning, local_settings.py already exists. Make sure that any changes in settings_local.py.server have been copied over if required"
+   echo "Warning, settings_local.py already exists. Make sure that any changes in settings_local.py.server have been copied over if required"
    echo ""	
 fi
 
 cd /opt/code
 
 echo ""
-echo "Tour friendly django debug server"
+echo "Your friendly django debug server"
 echo ""
 echo "Run Debug Server "
 echo "./manage.py runserver 0.0.0.0:${WEB_SERVER_PORT_DEBUG}" 

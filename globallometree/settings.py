@@ -113,10 +113,6 @@ INSTALLED_APPS = (
     'south',
     'crispy_forms',
 
-    #search
-    'haystack',
-    'elasticstack',
-
     # cms
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'cms',
@@ -127,21 +123,9 @@ INSTALLED_APPS = (
 
     # django cms options
 
-    # 'cms.plugins.text',
     'cms.plugins.file',  # replaced by filer
-    #'cms.plugins.flash',
-    #'cms.plugins.googlemap',
     'cms.plugins.link',
-    #'cms.plugins.picture',  # replaced by filer
-    #'cms.plugins.snippet',
-    #'cms.plugins.teaser',  # replaced by filer
-    #'cms.plugins.video',  # replaced by filer
-    # 'cmsplugin_filer_file',
-    # 'cmsplugin_filer_folder',
-    # 'cmsplugin_filer_image',
-    # 'cmsplugin_filer_teaser',
-    # 'cmsplugin_filer_video',
-    # 'cms.plugins.twitter',
+    'globallometree.plugins.linkbox',
 
     # project apps
     'globallometree.apps.common',
@@ -155,10 +139,9 @@ INSTALLED_APPS = (
     'globallometree.apps.bootstrap_3_theme', #our app must got first here for overrides
     'bootstrap3', 
 
-    # 'globallometree.apps.original_theme',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
-    'globallometree.plugins.linkbox',
+
 )
 
 
@@ -173,10 +156,17 @@ STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
 STATIC_URL = '/static/'
 
 
-#Encoding used for export and import of data
+#Encoding used for export and import of data for Allometric Equations
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
 
-from settings_search import *
+#urls of elasticsearch nodes
+ELASTICSEARCH_URLS = ['http://127.0.01:9200',]
+
+
+#Celery
+CELERY_ACCEPT_CONTENT = ['json',]
+BROKER_URL = 'redis://localhost:6379/0'
+
 from settings_local import *
