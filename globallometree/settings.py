@@ -162,7 +162,7 @@ INSTALLED_APPS = (
 )
 
 
-CRISPY_TEMPLATE_PACK = 'bootstrap'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Override the server-derived value of SCRIPT_NAME 
 # See http://code.djangoproject.com/wiki/BackwardsIncompatibleChanges#lighttpdfastcgiandothers

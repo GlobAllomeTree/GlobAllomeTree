@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 {% block script %}
 <script>
     $(function() {
-       
         $('a[href="#keyword"]').tab('show');
 
         var autocompletes = ['Country',
@@ -22,7 +22,6 @@
                              'Output'];
 
         $.each(autocompletes, function (index, field) {
-
             $( "#id_" + field ).attr('autocomplete', 'off');
             $( "#id_" + field ).typeahead({
             source: function ( query, process) {
@@ -33,51 +32,41 @@
             minLength: 2
             });
         });
-        
     });
-   
-
 </script>
-
-
-
 {% endblock %}
 
-
 {% block content %}
-
 	<div id="equations_page">
-	    
-	    
-	    
+
 	    {% if form.current_search_summary %}
-	       <div id="currentSearch">
+	        <div id="currentSearch">
                <div style="float:right"> 
-                    <a target="_blank" href="/data/export/{{form.export_link}}" class="btn btn-succcess" id="exportButton">Export Results</a>
+                    <a target="_blank" href="/data/export/{{form.export_link}}"
+                        class="btn btn-succcess" id="exportButton">
+                        Export Results
+                    </a>
                 </div>
-	           
                <h3>Your current search</h3>
                <h4>Equations found: {{ page.paginator.count}} </h4>
-
     	       <table>
         	       {% for item in form.current_search_summary %}
         	           <tr>
         	                <td style="width:150px;">{{item.field}}</td>
         	                <td style="width:250px;">{{item.search_value|truncatechars:48 }}</td>
-                            <td style="width:30px;"><a href="{{item.clear_link}}">clear</a></td>
+                            <td style="width:30px;">
+                                <a href="{{item.clear_link}}">clear</a>
+                            </td>
         	           </tr>
         	       {% endfor %}
     	       </table>
 	       </div>
-
 	    {% endif %}
 
         <h3>Equations</h3>
 
 	    <form method="get" action="." id="searchForm" autocomplete="off">
-	       
     	    <div id="search-box" style="clear:both;">    
-                
                 <ul class="nav nav-tabs">                   
                     <li><a href="#keyword" data-toggle="tab" class="active">Keyword</a></li>
                     <li><a href="#identification" data-toggle="tab">Identification</a></li>
@@ -88,7 +77,6 @@
                     <li><a href="#allometry" data-toggle="tab">Allometry</a></li>
                     <li><a href="#reference" data-toggle="tab">Reference</a></li>
                 </ul>
-
                 <div class="tab-content" >
                
     	            <div class="tab-pane active" id="keyword">
@@ -101,12 +89,13 @@
                                <a href="?q=Glutinosum">Glutinosum</a>,
                                <a href="?q=rainforest">rainforest</a>
                         </p>
-    	                <div {% if form.q.errors %} class="error" {% endif %}>
-                            {{ form.q.errors }}
-                            <label  class="floatedLabel" for="id_q">Keyword</label>
-                            {{ form.q }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                {{ form.q|as_crispy_field }}
+                            </div>
                         </div>
     	            </div>
+
     	            <div class="tab-pane" id="identification">
             	       <p class="search-help-text">
                             Search allometric equations by tree ecosystem and population. <br>
@@ -114,23 +103,16 @@
                                <a href="?Ecosystem=Plantation">Ecosystem: Plantation</a>,
                                <a href="?Population=STAND">Population: STAND</a>
                         </p>
-                        <div {% if form.Ecosystem.errors %} class="error" {% endif %}>
-                        {{ form.Ecosystem.errors }}
-                        <label for="id_Ecosystem" class="floatedLabel">Ecosystem</label>
-                        {{ form.Ecosystem }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                {{ form.Ecosystem|as_crispy_field }}
+                            </div>
+                            <div class="col-lg-6">
+                                {{ form.Population|as_crispy_field }}
+                            </div>
                         </div>
-                    
-            
-                        
-                        <div {% if form.Population.errors %} class="error" {% endif %}>
-                        {{ form.Population.errors }}
-                        <label for="id_Population" class="floatedLabel">Population</label>
-                        {{ form.Population }}
-                        </div>
-
     	            </div>
-    	     
-            
+
                     <div class="tab-pane" id="taxonomy">
                         <p class="search-help-text">
                             Search allometric equations by tree genus or species. <br>
@@ -138,25 +120,16 @@
                                <a href="?Genus=Gmelina">Genus: Gmelina</a>,
                                <a href="?Species=schweinfurthii">Species: schweinfurthii</a>
                         </p>
-
-            	  
-                        <div {% if form.Genus.errors %} class="error" {% endif %}>
-                        {{ form.Genus.errors }}
-                        <label  for="id_Genus" class="floatedLabel">Genus</label>
-                        {{ form.Genus }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                {{ form.Genus|as_crispy_field }}
+                            </div>
+                            <div class="col-lg-6">
+                                {{ form.Species|as_crispy_field }}
+                            </div>
                         </div>
-                            
-                        
-                        <div {% if form.Species.errors %} class="error" {% endif %}>
-                        {{ form.Species.errors }}
-                        <label for="ID_Species" class="floatedLabel">Species</label>
-                        {{ form.Species }}
-                        </div>
-                
-            
                     </div>
-             
-            
+
                     <div class="tab-pane" id="Location">
                         <p class="search-help-text">
                             Search allometric equations by tree location and biome. <br>
@@ -164,54 +137,19 @@
                                <a href="?Biome_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
                                <a href="?Country=Benin">Country: Benin</a>
                         </p>
-                        <div style="width:50%;float:left">
-                            <div {% if form.country.errors %} class="error" {% endif %}>
-                            {{ form.Country.errors }}
-                            <label for="id_Country" class="floatedLabel">Country</label>
-                            {{ form.Country }}
-                            </div>        
-                             
-                
-                            <div {% if form.Biome_HOLDRIDGE.errors %} class="error" {% endif %}>
-                            {{ form.Biome_HOLDRIDGE.errors }}
-                            <label for="id_Biome_HOLDRIDGE" class="floatedLabel">Biome (HOLDRIDGE)</label>
-                            {{ form.Biome_HOLDRIDGE }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                {{ form.Country|as_crispy_field }}
+                                {{ form.Biome_HOLDRIDGE|as_crispy_field }}
+                                {{ form.Biome_UDVARDY|as_crispy_field }}
+                	        </div>
+                	        <div class="col-lg-6">
+                                {{ form.Biome_FAO|as_crispy_field }}
+                                {{ form.Biome_WWF|as_crispy_field }}
+                                {{ form.Division_BAILEY|as_crispy_field }}
                             </div>
-                        
-                        
-                            
-                            <div {% if form.Biome_UDVARDY.errors %} class="error" {% endif %}>
-                            {{ form.Biome_UDVARDY.errors }}
-                            <label for="id_Biome_UDVARDY" class="floatedLabel">Biome (UDVARDY)</label>
-                            {{ form.Biome_UDVARDY }}
-                            </div>
-                        
-            	        </div>
-            	        <div style="width:50%;float:left">
-     
-                            <div {% if form.Biome_FAO.errors %} class="error" {% endif %}>
-                            {{ form.Biome_FAO.errors }}
-                            <label for="id_Biome_FAO" class="floatedLabel">Biome (FAO)</label>
-                            {{ form.Biome_FAO }}
-                            </div>
-                        
-                	       
-                            <div {% if form.Biome_WWF.errors %} class="error" {% endif %}>
-                            {{ form.Biome_WWF.errors }}
-                            <label for="id_Biome_WWF" class="floatedLabel">Biome (WWF)</label>
-                            {{ form.Biome_WWF }}
-                            </div>
-                        
-                                   
-                
-                            <div {% if form.Division_BAILEY.errors %} class="error" {% endif %}>
-                            {{ form.Division_BAILEY.errors }}
-                            <label for="id_Division_BAILEY" class="floatedLabel">Division (BAILEY)</label>
-                            {{ form.Division_BAILEY }}
-                            </div>
-        
+
                         </div>
-                        <div style="clear:both"></div>
             
                     </div>
              
@@ -223,89 +161,26 @@
                                <a href="?B=Yes&amp;Rf=Yes">B Bark: Yes + Rf Fine Roots: Yes</a>,
                                <a href="?F=No&amp;S=Yes">F Fruit: No +  S Stump: Yes</a>
                         </p>
-                        <div style="float:left;width:350px"> 
-                            <div class="{% if form.B.errors %}error{% endif %}">
-                            {{ form.B.errors }}
-                            <label for="id_B" class="floatedLabel"><span style="font-weight:bold;">B</span> - Bark</label>
-                            {{ form.B }}
+                        <div class="row smallInputs">
+                            <div class="col-lg-4">
+                                {{ form.B|as_crispy_field }}
+                                {{ form.Bd|as_crispy_field }}
+                                {{ form.Bg|as_crispy_field }}
+                                {{ form.Bt|as_crispy_field }}
+                                {{ form.L|as_crispy_field }}
+                                {{ form.Rb|as_crispy_field }}
+                                {{ form.Rf|as_crispy_field }}
+                                {{ form.Rm|as_crispy_field }}
+                                {{ form.S|as_crispy_field }}
+                                {{ form.T|as_crispy_field }}
+                                {{ form.F|as_crispy_field }}
                             </div>
-                        
-                
-                            <div class="{% if form.Bd.errors %}error{% endif %}">
-                            {{ form.Bd.errors }}
-                            <label for="id_Bd" class="floatedLabel"> <span style="font-weight:bold;">Bd</span> - Dead branches</label>
-                            {{ form.Bd }}
-                            </div>
-                        
-                            
-                            <div class="{% if form.Bg.errors %}error{% endif %}">
-                            {{ form.Bg.errors }}
-                            <label for="id_Bg" class="floatedLabel"> <span style="font-weight:bold;">Bg</span> - Big branches</label>
-                            {{ form.Bg }}
-                            </div>    
-                           
-                
-                            <div class="{% if form.Bt.errors %}error{% endif %}">
-                            {{ form.Bt.errors }}
-                            <label for="id_Bt" class="floatedLabel"> <span style="font-weight:bold;">Bt</span> - Thin Branches </label>
-                            {{ form.Bt }}
-                            </div>
-                       
-                            <div class="{% if form.L.errors %}error{% endif %}">
-                            {{ form.L.errors }}
-                            <label for="id_L" class="floatedLabel"> <span style="font-weight:bold;">L</span> - Leaves </label>
-                            {{ form.L }}
-                            </div>            
-                                       
-                            <div class="{% if form.Rb.errors %}error{% endif %}">
-                            {{ form.Rb.errors }}
-                            <label for="id_Rb" class="floatedLabel"> <span style="font-weight:bold;">Rb</span> - Large roots </label>
-                            {{ form.Rb }}
-                            </div>   
-                                
-                                
-                            <div class="{% if form.Rf.errors %}error{% endif %}">
-                            {{ form.Rf.errors }}
-                            <label for="id_Rf" class="floatedLabel"> <span style="font-weight:bold;">Rf</span> - Fine roots</label>
-                            {{ form.Rf }}
-                            </div>
-                                
-                            <div class="{% if form.Rm.errors %}error{% endif %}">
-                            {{ form.Rm.errors }}
-                            <label for="id_Rm" class="floatedLabel"> <span style="font-weight:bold;">Rm</span> - Medium roots</label>
-                            {{ form.Rm }}
-                            </div>
-                
-                            <div class="{% if form.S.errors %}error{% endif %}">
-                            {{ form.S.errors }}
-                            <label for="id_S" class="floatedLabel"> <span style="font-weight:bold;">S</span> - Stump</label>
-                            {{ form.S }}
-                            </div>
-                                
-                              
-                            <div class="{% if form.T.errors %}error{% endif %}">
-                            {{ form.T.errors }}
-                            <label for="id_T" class="floatedLabel"> <span style="font-weight:bold;">T</span> - Trunks</label>
-                            {{ form.T }}
-                            </div>
-                      
-                
-                            <div class="{% if form.F.errors %}error{% endif %}">
-                            {{ form.F.errors }}
-                            <label for="id_F" class="floatedLabel"> <span style="font-weight:bold;">F</span> - Fruit</label>
-                            {{ form.F }}
+                            <div class="col-lg-8">
+                                <img src="{% static 'images/components.png' %}" width="500" />
                             </div>
                         </div>
-                        <div style="float:left;width:600px;padding:20px">
-                            <img src="{% static 'images/components.png' %}" width="500" />
-                        </div>
-
-
-                        <div style="clear:both"></div>
-               
                     </div>
-             
-            
+
                     <div class="tab-pane" id="input_Output">
                         <p class="search-help-text">
                             Search allometric equations by equation input and output characteristics. <br>
@@ -313,125 +188,36 @@
                                <a href="?Output=Biomass">Output: Biomass</a>,
                                <a href="?Unit_X=cm&amp;Min_X__gte=10&amp;Min_X__lte=50">Unit X: cm + Min X From: 10 + Min X To: 50</a>
                         </p>
-                        <div style="float:left;width:24%" class="smallInputs">
-                           
-                            <div class="{% if form.U.errors %}error{% endif %}">
-                            {{ form.U.errors }}<label for="id_U">U</label>
-                            {{ form.U }}
+                        <div class="row smallInputs">
+                            <div class="col-lg-3">
+                                {{ form.U|as_crispy_field }}
+                                {{ form.V|as_crispy_field }}
+                                {{ form.W|as_crispy_field }}
+                                {{ form.X|as_crispy_field }}
+                                {{ form.Z|as_crispy_field }}
                             </div>
-                
-                            <div class="{% if form.V.errors %}error{% endif %}">
-                            {{ form.V.errors }}<label for="id_V">V</label>
-                            {{ form.V }}
+                            <div class="col-lg-3">
+                                {{ form.Unit_U|as_crispy_field }}
+                                {{ form.Unit_V|as_crispy_field }}
+                                {{ form.Unit_W|as_crispy_field }}
+                                {{ form.Unit_X|as_crispy_field }}
+                                {{ form.Unit_Y|as_crispy_field }}
+                                {{ form.Unit_Z|as_crispy_field }}
                             </div>
-                            
-                            <div class="{% if form.W.errors %}error{% endif %}">
-                            {{ form.W.errors }}<label for="id_W">W</label>
-                            {{ form.W }}
+                            <div class="col-lg-3">
+                                {{ form.Min_X__gte|as_crispy_field }}
+                                {{ form.Max_X__gte|as_crispy_field }}
+                                {{ form.Min_Z__gte|as_crispy_field }}
+                                {{ form.Max_Z__gte|as_crispy_field }}
+                                {{ form.Output|as_crispy_field }}
                             </div>
-
-                            <div class="{% if form.X.errors %}error{% endif %}">
-                            {{ form.X.errors }}<label for="id_X">X</label>
-                            {{ form.X }}
-                            </div>
-                        
-                    
-                            <div style="float:left;clear:left;height:40px"></div> 
-
-                            <div class="{% if form.Z.errors %}error{% endif %}">
-                            {{ form.Z.errors }}<label for="id_Z" >Z</label>
-                            {{ form.Z }}
-                            </div>
-                
-                          
-                    
-                        </div>
-                        <div style="float:left;width:24%" class="smallInputs">
-
-                            
-                            
-                            <div class="{% if form.Unit_U.errors %}error{% endif %}">
-                            {{ form.Unit_U.errors }}<label for="id_Unit_U">Unit U</label>
-                            {{ form.Unit_U }}
-                            </div>
-                        
-                
-                
-                            <div class="{% if form.Unit_V.errors %}error{% endif %}">
-                            {{ form.Unit_V.errors }}<label for="id_Unit_V">Unit V</label>
-                            {{ form.Unit_V }}
-                            </div>           
-                            
-                            <div class="{% if form.Unit_W.errors %}error{% endif %}">
-                            {{ form.Unit_W.errors }}<label for="id_Unit_W">Unit W</label>
-                            {{ form.Unit_W }}
-                            </div>
-                                
-                            <div class="{% if form.Unit_X.errors %}error{% endif %}">
-                            {{ form.Unit_X.errors }}<label for="id_Unit_X">Unit X</label>
-                            {{ form.Unit_X }}
-                            </div>
-                        
-                            
-                            <div class="{% if form.Unit_Y.errors %}error{% endif %}">
-                            {{ form.Unit_Y.errors }}<label for="id_Unit_Y">Unit Y</label>
-                            {{ form.Unit_Y }}
-                            </div>
-                                
-                            <div class="{% if form.Unit_Z.errors %}error{% endif %}">
-                            {{ form.Unit_Z.errors }}<label for="id_Unit_Z">Unit Z</label>
-                            {{ form.Unit_Z }}
-                            </div>
-                        
-            
-                        </div>
-                        <div style="float:left;width:50%">
-                
-                            <div class="{% if form.Min_X__gte.errors %}error{% endif %} {% if form.Min_X__lte.errors %}error{% endif %} smallInputs2">
-                            {{ form.Min_X__gte.errors }}<label for="id_Min_X__gte">Min X From</label>
-                            {{ form.Min_X__gte }}
-                            {{ form.Min_X__lte.errors }}<label for="id_Min_X__lte" class="middle">To</label>
-                            {{ form.Min_X__lte }}
-                            </div>
-                            
-                     
-                
-                            <div class="{% if form.Max_X__gte.errors %}error{% endif %} {% if form.Max_X__lte.errors %}error{% endif %} smallInputs2">
-                            {{ form.Max_X__gte.errors }}<label for="id_Max_X__gte">Max X From</label>
-                            {{ form.Max_X__gte }}
-                            {{ form.Max_X__lte.errors }}<label for="id_Max_X__lte" class="middle">To</label>
-                            {{ form.Max_X__lte }}
-                            </div>
-                            
-                            <div style="float:left;clear:left;height:40px"></div>  
-                        
-                              
-                            <div class="{% if form.Min_Z__gte.errors %}error{% endif %} {% if form.Min_Z__lte.errors %}error{% endif %} smallInputs2">
-                            {{ form.Min_Z__gte.errors }}<label for="id_Min_Z__gte">Min H From</label>
-                            {{ form.Min_Z__gte }}
-                            {{ form.Min_Z__lte.errors }}<label for="id_Min_Z__lte" class="middle">To</label>
-                            {{ form.Min_Z__lte }}
-                            </div>
-                        
-                        
-                                          
-                            <div class="{% if form.Max_Z__gte.errors %}error{% endif %} {% if form.Max_Z__lte.errors %}error{% endif %} smallInputs2">
-                            {{ form.Max_Z__gte.errors }}<label for="id_Max_Z__gte" style="margin-bottom:34px;">Max H From</label>
-                            {{ form.Max_Z__gte }}
-                            {{ form.Max_Z__lte.errors }}<label for="id_Max_Z__lte" class="middle">To</label>
-                            {{ form.Max_Z__lte }}
-                            </div>
-                                
-                            <div style="float:left;clear:left;height:40px"></div> 
-                        
-                
-                            <div class="{% if form.Output.errors %}error{% endif %} smallInputs2">
-                            {{ form.Output.errors }}<label for="id_Output" >Output</label>
-                            {{ form.Output }}
+                            <div class="col-lg-3">
+                                {{ form.Min_X__lte|as_crispy_field }}
+                                {{ form.Max_X__lte|as_crispy_field }}
+                                {{ form.Min_Z__lte|as_crispy_field }}
+                                {{ form.Max_Z__lte|as_crispy_field }}
                             </div>
                         </div>
-                        <div style="clear:both"></div>
-
                     </div>
              
             
@@ -442,16 +228,13 @@
                                <a href="?Equation=log(H)">Equation contains: log(H)</a>,
                                <a href="?Equation=DBH^2">Equation contains: DBH^2</a>
                         </p>
-      
-                        <div {% if form.Equation.errors %} class="error" {% endif %}>
-                        {{ form.Equation.errors }}
-                        <label for="id_Equation" class="floatedLabel">Equation</label>
-                        {{ form.Equation }}
-                        </div>
-                            
+                        <div class="row">
+                            <div class="col-lg-6">
+                                {{ form.Equation|as_crispy_field }}
+                            </div>
+                        </div>  
                     </div>
-             
-            
+
                     <div class="tab-pane" id="reference">
                         <p class="search-help-text">
                             Search allometric equations by author, year, and reference. <br>
@@ -461,30 +244,18 @@
                                <a href="?Year=2004">Year: 2004</a>
                         </p>
             
-                        <div {% if form.Author.errors %} class="error" {% endif %}>
-                        {{ form.Author.errors }}
-                        <label for="id_Author" class="floatedLabel">Author</label>
-                        {{ form.Author }}
+                        <div class="row">
+                            <div class="col-lg-4">
+                                {{ form.Author|as_crispy_field }}
+                            </div>
+                            <div class="col-lg-4">
+                                {{ form.Reference|as_crispy_field }}
+                            </div>        
+                            <div class="col-lg-4">
+                                {{ form.Year|as_crispy_field }}
+                            </div>
                         </div>
-                    
-            
-            
-                        <div {% if form.Reference.errors %} class="error" {% endif %}>
-                        {{ form.Reference.errors }}
-                        <label for="ID_Reference" class="floatedLabel">Reference</label>
-                        {{ form.Reference }}
-                        </div>        
-            
-                        <div {% if form.Year.errors %} class="error" {% endif %}>
-                        {{ form.Year.errors }}
-                        <label for="id_Year" class="floatedLabel">Year</label>
-                        {{ form.Year }}
-                        </div>
-            
-
-                
                     </div>
-            
                 </div>
               
                 {{ form.order_by }} 
@@ -493,6 +264,7 @@
                 <div id="search-submit-holder">
                     <input id="searchButton" style="float:right" class="btn btn-succcess" type="submit" value="Search">
                 </div>
+                <div class="clearfix"></div>
             </div>
     	            
 	    </form>
@@ -500,8 +272,8 @@
 	    {% if no_query_entered %}
             <!-- NO QUERY YET -->
         {% elif page.object_list %}
-         <br>
-         <br>
+         <br />
+         <br />
 			<div style="float:left;width:1030px;overflow-x:auto;">	
 				<table class="equationTable" style="width:500px;">
 				<thead>   
