@@ -96,7 +96,6 @@ class Command(BaseCommand):
         #
         #     
             
-
         pprint(es.search(search_type='count', #since we just want the facet counts returned
                          body = { 
                          "aggregations" : {
@@ -130,7 +129,77 @@ class Command(BaseCommand):
         #                                                      u'key': u'ec'},
                                                     
         
-   
+
+
+        pprint(es.search(search_type='count', #since we just want the facet counts returned
+                         body = { 
+                         "aggregations" : {
+                            "species" : {
+                                "terms" : { 
+                                    "field" : "Species" 
+                                    }
+                                }
+                            }
+                        }))
+
+
+        #############################################################################
+        # {u'_shards': {u'failed': 0, u'successful': 5, u'total': 5},
+        #  u'aggregations': {u'species': {u'buckets': [{u'doc_count': 56,
+        #                                               u'key': u'spp.'},
+        #                                              {u'doc_count': 21,
+        #                                               u'key': u'All'},
+        #                                              {u'doc_count': 9,
+        #                                               u'key': u'copaia'},
+        #                                              {u'doc_count': 9,
+        #                                               u'key': u'glabrum'},
+        #                                              {u'doc_count': 9,
+
+
+        #Combining!
+        pprint(es.search(search_type='count', #since we just want the facet counts returned
+                         body = { 
+                         "aggregations" : {
+                            "Locations-Grid" : {
+                                "geohash_grid" : {
+                                    "field" : "Locations",
+                                    "precision" : 2
+                                },
+                                "aggregations" : {
+                                    "species" : {
+                                            "terms" : { 
+                                                "field" : "Species" 
+                                             }
+                                        }
+                                    }
+                                },         
+                            }       
+                        }))
+
+        #Here we get a list of geohashes by key with the species that are at that geohash
+        ##############################################################################
+        # {u'doc_count': 2,
+        # u'key': u'6q',
+        # u'species': {u'buckets': [{u'doc_count': 2,
+        #                            u'key': u'unknown'},
+        #                           {u'doc_count': 1,
+        #                            u'key': u'flexuosa'},
+        #                           {u'doc_count': 1,
+        #                            u'key': u'laevis'},
+        #                           {u'doc_count': 1,
+        #                            u'key': u'officinalis'},
+        #                           {u'doc_count': 1,
+        #                            u'key': u'pavonis'}]}},
+        #  {u'doc_count': 1,
+        #  u'key': u'ud',
+        #  u'species': {u'buckets': [{u'doc_count': 1,
+        #                             u'key': u'sylvestris'}]}},
+        # {u'doc_count': 1,
+        #  u'key': u'u7',
+        #  u'species': {u'buckets': [{u'doc_count': 1,
+        #                             u'key': u'sylvestris'}]}},
+
+
 
 
                  
