@@ -4,6 +4,7 @@ WEB_SERVER_PORT ?= 8082
 WEB_SERVER_PORT_DEBUG ?= 8083
 SECRET_KEY ?= top_secret 
 
+
 WEB_BASE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 WEB_BASE_DIR := $(abspath $(patsubst %/,%,$(dir $(WEB_BASE_PATH))))
 
@@ -61,7 +62,7 @@ django-manage:
 	#Example)  django-manage COMMAND="collectstatic --noinput"
 	-@docker stop django_manage 2>/dev/null || true
 	-@docker rm django_manage 2>/dev/null || true
-	docker run -i -t --name django_manage ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" web_server_image bash /opt/code/server/startup_manage.sh
+	docker run -i -t --name django_manage ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" ${WEB_TAG_NAME} bash /opt/code/server/startup_manage.sh
 
 
 django-collectstatic:
