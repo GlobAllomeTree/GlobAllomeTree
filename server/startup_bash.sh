@@ -1,12 +1,12 @@
 #!/bin/bash
-python /home/docker/code/server/save_env.py
+python /opt/code/server/save_env.py
 
-LOCAL_SETTINGS_FILE=/home/docker/code/globallometree/settings_local.py
+LOCAL_SETTINGS_FILE=/opt/code/globallometree/settings_local.py
 
 if [ ! -f $LOCAL_SETTINGS_FILE ];
 then
    echo "Copying settings_local.py.server to settings_local.py"
-   cp /home/docker/code/globallometree/settings_local.py.server /home/docker/code/globallometree/settings_local.py
+   cp /opt/code/globallometree/settings_local.py.server /opt/code/globallometree/settings_local.py
 else
    echo ""
    echo ""
@@ -14,14 +14,14 @@ else
    echo ""	
 fi
 
-cd /home/docker/code
+cd /opt/code
 
 echo ""
 echo "Tour friendly django debug server"
 echo ""
 echo "Run Debug Server "
-echo "./manage.py runserver 0.0.0.0:8083" 
-echo " - then open your browser to http://127.0.0.1:8083/"
+echo "./manage.py runserver 0.0.0.0:${WEB_SERVER_PORT_DEBUG}" 
+echo " - then open your browser to http://127.0.0.1:${WEB_SERVER_PORT_DEBUG}/"
 echo ""
 echo "iPython Shell "
 echo "./manage.py shell_plus" 

@@ -1,5 +1,5 @@
 #!/bin/bash
-python /home/docker/code/server/save_env.py
+python /opt/code/server/save_env.py
 
 #Add a reference to our upstream elastic search so nginx can reference it
 cat << EOF > /etc/nginx/elasticsearch_upstream.conf
