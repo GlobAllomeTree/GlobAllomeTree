@@ -200,69 +200,53 @@ class Command(BaseCommand):
         #                             u'key': u'sylvestris'}]}},
 
 
-        #Example showing both query and aggregations
-        #Although this query uses the constant_score filter, 
-        #the query_string could also be used which can 
-        #be taken from haystack
+        #Example showing both query, aggregations, and geo_bounding_box
+        
         pprint(es.search(search_type='count', 
                          body = { 
-                         "query" : {
-                             "constant_score" : {
-                                "filter" : {
-                                    "term" : { "Species" : "sylvestris"}
-                                }
-                             },
-                         },
-                         "aggregations" : {
-                            "Locations-Grid" : {
-                                "geohash_grid" : {
-                                    "field" : "Locations",
-                                    "precision" : 2
-                                },
-                                "aggregations" : {
-                                    "species" : {
-                                            "terms" : { 
-                                                "field" : "Species" 
-                                             }
+
+                             "query" : {
+                                 "constant_score" : {
+                                    "filter" : {
+                                        "term" : { "Species" : "sylvestris"},
+                                    }
+                                 },
+                                 "filtered" : {
+                                    "query" : {
+                                        "match_all" : {}
+                                    },
+                                    "filter" : {
+                                        "geo_bounding_box" : {
+                                            "Locations" : {
+                                                "top_left" : {
+                                                    "lat" : 180,
+                                                    "lon" : 0
+                                                },
+                                                "bottom_right" : {
+                                                    "lat" : 0,
+                                                    "lon" : 180
+                                                }
+                                            }
                                         }
                                     }
-                                },         
-                            }       
-                        }))
-        #Here we get a list of geohashes like above, but filtered by the query
-        ##################################################################
-        # {u'_shards': {u'failed': 0, u'successful': 5, u'total': 5},
-        #  u'aggregations': {u'Locations-Grid': {u'buckets': [{u'doc_count': 3,
-        #                                                      u'key': u'u3',
-        #                                                      u'species': {u'buckets': [{u'doc_count': 3,
-        #                                                                                 u'key': u'sylvestris'}]}},
-        #                                                     {u'doc_count': 3,
-        #                                                      u'key': u'u2',
-        #                                                      u'species': {u'buckets': [{u'doc_count': 3,
-        #                                                                                 u'key': u'sylvestris'}]}},
-        #                                                     {u'doc_count': 3,
-        #                                                      u'key': u'gf',
-        #                                                      u'species': {u'buckets': [{u'doc_count': 3,
-        #                                                                                 u'key': u'sylvestris'}]}},
-        #                                                     {u'doc_count': 2,
-        #                                                      u'key': u'u4',
-        #                                                      u'species': {u'buckets': [{u'doc_count': 2,
-        #                                                                                 u'key': u'sylvestris'}]}},
-        #                                                     {u'doc_count': 1,
-        #                                                      u'key': u'ud',
-        #                                                      u'species': {u'buckets': [{u'doc_count': 1,
-        #                                                                                 u'key': u'sylvestris'}]}},
-        #                                                     {u'doc_count': 1,
-        #                                                      u'key': u'u7',
-        #                                                      u'species': {u'buckets': [{u'doc_count': 1,
-        #                                                                                 u'key': u'sylvestris'}]}},
-        #                                                     {u'doc_count': 1,
-        #                                                      u'key': u'u6',
-        #                                                      u'species': {u'buckets': [{u'doc_count': 1,
-        #                                                                                 u'key': u'sylvestris'}]}}]}},
-        #  u'hits': {u'hits': [], u'max_score': 0.0, u'total': 14},
-        #  u'timed_out': False,
-        #  u'took': 14}
-
+                                }
+                             },
+                             "aggregations" : {
+                                "Locations-Grid" : {
+                                    "geohash_grid" : {
+                                        "field" : "Locations",
+                                        "precision" : 2
+                                    },
+                                    "aggregations" : {
+                                        "species" : {
+                                                "terms" : { 
+                                                    "field" : "Species" 
+                                                 }
+                                            }
+                                        }
+                                    },         
+                                }       
+                            }))
+       
 
                  
