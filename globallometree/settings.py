@@ -21,7 +21,7 @@ TIME_ZONE = 'Europe/Zurich'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 USE_I18N = True
 
@@ -62,7 +62,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
-    'cms.context_processors.media',
+    'cms.context_processors.cms_settings',
     'sekizai.context_processors.sekizai',
 )
 
@@ -103,7 +103,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
-    # must go before django.contrib.admin
+    # djangocms_admin_style must go before django.contrib.admin
     'djangocms_admin_style',  # cms
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -113,35 +113,17 @@ INSTALLED_APPS = (
     'south',
     'crispy_forms',
 
-    #search
+    #Search related apps
     'haystack',
     'elasticstack',
 
-    # cms
+    # Django CMS apps
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'cms',
     'menus',
     'mptt',
     'sekizai',
-    'cms.stacks',
-
-    # django cms options
-
-    # 'cms.plugins.text',
-    'cms.plugins.file',  # replaced by filer
-    #'cms.plugins.flash',
-    #'cms.plugins.googlemap',
-    'cms.plugins.link',
-    #'cms.plugins.picture',  # replaced by filer
-    #'cms.plugins.snippet',
-    #'cms.plugins.teaser',  # replaced by filer
-    #'cms.plugins.video',  # replaced by filer
-    # 'cmsplugin_filer_file',
-    # 'cmsplugin_filer_folder',
-    # 'cmsplugin_filer_image',
-    # 'cmsplugin_filer_teaser',
-    # 'cmsplugin_filer_video',
-    # 'cms.plugins.twitter',
+    'djangocms_link',
 
     # project apps
     'globallometree.apps.common',

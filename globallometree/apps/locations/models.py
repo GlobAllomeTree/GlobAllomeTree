@@ -1,5 +1,4 @@
 from django.db import models
-from haystack.utils.geo import Point
 
 
 class Continent(models.Model):
