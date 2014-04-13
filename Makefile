@@ -44,6 +44,9 @@ web-attach:
 	#Use lxc attach to attch to the webserver
 	$(MAKE) dock-attach CONTAINER=${WEB_CONTAINER_NAME}
 
+web-commit:
+	docker commit -m "commit from modified web server" ${WEB_CONTAINER_NAME} ${WEB_TAG_NAME} 
+
 
 ####################################### WEB DEBUG #####################################
 
@@ -58,7 +61,8 @@ web-debug-run: web-debug-clean
 	#Run a debug server on port 8083
 	docker run -i -t --name ${WEB_CONTAINER_NAME}_debug -p ${WEB_SERVER_PORT_DEBUG}:8083 -e WEB_SERVER_PORT_DEBUG=${WEB_SERVER_PORT_DEBUG} ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /opt/code/server/startup_bash.sh
 
-
+web-commit-from-debug:
+	docker commit -m "commit from debug server" ${WEB_CONTAINER_NAME}_debug ${WEB_TAG_NAME} 
 
 ####################################### DJANGO SPECIFIC #####################################
 

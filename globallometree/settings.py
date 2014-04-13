@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'mptt',
     'sekizai',
     'djangocms_link',
+    'djangocms_file',
 
     # project apps
     'globallometree.apps.common',
