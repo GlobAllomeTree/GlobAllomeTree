@@ -41,3 +41,5 @@ djangocms-text-ckeditor==2.1.1
 
 ####################### Frontend
 django-bootstrap3==3.0.0
+
+mock==1.0.1

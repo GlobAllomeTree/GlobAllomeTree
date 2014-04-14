@@ -1,0 +1,436 @@
+-   fields: {name: America}
+    model: locations.continent
+    pk: 1
+-   fields: {name: Africa}
+    model: locations.continent
+    pk: 2
+-   fields: {name: Asia}
+    model: locations.continent
+    pk: 3
+-   fields: {name: Europe}
+    model: locations.continent
+    pk: 4
+-   fields: {capital: Washington, common_name: United Republic of Tanzania, continent: 2, formal_name: United
+            States of America, iana_country_code_tld: .us, iso_3166_1_2_letter_code: US,
+        iso_3166_1_3_letter_code: USA, iso_3166_1_number: 840, iso_4217_currency_code: USD,
+        iso_4217_currency_name: Dollar, sovereignty: '', sub_type: '', telephone_code: '1',
+        type: Independent State}
+    model: locations.country
+    pk: 1
+-   fields: {capital: Abuja, common_name: Nigeria, continent: 2, formal_name: Federal
+            Republic of Nigeria, iana_country_code_tld: .ng, iso_3166_1_2_letter_code: NG,
+        iso_3166_1_3_letter_code: NGA, iso_3166_1_number: 566, iso_4217_currency_code: NGN,
+        iso_4217_currency_name: Naira, sovereignty: '', sub_type: '', telephone_code: '234',
+        type: Independent State}
+    model: locations.country
+    pk: 2
+-   fields: {capital: Libreville, common_name: Gabon, continent: 2, formal_name: Gabonese
+            Republic, iana_country_code_tld: .ga, iso_3166_1_2_letter_code: GA, iso_3166_1_3_letter_code: GAB,
+        iso_3166_1_number: 266, iso_4217_currency_code: XAF, iso_4217_currency_name: Franc,
+        sovereignty: '', sub_type: '', telephone_code: '241', type: Independent State}
+    model: locations.country
+    pk: 3
+-   fields: {capital: Yamoussoukro, common_name: Cote d'Ivoire, continent: 2, formal_name: Republic
+            of Cote d'Ivoire, iana_country_code_tld: .ci, iso_3166_1_2_letter_code: CI,
+        iso_3166_1_3_letter_code: CIV, iso_3166_1_number: 384, iso_4217_currency_code: XOF,
+        iso_4217_currency_name: Franc, sovereignty: '', sub_type: '', telephone_code: '225',
+        type: Independent State}
+    model: locations.country
+    pk: 4
+-   fields: {capital: Phnom Penh, common_name: Cambodia, continent: 3, formal_name: Kingdom
+            of Cambodia, iana_country_code_tld: .kh, iso_3166_1_2_letter_code: KH,
+        iso_3166_1_3_letter_code: KHM, iso_3166_1_number: 116, iso_4217_currency_code: KHR,
+        iso_4217_currency_name: Riels, sovereignty: '', sub_type: '', telephone_code: '855',
+        type: Independent State}
+    model: locations.country
+    pk: 5
+-   fields: {capital: Yaounde, common_name: Cameroon, continent: 2, formal_name: Republic
+            of Cameroon, iana_country_code_tld: .cm, iso_3166_1_2_letter_code: CM,
+        iso_3166_1_3_letter_code: CMR, iso_3166_1_number: 120, iso_4217_currency_code: XAF,
+        iso_4217_currency_name: Franc, sovereignty: '', sub_type: '', telephone_code: '237',
+        type: Independent State}
+    model: locations.country
+    pk: 6
+-   fields: {capital: Bogota, common_name: Colombia, continent: 1, formal_name: Republic
+            of Colombia, iana_country_code_tld: .co, iso_3166_1_2_letter_code: CO,
+        iso_3166_1_3_letter_code: COL, iso_3166_1_number: 170, iso_4217_currency_code: COP,
+        iso_4217_currency_name: Peso, sovereignty: '', sub_type: '', telephone_code: '57',
+        type: Independent State}
+    model: locations.country
+    pk: 7
+-   fields: {capital: Bangui, common_name: Central African Republic, continent: 2,
+        formal_name: '', iana_country_code_tld: .cf, iso_3166_1_2_letter_code: CF,
+        iso_3166_1_3_letter_code: CAF, iso_3166_1_number: 140, iso_4217_currency_code: XAF,
+        iso_4217_currency_name: Franc, sovereignty: '', sub_type: '', telephone_code: '236',
+        type: Independent State}
+    model: locations.country
+    pk: 8
+-   fields: {capital: Bissau, common_name: Guinea-Bissau, continent: 2, formal_name: Republic
+            of Guinea-Bissau, iana_country_code_tld: .gw, iso_3166_1_2_letter_code: GW,
+        iso_3166_1_3_letter_code: GNB, iso_3166_1_number: 624, iso_4217_currency_code: XOF,
+        iso_4217_currency_name: Franc, sovereignty: '', sub_type: '', telephone_code: '245',
+        type: Independent State}
+    model: locations.country
+    pk: 9
+-   fields: {capital: Hanoi, common_name: Vietnam, continent: 3, formal_name: Socialist
+            Republic of Vietnam, iana_country_code_tld: .vn, iso_3166_1_2_letter_code: VN,
+        iso_3166_1_3_letter_code: VNM, iso_3166_1_number: 704, iso_4217_currency_code: VND,
+        iso_4217_currency_name: Dong, sovereignty: '', sub_type: '', telephone_code: '84',
+        type: Independent State}
+    model: locations.country
+    pk: 10
+-   fields: {capital: Brazzaville, common_name: "Congo, Republic of the (Congo \x96\
+            \ Brazzaville)", continent: 2, formal_name: Congo, iana_country_code_tld: .cg,
+        iso_3166_1_2_letter_code: CG, iso_3166_1_3_letter_code: COG, iso_3166_1_number: 178,
+        iso_4217_currency_code: XAF, iso_4217_currency_name: Franc, sovereignty: '',
+        sub_type: '', telephone_code: '242', type: Independent State}
+    model: locations.country
+    pk: 11
+-   fields: {capital: Oslo, common_name: Norway, continent: 4, formal_name: Kingdom
+            of Norway, iana_country_code_tld: .no, iso_3166_1_2_letter_code: 'NO',
+        iso_3166_1_3_letter_code: NOR, iso_3166_1_number: 578, iso_4217_currency_code: NOK,
+        iso_4217_currency_name: Krone, sovereignty: '', sub_type: '', telephone_code: '47',
+        type: Independent State}
+    model: locations.country
+    pk: 12
+-   fields: {capital: Vienna, common_name: Austria, continent: 4, formal_name: Republic
+            of Austria, iana_country_code_tld: .at, iso_3166_1_2_letter_code: AT,
+        iso_3166_1_3_letter_code: AUT, iso_3166_1_number: 40, iso_4217_currency_code: EUR,
+        iso_4217_currency_name: Euro, sovereignty: '', sub_type: '', telephone_code: '43',
+        type: Independent State}
+    model: locations.country
+    pk: 13
+-   fields: {capital: Kampala, common_name: Uganda, continent: 2, formal_name: Republic
+            of Uganda, iana_country_code_tld: .ug, iso_3166_1_2_letter_code: UG, iso_3166_1_3_letter_code: UGA,
+        iso_3166_1_number: 800, iso_4217_currency_code: UGX, iso_4217_currency_name: Shilling,
+        sovereignty: '', sub_type: '', telephone_code: '256', type: Independent State}
+    model: locations.country
+    pk: 14
+-   fields: {capital: Amsterdam (administrative) and The Hague (legislative/judical),
+        common_name: Netherlands, continent: 4, formal_name: Kingdom of the Netherlands,
+        iana_country_code_tld: .nl, iso_3166_1_2_letter_code: NL, iso_3166_1_3_letter_code: NLD,
+        iso_3166_1_number: 528, iso_4217_currency_code: EUR, iso_4217_currency_name: Euro,
+        sovereignty: '', sub_type: '', telephone_code: '31', type: Independent State}
+    model: locations.country
+    pk: 15
+-   fields: {capital: Ottawa, common_name: Canada, continent: 1, formal_name: '',
+        iana_country_code_tld: .ca, iso_3166_1_2_letter_code: CA, iso_3166_1_3_letter_code: CAN,
+        iso_3166_1_number: 124, iso_4217_currency_code: CAD, iso_4217_currency_name: Dollar,
+        sovereignty: '', sub_type: '', telephone_code: '1', type: Independent State}
+    model: locations.country
+    pk: 16
+-   fields: {capital: Kinshasa, common_name: "Congo, Democratic Republic of the (Congo\
+            \ \x96 Kinshasa)", continent: 2, formal_name: Democratic Republic of the
+            Congo, iana_country_code_tld: .cd, iso_3166_1_2_letter_code: CD, iso_3166_1_3_letter_code: COD,
+        iso_3166_1_number: 180, iso_4217_currency_code: CDF, iso_4217_currency_name: Franc,
+        sovereignty: '', sub_type: '', telephone_code: '243', type: Independent State}
+    model: locations.country
+    pk: 17
+-   fields: {capital: Berlin, common_name: Germany, continent: 4, formal_name: Federal
+            Republic of Germany, iana_country_code_tld: .de, iso_3166_1_2_letter_code: DE,
+        iso_3166_1_3_letter_code: DEU, iso_3166_1_number: 276, iso_4217_currency_code: EUR,
+        iso_4217_currency_name: Euro, sovereignty: '', sub_type: '', telephone_code: '49',
+        type: Independent State}
+    model: locations.country
+    pk: 18
+-   fields: {capital: Copenhagen, common_name: Denmark, continent: 4, formal_name: Kingdom
+            of Denmark, iana_country_code_tld: .dk, iso_3166_1_2_letter_code: DK,
+        iso_3166_1_3_letter_code: DNK, iso_3166_1_number: 208, iso_4217_currency_code: DKK,
+        iso_4217_currency_name: Krone, sovereignty: '', sub_type: '', telephone_code: '45',
+        type: Independent State}
+    model: locations.country
+    pk: 19
+-   fields: {capital: Rome, common_name: Italy, continent: 4, formal_name: Italian
+            Republic, iana_country_code_tld: .it, iso_3166_1_2_letter_code: IT, iso_3166_1_3_letter_code: ITA,
+        iso_3166_1_number: 380, iso_4217_currency_code: EUR, iso_4217_currency_name: Euro,
+        sovereignty: '', sub_type: '', telephone_code: '39', type: Independent State}
+    model: locations.country
+    pk: 20
+-   fields: {capital: Prague, common_name: Czech Republic, continent: 4, formal_name: '',
+        iana_country_code_tld: .cz, iso_3166_1_2_letter_code: CZ, iso_3166_1_3_letter_code: CZE,
+        iso_3166_1_number: 203, iso_4217_currency_code: CZK, iso_4217_currency_name: Koruna,
+        sovereignty: '', sub_type: '', telephone_code: '420', type: Independent State}
+    model: locations.country
+    pk: 21
+-   fields: {capital: London, common_name: United Kingdom, continent: 4, formal_name: United
+            Kingdom of Great Britain and Northern Ireland, iana_country_code_tld: .uk,
+        iso_3166_1_2_letter_code: GB, iso_3166_1_3_letter_code: GBR, iso_3166_1_number: 826,
+        iso_4217_currency_code: GBP, iso_4217_currency_name: Pound, sovereignty: '',
+        sub_type: '', telephone_code: '44', type: Independent State}
+    model: locations.country
+    pk: 22
+-   fields: {capital: Warsaw, common_name: Poland, continent: 4, formal_name: Republic
+            of Poland, iana_country_code_tld: .pl, iso_3166_1_2_letter_code: PL, iso_3166_1_3_letter_code: POL,
+        iso_3166_1_number: 616, iso_4217_currency_code: PLN, iso_4217_currency_name: Zloty,
+        sovereignty: '', sub_type: '', telephone_code: '48', type: Independent State}
+    model: locations.country
+    pk: 23
+-   fields: {capital: Stockholm, common_name: Sweden, continent: 4, formal_name: Kingdom
+            of Sweden, iana_country_code_tld: .se, iso_3166_1_2_letter_code: SE, iso_3166_1_3_letter_code: SWE,
+        iso_3166_1_number: 752, iso_4217_currency_code: SEK, iso_4217_currency_name: Kronoa,
+        sovereignty: '', sub_type: '', telephone_code: '46', type: Independent State}
+    model: locations.country
+    pk: 24
+-   fields: {capital: Helsinki, common_name: Finland, continent: 4, formal_name: Republic
+            of Finland, iana_country_code_tld: .fi, iso_3166_1_2_letter_code: FI,
+        iso_3166_1_3_letter_code: FIN, iso_3166_1_number: 246, iso_4217_currency_code: EUR,
+        iso_4217_currency_name: Euro, sovereignty: '', sub_type: '', telephone_code: '358',
+        type: Independent State}
+    model: locations.country
+    pk: 25
+-   fields: {capital: Madrid, common_name: Spain, continent: 4, formal_name: Kingdom
+            of Spain, iana_country_code_tld: .es, iso_3166_1_2_letter_code: ES, iso_3166_1_3_letter_code: ESP,
+        iso_3166_1_number: 724, iso_4217_currency_code: EUR, iso_4217_currency_name: Euro,
+        sovereignty: '', sub_type: '', telephone_code: '34', type: Independent State}
+    model: locations.country
+    pk: 26
+-   fields: {capital: Bucharest, common_name: Romania, continent: 4, formal_name: '',
+        iana_country_code_tld: .ro, iso_3166_1_2_letter_code: RO, iso_3166_1_3_letter_code: ROU,
+        iso_3166_1_number: 642, iso_4217_currency_code: RON, iso_4217_currency_name: Leu,
+        sovereignty: '', sub_type: '', telephone_code: '40', type: Independent State}
+    model: locations.country
+    pk: 27
+-   fields: {capital: Brussels, common_name: Belgium, continent: 4, formal_name: Kingdom
+            of Belgium, iana_country_code_tld: .be, iso_3166_1_2_letter_code: BE,
+        iso_3166_1_3_letter_code: BEL, iso_3166_1_number: 56, iso_4217_currency_code: EUR,
+        iso_4217_currency_name: Euro, sovereignty: '', sub_type: '', telephone_code: '32',
+        type: Independent State}
+    model: locations.country
+    pk: 28
+-   fields: {capital: Accra, common_name: Ghana, continent: 2, formal_name: Republic
+            of Ghana, iana_country_code_tld: .gh, iso_3166_1_2_letter_code: GH, iso_3166_1_3_letter_code: GHA,
+        iso_3166_1_number: 288, iso_4217_currency_code: GHS, iso_4217_currency_name: Cedi,
+        sovereignty: '', sub_type: '', telephone_code: '233', type: Independent State}
+    model: locations.country
+    pk: 29
+-   fields: {name: Temperate mountain system}
+    model: locations.biomefao
+    pk: 1
+-   fields: {name: Subtropical humid forest}
+    model: locations.biomefao
+    pk: 2
+-   fields: {name: Tropical rainforest}
+    model: locations.biomefao
+    pk: 3
+-   fields: {name: Tropical moist deciduous forest}
+    model: locations.biomefao
+    pk: 4
+-   fields: {name: Temperate continental forest}
+    model: locations.biomefao
+    pk: 5
+-   fields: {name: Subtropical mountain system}
+    model: locations.biomefao
+    pk: 6
+-   fields: {name: Boreal mountain system}
+    model: locations.biomefao
+    pk: 7
+-   fields: {name: Tropical dry forest}
+    model: locations.biomefao
+    pk: 8
+-   fields: {name: Temperate oceanic forest}
+    model: locations.biomefao
+    pk: 9
+-   fields: {name: Boreal coniferous forest}
+    model: locations.biomefao
+    pk: 10
+-   fields: {name: Subtropical dry forest}
+    model: locations.biomefao
+    pk: 11
+-   fields: {name: Mixed mountain systems}
+    model: locations.biomeudvardy
+    pk: 1
+-   fields: {name: Temperate broad-leaf forests}
+    model: locations.biomeudvardy
+    pk: 2
+-   fields: {name: Tropical humid forests}
+    model: locations.biomeudvardy
+    pk: 3
+-   fields: {name: Tropical dry forests / Woodlands}
+    model: locations.biomeudvardy
+    pk: 4
+-   fields: {name: Warm deserts / semi-deserts}
+    model: locations.biomeudvardy
+    pk: 5
+-   fields: {name: Temperate needle-leaf forests / Woodlands}
+    model: locations.biomeudvardy
+    pk: 6
+-   fields: {name: Sub-tropical / Temperate rain forests / Woodlands}
+    model: locations.biomeudvardy
+    pk: 7
+-   fields: {name: Evergreen Sclerophyllous forests}
+    model: locations.biomeudvardy
+    pk: 8
+-   fields: {name: Mixed island systems}
+    model: locations.biomeudvardy
+    pk: 9
+-   fields: {name: Temperate coniferous forests}
+    model: locations.biomewwf
+    pk: 1
+-   fields: {name: Tropical and Subtropical Moist Broadleaf Forests}
+    model: locations.biomewwf
+    pk: 2
+-   fields: {name: Temperate broadleaf and mixed forests}
+    model: locations.biomewwf
+    pk: 3
+-   fields: {name: Tropical and subtropical moist broadleaf forests}
+    model: locations.biomewwf
+    pk: 4
+-   fields: {name: Seasonal Tropical Forest}
+    model: locations.biomewwf
+    pk: 5
+-   fields: {name: Tundra}
+    model: locations.biomewwf
+    pk: 6
+-   fields: {name: Temperate Conifer Forests}
+    model: locations.biomewwf
+    pk: 7
+-   fields: {name: 'Tropical and Subtropical Grasslands, Savannas and Shrublands'}
+    model: locations.biomewwf
+    pk: 8
+-   fields: {name: Temperate Broadleaf and Mixed Forests}
+    model: locations.biomewwf
+    pk: 9
+-   fields: {name: Boreal forest/taigas}
+    model: locations.biomewwf
+    pk: 10
+-   fields: {name: Boreal Forests/Taiga}
+    model: locations.biomewwf
+    pk: 11
+-   fields: {name: 'Mediterranean Forests, Woodlands and Scrub'}
+    model: locations.biomewwf
+    pk: 12
+-   fields: {name: Dry Steppes Of Continental Climate}
+    model: locations.divisionbailey
+    pk: 1
+-   fields: {name: Oceanic Mixed Constantly Humid Forests}
+    model: locations.divisionbailey
+    pk: 2
+-   fields: {name: Humid Forests With Short Dry Season}
+    model: locations.divisionbailey
+    pk: 3
+-   fields: {name: Rainforest Division}
+    model: locations.divisionbailey
+    pk: 4
+-   fields: {name: Mixed Forests With Short Dry Season}
+    model: locations.divisionbailey
+    pk: 5
+-   fields: {name: Humid Tall-Grass Savannas And Savanna Forests}
+    model: locations.divisionbailey
+    pk: 6
+-   fields: {name: Permanently Humid Eastern Oceanic Broadleaf Forests}
+    model: locations.divisionbailey
+    pk: 7
+-   fields: {name: Mixed forets with shorth dry season}
+    model: locations.divisionbailey
+    pk: 8
+-   fields: {name: 'Seasonally Humid, Predominantly Deciduous Forests'}
+    model: locations.divisionbailey
+    pk: 9
+-   fields: {name: Forest-Meadow Of Eastern Oceanic (Monsoon Climate)}
+    model: locations.divisionbailey
+    pk: 10
+-   fields: {name: Dry Steppes And Shrub Of Moderate Continental Climate}
+    model: locations.divisionbailey
+    pk: 11
+-   fields: {name: Moderate Continental Mixed Forests}
+    model: locations.divisionbailey
+    pk: 12
+-   fields: {name: Marine Division}
+    model: locations.divisionbailey
+    pk: 13
+-   fields: {name: Marine Regime Mountains}
+    model: locations.divisionbailey
+    pk: 14
+-   fields: {name: Moderately Humid Grassy Savannas}
+    model: locations.divisionbailey
+    pk: 15
+-   fields: {name: Savanna Division}
+    model: locations.divisionbailey
+    pk: 16
+-   fields: {name: Eastern Oceanic Constantly Humid Forests}
+    model: locations.divisionbailey
+    pk: 17
+-   fields: {name: Continental Dark Evergreen Needleleaf Open Forest}
+    model: locations.divisionbailey
+    pk: 18
+-   fields: {name: Western Oceanic Coniferous And Mixed Forests}
+    model: locations.divisionbailey
+    pk: 19
+-   fields: {name: Eastern Oceanic Tayga}
+    model: locations.divisionbailey
+    pk: 20
+-   fields: {name: Oceanic Forest-Tundra}
+    model: locations.divisionbailey
+    pk: 21
+-   fields: {name: Mediterranean Division}
+    model: locations.divisionbailey
+    pk: 22
+-   fields: {name: Hot Continental Division}
+    model: locations.divisionbailey
+    pk: 23
+-   fields: {name: Subarctic Division}
+    model: locations.divisionbailey
+    pk: 24
+-   fields: {name: Warm Continental Division}
+    model: locations.divisionbailey
+    pk: 25
+-   fields: {name: Prairie Division}
+    model: locations.divisionbailey
+    pk: 26
+-   fields: {name: Temperate Steppe Division}
+    model: locations.divisionbailey
+    pk: 27
+-   fields: {name: Mediterranean Regime Mountains}
+    model: locations.divisionbailey
+    pk: 28
+-   fields: {name: Forest-Alpine Meadows}
+    model: locations.divisionbailey
+    pk: 29
+-   fields: {name: Moderately Humid Broadleaf Forest In Moderately Continental Climate}
+    model: locations.divisionbailey
+    pk: 30
+-   fields: {name: Constantly Humid Evergreen Forests}
+    model: locations.divisionbailey
+    pk: 31
+-   fields: {name: Boreal wet forest}
+    model: locations.biomeholdridge
+    pk: 1
+-   fields: {name: Subtropical moist forest}
+    model: locations.biomeholdridge
+    pk: 2
+-   fields: {name: Tropical moist forest}
+    model: locations.biomeholdridge
+    pk: 3
+-   fields: {name: Tropical dry forest}
+    model: locations.biomeholdridge
+    pk: 4
+-   fields: {name: Warm temperate moist forest}
+    model: locations.biomeholdridge
+    pk: 5
+-   fields: {name: Subtropical wet forest}
+    model: locations.biomeholdridge
+    pk: 6
+-   fields: {name: Cool temperate moist forest}
+    model: locations.biomeholdridge
+    pk: 7
+-   fields: {name: Cool temperate steppe}
+    model: locations.biomeholdridge
+    pk: 8
+-   fields: {name: Boreal rain forest}
+    model: locations.biomeholdridge
+    pk: 9
+-   fields: {name: Polar rain tundra}
+    model: locations.biomeholdridge
+    pk: 10
+-   fields: {name: Boreal moist forest}
+    model: locations.biomeholdridge
+    pk: 11
+-   fields: {name: Cool temperate rain forest}
+    model: locations.biomeholdridge
+    pk: 12
+-   fields: {name: Cool temperate wet forest}
+    model: locations.biomeholdridge
+    pk: 13
+-   fields: {name: Warm temperate dry forest}
+    model: locations.biomeholdridge
+    pk: 14
