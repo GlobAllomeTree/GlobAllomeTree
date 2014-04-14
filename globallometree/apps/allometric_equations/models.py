@@ -83,7 +83,7 @@ class Submission(models.Model):
         expected_headers = [
             'ID', 'IDequation', 'Population', 'Ecosystem', 'Continent',
             'Country', 'ID_Location', 'Group_Location', 'Location', 'Latitude',
-            ' Longitude', 'Biome_FAO', 'Biome_UDVARDY', 'Biome_WWF',
+            'Longitude', 'Biome_FAO', 'Biome_UDVARDY', 'Biome_WWF',
             'Division_BAILEY', 'Biome_HOLDRIDGE', 'X', 'Unit_X', 'Z', 'Unit_Z',
             'W', 'Unit_W', 'U', 'Unit_U', 'V', 'Unit_V', 'Min_X', 'Max_X',
             'Min_Z', 'Max_Z', 'Output', 'Output_TR', 'Unit_Y', 'Age',
@@ -402,8 +402,8 @@ class Submission(models.Model):
         output['show_import_summary'] = run_verified
         output['species_inserted'] = species_inserted
         output['species_groups_inserted'] = species_groups_inserted
-        output['locations_inserted'] = missed_rows
-        output['location_groups_inserted'] = missed_rows
+        output['locations_inserted'] = locations_inserted
+        output['location_groups_inserted'] = location_groups_inserted
         output['missed_rows'] = missed_rows
         output['total_rows_imported'] = total_rows_imported
 

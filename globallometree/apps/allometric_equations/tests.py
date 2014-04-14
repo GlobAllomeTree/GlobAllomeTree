@@ -4,7 +4,15 @@ from django.test import TestCase
 from django.core.files import File
 from datetime import date
 from django.contrib.auth.models import User
-from globallometree.apps.allometric_equations.models import Submission
+from globallometree.apps.allometric_equations.models import (
+    Submission, AllometricEquation
+)
+from globallometree.apps.taxonomy.models import (
+    Species, SpeciesGroup
+)
+from globallometree.apps.locations.models import (
+    Country, Location, LocationGroup
+)
 import globallometree.settings as settings
 
 class SubmissionTestCase(TestCase):
@@ -42,8 +50,27 @@ class SubmissionTestCase(TestCase):
 
         print(output)
 
-        self.assertEqual(len(output['ok_headers']), 71)
+        self.assertEqual(len(output['errors']), 0)
+        self.assertEqual(len(output['missing_headers']), 0)
+        self.assertEqual(len(output['missed_rows']), 0)
+        self.assertEqual(len(output['ok_headers']), 72)
         self.assertEqual(output['rows_to_import'], output['total_rows_imported'])
+        self.assertEqual(
+            Species.objects.count(),
+            output['species_inserted']
+        )
+        self.assertEqual(
+            SpeciesGroup.objects.count(),
+            output['species_groups_inserted']
+        )
+        self.assertEqual(
+            Location.objects.count(),
+            output['locations_inserted']
+        )
+        self.assertEqual(
+            LocationGroup.objects.count(),
+            output['location_groups_inserted']
+        )
 
         os.unlink(os.path.join(
             settings.MEDIA_ROOT, 'data_submissions', 'test_import_success.txt'
