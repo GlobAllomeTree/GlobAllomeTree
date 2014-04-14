@@ -1,10 +1,7 @@
 from django.core.management.base import BaseCommand
 
-#from elasticutils.contrib.django.tasks import index_objects
-
-from globallometree.apps.allometric_equations.es_index import AllometricEquationIndex
+from globallometree.apps.allometric_equations.indexes import AllometricEquationIndex
 from globallometree.apps.allometric_equations.models import AllometricEquation
-
 
 from pprint import pprint
 
@@ -47,8 +44,6 @@ class Command(BaseCommand):
             document = index_cls.extract_document(obj=obj)
             #pprint(document)
             documents.append(document)
-
-
 
         #Using the bulk command - put all the documents
         index_cls.bulk_index(documents, id_field=model._meta.pk.name, es=es, index=index)
