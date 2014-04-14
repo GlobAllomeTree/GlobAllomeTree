@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from globallometree.apps.allometric_equations.indexes import AllometricEquationIndex
+from globallometree.apps.allometric_equations.indices import AllometricEquationIndex
 from globallometree.apps.allometric_equations.models import AllometricEquation
 
 from pprint import pprint

@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
         from elasticsearch import Elasticsearch
 
-        #Sample facet accross all indexes by Species
+        #Sample facet accross all indices by Species
         global_search = S().es(urls=settings.ELASTICSEARCH_URLS) 
         s = global_search.facet('Species')
         for result in s.facet_counts()['Species']['terms'][0:10]:

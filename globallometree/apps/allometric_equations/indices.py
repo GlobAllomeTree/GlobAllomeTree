@@ -87,11 +87,11 @@ class AllometricEquationIndex(MappingType, Indexable):
         return cls.get_model().objects.iterator()
 
     @classmethod
-    def prepare_ecosystem_name(cls, obj):
+    def prepare_Ecosystem(cls, obj):
         return None if obj.ecosystem is None else obj.ecosystem.name
 
     @classmethod
-    def prepare_population_name(cls, obj):
+    def prepare_Population(cls, obj):
         return None if obj.population is None else obj.population.name
 
     @classmethod
@@ -161,7 +161,7 @@ class AllometricEquationIndex(MappingType, Indexable):
         ]
 
     @classmethod
-    def get_Locations(cls, obj):
+    def prepare_Locations(cls, obj):
         locations = []
         for location in obj.location_group.locations.all():
             locations.append({
