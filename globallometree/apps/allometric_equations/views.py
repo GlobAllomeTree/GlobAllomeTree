@@ -12,8 +12,7 @@ from django.views.generic.base import TemplateView
 from django.core.mail import mail_managers
 from django.conf import settings
 from django.db import connection
-
-
+from django.views.generic.edit import FormView
 
 from .forms import SubmissionForm, SearchForm
 from .models import AllometricEquation, Submission
@@ -179,6 +178,17 @@ def species(request, selected_Genus=None):
                                {'genus_list': genus_list,
                                'is_page_data' : True }))
 
+
+class SearchView(FormView):
+    template_name = 'allometric_equations/template.search.html'
+    form_class = SearchForm
+
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.send_email()
+        return super(ContactView, self).form_valid(form)
 
 # class SearchView(BaseSearchView):
     

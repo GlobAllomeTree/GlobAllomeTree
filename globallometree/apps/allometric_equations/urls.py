@@ -11,6 +11,8 @@ urlpatterns = patterns('apps.allometric_equations.views',
             
     url(r'^submit$', SubmissionView.as_view()),
     url(r'^submit/complete/$', SubmissionCompleteView.as_view()),
+    #Searchable list of equations                   
+    url(r'^search/$', SearchView.as_view(), name='equation_search'),  
 
     #Single equation
     (r'^(\d+)/$', 'allometric_equation_id'),

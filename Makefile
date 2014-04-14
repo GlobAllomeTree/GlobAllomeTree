@@ -74,7 +74,7 @@ celery-run: celery-clean
 celery-stop:
 	-@docker stop ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
 
-celery-clean:
+celery-clean: celery-stop
 	-@docker rm ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
 
 ####################################### DJANGO SPECIFIC #####################################

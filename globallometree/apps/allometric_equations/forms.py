@@ -234,12 +234,13 @@ class SearchForm(forms.Form):
     def export_link(self):
         return self.get_query_string(export=True)
 
-    def __getattribute__(self, name):
-        if name.startswith('sort_link_'):
-            return self.sort_link(name.replace('sort_link_', ''))
-        else:
-            # Default behaviour
-            return BaseSearchForm.__getattribute__(self, name)
+    # todo - reinstate sort links for templates
+    # def __getattribute__(self, name):
+    #     if name.startswith('sort_link_'):
+    #         return self.sort_link(name.replace('sort_link_', ''))
+    #     else:
+    #         # Default behaviour
+    #         return BaseSearchForm.__getattribute__(self, name)
 
     def sort_link(self, field_name):
         try:
