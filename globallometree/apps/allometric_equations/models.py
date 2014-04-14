@@ -79,7 +79,7 @@ class Submission(models.Model):
         self.country_mappings[country_name] = obj
         return obj
 
-    def load_data(self, run_verified, import_good_rows_anyway):
+    def import_data(self, run_verified, import_good_rows_anyway):
         expected_headers = [
             'ID', 'IDequation', 'Population', 'Ecosystem', 'Continent',
             'Country', 'ID_Location', 'Group_Location', 'Location', 'Latitude',

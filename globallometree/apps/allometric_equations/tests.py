@@ -46,7 +46,7 @@ class SubmissionTestCase(TestCase):
         s = Submission.objects.latest('id')
         self.set_submitted_file(s, 'test_import_success.txt')
 
-        output = s.load_data(run_verified=True, import_good_rows_anyway=True)
+        output = s.import_data(run_verified=True, import_good_rows_anyway=True)
 
         self.assertEqual(len(output['errors']), 0)
         self.assertEqual(len(output['missing_headers']), 0)
