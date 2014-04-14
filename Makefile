@@ -10,13 +10,8 @@ WEB_BASE_DIR := $(abspath $(patsubst %/,%,$(dir $(WEB_BASE_PATH))))
 
 
 #This will get evaluated when used below
-<<<<<<< HEAD
 WEB_SERVER_BASE_ENV = --link ${PSQL_SERVER_CONTAINER_NAME}:DB 
 WEB_SERVER_BASE_ENV += --link ${ELASTIC_CONTAINER_NAME}:ES
-=======
-WEB_SERVER_BASE_ENV = --link postgresql_server:DB 
-WEB_SERVER_BASE_ENV += --link elasticsearch:ES 
->>>>>>> djcms_3_updates
 WEB_SERVER_BASE_ENV += --link ${REDIS_CONTAINER_NAME}:REDIS  
 WEB_SERVER_BASE_ENV += -v ${WEB_BASE_DIR}:/opt/code 
 WEB_SERVER_BASE_ENV += -e SECRET_KEY=${SECRET_KEY}  

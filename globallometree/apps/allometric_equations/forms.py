@@ -1,6 +1,5 @@
 from django import forms
-from haystack.forms import SearchForm as BaseSearchForm
-from haystack.inputs import AutoQuery
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
 from .models import AllometricEquation, Ecosystem, Population
@@ -46,7 +45,7 @@ COMPONENT_CHOICES = (
             ('Yes', 'Yes')
         )
 
-class SearchForm(BaseSearchForm):
+class SearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         #Add on initial arguments
