@@ -114,6 +114,14 @@ class SearchForm(BaseSearchForm):
                 choices=choices, required=False, label=select_label
             )
 
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            'q'
+        )
+
     #Full Text
     q = forms.CharField(required=False, label='Keyword')
     
@@ -169,7 +177,6 @@ class SearchForm(BaseSearchForm):
     Author = forms.CharField(required=False, label='Author')
     Year = forms.CharField(required=False, label='Year')
     Reference = forms.CharField(required=False, label='Reference') 
-
 
     def search(self):
        

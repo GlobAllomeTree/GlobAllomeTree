@@ -17,6 +17,7 @@ pygraphviz==1.2 #for shell plus graph models
 ipdb==0.8 #Iron Python shell use: import ipdb; ipdb.set_trace() 
 
 
+
 ######################## ElasticUtils based search
 -e git+git://github.com/tomgruner/elasticutils.git@4b908c2374299b54768e4052ec3ddcd464247e24#egg=elasticutils
 elasticsearch==1.0.0
@@ -34,11 +35,12 @@ feedparser==5.1.3
 
 
 ######################## Django CMS 
-https://github.com/divio/django-cms/archive/3.0.0.beta3.tar.gz
+django-cms==3.0
 djangocms-admin-style==0.2.0
 cmsplugin-filer==0.9.5
-django-filer==0.9.5
+djangocms-file==0.0.1
 djangocms-text-ckeditor==2.1.1
+djangocms-link==1.3.4
 
 
 ####################### Frontend
