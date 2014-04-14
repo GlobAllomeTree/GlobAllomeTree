@@ -11,7 +11,7 @@ from globallometree.apps.taxonomy.models import (
     Species, SpeciesGroup
 )
 from globallometree.apps.locations.models import (
-    Country, Location, LocationGroup
+    Location, LocationGroup
 )
 import globallometree.settings as settings
 
@@ -48,13 +48,15 @@ class SubmissionTestCase(TestCase):
 
         output = s.load_data(run_verified=True, import_good_rows_anyway=True)
 
-        print(output)
-
         self.assertEqual(len(output['errors']), 0)
         self.assertEqual(len(output['missing_headers']), 0)
         self.assertEqual(len(output['missed_rows']), 0)
         self.assertEqual(len(output['ok_headers']), 72)
         self.assertEqual(output['rows_to_import'], output['total_rows_imported'])
+        self.assertEqual(
+            AllometricEquation.objects.count(),
+            output['total_rows_imported']
+        )
         self.assertEqual(
             Species.objects.count(),
             output['species_inserted']
