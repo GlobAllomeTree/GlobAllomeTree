@@ -187,25 +187,6 @@ class SearchView(FormView):
     def form_valid(self, form):
         pass
 
-        
-
-# class SearchView(BaseSearchView):
-    
-#     def __name__(self):
-#         return "SearchView"
-
-#     def extra_context(self):
-
-#         no_query_entered = not bool(len(self.request.GET.keys()))
-
-#         return {'is_page_data' : True,
-#                 'no_query_entered' : no_query_entered}
-
-#     def create_response(self, *args, **kwargs):
-#         if not self.request.user.is_authenticated():
-#             return HttpResponseRedirect('/accounts/login/')
-#         return super(SearchView, self).create_response( *args, **kwargs)
-
 
 def autocomplete(request, field): 
     if not request.user.is_authenticated():
