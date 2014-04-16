@@ -1,10 +1,12 @@
+import sys
+from pprint import pprint
+
 from django.core.management.base import BaseCommand
 
 from globallometree.apps.allometric_equations.search.indices import AllometricEquationIndex
 from globallometree.apps.allometric_equations.models import AllometricEquation
 from elasticutils.contrib.django import get_es
 
-from pprint import pprint
 
 class Command(BaseCommand):
     args = '<limit (optional)>'
@@ -38,18 +40,37 @@ class Command(BaseCommand):
             }
         )
 
+
+        if limit:
+            total = limit
+        else:
+            total = index_cls.get_indexable().count()
+
+        def send_to_index(documents):
+            #Using the bulk command - put all the documents
+            index_cls.bulk_index(documents, id_field=model._meta.pk.name, es=es, index=index)
+
         documents=[]
-        for obj in index_cls.get_indexable():
+        for obj in index_cls.get_indexable().iterator():
             if limit and n > limit: break;
             n = n + 1; 
+            print n, 'out of', total, '\r',
+            sys.stdout.flush()
+
             document = index_cls.extract_document(obj=obj)
             #pprint(document)
             documents.append(document)
 
-        #Using the bulk command - put all the documents
-        index_cls.bulk_index(documents, id_field=model._meta.pk.name, es=es, index=index)
+           
+            #Send in batches of 50
+            if len(documents) == 50:
+                send_to_index(documents)
+                documents = []
 
-        #Refresh the index
-        #index_cls.get_es().indices.refresh(index=index)
-        #wait for the index to be ready
-        #index_cls.get_es().cluster.health(wait_for_status='yellow')
+        #Send any remaining documents (for example if loop ended with 29 docs) 
+        if len(documents):
+            send_to_index(documents)
+
+        print
+        print total, ' documents indexed'
+       

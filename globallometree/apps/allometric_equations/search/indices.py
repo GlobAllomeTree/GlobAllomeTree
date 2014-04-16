@@ -80,7 +80,7 @@ class AllometricEquationIndex(MappingType, Indexable):
    
     @classmethod
     def get_indexable(cls):
-        return cls.get_model().objects.iterator()
+        return cls.get_model().objects.all()
 
     @classmethod
     def prepare_Ecosystem(cls, obj):

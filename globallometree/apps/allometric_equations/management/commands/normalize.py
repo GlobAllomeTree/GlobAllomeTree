@@ -1,3 +1,5 @@
+import sys
+
 from django.core.management.base import BaseCommand
 from globallometree.apps.data.models import TreeEquation
 from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
@@ -28,11 +30,20 @@ class Command(BaseCommand):
         original_location_groups_inserted = 0
         new_location_groups_inserted = 0
 
+        if limit:
+            total = limit
+        else:
+            total = TreeEquation.objects.all().count()
+
+
         for orig_equation in TreeEquation.objects.all().iterator():
             if limit and n > limit: break;
             n = n + 1; 
             
 ######################################## TAXONOMY ################################################
+
+            print n, 'out of', total, '\r',
+            sys.stdout.flush()
 
             if orig_equation.Family is None:
                 family = None
@@ -260,6 +271,7 @@ class Command(BaseCommand):
                 new_equation.save()
                 equations_insterted = equations_insterted + 1
 
+        print 
         self.stdout.write(
             'Inserted: {0} AllometricEquation, {1} Species, '
             '{2} original SpeciesGroup, {3} new SpeciesGroup, {4} Locations, '
