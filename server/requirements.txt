@@ -19,7 +19,7 @@ ipdb==0.8 #Iron Python shell use: import ipdb; ipdb.set_trace()
 
 
 ######################## ElasticUtils based search
--e git+git://github.com/tomgruner/elasticutils.git@4b908c2374299b54768e4052ec3ddcd464247e24#egg=elasticutils
+-e git+git://github.com/tomgruner/elasticutils.git@patch-1#egg=elasticutils
 elasticsearch==1.0.0
 celery==3.1.10
 redis==2.9.1

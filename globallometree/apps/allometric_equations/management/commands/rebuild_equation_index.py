@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand
 
-from globallometree.apps.allometric_equations.indices import AllometricEquationIndex
+from globallometree.apps.allometric_equations.search.indices import AllometricEquationIndex
 from globallometree.apps.allometric_equations.models import AllometricEquation
+from elasticutils.contrib.django import get_es
 
 from pprint import pprint
 
@@ -21,7 +22,7 @@ class Command(BaseCommand):
         index_cls = AllometricEquationIndex
 
         #Get an instance of the elasticsearch python wrapper
-        es = index_cls.get_es()
+        es = get_es()
         index = index_cls.get_index()
         model = index_cls.get_model()
         type_name = index_cls.get_mapping_type_name()

@@ -1,15 +1,11 @@
 
 from django.conf import settings
 
-from elasticutils import get_es
-from elasticutils.contrib.django import Indexable, MappingType
+from elasticutils.contrib.django import Indexable, MappingType, get_es
 
-from .models import AllometricEquation
+from ..models import AllometricEquation
 
 class AllometricEquationIndex(MappingType, Indexable):
-    @classmethod
-    def get_es(cls):
-        return get_es(urls=settings.ELASTICSEARCH_URLS)
 
     @classmethod
     def get_index(cls):

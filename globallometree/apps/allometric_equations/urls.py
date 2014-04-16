@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url
-from .forms import SearchForm
-from .views import SearchView, SubmissionView, SubmissionCompleteView
-
+from .views import SubmissionView, SubmissionCompleteView
+from .search.views import SearchView
 
 urlpatterns = patterns('apps.allometric_equations.views',
 
@@ -18,4 +17,5 @@ urlpatterns = patterns('apps.allometric_equations.views',
     (r'^(\d+)/$', 'allometric_equation_id'),
     #Single equation PDF
     (r'^(\d+)/pdf$', 'allometric_equation_id_pdf')
+      
 )

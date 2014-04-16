@@ -156,12 +156,24 @@ DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
 
-#urls of elasticsearch nodes
-ELASTICSEARCH_URLS = ['http://127.0.01:9200',]
+
+#elasticutils django contrib settings
+ES_URLS = ['http://127.0.01:9200',]
+ES_INDEXES = {'default': 'globallometree'}
 
 
 #Celery
 CELERY_ACCEPT_CONTENT = ['json',]
 BROKER_URL = 'redis://localhost:6379/0'
 
-from settings_local import *
+
+if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
+    print "No file: settings_local.py"
+    print "Copy settings_local.py.sample to settings_local.py?"
+    print "If running docker containers: copy settings_local.py.server instead."
+    raise ImportError
+else:
+    try:
+        from settings_local import *
+    except ImportError:
+        print "Probably an error in the settings_local.py file."
