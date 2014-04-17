@@ -184,6 +184,36 @@ pprint(es.search(search_type='count', #since we just want the facet counts retur
 							    },
 	                        },
 	                    },
+	                    "Locations-Bounds"  : {
+	                    	"filter" : { 
+	                    		"exists" : {
+	                    			"field" : "Locations"
+	                    		},
+	                    	},
+	                    	"aggregations": {
+		                    	"min_lat": {
+								        "min": {
+								            "script": "doc['Locations'].value.lat"
+								        }
+							    },
+							    "max_lat": {
+								        "max": {
+								            "script": "doc['Locations'].value.lat"
+								        }
+							    },
+							    "min_lon": {
+								        "min": {
+								            "script": "doc['Locations'].value.lon"
+								        }
+							    },
+							    "max_lon": {
+								        "max": {
+								            "script": "doc['Locations'].value.lon"
+								        }
+							    },
+						   }
+						}
+	                    
 	                }       
                 }))
 
