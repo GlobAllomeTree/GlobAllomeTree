@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
@@ -11,23 +13,24 @@ from .indices import AllometricEquationIndex
 
 class SearchView(TemplateView):
     template_name = 'allometric_equations/template.search.html'
+    paginate_by = 40
 
     def get_context_data(self, **kwargs):
         context = super(SearchView, self).get_context_data(**kwargs)
 
         self.form = SearchForm(self.request.GET)
-    	results = self.search()
-    	paginator = Paginator(results, 40)
-        page = paginator.page(self.get_current_page())
-         
+    	
         context['form'] = self.form
         context['is_page_data'] =  True
+        context['query_entered'] = self.query_entered()
 
         if self.form.is_valid():
+            search_results = self.search()
+            paginator = Paginator(search_results, self.paginate_by)
+            page = paginator.page(self.get_current_page())
             context['page'] = page
             context['current_search_summary'] = self.current_search_summary()
-        
-        context['query_entered'] = self.query_entered()
+            context['elasticsearch_query'] = json.dumps(search_results.build_search())
 
         return context
 
@@ -39,17 +42,10 @@ class SearchView(TemplateView):
             return HttpResponseRedirect('/accounts/login/')
         return super(SearchView, self).create_response( *args, **kwargs)
 
+
     def search(self):
        
        	s = S(AllometricEquationIndex)
-
-        if not self.form.is_valid():
-            #if form is not valid, return empty list
-            return []
-
-        if not self.query_entered():
-            #If there is no query yet return all results
-            return s
 
         # if form.cleaned_data.get('q'):
         #     s = s.??
@@ -82,6 +78,7 @@ class SearchView(TemplateView):
                         val = 0
                 kwargs = {field : val}
                 s = s.filter(**kwargs)
+
 
         return s
         

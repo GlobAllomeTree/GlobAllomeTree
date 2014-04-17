@@ -154,7 +154,12 @@ es = get_es(urls=settings.ES_URLS)
 
 #Combining!
 pprint(es.search(search_type='count', #since we just want the facet counts returned
-                 body = { 
+                 body = {
+                     "filter": {
+                     	"term": {
+                     		"Population": "Liana"
+                     	 }
+                     }, 
 	                 "aggregations" : {
 	                    "Locations-Grid" : {
 	                        "geohash_grid" : {

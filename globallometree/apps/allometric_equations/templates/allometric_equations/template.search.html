@@ -37,8 +37,10 @@
 {% endblock %}
 
 {% block content %}
-	<div id="equations_page">
 
+
+	<div id="equations_page">
+        <div id="elasticsearch_query">{{elasticsearch_query}}</div>
 	    {% if current_search_summary %}
 	        <div id="currentSearch">
                <div style="float:right"> 
@@ -336,6 +338,7 @@
         	<p>Try making your search more general.</p>
             {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}
+        
 	    
     </div>
 {% endblock %}
