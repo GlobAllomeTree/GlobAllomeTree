@@ -21,7 +21,7 @@ TIME_ZONE = 'Europe/Zurich'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 USE_I18N = True
 
@@ -62,7 +62,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
-    'cms.context_processors.media',
+    'cms.context_processors.cms_settings',
     'sekizai.context_processors.sekizai',
 )
 
@@ -103,7 +103,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
-    # must go before django.contrib.admin
+    # djangocms_admin_style must go before django.contrib.admin
     'djangocms_admin_style',  # cms
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -113,35 +113,14 @@ INSTALLED_APPS = (
     'south',
     'crispy_forms',
 
-    #search
-    'haystack',
-    'elasticstack',
-
-    # cms
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'cms',
     'menus',
     'mptt',
     'sekizai',
-    'cms.stacks',
-
-    # django cms options
-
-    # 'cms.plugins.text',
-    'cms.plugins.file',  # replaced by filer
-    #'cms.plugins.flash',
-    #'cms.plugins.googlemap',
-    'cms.plugins.link',
-    #'cms.plugins.picture',  # replaced by filer
-    #'cms.plugins.snippet',
-    #'cms.plugins.teaser',  # replaced by filer
-    #'cms.plugins.video',  # replaced by filer
-    # 'cmsplugin_filer_file',
-    # 'cmsplugin_filer_folder',
-    # 'cmsplugin_filer_image',
-    # 'cmsplugin_filer_teaser',
-    # 'cmsplugin_filer_video',
-    # 'cms.plugins.twitter',
+    'djangocms_link',
+    'djangocms_file',
+    'globallometree.plugins.linkbox',
 
     # project apps
     'globallometree.apps.common',
@@ -155,10 +134,9 @@ INSTALLED_APPS = (
     'globallometree.apps.bootstrap_3_theme', #our app must got first here for overrides
     'bootstrap3', 
 
-    # 'globallometree.apps.original_theme',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
-    'globallometree.plugins.linkbox',
+
 )
 
 
@@ -173,10 +151,29 @@ STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
 STATIC_URL = '/static/'
 
 
-#Encoding used for export and import of data
+#Encoding used for export and import of data for Allometric Equations
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
 
-from settings_search import *
-from settings_local import *
+
+#elasticutils django contrib settings
+ES_URLS = ['http://127.0.01:9200',]
+ES_INDEXES = {'default': 'globallometree'}
+
+
+#Celery
+CELERY_ACCEPT_CONTENT = ['json',]
+BROKER_URL = 'redis://localhost:6379/0'
+
+
+if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
+    print "No file: settings_local.py"
+    print "Copy settings_local.py.sample to settings_local.py?"
+    print "If running docker containers: copy settings_local.py.server instead."
+    raise ImportError
+else:
+    try:
+        from settings_local import *
+    except ImportError:
+        print "Probably an error in the settings_local.py file."

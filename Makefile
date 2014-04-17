@@ -10,8 +10,9 @@ WEB_BASE_DIR := $(abspath $(patsubst %/,%,$(dir $(WEB_BASE_PATH))))
 
 
 #This will get evaluated when used below
-WEB_SERVER_BASE_ENV = --link postgresql_server:DB 
-WEB_SERVER_BASE_ENV += --link elasticsearch:ES 
+WEB_SERVER_BASE_ENV = --link ${PSQL_SERVER_CONTAINER_NAME}:DB 
+WEB_SERVER_BASE_ENV += --link ${ELASTIC_CONTAINER_NAME}:ES
+WEB_SERVER_BASE_ENV += --link ${REDIS_CONTAINER_NAME}:REDIS  
 WEB_SERVER_BASE_ENV += -v ${WEB_BASE_DIR}:/opt/code 
 WEB_SERVER_BASE_ENV += -e SECRET_KEY=${SECRET_KEY}  
 WEB_SERVER_BASE_ENV += -e POSTGRESQL_USER=${POSTGRESQL_USER} 
@@ -39,30 +40,48 @@ web-run: web-clean
 	#Run the webserver on port 8082
 	docker run -d --name ${WEB_CONTAINER_NAME} -p ${WEB_SERVER_PORT}:80 ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME}
 
+web-attach:
+	#Use lxc attach to attch to the webserver
+	$(MAKE) dock-attach CONTAINER=${WEB_CONTAINER_NAME}
+
+web-commit:
+	docker commit -m "commit from modified web server" ${WEB_CONTAINER_NAME} ${WEB_TAG_NAME} 
 
 
 ####################################### WEB DEBUG #####################################
 
 
-web-run-debug:
+web-debug-stop:
+	-@docker stop ${WEB_CONTAINER_NAME}_debug 2>/dev/null || true
+
+web-debug-clean: web-debug-stop
+	-@docker rm ${WEB_CONTAINER_NAME}_debug 2>/dev/null || true
+
+web-debug-run: web-debug-clean
 	#Run a debug server on port 8083
-	-@docker stop web_server_debug 2>/dev/null || true
-	-@docker rm web_server_debug 2>/dev/null || true
-	docker run -i -t --name web_server_debug -p ${WEB_SERVER_PORT_DEBUG}:8083 -e WEB_SERVER_PORT_DEBUG=${WEB_SERVER_PORT_DEBUG} ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /opt/code/server/startup_bash.sh
+	docker run -i -t --name ${WEB_CONTAINER_NAME}_debug -p ${WEB_SERVER_PORT_DEBUG}:8083 -e WEB_SERVER_PORT_DEBUG=${WEB_SERVER_PORT_DEBUG} ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /opt/code/server/startup_bash.sh
 
-web-attach:
-	#Use lxc attach to attch to the webserver
-	$(MAKE) dock-attach CONTAINER=${WEB_CONTAINER_NAME}
+web-commit-from-debug:
+	docker commit -m "commit from debug server" ${WEB_CONTAINER_NAME}_debug ${WEB_TAG_NAME} 
 
+
+######################################### CELERY ####################################
+
+celery-run: celery-clean
+	#Run celery using the web container
+	docker run -d --name ${WEB_CONTAINER_NAME}_celery ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /opt/code/server/startup_celery.sh
+
+celery-stop:
+	-@docker stop ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
+
+celery-clean: celery-stop
+	-@docker rm ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
 
 ####################################### DJANGO SPECIFIC #####################################
 
 django-manage:
-	#Run manage.py 
-	#Example)  django-manage COMMAND="collectstatic --noinput"
-	-@docker stop django_manage 2>/dev/null || true
-	-@docker rm django_manage 2>/dev/null || true
-	docker run -i -t --name django_manage ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" ${WEB_TAG_NAME} bash /opt/code/server/startup_manage.sh
+	# --rm will remove the container once the process finishes
+	docker run -i -t --rm ${WEB_SERVER_BASE_ENV} -e COMMAND="${COMMAND}" ${WEB_TAG_NAME} bash /opt/code/server/startup_manage.sh
 
 
 django-collectstatic:
@@ -82,4 +101,5 @@ graph-data-models:
 
 graph-p1-data-models:
 	$(MAKE) django-manage COMMAND="graph_models data -o data_models_phase_1.png"
+
 

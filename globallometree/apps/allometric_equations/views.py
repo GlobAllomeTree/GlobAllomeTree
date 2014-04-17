@@ -12,9 +12,7 @@ from django.views.generic.base import TemplateView
 from django.core.mail import mail_managers
 from django.conf import settings
 from django.db import connection
-
-from haystack.views import SearchView as BaseSearchView
-from haystack.query import SearchQuerySet
+from django.views.generic.edit import FormView
 
 from .forms import SubmissionForm, SearchForm
 from .models import AllometricEquation, Submission
@@ -181,22 +179,13 @@ def species(request, selected_Genus=None):
                                'is_page_data' : True }))
 
 
-class SearchView(BaseSearchView):
-    
-    def __name__(self):
-        return "SearchView"
+class SearchView(FormView):
+    template_name = 'allometric_equations/template.search.html'
+    form_class = SearchForm
 
-    def extra_context(self):
 
-        no_query_entered = not bool(len(self.request.GET.keys()))
-
-        return {'is_page_data' : True,
-                'no_query_entered' : no_query_entered}
-
-    def create_response(self, *args, **kwargs):
-        if not self.request.user.is_authenticated():
-            return HttpResponseRedirect('/accounts/login/')
-        return super(SearchView, self).create_response( *args, **kwargs)
+    def form_valid(self, form):
+        pass
 
 
 def autocomplete(request, field): 

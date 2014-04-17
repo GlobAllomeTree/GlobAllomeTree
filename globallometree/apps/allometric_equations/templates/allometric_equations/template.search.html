@@ -37,9 +37,11 @@
 {% endblock %}
 
 {% block content %}
-	<div id="equations_page">
 
-	    {% if form.current_search_summary %}
+
+	<div id="equations_page">
+        <div id="elasticsearch_query">{{elasticsearch_query}}</div>
+	    {% if current_search_summary %}
 	        <div id="currentSearch">
                <div style="float:right"> 
                     <a target="_blank" href="/data/export/{{form.export_link}}"
@@ -50,7 +52,7 @@
                <h3>Your current search</h3>
                <h4>Equations found: {{ page.paginator.count}} </h4>
     	       <table>
-        	       {% for item in form.current_search_summary %}
+        	       {% for item in current_search_summary %}
         	           <tr>
         	                <td style="width:150px;">{{item.field}}</td>
         	                <td style="width:250px;">{{item.search_value|truncatechars:48 }}</td>
@@ -269,7 +271,7 @@
     	            
 	    </form>
 	  
-	    {% if no_query_entered %}
+	    {% if not query_entered %}
             <!-- NO QUERY YET -->
         {% elif page.object_list %}
          <br />
@@ -336,6 +338,7 @@
         	<p>Try making your search more general.</p>
             {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}
+        
 	    
     </div>
 {% endblock %}
