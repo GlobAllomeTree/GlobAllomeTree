@@ -4,7 +4,9 @@
 
 {% block script %}
 <script>
+	var es_query = {{elasticsearch_query}};
     $(function() {
+		
         $('a[href="#keyword"]').tab('show');
 
         var autocompletes = ['Country',
@@ -270,70 +272,89 @@
             </div>
     	            
 	    </form>
-	  
-	    {% if not query_entered %}
-            <!-- NO QUERY YET -->
-        {% elif page.object_list %}
-         <br />
-         <br />
-			<div style="float:left;width:1030px;overflow-x:auto;">	
-				<table class="equationTable" style="width:500px;">
-				<thead>   
-    				<tr>
-                        <th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}}">ID</a></th>
-    					<th>Equation</th>
-    					<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
-    					<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
-    					<th><a href="{{form.sort_link_Country_order}}">Country</a></th>
-    					<th>Components</th>
-    					<th><a href="{{form.sort_link_Output_order}}">Output</a></th>
-    					<th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
-    					<th><a href="{{form.sort_link_Author_order}}">Author</a></th>
-    			    </tr>
-			    </thead>
-			    <tbody>
-                {% for result in page.object_list %}
-                    <tr>
-                        <td style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{ result.object.get_absolute_url }}">{{ result.object.ID}}</a></td>
-                        <td>{{ result.object.Substitute_equation }}</td>
-                        <td>{{ result.object.species_group.genera_string }}</td>
-                        <td>{{ result.object.species_group.species_string }}</td>
-                        <td>{{ result.object.location_group.countries_string }}</td>
-                        <td>{{ result.object.components_string}}</td>
-                        <td>{{ result.object.Output}}</td>
-                        <td>{{ result.object.location_group.biomes_fao_string }}</td>
-                        <td>{{ result.object.reference.author }}</td>
-                    </tr>
-                  {% endfor %}
-			     </tbody>
-			      <tfoot>   
-                   <tr>
-                        <th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}">Id</a></th>
-                        <th>Equation</th>
-                        <th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
-                        <th><a href="{{form.sort_link_Species_order}}">Species</a></th>
-                        <th><a href="{{form.sort_link_Country_order}}">Country</a></th>
-                        <th>Components</th>
-                        <th><a href="{{form.sort_link_Output_order}}">Output</a></th>
-                        <th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
-                        <th><a href="{{form.sort_link_Author_order}}">Author</a></th>
-                    </tr>
-                 </tfoot>   
-			     </table>
+		
+		{% if not query_entered %}
+			<!-- NO QUERY YET -->
+		{% elif page.object_list %}
+		
+		<br />
+        <br />
+		<ul class="nav nav-tabs">
+			<li>
+				<a href="#result-list" data-toggle="tab" class="active">List</a>
+			</li>
+			<li>
+				<a href="#result-map" data-toggle="tab">Map</a>
+			</li>
+		</ul>
+		
+		<div class="tab-content">
+			<div class="tab-pane active" id="result-list">
+			
+				<div style="float:left;width:1030px;overflow-x:auto;">	
+					<table class="equationTable" style="width:500px;">
+					<thead>   
+						<tr>
+							<th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}}">ID</a></th>
+							<th>Equation</th>
+							<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
+							<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
+							<th><a href="{{form.sort_link_Country_order}}">Country</a></th>
+							<th>Components</th>
+							<th><a href="{{form.sort_link_Output_order}}">Output</a></th>
+							<th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
+							<th><a href="{{form.sort_link_Author_order}}">Author</a></th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for result in page.object_list %}
+						<tr>
+							<td style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{ result.object.get_absolute_url }}">{{ result.object.ID}}</a></td>
+							<td>{{ result.object.Substitute_equation }}</td>
+							<td>{{ result.object.species_group.genera_string }}</td>
+							<td>{{ result.object.species_group.species_string }}</td>
+							<td>{{ result.object.location_group.countries_string }}</td>
+							<td>{{ result.object.components_string}}</td>
+							<td>{{ result.object.Output}}</td>
+							<td>{{ result.object.location_group.biomes_fao_string }}</td>
+							<td>{{ result.object.reference.author }}</td>
+						</tr>
+					  {% endfor %}
+					 </tbody>
+					  <tfoot>   
+					   <tr>
+							<th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}">Id</a></th>
+							<th>Equation</th>
+							<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
+							<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
+							<th><a href="{{form.sort_link_Country_order}}">Country</a></th>
+							<th>Components</th>
+							<th><a href="{{form.sort_link_Output_order}}">Output</a></th>
+							<th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
+							<th><a href="{{form.sort_link_Author_order}}">Author</a></th>
+						</tr>
+					 </tfoot>   
+					 </table>
+				</div>
+				<div style="clear:both;"></div>
+				{% if page.has_previous or page.has_next %}
+					<p style="float:right">
+						
+						
+						{% if page.has_previous %}<a href="{{form.prev_page_link}}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+						|
+						{% if page.has_next %}<a href="{{form.next_page_link}}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+					</p>
+				{% endif %}
+				<p>Showing equations: {{ page.start_index }} to {{ page.end_index }} of {{ page.paginator.count}}</p>
 			</div>
-			<div style="clear:both;"></div>
-			{% if page.has_previous or page.has_next %}
-                <p style="float:right">
-                	
-                	
-                    {% if page.has_previous %}<a href="{{form.prev_page_link}}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                    |
-                    {% if page.has_next %}<a href="{{form.next_page_link}}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                </p>
-            {% endif %}
-			<p>Showing equations: {{ page.start_index }} to {{ page.end_index }} of {{ page.paginator.count}}</p>
-           
-        {% else %}
+			
+			<div class="tab-pane" id="result-map">
+				<div id="map"</div>
+			</div>
+        </div>
+		
+		{% else %}
         	<h4>No results were found that matched your search</h4>
         	<p>Try making your search more general.</p>
             {# Show some example queries to run, maybe query syntax, something else? #}
