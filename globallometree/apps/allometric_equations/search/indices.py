@@ -30,6 +30,7 @@ class AllometricEquationIndex(MappingType, Indexable):
         """Returns an Elasticsearch mapping for this MappingType"""
         mapping = {
             'properties': {
+                'Keywords' :        estype_string_analyzed,
                 'ID':               estype_integer,
                 'Population' :      estype_string_not_analyzed,
                 'Ecosystem' :       estype_string_not_analyzed,
@@ -71,7 +72,7 @@ class AllometricEquationIndex(MappingType, Indexable):
                 'F' :               estype_boolean, 
                 'Equation' :        estype_string_not_analyzed, 
                 'Author' :          estype_string_not_analyzed,
-                'Year' :            estype_string_not_analyzed,
+                'Year' :            estype_integer,
                 'Reference' :       estype_string_not_analyzed
             }
         }
@@ -91,21 +92,53 @@ class AllometricEquationIndex(MappingType, Indexable):
         document = {}
         #Create the document dynamically using the mapping, obj, and prepare methods
         for field in cls.get_mapping()['properties'].keys():
+            document[field] = cls.get_field_value(obj, field)
             
-            prepare_method_name = 'prepare_%s' % field
-            
-            #If this class has a prepare_FOO method for field FOO, use that method
-            if hasattr(cls, prepare_method_name):
-                method = getattr(cls, prepare_method_name)
-                document[field] = method(obj)
-            #If the object has a FOO property, use the object's FOO
-            elif hasattr(obj, field):
-                document[field] = getattr(obj, field)
-            else:
-                raise Exception("No model field or prepare method found for field %s" % field)
-
         return document
 
+    @classmethod
+    def get_field_value(cls, obj, field):
+        prepare_method_name = 'prepare_%s' % field
+            
+        #If this class has a prepare_FOO method for field FOO, use that method
+        if hasattr(cls, prepare_method_name):
+            method = getattr(cls, prepare_method_name)
+            return method(obj)
+        #If the object has a FOO property, use the object's FOO
+        elif hasattr(obj, field):
+            return getattr(obj, field)
+        else:
+            raise Exception("No model field or prepare method found for field %s" % field)
+
+
+    @classmethod
+    def prepare_Keywords(cls, obj):
+        """ Return keywords for the document, this uses the mapping to 
+            generate a list of keywords based on all fields of string type 
+            or fields in include_list
+            """
+        keywords = u''
+        mapping = cls.get_mapping()['properties']
+        #Create the document dynamically using the mapping, obj, and prepare methods
+        
+        #String types to skip
+        skip_list = ['Keywords', 'Equation']
+        
+        #Non string types to include
+        include_list = ['Year',]
+
+        for field in mapping.keys():
+            if field in skip_list:
+                continue
+            if mapping[field]['type'] == 'string' or field in include_list:
+                value = cls.get_field_value(obj, field)
+                if not value:
+                    continue
+                if type(value) == list:
+                    value = " ".join(value)
+                keywords += unicode(value) + u" "
+        print keywords
+        return keywords
 
     @classmethod
     def prepare_Ecosystem(cls, obj):
