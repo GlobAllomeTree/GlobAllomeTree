@@ -1,30 +1,9 @@
-
 from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 from ..models import AllometricEquation
-
-estypes = {
-    'boolean' : {'type': 'boolean'},
-
-    'integer' : {'type': 'integer'},
-
-    'float' : { 'type' : 'float' },
-
-    'long' : { 'type' : 'long'},
-
-    'double' : { 'type' : 'double' },
-
-    'string_not_analyzed' : {'type': 'string', 
-                             'index': 'not_analyzed'},
-
-    'geopoint_geohashed' : {'type': 'geo_point',
-                            'geohash': True,
-                            'geohash_prefix': True,
-                            'geohash_precision': 8
-                            },
-}
+from .estypes import *
 
 class AllometricEquationIndex(MappingType, Indexable):
 
@@ -42,55 +21,62 @@ class AllometricEquationIndex(MappingType, Indexable):
         return AllometricEquation
 
     @classmethod
+    def get_indexable(cls):
+        #return a queryset of models that should be indexed
+        return cls.get_model().objects.all()
+
+    @classmethod
     def get_mapping(cls):
         """Returns an Elasticsearch mapping for this MappingType"""
-        return {
+        mapping = {
             'properties': {
-                'ID':               estypes.integer,
-                'Population' :      estypes.string_not_analyzed,
-                'Ecosystem' :       estypes.string_not_analyzed,
-                'Genus' :           estypes.string_not_analyzed,
-                'Species':          estypes.string_not_analyzed,
-                'Locations' :       estypes.geopoint_geohashed,
-                'Country' :         estypes.string_not_analyzed,
-                'Biome_FAO' :       estypes.string_not_analyzed,
-                'Biome_UDVARDY' :   estypes.string_not_analyzed,
-                'Biome_WWF' :       estypes.string_not_analyzed,
-                'Division_BAILEY' : estypes.string_not_analyzed,
-                'Biome_HOLDRIDGE' : estypes.string_not_analyzed,
-                'X' :               estypes.string_not_analyzed, 
-                'Unit_X' :          estypes.string_not_analyzed, 
-                'Z' :               estypes.string_not_analyzed, 
-                'Unit_Z' :          estypes.string_not_analyzed, 
-                'W' :               estypes.string_not_analyzed, 
-                'Unit_W' :          estypes.string_not_analyzed, 
-                'U' :               estypes.string_not_analyzed, 
-                'Unit_U' :          estypes.string_not_analyzed, 
-                'V' :               estypes.string_not_analyzed, 
-                'Unit_V' :          estypes.string_not_analyzed, 
-                'Min_X' :           estypes.float, 
-                'Max_X' :           estypes.float,
-                'Min_Z' :           estypes.float, 
-                'Max_Z' :           estypes.float, 
-                'Output' :          estypes.string_not_analyzed, 
-                'Unit_Y' :          estypes.string_not_analyzed,
-                'B' :               estypes.boolean, 
-                'Bd' :              estypes.boolean,
-                'Bg' :              estypes.boolean, 
-                'Bt' :              estypes.boolean,
-                'L' :               estypes.boolean,
-                'Rb' :              estypes.boolean, 
-                'Rf' :              estypes.boolean, 
-                'Rm' :              estypes.boolean, 
-                'S' :               estypes.boolean, 
-                'T' :               estypes.boolean, 
-                'F' :               estypes.boolean, 
-                'Equation' :        estypes.string_not_analyzed, 
-                'Author' :          estypes.string_not_analyzed,
-                'Year' :            estypes.string_not_analyzed,
-                'Reference' :       estypes.string_not_analyzed
+                'ID':               estype_integer,
+                'Population' :      estype_string_not_analyzed,
+                'Ecosystem' :       estype_string_not_analyzed,
+                'Genus' :           estype_string_not_analyzed,
+                'Species':          estype_string_not_analyzed,
+                'Locations' :       estype_geopoint_geohashed,
+                'Country' :         estype_string_not_analyzed,
+                'Biome_FAO' :       estype_string_not_analyzed,
+                'Biome_UDVARDY' :   estype_string_not_analyzed,
+                'Biome_WWF' :       estype_string_not_analyzed,
+                'Division_BAILEY' : estype_string_not_analyzed,
+                'Biome_HOLDRIDGE' : estype_string_not_analyzed,
+                'X' :               estype_string_not_analyzed, 
+                'Unit_X' :          estype_string_not_analyzed, 
+                'Z' :               estype_string_not_analyzed, 
+                'Unit_Z' :          estype_string_not_analyzed, 
+                'W' :               estype_string_not_analyzed, 
+                'Unit_W' :          estype_string_not_analyzed, 
+                'U' :               estype_string_not_analyzed, 
+                'Unit_U' :          estype_string_not_analyzed, 
+                'V' :               estype_string_not_analyzed, 
+                'Unit_V' :          estype_string_not_analyzed, 
+                'Min_X' :           estype_float, 
+                'Max_X' :           estype_float,
+                'Min_Z' :           estype_float, 
+                'Max_Z' :           estype_float, 
+                'Output' :          estype_string_not_analyzed, 
+                'Unit_Y' :          estype_string_not_analyzed,
+                'B' :               estype_boolean, 
+                'Bd' :              estype_boolean,
+                'Bg' :              estype_boolean, 
+                'Bt' :              estype_boolean,
+                'L' :               estype_boolean,
+                'Rb' :              estype_boolean, 
+                'Rf' :              estype_boolean, 
+                'Rm' :              estype_boolean, 
+                'S' :               estype_boolean, 
+                'T' :               estype_boolean, 
+                'F' :               estype_boolean, 
+                'Equation' :        estype_string_not_analyzed, 
+                'Author' :          estype_string_not_analyzed,
+                'Year' :            estype_string_not_analyzed,
+                'Reference' :       estype_string_not_analyzed
             }
         }
+
+        return mapping
    
 
     @classmethod
@@ -102,30 +88,31 @@ class AllometricEquationIndex(MappingType, Indexable):
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
+        document = {}
+        #Create the document dynamically using the mapping, obj, and prepare methods
         for field in cls.get_mapping()['properties'].keys():
-            print field
+            
+            prepare_method_name = 'prepare_%s' % field
+            
+            #If this class has a prepare_FOO method for field FOO, use that method
+            if hasattr(cls, prepare_method_name):
+                method = getattr(cls, prepare_method_name)
+                document[field] = method(obj)
+            #If the object has a FOO property, use the object's FOO
+            elif hasattr(obj, field):
+                document[field] = getattr(obj, field)
+            else:
+                raise Exception("No model field or prepare method found for field %s" % field)
 
-        return {
-            'ID': obj.ID,
-            'Population' : cls.prepare_Population(obj),
-            'Ecosystem' : cls.prepare_Ecosystem(obj),
-            'Genus' : cls.prepare_Genus(obj),
-            'Species': cls.prepare_Species(obj),
-            'Locations' : cls.prepare_Locations(obj)
-            }
+        return document
 
 
     @classmethod
-    def get_species(cls, obj):
+    def prepare_species(cls, obj):
         species_list = []
         for species in obj.species_group.species.all():
             species_list.append(species.name)
         return species_list
-
-   
-    @classmethod
-    def get_indexable(cls):
-        return cls.get_model().objects.all()
 
     @classmethod
     def prepare_Ecosystem(cls, obj):
@@ -210,4 +197,16 @@ class AllometricEquationIndex(MappingType, Indexable):
                 "lon" : location.Longitude
             })
         return locations
+
+    @classmethod
+    def prepare_Author(cls, obj):
+        return obj.reference.author
+
+    @classmethod
+    def prepare_Reference(cls, obj):
+        return obj.reference.reference
+
+    @classmethod
+    def prepare_Year(cls, obj):
+        return obj.reference.year
 

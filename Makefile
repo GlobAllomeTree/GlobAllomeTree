@@ -72,10 +72,11 @@ celery-run: celery-clean
 	docker run -d --name ${WEB_CONTAINER_NAME}_celery ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /opt/code/server/startup_celery.sh
 
 celery-stop:
-	-@docker stop ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
+	echo ${WEB_CONTAINER_NAME}
+	docker stop ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
 
 celery-clean: celery-stop
-	-@docker rm ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
+	docker rm ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
 
 ####################################### DJANGO SPECIFIC #####################################
 
