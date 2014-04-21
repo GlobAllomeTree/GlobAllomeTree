@@ -1,15 +1,20 @@
 import json
+import re
+
 
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
 
-#import the S object from contrib which reads settings.ES_URLS
-from elasticutils.contrib.django import S
+#import the get_es object from contrib which reads settings.ES_URLS
+from elasticutils.contrib.django import get_es
 
 from .forms import SearchForm
 from .indices import AllometricEquationIndex
+
+year_regex = re.compile("[\d]4")
+
 
 class SearchView(TemplateView):
     template_name = 'allometric_equations/template.search.html'
@@ -45,10 +50,10 @@ class SearchView(TemplateView):
 
     def search(self):
        
-       	s = S(AllometricEquationIndex)
+       	es = get_es()
 
-        # if form.cleaned_data.get('q'):
-        #     s = s.??
+        if form.cleaned_data.get('q'):
+            terms['Keywords'] = form.cleaned_data.get('q')
 
         # ORDERING 
         # Check to see if a order_by field was chosen.
@@ -58,6 +63,8 @@ class SearchView(TemplateView):
         #Send search fields to the the sqs.filter
         for field in self.form.cleaned_data:
         
+
+
             if field in ['q', 'order_by', 'page']:
                 continue
 

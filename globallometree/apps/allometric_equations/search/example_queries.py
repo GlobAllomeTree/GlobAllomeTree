@@ -155,30 +155,39 @@ es = get_es(urls=settings.ES_URLS)
 #Combining!
 pprint(es.search(search_type='count', #since we just want the facet counts returned
                  body = {
-                    "filter": {
-                     	"and" : [
-                     		{
-                 	 			#Restrict these to limit the bounding box
-	                     	 	"geo_bounding_box" : {
-		                            "Locations" : {
-		                                "top_left" : {
-		                                    "lat" : -90,
-		                                    "lon" : -180
-		                                },
-		                                "bottom_right" : {
-		                                    "lat" : 90,
-		                                    "lon" : 180
-		                                }
-		                            }
-		                        }
-		                    },
-                 	 	 	{
-                 	 	 		"term": {
-                 					"Population": "Liana"
-                 	 			},
-                 	 		}
-	                 	]
-                    },   
+                 	"query" : {
+                 		"filtered" :  {
+                 			"query" : {
+				                "query_string" : {
+				                    "query" : "Liana"
+				                }
+			            	},
+		                    "filter": {
+		                     	"and" : [
+		                     		{
+		                 	 			#Restrict these to limit the bounding box
+			                     	 	"geo_bounding_box" : {
+				                            "Locations" : {
+				                                "top_left" : {
+				                                    "lat" : -90,
+				                                    "lon" : -180
+				                                },
+				                                "bottom_right" : {
+				                                    "lat" : 90,
+				                                    "lon" : 180
+				                                }
+				                            }
+				                        }
+				                    },
+		                 	 	 	{
+		                 	 	 		"term": {
+		                 					"Population": "Liana"
+		                 	 			},
+		                 	 		}
+			                 	]
+		                    }, 
+		                },
+	                },  
 	                 "aggregations" : {
 	                    "Locations-Grid" : {
 	                        "geohash_grid" : {

@@ -1,3 +1,5 @@
+import re
+
 from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
@@ -121,7 +123,7 @@ class AllometricEquationIndex(MappingType, Indexable):
         mapping = cls.get_mapping()['properties']
         #Create the document dynamically using the mapping, obj, and prepare methods
         
-        #String types to skip
+        #String types to skip (Keywords is skipped to avoid recursion)
         skip_list = ['Keywords', 'Equation']
         
         #Non string types to include
@@ -132,12 +134,11 @@ class AllometricEquationIndex(MappingType, Indexable):
                 continue
             if mapping[field]['type'] == 'string' or field in include_list:
                 value = cls.get_field_value(obj, field)
-                if not value:
-                    continue
                 if type(value) == list:
-                    value = " ".join(value)
-                keywords += unicode(value) + u" "
-        print keywords
+                    keywords += " ".join([v for v in value if v])
+                if value:
+                    keywords += unicode(value) + u"\n"
+
         return keywords
 
     @classmethod
@@ -234,5 +235,7 @@ class AllometricEquationIndex(MappingType, Indexable):
 
     @classmethod
     def prepare_Year(cls, obj):
-        return obj.reference.year
-
+        if obj.reference.year:
+            return re.findall(r'\d{4}', obj.reference.year)
+        return None
+       
