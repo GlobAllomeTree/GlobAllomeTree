@@ -169,8 +169,7 @@ BROKER_URL = 'redis://localhost:6379/0'
 
 if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
     print "No file: settings_local.py"
-    print "Copy settings_local.py.sample to settings_local.py?"
-    print "If running docker containers: copy settings_local.py.server instead."
+    print "Copy settings_local.py.server to settings_local.py?"
     raise ImportError
 else:
     try:
