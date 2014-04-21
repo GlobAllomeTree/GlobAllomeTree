@@ -108,13 +108,6 @@ class AllometricEquationIndex(MappingType, Indexable):
 
 
     @classmethod
-    def prepare_species(cls, obj):
-        species_list = []
-        for species in obj.species_group.species.all():
-            species_list.append(species.name)
-        return species_list
-
-    @classmethod
     def prepare_Ecosystem(cls, obj):
         return None if obj.ecosystem is None else obj.ecosystem.name
 
