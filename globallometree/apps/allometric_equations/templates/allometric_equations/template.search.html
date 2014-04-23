@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
-
 {% block script %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+<style>
+	/* Map Styles */
+	#map {
+		height: 600px;
+		width: 1060px;
+	}
+</style>
+
+<script src="{% static 'allometric_equations/js/elastic.min.js' %}"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+<script src="{% static 'allometric_equations/js/map.js' %}"></script>
 <script>
-	var es_query = {{elasticsearch_query}};
+	var es_query = {{elasticsearch_query|safe}};
+	
     $(function() {
 		
         $('a[href="#keyword"]').tab('show');
@@ -279,17 +291,17 @@
 		
 		<br />
         <br />
-		<ul class="nav nav-tabs">
+		<ul id="results-tab" class="nav nav-tabs">
 			<li>
-				<a href="#result-list" data-toggle="tab" class="active">List</a>
+				<a href="#results-list" data-toggle="tab" class="active">List</a>
 			</li>
 			<li>
-				<a href="#result-map" data-toggle="tab">Map</a>
+				<a id="list-tab" href="#results-map" data-toggle="tab">Map</a>
 			</li>
 		</ul>
 		
 		<div class="tab-content">
-			<div class="tab-pane active" id="result-list">
+			<div class="tab-pane active" id="results-list">
 			
 				<div style="float:left;width:1030px;overflow-x:auto;">	
 					<table class="equationTable" style="width:500px;">
@@ -349,7 +361,7 @@
 				<p>Showing equations: {{ page.start_index }} to {{ page.end_index }} of {{ page.paginator.count}}</p>
 			</div>
 			
-			<div class="tab-pane" id="result-map">
+			<div class="tab-pane" id="results-map">
 				<div id="map"</div>
 			</div>
         </div>
