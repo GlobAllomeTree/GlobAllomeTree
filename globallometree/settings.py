@@ -8,7 +8,6 @@ gettext = lambda s: s
 PROJECT_PATH = os.path.join(os.path.dirname(__file__))
 BASE_PATH = os.path.abspath(os.path.join(PROJECT_PATH, '../'))
 
-
 ALLOWED_HOSTS = []
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
@@ -55,6 +54,9 @@ TEMPLATE_LOADERS = (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
 #    )),
+    #below is askbot stuff for this tuple
+    #'askbot.skins.loaders.load_template_source', #changed due to bug 97
+    'askbot.skins.loaders.filesystem_load_template_source',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -65,6 +67,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'cms.context_processors.cms_settings',
     'sekizai.context_processors.sekizai',
+
+    #askbot
+    'askbot.context.application_settings',
+    'askbot.user_messages.context_processors.user_messages',#must be before auth
+    'django.core.context_processors.csrf', #necessary for csrf protection
 )
 
 MIDDLEWARE_CLASSES = (
@@ -79,6 +86,13 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #below is askbot stuff for this tuple
+    'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
+    'askbot.middleware.forum_mode.ForumModeMiddleware',
+    'askbot.middleware.cancel.CancelActionMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
+    'askbot.middleware.view_log.ViewLogMiddleware',
+    'askbot.middleware.spaceless.SpacelessMiddleware',
 )
 
 ROOT_URLCONF = 'globallometree.urls'
@@ -143,6 +157,27 @@ INSTALLED_APPS = (
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
     'globallometree.plugins.linkbox',
+
+    # askbot
+    'longerusername',
+    #all of these are needed for the askbot
+    'django.contrib.humanize',
+    'django.contrib.sitemaps',
+    'compressor',
+    #'debug_toolbar',
+    'askbot',
+    'askbot.deps.django_authopenid',
+    #'askbot.importers.stackexchange', #se loader
+    'askbot.deps.livesettings',
+    'keyedcache',
+    'robots',
+    'django_countries',
+    'djcelery',
+    'djkombu',
+    'followit',
+    'tinymce',
+    #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
+    'compressor',
 )
 
 

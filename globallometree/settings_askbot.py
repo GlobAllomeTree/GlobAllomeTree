@@ -1,7 +1,18 @@
+import os.path
 import logging
 import sys
 import askbot
 import site
+
+# TODO: already defined in the main settings module
+PROJECT_PATH = os.path.join(os.path.dirname(__file__))
+BASE_PATH = os.path.abspath(os.path.join(PROJECT_PATH, '../'))
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
+
+#this line is added so that we can import pre-packaged askbot dependencies
+ASKBOT_ROOT = os.path.abspath(os.path.dirname(askbot.__file__))
+site.addsitedir(os.path.join(ASKBOT_ROOT, 'deps'))
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
@@ -10,25 +21,7 @@ PROJECT_ROOT = os.path.dirname(__file__)
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'#must be this value
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS += (
-    #below is askbot stuff for this tuple
-    #'askbot.skins.loaders.load_template_source', #changed due to bug 97
-    'askbot.skins.loaders.filesystem_load_template_source',
-)
-
-MIDDLEWARE_CLASSES += (
-    #below is askbot stuff for this tuple
-    'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
-    'askbot.middleware.forum_mode.ForumModeMiddleware',
-    'askbot.middleware.cancel.CancelActionMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'askbot.middleware.view_log.ViewLogMiddleware',
-    'askbot.middleware.spaceless.SpacelessMiddleware',
-)
-
-JINJA2_EXTENSIONS += (
+JINJA2_EXTENSIONS = (
     'compressor.contrib.jinja2ext.CompressorExtension',
 )
 
@@ -56,35 +49,6 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 #ASKBOT_EXTRA_SKINS_DIR = #path to your private skin collection
 #take a look here http://askbot.org/en/question/207/
 
-TEMPLATE_CONTEXT_PROCESSORS += (
-    'askbot.context.application_settings',
-    'askbot.user_messages.context_processors.user_messages',#must be before auth
-    'django.core.context_processors.csrf', #necessary for csrf protection
-)
-
-
-INSTALLED_APPS += (
-    'longerusername',
-    #all of these are needed for the askbot
-    'django.contrib.humanize',
-    'django.contrib.sitemaps',
-    'compressor',
-    #'debug_toolbar',
-    'askbot',
-    'askbot.deps.django_authopenid',
-    #'askbot.importers.stackexchange', #se loader
-    'askbot.deps.livesettings',
-    'keyedcache',
-    'robots',
-    'django_countries',
-    'djcelery',
-    'djkombu',
-    'followit',
-    'tinymce',
-    #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
-    'compressor',
-)
-
 #setup memcached for production use!
 #see http://docs.djangoproject.com/en/1.1/topics/cache/ for details
 CACHE_BACKEND = 'locmem://'
@@ -103,12 +67,12 @@ AUTHENTICATION_BACKENDS = (
 )
 
 #logging settings
-LOG_FILENAME = 'askbot.log'
-logging.basicConfig(
-    filename=os.path.join(os.path.dirname(__file__), 'log', LOG_FILENAME),
-    level=logging.CRITICAL,
-    format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
-)
+# LOG_FILENAME = 'askbot.log'
+# logging.basicConfig(
+#     filename=os.path.join(os.path.dirname(__file__), 'log', LOG_FILENAME),
+#     level=logging.CRITICAL,
+#     format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
+# )
 
 ###########################
 #
