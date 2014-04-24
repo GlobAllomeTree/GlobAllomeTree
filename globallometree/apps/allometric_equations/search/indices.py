@@ -1,9 +1,11 @@
+import re
 
 from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 from ..models import AllometricEquation
+from .estypes import *
 
 class AllometricEquationIndex(MappingType, Indexable):
 
@@ -21,35 +23,64 @@ class AllometricEquationIndex(MappingType, Indexable):
         return AllometricEquation
 
     @classmethod
+    def get_indexable(cls):
+        #return a queryset of models that should be indexed
+        return cls.get_model().objects.all()
+
+    @classmethod
     def get_mapping(cls):
         """Returns an Elasticsearch mapping for this MappingType"""
-        return {
+        mapping = {
             'properties': {
-                # The id is an integer, so store it as such. Elasticsearch
-                # would have inferred this just fine.
-                'ID': {'type': 'integer'},
-
-                'Population' : {'type': 'string', 
-                               'index': 'not_analyzed'},
-
-                'Ecosystem' : {'type': 'string', 
-                              'index': 'not_analyzed'},
-
-                'Genus' : {'type': 'string',                           
-                           'index': 'not_analyzed'},
-
-                # The species is a name---so we shouldn't analyze it
-                # (de-stem, tokenize, parse, etc).
-                'Species': {'type': 'string', 
-                            'index': 'not_analyzed'},
-                            
-                'Locations' : {'type': 'geo_point',
-                               'geohash': True,
-                               'geohash_prefix': True,
-                               'geohash_precision': 8
-                               }
+                'Keywords' :        estype_string_analyzed,
+                'ID':               estype_integer,
+                'Population' :      estype_string_not_analyzed,
+                'Ecosystem' :       estype_string_not_analyzed,
+                'Genus' :           estype_string_not_analyzed,
+                'Species':          estype_string_not_analyzed,
+                'Locations' :       estype_geopoint_geohashed,
+                'Country' :         estype_string_not_analyzed,
+                'Biome_FAO' :       estype_string_not_analyzed,
+                'Biome_UDVARDY' :   estype_string_not_analyzed,
+                'Biome_WWF' :       estype_string_not_analyzed,
+                'Division_BAILEY' : estype_string_not_analyzed,
+                'Biome_HOLDRIDGE' : estype_string_not_analyzed,
+                'X' :               estype_string_not_analyzed, 
+                'Unit_X' :          estype_string_not_analyzed, 
+                'Z' :               estype_string_not_analyzed, 
+                'Unit_Z' :          estype_string_not_analyzed, 
+                'W' :               estype_string_not_analyzed, 
+                'Unit_W' :          estype_string_not_analyzed, 
+                'U' :               estype_string_not_analyzed, 
+                'Unit_U' :          estype_string_not_analyzed, 
+                'V' :               estype_string_not_analyzed, 
+                'Unit_V' :          estype_string_not_analyzed, 
+                'Min_X' :           estype_float, 
+                'Max_X' :           estype_float,
+                'Min_Z' :           estype_float, 
+                'Max_Z' :           estype_float, 
+                'Output' :          estype_string_not_analyzed, 
+                'Unit_Y' :          estype_string_not_analyzed,
+                'B' :               estype_boolean, 
+                'Bd' :              estype_boolean,
+                'Bg' :              estype_boolean, 
+                'Bt' :              estype_boolean,
+                'L' :               estype_boolean,
+                'Rb' :              estype_boolean, 
+                'Rf' :              estype_boolean, 
+                'Rm' :              estype_boolean, 
+                'S' :               estype_boolean, 
+                'T' :               estype_boolean, 
+                'F' :               estype_boolean, 
+                'Equation' :        estype_string_not_analyzed, 
+                'Author' :          estype_string_not_analyzed,
+                'Year' :            estype_integer,
+                'Reference' :       estype_string_not_analyzed
             }
         }
+
+        return mapping
+   
 
     @classmethod
     def extract_document(cls, obj_id=None, obj=None):
@@ -60,27 +91,55 @@ class AllometricEquationIndex(MappingType, Indexable):
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
-        return {
-            'ID': obj.ID,
-            'Population' : cls.prepare_Population(obj),
-            'Ecosystem' : cls.prepare_Ecosystem(obj),
-            'Genus' : cls.prepare_Genus(obj),
-            'Species': cls.prepare_Species(obj),
-            'Locations' : cls.prepare_Locations(obj)
-            }
+        document = {}
+        #Create the document dynamically using the mapping, obj, and prepare methods
+        for field in cls.get_mapping()['properties'].keys():
+            document[field] = cls.get_field_value(obj, field)
+            
+        return document
+
+    @classmethod
+    def get_field_value(cls, obj, field):
+        prepare_method_name = 'prepare_%s' % field
+            
+        #If this class has a prepare_FOO method for field FOO, use that method
+        if hasattr(cls, prepare_method_name):
+            method = getattr(cls, prepare_method_name)
+            return method(obj)
+        #If the object has a FOO property, use the object's FOO
+        elif hasattr(obj, field):
+            return getattr(obj, field)
+        else:
+            raise Exception("No model field or prepare method found for field %s" % field)
 
 
     @classmethod
-    def get_species(cls, obj):
-        species_list = []
-        for species in obj.species_group.species.all():
-            species_list.append(species.name)
-        return species_list
+    def prepare_Keywords(cls, obj):
+        """ Return keywords for the document, this uses the mapping to 
+            generate a list of keywords based on all fields of string type 
+            or fields in include_list
+            """
+        keywords = u''
+        mapping = cls.get_mapping()['properties']
+        #Create the document dynamically using the mapping, obj, and prepare methods
+        
+        #String types to skip (Keywords is skipped to avoid recursion)
+        skip_list = ['Keywords', 'Equation']
+        
+        #Non string types to include
+        include_list = ['Year',]
 
-   
-    @classmethod
-    def get_indexable(cls):
-        return cls.get_model().objects.all()
+        for field in mapping.keys():
+            if field in skip_list:
+                continue
+            if mapping[field]['type'] == 'string' or field in include_list:
+                value = cls.get_field_value(obj, field)
+                if type(value) == list:
+                    keywords += " ".join([v for v in value if v])
+                if value:
+                    keywords += unicode(value) + u"\n"
+
+        return keywords
 
     @classmethod
     def prepare_Ecosystem(cls, obj):
@@ -166,3 +225,17 @@ class AllometricEquationIndex(MappingType, Indexable):
             })
         return locations
 
+    @classmethod
+    def prepare_Author(cls, obj):
+        return obj.reference.author
+
+    @classmethod
+    def prepare_Reference(cls, obj):
+        return obj.reference.reference
+
+    @classmethod
+    def prepare_Year(cls, obj):
+        if obj.reference.year:
+            return re.findall(r'\d{4}', obj.reference.year)
+        return None
+       

@@ -152,111 +152,271 @@ es = get_es(urls=settings.ES_URLS)
 #                                              {u'doc_count': 9,
 
 
+# #Combining!
+# pprint(es.search(search_type='count', #since we just want the facet counts returned
+#                  body = {
+#                     "query" : {
+#                     	"filtered" :  {
+#                  			"query" : {
+#                 				"match" : { "Keywords" : 'Forest'}			
+#                  			},
+# 		                    "filter": {
+# 		                     	"and" : [
+# 		                     		{
+# 		                 	 			#Restrict these to limit the bounding box
+# 			                     	 	"geo_bounding_box" : {
+# 				                            "Locations" : {
+# 				                                "top_left" : {
+# 				                                    "lat" : -90,
+# 				                                    "lon" : -180
+# 				                                },
+# 				                                "bottom_right" : {
+# 				                                    "lat" : 90,
+# 				                                    "lon" : 180
+# 				                                }
+# 				                            }
+# 				                        }
+# 				                    },
+		                 	 	 	
+# 			                 	]
+# 		                    }
+# 		                }
+# 		             },
+# 	                 "aggregations" : {
+# 	                    "Locations-Grid" : {
+# 	                        "geohash_grid" : {
+# 	                            "field" : "Locations",
+# 	                            "precision" : 2
+# 	                        },
+# 	                        "aggregations" : {
+# 	                            "species" : {
+# 	                                "terms" : { 
+# 	                                    "field" : "Species" 
+# 	                                 }
+# 	                            },
+# 	                            "avg_lat": {
+# 							        "avg": {
+# 							            "script": "doc['Locations'].value.lat"
+# 							        }
+# 							    },
+# 							    "avg_lon": {
+# 							        "avg": {
+# 							            "script": "doc['Locations'].value.lon"
+# 							        }
+# 							    },
+# 	                        },
+# 	                    },
+# 	                    "Locations-Bounds"  : {
+# 	                    	"filter" : { 
+# 	                    		"exists" : {
+# 	                    			"field" : "Locations"
+# 	                    		},
+# 	                    	},
+# 	                    	"aggregations": {
+# 		                    	"min_lat": {
+# 								        "min": {
+# 								            "script": "doc['Locations'].value.lat"
+# 								        }
+# 							    },
+# 							    "max_lat": {
+# 								        "max": {
+# 								            "script": "doc['Locations'].value.lat"
+# 								        }
+# 							    },
+# 							    "min_lon": {
+# 								        "min": {
+# 								            "script": "doc['Locations'].value.lon"
+# 								        }
+# 							    },
+# 							    "max_lon": {
+# 								        "max": {
+# 								            "script": "doc['Locations'].value.lon"
+# 								        }
+# 							    },
+# 						   }
+# 						}  
+# 	                }       
+#                 }))
+
+
+
+
 #Combining!
-pprint(es.search(search_type='count', #since we just want the facet counts returned
-                 body = {
-                    "filter": {
-                     	"and" : [
-                     		{
-                 	 			#Restrict these to limit the bounding box
-	                     	 	"geo_bounding_box" : {
-		                            "Locations" : {
-		                                "top_left" : {
-		                                    "lat" : -90,
-		                                    "lon" : -180
-		                                },
-		                                "bottom_right" : {
-		                                    "lat" : 90,
-		                                    "lon" : 180
-		                                }
-		                            }
-		                        }
-		                    },
-                 	 	 	{
-                 	 	 		"term": {
-                 					"Population": "Liana"
-                 	 			},
-                 	 		}
-	                 	]
-                    },   
-	                 "aggregations" : {
-	                    "Locations-Grid" : {
-	                        "geohash_grid" : {
-	                            "field" : "Locations",
-	                            "precision" : 2
-	                        },
-	                        "aggregations" : {
-	                            "species" : {
-	                                "terms" : { 
-	                                    "field" : "Species" 
-	                                 }
-	                            },
-	                            "avg_lat": {
-							        "avg": {
-							            "script": "doc['Locations'].value.lat"
-							        }
-							    },
-							    "avg_lon": {
-							        "avg": {
-							            "script": "doc['Locations'].value.lon"
-							        }
-							    },
-	                        },
-	                    },
-	                    "Locations-Bounds"  : {
-	                    	"filter" : { 
-	                    		"exists" : {
-	                    			"field" : "Locations"
-	                    		},
-	                    	},
-	                    	"aggregations": {
-		                    	"min_lat": {
-								        "min": {
-								            "script": "doc['Locations'].value.lat"
-								        }
-							    },
-							    "max_lat": {
-								        "max": {
-								            "script": "doc['Locations'].value.lat"
-								        }
-							    },
-							    "min_lon": {
-								        "min": {
-								            "script": "doc['Locations'].value.lon"
-								        }
-							    },
-							    "max_lon": {
-								        "max": {
-								            "script": "doc['Locations'].value.lon"
-								        }
-							    },
-						   }
-						}  
-	                }       
+pprint(es.search(body = {
+                    "query" : {
+                        "filtered" :  {
+                            "query" : {
+                                #search in keywords for matches based on simple query string
+                                "simple_query_string" : {
+                                    "query" : "dendrometrique",
+                                    "fields": ["Keywords"],
+                                    "default_operator": "and"
+                                }
+                            },
+                            "filter": {
+                                "and" : [
+                                    {
+                                        #Restrict these to limit the bounding box
+                                        "geo_bounding_box" : {
+                                            "Locations" : {
+                                                "top_left" : {
+                                                    "lat" : 10,
+                                                    "lon" : 0
+                                                },
+                                                "bottom_right" : {
+                                                    "lat" : 0,
+                                                    "lon" : 10
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "Population": "TREE"
+                                        },
+                                    }
+                                ]
+                            }, 
+                        },
+                    },  
+                     "aggregations" : {
+                        "Locations-Grid" : {
+                            "geohash_grid" : {
+                                "field" : "Locations",
+                                "precision" : 2
+                            },
+                            "aggregations" : {
+                                "species" : {
+                                    "terms" : { 
+                                        "field" : "Species" 
+                                     }
+                                },
+                                "avg_lat": {
+                                    "avg": {
+                                        "script": "doc['Locations'].value.lat"
+                                    }
+                                },
+                                "avg_lon": {
+                                    "avg": {
+                                        "script": "doc['Locations'].value.lon"
+                                    }
+                                },
+                            },
+                        },
+                        "Locations-Bounds"  : {
+                            "filter" : { 
+                                "exists" : {
+                                    "field" : "Locations"
+                                },
+                            },
+                            "aggregations": {
+                                "min_lat": {
+                                        "min": {
+                                            "script": "doc['Locations'].value.lat"
+                                        }
+                                },
+                                "max_lat": {
+                                        "max": {
+                                            "script": "doc['Locations'].value.lat"
+                                        }
+                                },
+                                "min_lon": {
+                                        "min": {
+                                            "script": "doc['Locations'].value.lon"
+                                        }
+                                },
+                                "max_lon": {
+                                        "max": {
+                                            "script": "doc['Locations'].value.lon"
+                                        }
+                                },
+                           }
+                        }  
+                    }       
                 }))
 
+
 #Here we get a list of geohashes by key with the species that are at that geohash
+#Also the Locations-Bounds aggregation shows the max and min lons for all results
 ##############################################################################
-# {u'doc_count': 2,
-# u'key': u'6q',
-# u'species': {u'buckets': [{u'doc_count': 2,
-#                            u'key': u'unknown'},
-#                           {u'doc_count': 1,
-#                            u'key': u'flexuosa'},
-#                           {u'doc_count': 1,
-#                            u'key': u'laevis'},
-#                           {u'doc_count': 1,
-#                            u'key': u'officinalis'},
-#                           {u'doc_count': 1,
-#                            u'key': u'pavonis'}]}},
-#  {u'doc_count': 1,
-#  u'key': u'ud',
-#  u'species': {u'buckets': [{u'doc_count': 1,
-#                             u'key': u'sylvestris'}]}},
-# {u'doc_count': 1,
-#  u'key': u'u7',
-#  u'species': {u'buckets': [{u'doc_count': 1,
-#                             u'key': u'sylvestris'}]}},
+# {u'_shards': {u'failed': 0, u'successful': 5, u'total': 5},
+#  u'aggregations': {u'Locations-Bounds': {u'doc_count': 4786,
+#                                          u'max_lat': {u'value': 69.7333},
+#                                          u'max_lon': {u'value': 116.9927},
+#                                          u'min_lat': {u'value': -54.60127},
+#                                          u'min_lon': {u'value': -155.15}},
+#                    u'Locations-Grid': {u'buckets': [{u'avg_lat': {u'value': 33.56548754646842},
+#                                                      u'avg_lon': {u'value': -84.37593382899628},
+#                                                      u'doc_count': 538,
+#                                                      u'key': u'dn',
+#                                                      u'species': {u'buckets': [{u'doc_count': 60,
+#                                                                                 u'key': u'spp.'},
+#                                                                                {u'doc_count': 52,
+#                                                                                 u'key': u'tesota'},
+#                                                                                {u'doc_count': 45,
+#                                                                                 u'key': u'alba'},
+#                                                                                {u'doc_count': 44,
+#                                                                                 u'key': u'tulipifera'},
+#                                                                                {u'doc_count': 32,
+#                                                                                 u'key': u'coccinea'},
+#                                                                                {u'doc_count': 29,
+#                                                                                 u'key': u'rubrum'},
+#                                                                                {u'doc_count': 27,
+#                                                                                 u'key': u'styraciflua'},
+#                                                                                {u'doc_count': 14,
+#                                                                                 u'key': u'prinus'},
+#                                                                                {u'doc_count': 13,
+#                                                                                 u'key': u'falcata var. falcata'},
+#                                                                                {u'doc_count': 13,
+#                                                                                 u'key': u'sylvatica'}]}},
+#                                                     {u'avg_lat': {u'value': 43.993877848101256},
+#                                                      u'avg_lon': {u'value': -70.39159715189872},
+#                                                      u'doc_count': 316,
+#                                                      u'key': u'dr',
+#                                                      u'species': {u'buckets': [{u'doc_count': 39,
+#                                                                                 u'key': u'spp.'},
+#                                                                                {u'doc_count': 34,
+#                                                                                 u'key': u'saccharum'},
+#                                                                                {u'doc_count': 22,
+#                                                                                 u'key': u'grandifolia'},
+#                                                                                {u'doc_count': 19,
+#                                                                                 u'key': u'rubrum'},
+#                                                                                {u'doc_count': 14,
+#                                                                                 u'key': u'alleghaniensis'},
+#                                                                                {u'doc_count': 12,
+#                                                                                 u'key': u'canadensis'},
+#                                                                                {u'doc_count': 12,
+#                                                                                 u'key': u'papyrifera'},
+#                                                                                {u'doc_count': 9,
+#                                                                                 u'key': u'virginiana'},
+#                                                                                {u'doc_count': 8,
+#                                                                                 u'key': u'populifolia'},
+#                                                                                {u'doc_count': 8,
+#                                                                                 u'key': u'strobus'}]}},
+#                                                     {u'avg_lat': {u'value': 47.02884925373134},
+#                                                      u'avg_lon': {u'value': -118.69945970149253},
+#                                                      u'doc_count': 268,
+#                                                      u'key': u'c2',
+#                                                      u'species': {u'buckets': [{u'doc_count': 89,
+#                                                                                 u'key': u'menziesii'},
+#                                                                                {u'doc_count': 24,
+#                                                                                 u'key': u'mertensiana'},
+#                                                                                {u'doc_count': 24,
+#                                                                                 u'key': u'ponderosa'},
+#                                                                                {u'doc_count': 20,
+#                                                                                 u'key': u'amabilis'},
+#                                                                                {u'doc_count': 20,
+#                                                                                 u'key': u'plicata'},
+#                                                                                {u'doc_count': 17,
+#                                                                                 u'key': u'heterophylla'},
+#                                                                                {u'doc_count': 12,
+#                                                                                 u'key': u'occidentalis'},
+#                                                                                {u'doc_count': 10,
+#                                                                                 u'key': u'spp.'},
+#                                                                                {u'doc_count': 9,
+#                                                                                 u'key': u'contorta'},
+#                                                                                {u'doc_count': 8,
+#                                                                                 u'key': u'resinosa'}]}},
 
 
 #Example showing both query, aggregations, and geo_bounding_box
