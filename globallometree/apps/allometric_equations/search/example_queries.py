@@ -161,7 +161,7 @@ pprint(es.search(body = {
                     "fields" : ['Species', 'Genus', 'Equation', 'Locations', 'Country'],
                     
                     #Show results from 0 to 40
-                    "from" : 0, "size" : 20,
+                    "from" : 0, "size" : 40,
 
                     #Use a filtered query
                     "query" : {
@@ -181,22 +181,22 @@ pprint(es.search(body = {
                                         "geo_bounding_box" : {
                                             "Locations" : {
                                                 "top_left" : {
-                                                    "lat" : 10,
+                                                    "lat" : 90,
                                                     "lon" : 0
                                                 },
                                                 "bottom_right" : {
                                                     "lat" : 0,
-                                                    "lon" : 10
+                                                    "lon" : 180
                                                 }
                                             }
                                         }
                                     },
-                                    # #term queries are for exact matches on non_analyzed fields
-                                    # {
-                                    #     "term": {
-                                    #         "Population": "TREE"
-                                    #     },
-                                    # }
+                                    #term queries are for exact matches on non_analyzed fields
+                                    {
+                                        "term": {
+                                            "B": True
+                                        },
+                                    }
                                 ]
                             }, 
                         },

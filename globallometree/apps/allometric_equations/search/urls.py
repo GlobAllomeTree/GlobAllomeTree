@@ -1,7 +1,6 @@
 
-from django.conf.urls import patterns, url
-from .views import SubmissionView, SubmissionCompleteView
-from .search.views import SearchView
+from django.conf.urls import url, patterns
+from .views import SearchView
 
 urlpatterns = patterns('apps.allometric_equations.views',
 
