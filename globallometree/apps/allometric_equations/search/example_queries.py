@@ -152,103 +152,24 @@ es = get_es(urls=settings.ES_URLS)
 #                                              {u'doc_count': 9,
 
 
-# #Combining!
-# pprint(es.search(search_type='count', #since we just want the facet counts returned
-#                  body = {
-#                     "query" : {
-#                     	"filtered" :  {
-#                  			"query" : {
-#                 				"match" : { "Keywords" : 'Forest'}			
-#                  			},
-# 		                    "filter": {
-# 		                     	"and" : [
-# 		                     		{
-# 		                 	 			#Restrict these to limit the bounding box
-# 			                     	 	"geo_bounding_box" : {
-# 				                            "Locations" : {
-# 				                                "top_left" : {
-# 				                                    "lat" : -90,
-# 				                                    "lon" : -180
-# 				                                },
-# 				                                "bottom_right" : {
-# 				                                    "lat" : 90,
-# 				                                    "lon" : 180
-# 				                                }
-# 				                            }
-# 				                        }
-# 				                    },
-		                 	 	 	
-# 			                 	]
-# 		                    }
-# 		                }
-# 		             },
-# 	                 "aggregations" : {
-# 	                    "Locations-Grid" : {
-# 	                        "geohash_grid" : {
-# 	                            "field" : "Locations",
-# 	                            "precision" : 2
-# 	                        },
-# 	                        "aggregations" : {
-# 	                            "species" : {
-# 	                                "terms" : { 
-# 	                                    "field" : "Species" 
-# 	                                 }
-# 	                            },
-# 	                            "avg_lat": {
-# 							        "avg": {
-# 							            "script": "doc['Locations'].value.lat"
-# 							        }
-# 							    },
-# 							    "avg_lon": {
-# 							        "avg": {
-# 							            "script": "doc['Locations'].value.lon"
-# 							        }
-# 							    },
-# 	                        },
-# 	                    },
-# 	                    "Locations-Bounds"  : {
-# 	                    	"filter" : { 
-# 	                    		"exists" : {
-# 	                    			"field" : "Locations"
-# 	                    		},
-# 	                    	},
-# 	                    	"aggregations": {
-# 		                    	"min_lat": {
-# 								        "min": {
-# 								            "script": "doc['Locations'].value.lat"
-# 								        }
-# 							    },
-# 							    "max_lat": {
-# 								        "max": {
-# 								            "script": "doc['Locations'].value.lat"
-# 								        }
-# 							    },
-# 							    "min_lon": {
-# 								        "min": {
-# 								            "script": "doc['Locations'].value.lon"
-# 								        }
-# 							    },
-# 							    "max_lon": {
-# 								        "max": {
-# 								            "script": "doc['Locations'].value.lon"
-# 								        }
-# 							    },
-# 						   }
-# 						}  
-# 	                }       
-#                 }))
 
 
 
-
-#Combining!
+#Combined Query
 pprint(es.search(body = {
+                    #Use these fields for results and aggs
+                    "fields" : ['Species', 'Genus', 'Equation', 'Locations', 'Country'],
+                    
+                    #Show results from 0 to 40
+                    "from" : 0, "size" : 20,
+
+                    #Use a filtered query
                     "query" : {
                         "filtered" :  {
                             "query" : {
                                 #search in keywords for matches based on simple query string
                                 "simple_query_string" : {
-                                    "query" : "dendrometrique",
+                                    "query" : "tree",
                                     "fields": ["Keywords"],
                                     "default_operator": "and"
                                 }
@@ -270,20 +191,23 @@ pprint(es.search(body = {
                                             }
                                         }
                                     },
-                                    {
-                                        "term": {
-                                            "Population": "TREE"
-                                        },
-                                    }
+                                    # #term queries are for exact matches on non_analyzed fields
+                                    # {
+                                    #     "term": {
+                                    #         "Population": "TREE"
+                                    #     },
+                                    # }
                                 ]
                             }, 
                         },
-                    },  
-                     "aggregations" : {
+                    },
+
+                    #Run aggregations on the results matched by the query
+                    "aggregations" : {
                         "Locations-Grid" : {
                             "geohash_grid" : {
                                 "field" : "Locations",
-                                "precision" : 2
+                                "precision" : 7
                             },
                             "aggregations" : {
                                 "species" : {

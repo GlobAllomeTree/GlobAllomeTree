@@ -136,7 +136,7 @@ class AllometricEquationIndex(MappingType, Indexable):
                 value = cls.get_field_value(obj, field)
                 if type(value) == list:
                     keywords += " ".join([v for v in value if v])
-                if value:
+                elif value:
                     keywords += unicode(value) + u"\n"
 
         return keywords
