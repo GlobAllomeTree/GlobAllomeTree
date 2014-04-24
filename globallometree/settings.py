@@ -2,6 +2,7 @@
 # Django settings for globallometree project.
 
 import os.path
+
 gettext = lambda s: s
 
 PROJECT_PATH = os.path.join(os.path.dirname(__file__))
@@ -37,7 +38,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = True # TODO: check if this can be False
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -163,3 +164,4 @@ DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
 from settings_search import *
 from settings_local import *
+from settings_askbot import *

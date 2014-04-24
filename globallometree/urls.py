@@ -1,4 +1,3 @@
-
 from django.conf.urls import patterns, url, include
 from django.views.generic.list import ListView
 from django.contrib import admin
@@ -25,4 +24,16 @@ urlpatterns = patterns(
     (r'^geo_map/$', geo_map),
     (r'^geo_map_([A-Za-z]+)/$', geo_map_id),
     url(r'^', include('cms.urls')),
+)
+
+# askbot
+urlpatterns += patterns('',
+    (r'^followit/', include('followit.urls')),
+    (r'^tinymce/', include('tinymce.urls')),
+    (r'^robots.txt$', include('robots.urls')),
+    url( # TODO: replace with django.conf.urls.static ?
+        r'^%s(?P<path>.*)$' % settings.MEDIA_URL[1:],
+        'django.views.static.serve',
+        {'document_root': settings.MEDIA_ROOT.replace('\\','/')},
+    ),
 )
