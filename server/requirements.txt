@@ -45,3 +45,5 @@ djangocms-link==1.3.4
 
 ####################### Frontend
 django-bootstrap3==3.0.0
+
+mock==1.0.1
