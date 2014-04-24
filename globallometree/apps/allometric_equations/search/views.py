@@ -35,9 +35,6 @@ class SearchView(TemplateView):
         
         return context
 
-    def query_entered(self):
-        return bool(len(self.request.GET.keys()) and 'q' in self.request.GET.keys())
-
     def create_response(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseRedirect('/accounts/login/')
