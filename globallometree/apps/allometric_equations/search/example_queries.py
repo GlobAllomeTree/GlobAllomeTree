@@ -152,97 +152,189 @@ es = get_es(urls=settings.ES_URLS)
 #                                              {u'doc_count': 9,
 
 
+# #Combining!
+# pprint(es.search(search_type='count', #since we just want the facet counts returned
+#                  body = {
+#                     "query" : {
+#                     	"filtered" :  {
+#                  			"query" : {
+#                 				"match" : { "Keywords" : 'Forest'}			
+#                  			},
+# 		                    "filter": {
+# 		                     	"and" : [
+# 		                     		{
+# 		                 	 			#Restrict these to limit the bounding box
+# 			                     	 	"geo_bounding_box" : {
+# 				                            "Locations" : {
+# 				                                "top_left" : {
+# 				                                    "lat" : -90,
+# 				                                    "lon" : -180
+# 				                                },
+# 				                                "bottom_right" : {
+# 				                                    "lat" : 90,
+# 				                                    "lon" : 180
+# 				                                }
+# 				                            }
+# 				                        }
+# 				                    },
+		                 	 	 	
+# 			                 	]
+# 		                    }
+# 		                }
+# 		             },
+# 	                 "aggregations" : {
+# 	                    "Locations-Grid" : {
+# 	                        "geohash_grid" : {
+# 	                            "field" : "Locations",
+# 	                            "precision" : 2
+# 	                        },
+# 	                        "aggregations" : {
+# 	                            "species" : {
+# 	                                "terms" : { 
+# 	                                    "field" : "Species" 
+# 	                                 }
+# 	                            },
+# 	                            "avg_lat": {
+# 							        "avg": {
+# 							            "script": "doc['Locations'].value.lat"
+# 							        }
+# 							    },
+# 							    "avg_lon": {
+# 							        "avg": {
+# 							            "script": "doc['Locations'].value.lon"
+# 							        }
+# 							    },
+# 	                        },
+# 	                    },
+# 	                    "Locations-Bounds"  : {
+# 	                    	"filter" : { 
+# 	                    		"exists" : {
+# 	                    			"field" : "Locations"
+# 	                    		},
+# 	                    	},
+# 	                    	"aggregations": {
+# 		                    	"min_lat": {
+# 								        "min": {
+# 								            "script": "doc['Locations'].value.lat"
+# 								        }
+# 							    },
+# 							    "max_lat": {
+# 								        "max": {
+# 								            "script": "doc['Locations'].value.lat"
+# 								        }
+# 							    },
+# 							    "min_lon": {
+# 								        "min": {
+# 								            "script": "doc['Locations'].value.lon"
+# 								        }
+# 							    },
+# 							    "max_lon": {
+# 								        "max": {
+# 								            "script": "doc['Locations'].value.lon"
+# 								        }
+# 							    },
+# 						   }
+# 						}  
+# 	                }       
+#                 }))
+
+
+
+
 #Combining!
-pprint(es.search(search_type='count', #since we just want the facet counts returned
-                 body = {
-                 	"query" : {
-                 		"filtered" :  {
-                 			"query" : {
-				                "query_string" : {
-				                    "query" : "Liana"
-				                }
-			            	},
-		                    "filter": {
-		                     	"and" : [
-		                     		{
-		                 	 			#Restrict these to limit the bounding box
-			                     	 	"geo_bounding_box" : {
-				                            "Locations" : {
-				                                "top_left" : {
-				                                    "lat" : -90,
-				                                    "lon" : -180
-				                                },
-				                                "bottom_right" : {
-				                                    "lat" : 90,
-				                                    "lon" : 180
-				                                }
-				                            }
-				                        }
-				                    },
-		                 	 	 	{
-		                 	 	 		"term": {
-		                 					"Population": "Liana"
-		                 	 			},
-		                 	 		}
-			                 	]
-		                    }, 
-		                },
-	                },  
-	                 "aggregations" : {
-	                    "Locations-Grid" : {
-	                        "geohash_grid" : {
-	                            "field" : "Locations",
-	                            "precision" : 2
-	                        },
-	                        "aggregations" : {
-	                            "species" : {
-	                                "terms" : { 
-	                                    "field" : "Species" 
-	                                 }
-	                            },
-	                            "avg_lat": {
-							        "avg": {
-							            "script": "doc['Locations'].value.lat"
-							        }
-							    },
-							    "avg_lon": {
-							        "avg": {
-							            "script": "doc['Locations'].value.lon"
-							        }
-							    },
-	                        },
-	                    },
-	                    "Locations-Bounds"  : {
-	                    	"filter" : { 
-	                    		"exists" : {
-	                    			"field" : "Locations"
-	                    		},
-	                    	},
-	                    	"aggregations": {
-		                    	"min_lat": {
-								        "min": {
-								            "script": "doc['Locations'].value.lat"
-								        }
-							    },
-							    "max_lat": {
-								        "max": {
-								            "script": "doc['Locations'].value.lat"
-								        }
-							    },
-							    "min_lon": {
-								        "min": {
-								            "script": "doc['Locations'].value.lon"
-								        }
-							    },
-							    "max_lon": {
-								        "max": {
-								            "script": "doc['Locations'].value.lon"
-								        }
-							    },
-						   }
-						}  
-	                }       
+pprint(es.search(body = {
+                    "query" : {
+                        "filtered" :  {
+                            "query" : {
+                                #search in keywords for matches based on simple query string
+                                "simple_query_string" : {
+                                    "query" : "dendrometrique",
+                                    "fields": ["Keywords"],
+                                    "default_operator": "and"
+                                }
+                            },
+                            "filter": {
+                                "and" : [
+                                    {
+                                        #Restrict these to limit the bounding box
+                                        "geo_bounding_box" : {
+                                            "Locations" : {
+                                                "top_left" : {
+                                                    "lat" : 10,
+                                                    "lon" : 0
+                                                },
+                                                "bottom_right" : {
+                                                    "lat" : 0,
+                                                    "lon" : 10
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "Population": "TREE"
+                                        },
+                                    }
+                                ]
+                            }, 
+                        },
+                    },  
+                     "aggregations" : {
+                        "Locations-Grid" : {
+                            "geohash_grid" : {
+                                "field" : "Locations",
+                                "precision" : 2
+                            },
+                            "aggregations" : {
+                                "species" : {
+                                    "terms" : { 
+                                        "field" : "Species" 
+                                     }
+                                },
+                                "avg_lat": {
+                                    "avg": {
+                                        "script": "doc['Locations'].value.lat"
+                                    }
+                                },
+                                "avg_lon": {
+                                    "avg": {
+                                        "script": "doc['Locations'].value.lon"
+                                    }
+                                },
+                            },
+                        },
+                        "Locations-Bounds"  : {
+                            "filter" : { 
+                                "exists" : {
+                                    "field" : "Locations"
+                                },
+                            },
+                            "aggregations": {
+                                "min_lat": {
+                                        "min": {
+                                            "script": "doc['Locations'].value.lat"
+                                        }
+                                },
+                                "max_lat": {
+                                        "max": {
+                                            "script": "doc['Locations'].value.lat"
+                                        }
+                                },
+                                "min_lon": {
+                                        "min": {
+                                            "script": "doc['Locations'].value.lon"
+                                        }
+                                },
+                                "max_lon": {
+                                        "max": {
+                                            "script": "doc['Locations'].value.lon"
+                                        }
+                                },
+                           }
+                        }  
+                    }       
                 }))
+
 
 #Here we get a list of geohashes by key with the species that are at that geohash
 #Also the Locations-Bounds aggregation shows the max and min lons for all results
