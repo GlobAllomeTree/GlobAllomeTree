@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url, include
 from django.views.generic.list import ListView
 from django.contrib import admin
+from django.conf import settings
 from apps.data.models import TreeEquation
 from apps.data.views import continents_map, geo_map, geo_map_id
 

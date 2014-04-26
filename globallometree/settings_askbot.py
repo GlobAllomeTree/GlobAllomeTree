@@ -51,19 +51,19 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 #setup memcached for production use!
 #see http://docs.djangoproject.com/en/1.1/topics/cache/ for details
-CACHE_BACKEND = 'locmem://'
+#CACHE_BACKEND = 'locmem://'
 #needed for django-keyedcache
-CACHE_TIMEOUT = 6000
+#CACHE_TIMEOUT = 6000
 #sets a special timeout for livesettings if you want to make them different
-LIVESETTINGS_CACHE_TIMEOUT = CACHE_TIMEOUT
-CACHE_PREFIX = 'askbot' #make this unique
-CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+#LIVESETTINGS_CACHE_TIMEOUT = CACHE_TIMEOUT
+#CACHE_PREFIX = 'askbot' #make this unique
+#CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 #If you use memcache you may want to uncomment the following line to enable memcached based sessions
 #SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'askbot.deps.django_authopenid.backends.AuthBackend',
+    #'askbot.deps.django_authopenid.backends.AuthBackend',
 )
 
 #logging settings
@@ -178,3 +178,4 @@ JINJA2_EXTENSIONS = ('compressor.contrib.jinja2ext.CompressorExtension',)
 SOUTH_TESTS_MIGRATE = False
 
 VERIFIER_EXPIRE_DAYS = 3
+ASKBOT_SELF_TEST = False

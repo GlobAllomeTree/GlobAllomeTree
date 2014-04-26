@@ -51,9 +51,10 @@ MEDIA_URL = '/media/'
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
 #    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 #    )),
+
     #below is askbot stuff for this tuple
     #'askbot.skins.loaders.load_template_source', #changed due to bug 97
     'askbot.skins.loaders.filesystem_load_template_source',
@@ -166,7 +167,7 @@ INSTALLED_APPS = (
     'compressor',
     #'debug_toolbar',
     'askbot',
-    'askbot.deps.django_authopenid',
+    #'askbot.deps.django_authopenid',
     #'askbot.importers.stackexchange', #se loader
     'askbot.deps.livesettings',
     'keyedcache',
@@ -178,6 +179,7 @@ INSTALLED_APPS = (
     'tinymce',
     #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
     'compressor',
+    'group_messaging',
 )
 
 
