@@ -50,17 +50,22 @@ MEDIA_URL = '/media/'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
+    # askbot
+    #'askbot.skins.loaders.load_template_source', #changed due to bug 97
+    'askbot.skins.loaders.Loader',
+
 #    ('django.template.loaders.cached.Loader', (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #    )),
-
-    #below is askbot stuff for this tuple
-    #'askbot.skins.loaders.load_template_source', #changed due to bug 97
-    'askbot.skins.loaders.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
+    # askbot
+    'askbot.context.application_settings',
+    'askbot.user_messages.context_processors.user_messages',#must be before auth
+    'django.core.context_processors.csrf', #necessary for csrf protection
+
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
     'django.core.context_processors.request',
@@ -68,11 +73,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'cms.context_processors.cms_settings',
     'sekizai.context_processors.sekizai',
-
-    #askbot
-    'askbot.context.application_settings',
-    'askbot.user_messages.context_processors.user_messages',#must be before auth
-    'django.core.context_processors.csrf', #necessary for csrf protection
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,7 +88,7 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.toolbar.ToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #below is askbot stuff for this tuple
+    # askbot
     'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
     'askbot.middleware.forum_mode.ForumModeMiddleware',
     'askbot.middleware.cancel.CancelActionMiddleware',
@@ -198,7 +198,6 @@ STATIC_URL = '/static/'
 #Encoding used for export and import of data
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
-
 
 from settings_search import *
 from settings_local import *
