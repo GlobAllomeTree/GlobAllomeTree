@@ -27,7 +27,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ=False
 
 LANGUAGES = [
     ('en', 'English'),
@@ -57,7 +57,7 @@ TEMPLATE_LOADERS = (
 
     #below is askbot stuff for this tuple
     #'askbot.skins.loaders.load_template_source', #changed due to bug 97
-    'askbot.skins.loaders.filesystem_load_template_source',
+    'askbot.skins.loaders.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -87,6 +87,7 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     #below is askbot stuff for this tuple
     'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
     'askbot.middleware.forum_mode.ForumModeMiddleware',

@@ -28,6 +28,16 @@ urlpatterns = patterns(
 )
 
 # askbot
+if getattr(settings, 'ASKBOT_MULTILINGUAL', False) == True:
+    from django.conf.urls.i18n import i18n_patterns
+    urlpatterns += i18n_patterns('',
+        (r'%s' % settings.ASKBOT_URL, include('askbot.urls'))
+    )
+else:
+    urlpatterns += patterns('',
+        (r'%s' % settings.ASKBOT_URL, include('askbot.urls'))
+    )
+
 urlpatterns += patterns('',
     (r'^followit/', include('followit.urls')),
     (r'^tinymce/', include('tinymce.urls')),

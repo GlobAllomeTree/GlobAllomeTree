@@ -1,6 +1,5 @@
 import os.path
 import logging
-import sys
 import askbot
 import site
 
@@ -97,9 +96,9 @@ CELERY_ALWAYS_EAGER = True
 import djcelery
 djcelery.setup_loader()
 
-CSRF_COOKIE_NAME = 'askbot_csrf'
+#CSRF_COOKIE_NAME = 'askbot_csrf'
 #enter domain name here - e.g. example.com
-CSRF_COOKIE_DOMAIN = 'globallometree.org'
+#CSRF_COOKIE_DOMAIN = 'globallometree.org'
 
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
