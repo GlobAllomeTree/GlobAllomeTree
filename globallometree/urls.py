@@ -24,7 +24,6 @@ urlpatterns = patterns(
     (r'^continent_002/$', ListView.as_view(), TreeEquation_list),
     (r'^geo_map/$', geo_map),
     (r'^geo_map_([A-Za-z]+)/$', geo_map_id),
-    url(r'^', include('cms.urls')),
 )
 
 # askbot
@@ -37,7 +36,6 @@ else:
     urlpatterns += patterns('',
         (r'%s' % settings.ASKBOT_URL, include('askbot.urls'))
     )
-
 urlpatterns += patterns('',
     (r'^followit/', include('followit.urls')),
     (r'^tinymce/', include('tinymce.urls')),
@@ -47,4 +45,9 @@ urlpatterns += patterns('',
         'django.views.static.serve',
         {'document_root': settings.MEDIA_ROOT.replace('\\','/')},
     ),
+)
+
+# cms
+urlpatterns += patterns('',
+    url(r'^', include('cms.urls')),
 )
