@@ -9,13 +9,24 @@
 		height: 600px;
 		width: 1060px;
 	}
+	
+	.agg-icon {
+		background-color: #A2DA8A;
+		text-align:center;
+		vertical-align:middle;
+		border:1px solid #000;
+		border-radius:20px;
+		line-height: 35px;
+		font-size: 1.4em;
+		font-weight: bold;
+	}
+	
 </style>
 
 <script src="{% static 'allometric_equations/js/elastic.min.js' %}"></script>
 <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 <script src="{% static 'allometric_equations/js/map.js' %}"></script>
 <script>
-	var es_query = {{elasticsearch_query|safe}};
 	
     /*$(function() {
 		
@@ -54,7 +65,7 @@
 
 
 	<div id="equations_page">
-        <div id="elasticsearch_query">{{elasticsearch_query}}</div>
+        <div id="elasticsearch_query">{{query_entered}}</div>
 	    {% if current_search_summary %}
 	        <div id="currentSearch">
                <div style="float:right"> 
@@ -285,9 +296,9 @@
     	            
 	    </form>
 		
-		{% if not query_entered %}
+		{#% if not query_entered %}
 			<!-- NO QUERY YET -->
-		{% elif page.object_list %}
+		{#% elif page.object_list %}
 		
 		<br />
         <br />
@@ -366,11 +377,11 @@
 			</div>
         </div>
 		
-		{% else %}
+		{#% else %}
         	<h4>No results were found that matched your search</h4>
         	<p>Try making your search more general.</p>
             {# Show some example queries to run, maybe query syntax, something else? #}
-        {% endif %}
+        {#% endif %}
         
 	    
     </div>
