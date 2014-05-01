@@ -296,9 +296,9 @@
     	            
 	    </form>
 		
-		{#% if not query_entered %}
+		{#% if not query_entered %#}
 			<!-- NO QUERY YET -->
-		{#% elif page.object_list %}
+		{#% elif page.object_list %#}
 		
 		<br />
         <br />
@@ -377,11 +377,11 @@
 			</div>
         </div>
 		
-		{#% else %}
+		{#% else %#}
         	<h4>No results were found that matched your search</h4>
         	<p>Try making your search more general.</p>
             {# Show some example queries to run, maybe query syntax, something else? #}
-        {#% endif %}
+        {#% endif %#}
         
 	    
     </div>
