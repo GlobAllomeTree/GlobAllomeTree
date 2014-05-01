@@ -178,7 +178,6 @@ var geoGridPrecision = {
 	13 : 10,
 	14 : 10,
 	15 : 10
-	
 }
 
 //if (document.getElementById('map')) {
@@ -212,7 +211,6 @@ for (param in urlParams) {
 //http://jsfiddle.net/sowelie/3JbNY/
 var CustomMarker = L.Marker.extend({
 	bindPopup: function(htmlContent, options) {
-		console.log(options);
 		if (options && options.showOnMouseOver) {
 			//call the super method
 			L.Marker.prototype.bindPopup.apply(this, [htmlContent, options]);
@@ -223,7 +221,6 @@ var CustomMarker = L.Marker.extend({
 			
 			// bind to mouse over
 			this.on("mouseover", function(e) {
-				console.log(e);
 				
 				// get the element that the mouse hovered onto
 				var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
@@ -343,8 +340,7 @@ $('a[href="#results-map"]').on('shown.bs.tab', function(e){
 	map.fitBounds(mapBounds, {padding: [50, 50]});
 })
 
-var markers = L.featureGroup().addTo(map);
-map.on('zoomend', function() {
+function updateMarkers() {
 	var bounds = map.getBounds();
 	var maxx = bounds._northEast.lng;
 	var maxy = bounds._northEast.lat;
@@ -362,9 +358,20 @@ map.on('zoomend', function() {
 			addToMap(e);
 		}
 	})
+}
+
+var markers = L.featureGroup().addTo(map);
+map.on('zoomend', updateMarkers)
+
+var dragTimer = null;
+map.on('drag', function() {
+	if (dragTimer === null) {
+		dragTimer = setTimeout(function(){
+			updateMarkers(); 
+			dragTimer = null;
+		}, 500);
+	}
 })
-
-
 
 //}
 
