@@ -61,12 +61,8 @@ function generateESQuery(q,termFilters,boundingBox,precision) {
 					.field('Species')
 			)
 			.aggregation(
-				ejs.AvgAggregation('avg_lat')
-					.script("doc['Locations'].value.lat")
-			)
-			.aggregation(
-				ejs.AvgAggregation('avg_lon')
-					.script("doc['Locations'].value.lon")
+				ejs.TermsAggregation('geohashes')
+					.script("doc['Locations'].value.geohash")
 			)
 	)
 	.aggregation(
@@ -316,19 +312,67 @@ function addToMap (data) {
 			html += aggs[i].species.buckets[j].key + " (" + aggs[i].species.buckets[j]['doc_count']  + ")<br>"
 		}
 		
-		var marker = new CustomMarker([
-			aggs[i]['avg_lat'].value,
-			aggs[i]['avg_lon'].value
-		], {
-			icon: L.divIcon({
-				className: 'agg-icon',
-				html: aggs[i]['doc_count'],
-				iconSize: [35, 35]
-			})
-		})
+		var totalDocs = 0;
+		var totalLat = 0;
+		var totalLon =0
+		var totalLocations = 0;
+
+		//Here we loop through and get locations that are inside the geohash 
+		//we are looking for. (since documents have many locations and only some
+		//of them are inside the current geohash, this is required)
+		//At the moment this is quite hard to do serverside
+		for(var j =0; j < aggs[i]['geohashes']['buckets'].length; j++ ) {
+			var geohashKey = aggs[i]['geohashes']['buckets'][j]['key'];
+			//if the parent aggregation key is at the start of the location geohash
+			if (geohashKey.indexOf(aggs[i]['key']) == 0) {
+				var geohashLatLon = decodeGeoHash(geohashKey);
+				var geohashLocations = aggs[i]['geohashes']['buckets'][j]['doc_count'];
+				totalLocations += geohashLocations;
+				totalLat += (geohashLatLon['latitude'][2] * geohashLocations); //['lat'][2] is the middle of the geohash
+				totalLon +=	(geohashLatLon['longitude'][2] * geohashLocations); //['lon'][2] is the middle of the geohash
+			}  
+		}
 		
-		marker.bindPopup(html, {showOnMouseOver: true});
-		markers.addLayer(marker);
+		iconSize = aggs[i]['doc_count'] / 15 + 10;
+		if(iconSize > 35) iconSize = 35;
+		if (iconSize > 10 && iconSize < 11 ) {
+			iconSize = 14;
+			var sizeClass = 'agg-icon-1' 
+		} else if (iconSize >= 11 && iconSize < 20 ) { 
+			iconSize = 20;
+			var sizeClass = 'agg-icon-2' 
+		} else if (iconSize >= 20 && iconSize < 25 ) { 
+			iconSize = 24;
+			var sizeClass = 'agg-icon-3' 
+		} else if (iconSize >= 25 && iconSize < 30 ) { 
+			iconSize = 29;
+			var sizeClass = 'agg-icon-4' 
+		} else if (iconSize >= 30 && iconSize <= 35 ) { 
+			iconSize = 35;
+			var sizeClass = 'agg-icon-5' 
+		}
+
+		if(totalLocations) {
+			var avgLat = totalLat / totalLocations;
+			var avgLon = totalLon / totalLocations;
+			var marker = new CustomMarker([
+				avgLat,
+				avgLon
+			], {
+				icon: L.divIcon({
+					className: 'agg-icon ' + sizeClass,
+					html: aggs[i]['doc_count'],
+					iconSize: [iconSize, iconSize]
+				})
+			})
+			
+			marker.bindPopup(html, {showOnMouseOver: true});
+			markers.addLayer(marker);
+		
+		} else {
+			//Todo: find out why there are some key / location mismatches
+			console.log('mismatch!')
+		}
 	}
 	map.addLayer(markers);
 }

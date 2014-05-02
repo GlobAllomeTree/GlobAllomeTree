@@ -166,35 +166,14 @@ pprint(es.search(body = {
                     #Use a filtered query
                     "query" : {
                         "filtered" :  {
-                            "query" : {
-                                #search in keywords for matches based on simple query string
-                                "simple_query_string" : {
-                                    "query" : "tree",
-                                    "fields": ["Keywords"],
-                                    "default_operator": "and"
-                                }
+                                            "query" : {
+                                "match_all" : {}
                             },
                             "filter": {
                                 "and" : [
                                     {
-                                        #Restrict these to limit the bounding box
-                                        "geo_bounding_box" : {
-                                            "Locations" : {
-                                                "top_left" : {
-                                                    "lat" : 90,
-                                                    "lon" : 0
-                                                },
-                                                "bottom_right" : {
-                                                    "lat" : 0,
-                                                    "lon" : 180
-                                                }
-                                            }
-                                        }
-                                    },
-                                    #term queries are for exact matches on non_analyzed fields
-                                    {
                                         "term": {
-                                            "B": True
+                                            "Population": 'Mangroves'
                                         },
                                     }
                                 ]
@@ -204,28 +183,38 @@ pprint(es.search(body = {
 
                     #Run aggregations on the results matched by the query
                     "aggregations" : {
-                        "Locations-Grid" : {
-                            "geohash_grid" : {
-                                "field" : "Locations",
-                                "precision" : 7
+                        "Locations-Exist" : {
+                            "filter" : { 
+                                "exists" : {
+                                    "field" : "Locations"
+                                },
                             },
                             "aggregations" : {
-                                "species" : {
-                                    "terms" : { 
-                                        "field" : "Species" 
-                                     }
-                                },
-                                "avg_lat": {
-                                    "avg": {
-                                        "script": "doc['Locations'].value.lat"
-                                    }
-                                },
-                                "avg_lon": {
-                                    "avg": {
-                                        "script": "doc['Locations'].value.lon"
-                                    }
-                                },
-                            },
+                                "LocationsGrid": {
+                                    "geohash_grid" : {
+                                        "field" : "Locations",
+                                        "precision" : 7,
+                                       
+                                    },
+                                    "aggregations" : {
+                                        "Locations" : {
+                                            "terms" : { 
+                                                "field": "Locations" 
+                                             }
+                                        },
+                                        "avg_lat": {
+                                            "avg": {
+                                                "script": "if (doc['Locations'].value.geohash == _parent.key) doc['Locations'].value.lat;"
+                                            }
+                                        },
+                                        "avg_lon": {
+                                            "avg": {
+                                                "script": "doc['Locations'].value.lon"
+                                            }
+                                        },
+                                    },
+                                }
+                            }
                         },
                         "Locations-Bounds"  : {
                             "filter" : { 
