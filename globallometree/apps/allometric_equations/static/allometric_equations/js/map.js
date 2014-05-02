@@ -105,6 +105,32 @@
 		15 : 8 //4.773m/pixel : 38.2m x 19m
 	};
 	
+	//Elastic Search queries are filtered by the bounding box of the map view.  To faciliate smoother
+	//panning by loading in advance points slightly outside of the map view we can apply a buffer to
+	//the elastic search request.  This is done by adding padding to the coordinates passed to ES.
+	//Since we are using Latitude/Longitude, the length of a decimal degree will vary based on latitude
+	//All values here are calculated at the equator.  To calculate the decimal degree buffer by number of
+	//pixels (we are using 300 here) multiply the resolution of a pixel at the current zoom level (in meters/pixel)
+	//by the number of pixels you wish to buffer.  Then divide by the size of a decimal degree at the equator, 111,320m.
+	var zoomExtentBuffer = {
+		0 : 0,
+		1 : 0, 
+		2 : 3.512666188, //Minimum zoom for our map, shows almost entire world so 10 pixel buffer
+		3 : 8.781440891, //Still shows most of the world so 50 pixel buffer
+		4 : 26.05192239, //This and all subsequent zoom levels have 300 pixel buffer (half the map width)
+		5 : 13.17283507,
+		6 : 6.586417535,
+		7 : 3.293208768,
+		8 : 1.64390945,
+		9 : 0.821954725,
+		10 : 0.409629896,
+		11 : 0.204814948,
+		12 : 0.102407474,
+		13 : 0.0512037370,
+		14 : 0.025601868,
+		15 : 0.013474668
+	}
+	
 	//The map object
 	var map = L.map('map', {
 		minZoom: 2,
@@ -389,10 +415,11 @@
 	*/
 	function updateMarkers() {
 		var bounds = map.getBounds();
-		var maxx = bounds._northEast.lng;
-		var maxy = bounds._northEast.lat;
-		var minx = bounds._southWest.lng;
-		var miny = bounds._southWest.lat;
+		var zoom = map.getZoom();
+		var maxx = bounds._northEast.lng + zoomExtentBuffer[zoom];
+		var maxy = bounds._northEast.lat + zoomExtentBuffer[zoom];
+		var minx = bounds._southWest.lng - zoomExtentBuffer[zoom];
+		var miny = bounds._southWest.lat - zoomExtentBuffer[zoom];
 		var precision = geoGridPrecision[map.getZoom()];
 		var query = generateESQuery(q, filters, [minx, miny, maxx, maxy], precision);
 		
