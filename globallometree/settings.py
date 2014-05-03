@@ -200,5 +200,5 @@ DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
 from settings_search import *
-from settings_local import *
 from settings_askbot import *
+from settings_local import *

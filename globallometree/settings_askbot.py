@@ -45,7 +45,7 @@ ASKBOT_MAX_UPLOAD_FILE_SIZE = 1024 * 1024 #result in bytes
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 #TEMPLATE_DIRS = (,) #template have no effect in askbot, use the variable below
-#ASKBOT_EXTRA_SKINS_DIR = #path to your private skin collection
+ASKBOT_EXTRA_SKINS_DIR = os.path.join(BASE_PATH, 'globallometree/askbot_skins')
 #take a look here http://askbot.org/en/question/207/
 
 #setup memcached for production use!
@@ -103,7 +103,9 @@ djcelery.setup_loader()
 
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
+    ASKBOT_EXTRA_SKINS_DIR
 )
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
