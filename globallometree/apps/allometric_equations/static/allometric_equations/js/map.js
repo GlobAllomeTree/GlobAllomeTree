@@ -340,6 +340,8 @@
 			var iconSize;
 			var sizeClass;
 			
+			html += aggs[i].key + '<br>';
+
 			//Generate text for html hover events
 			for (j=0;j<aggs[i].species.buckets.length;j++){
 				html += aggs[i].species.buckets[j].key + " (" + aggs[i].species.buckets[j]['doc_count']  + ")<br>";
@@ -348,7 +350,7 @@
 			//Here we loop through and get locations that are inside the geohash 
 			//we are looking for. (since documents have many locations and only some
 			//of them are inside the current geohash, this is required)
-			//At the moment this is quite hard to do serverside
+			//At the moment this is quite hard to do server side
 			for(j=0; j < aggs[i].geohashes.buckets.length; j++ ) {
 				var geohashKey = aggs[i].geohashes.buckets[j].key;
 				//if the parent aggregation key is at the start of the location geohash
@@ -358,11 +360,17 @@
 					totalLocations += geohashLocations;
 					totalLat += (geohashLatLon.latitude[2] * geohashLocations); //['lat'][2] is the middle of the geohash
 					totalLon +=	(geohashLatLon.longitude[2] * geohashLocations); //['lon'][2] is the middle of the geohash
+				
+					if(aggs[i].key.indexOf('w66') ==0) {
+						html += geohashLatLon.latitude[2] + ' ' + geohashLatLon.longitude[2];
+					}
 				}  
 			}
 			
+			
+
 			//Set the marker icon size based on the number of aggregations
-			iconSize = aggs[i]['doc_count'] / 15 + 10;
+			iconSize = totalLocations / 15 + 10;
 			if(iconSize > 35) iconSize = 35;
 			if (iconSize > 10 && iconSize < 11 ) {
 				iconSize = 14;
@@ -381,16 +389,27 @@
 				sizeClass = 'agg-icon-5';
 			}
 
+
+
 			if(totalLocations) {
+
+				//Actual center of records
 				var avgLat = totalLat / totalLocations;
 				var avgLon = totalLon / totalLocations;
+
+				//Center of aggregation geohash
+				//Decode the geohash key for the bucket
+				//var aggLatLon = decodeGeoHash(aggs[i].key);
+				//var aggLat = aggLatLon.latitude[2]; //center of bucket
+				//var aggLon = aggLatLon.longitude[2]; //center of bucket 
+
 				var marker = new CustomMarker([
 					avgLat,
 					avgLon
 				], {
 					icon: L.divIcon({
 						className: 'agg-icon ' + sizeClass,
-						html: aggs[i]['doc_count'],
+						html: totalLocations,
 						iconSize: [iconSize, iconSize]
 					})
 				});
