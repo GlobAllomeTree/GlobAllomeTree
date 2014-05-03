@@ -161,7 +161,7 @@ pprint(es.search(body = {
                     "fields" : ['Species', 'Genus', 'Equation', 'Locations', 'Country'],
                     
                     #Show results from 0 to 40
-                    "from" : 0, "size" : 40,
+                    "from" : 0, "size" : 1,
 
                     #Use a filtered query
                     "query" : {
@@ -201,16 +201,6 @@ pprint(es.search(body = {
                                             "terms" : { 
                                                 "field": "Locations" 
                                              }
-                                        },
-                                        "avg_lat": {
-                                            "avg": {
-                                                "script": "if (doc['Locations'].value.geohash == _parent.key) doc['Locations'].value.lat;"
-                                            }
-                                        },
-                                        "avg_lon": {
-                                            "avg": {
-                                                "script": "doc['Locations'].value.lon"
-                                            }
                                         },
                                     },
                                 }

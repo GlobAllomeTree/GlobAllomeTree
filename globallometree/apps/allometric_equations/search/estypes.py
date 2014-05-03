@@ -18,5 +18,5 @@ estype_string_not_analyzed = {'type': 'string',
 estype_geopoint_geohashed = {'type': 'geo_point',
 	                         'geohash': True,
 	                         'geohash_prefix': True,
-	                         'geohash_precision': 8
+	                         'geohash_precision': 9
 	                         }

@@ -99,10 +99,10 @@
 		9 : 7,
 		10 : 8,
 		11 : 8,
-		12 : 8,
-		13 : 8,
-		14 : 8,
-		15 : 8 //4.773m/pixel : 38.2m x 19m
+		12 : 9,
+		13 : 9,
+		14 : 9,
+		15 : 9 //4.773m/pixel : 38.2m x 19m
 	};
 	
 	//Elastic Search queries are filtered by the bounding box of the map view.  To faciliate smoother
@@ -336,41 +336,74 @@
 			var j;
 			var totalLat = 0;
 			var totalLon = 0;
-			var totalLocations = 0;
+			var totalDocs = 0;
 			var iconSize;
 			var sizeClass;
 			
-			html += aggs[i].key + '<br>';
+			
 
 			//Generate text for html hover events
 			for (j=0;j<aggs[i].species.buckets.length;j++){
 				html += aggs[i].species.buckets[j].key + " (" + aggs[i].species.buckets[j]['doc_count']  + ")<br>";
 			}
 			
-			//Here we loop through and get locations that are inside the geohash 
-			//we are looking for. (since documents have many locations and only some
-			//of them are inside the current geohash, this is required)
-			//At the moment this is quite hard to do server side
+			// Here we loop through and get locations that are inside the geohash 
+			// so that we can average out the matching locations and find the best
+			// place to put the marker.
+			// Each document has several locations, some are inside this geohash and
+			// some are outside the geohash. 
+			// In the loop, we look to see if the location geohash has the prefix of the 
+			// bucket geohash.
+			// For example if the bucket geohash is c1, we would use the the location if 
+			// it's geohash begins with c1 (c1klj9, c178ds,...) 
+			//
+			// Additionally, we get a total doc count using the location geohashes
+			// This is done because the geohash grid bucket doc count is counting total locations, not total documents
+			// Taking the below result as an example it is easier to see why this is required
+			// geohas_grid agg bucket: key: "dn" - doc_count: 538
+			// geohashes terms agg: 
+			// buckets: 
+			// doc_count: 112
+			// key: "dnhjv2bwdk4u"
+			//
+			// doc_count: 100
+			// key: "djugne6qsphb"
+			//
+			// doc_count: 95
+			// key: "djjzj71gg3mp"
+			//
+			// u'doc_count': 3,
+			// u'key': u'dhqrfbh'}
+			// 
+			// While the geohash grid count is 538, that is the count of all locations 
+			// in all matched documents even if those locations fall outside the parent buckets geohash
+			// What we really what is just the count of all matched documents 
+			// So in the case here, we want key: "dnhjv2bwdk4u" with doc_count: 112
+
 			for(j=0; j < aggs[i].geohashes.buckets.length; j++ ) {
 				var geohashKey = aggs[i].geohashes.buckets[j].key;
 				//if the parent aggregation key is at the start of the location geohash
 				if (geohashKey.indexOf(aggs[i].key) === 0) {
 					var geohashLatLon = decodeGeoHash(geohashKey);
-					var geohashLocations = aggs[i].geohashes.buckets[j]['doc_count'];
-					totalLocations += geohashLocations;
-					totalLat += (geohashLatLon.latitude[2] * geohashLocations); //['lat'][2] is the middle of the geohash
-					totalLon +=	(geohashLatLon.longitude[2] * geohashLocations); //['lon'][2] is the middle of the geohash
-				
-					if(aggs[i].key.indexOf('w66') ==0) {
-						html += geohashLatLon.latitude[2] + ' ' + geohashLatLon.longitude[2];
-					}
+					var geohashDocs = aggs[i].geohashes.buckets[j]['doc_count'];
+					
+					//Since these documents do belong to the geohash we are interested in, 
+					//we add the documents to our total count
+					totalDocs += geohashDocs;
+					totalLat += (geohashLatLon.latitude[2] * geohashDocs); //['lat'][2] is the middle of the geohash
+					totalLon +=	(geohashLatLon.longitude[2] * geohashDocs); //['lon'][2] is the middle of the geohash
 				}  
+
+				var aggDocCount = aggs[i]['doc_count'];
+				var currentAgg = aggs[i];
+				// if (geohashDocs < aggDocCount) {
+				// 	debugger;
+				// }
 			}
 			
-			
-
+		
 			//Set the marker icon size based on the number of aggregations
-			iconSize = totalLocations / 15 + 10;
+			iconSize = totalDocs / 15 + 10;
 			if(iconSize > 35) iconSize = 35;
 			if (iconSize > 10 && iconSize < 11 ) {
 				iconSize = 14;
@@ -391,11 +424,11 @@
 
 
 
-			if(totalLocations) {
+			if(totalDocs) {
 
 				//Actual center of records
-				var avgLat = totalLat / totalLocations;
-				var avgLon = totalLon / totalLocations;
+				var avgLat = totalLat / totalDocs;
+				var avgLon = totalLon / totalDocs;
 
 				//Center of aggregation geohash
 				//Decode the geohash key for the bucket
@@ -409,7 +442,7 @@
 				], {
 					icon: L.divIcon({
 						className: 'agg-icon ' + sizeClass,
-						html: totalLocations,
+						html: totalDocs,
 						iconSize: [iconSize, iconSize]
 					})
 				});
@@ -418,8 +451,37 @@
 				markers.addLayer(marker);
 			
 			} else {
-				//Todo: find out why there are some key / location mismatches
-				console.log('mismatch!');
+
+				//console.log('mismatch! ', aggs[i].geohashes.buckets.length, ' ', aggs[i].key);
+				
+				// var aggLatLon = decodeGeoHash(aggs[i].key);
+
+				// console.log(aggLatLon.latitude[0] + ' to '  + aggLatLon.latitude[1],
+				// 			aggLatLon.longitude[0] + ' to ' + aggLatLon.longitude[1]);
+
+				for(j=0; j < aggs[i].geohashes.buckets.length; j++ ) {
+					
+					var geohashLatLon = decodeGeoHash(aggs[i].geohashes.buckets[j].key);				
+					var marker = new CustomMarker([
+						geohashLatLon.latitude[2],
+						geohashLatLon.longitude[2]
+					], {
+						icon: L.divIcon({
+							className: 'agg-icon agg-icon-1 agg-icon-red',
+							html:aggs[i].geohashes.buckets.length,
+							iconSize: [iconSize, iconSize]
+						})
+					});
+					
+					marker.bindPopup( 'mismatch! ' + html, {showOnMouseOver: true});
+					markers.addLayer(marker);
+				}
+				// //console.log('.')
+				// //console.log('.')
+				// //console.log('.')
+
+				
+
 			}
 		}
 		map.addLayer(markers);
