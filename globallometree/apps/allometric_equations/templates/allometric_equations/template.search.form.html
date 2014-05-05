@@ -1,0 +1,204 @@
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+<form method="get" action="." id="searchForm" autocomplete="off">
+    <div id="search-box" style="clear:both;">    
+        <ul class="nav nav-tabs">                   
+            <li><a href="#keyword" data-toggle="tab" class="active">Keyword</a></li>
+            <li><a href="#identification" data-toggle="tab">Identification</a></li>
+            <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
+            <li><a href="#Location" data-toggle="tab">Location</a></li>
+            <li><a href="#components" data-toggle="tab">Components</a></li>
+            <li><a href="#input_Output" data-toggle="tab">Input/Output</a></li>
+            <li><a href="#allometry" data-toggle="tab">Allometry</a></li>
+            <li><a href="#reference" data-toggle="tab">Reference</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="keyword">
+                <p class="search-help-text">
+                    Search allometric equations by keyword. 
+                    This searches accross several text fields. <br>
+                    Example searches: <a href="?q=Acacia">Acacia</a>,
+                       <a href="?q=Zambia">Zambia</a>,
+                       <a href="?q=Bellefontaine">Bellefontaine</a>, 
+                       <a href="?q=Glutinosum">Glutinosum</a>,
+                       <a href="?q=rainforest">rainforest</a>
+                </p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form.q|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="identification">
+    	       <p class="search-help-text">
+                    Search allometric equations by tree ecosystem and population. <br>
+                    Example searches: 
+                       <a href="?Ecosystem=Plantation">Ecosystem: Plantation</a>,
+                       <a href="?Population=STAND">Population: STAND</a>
+                </p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form.Ecosystem|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-6">
+                        {{ form.Population|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="taxonomy">
+                <p class="search-help-text">
+                    Search allometric equations by tree genus or species. <br>
+                    Example searches: 
+                       <a href="?Genus=Gmelina">Genus: Gmelina</a>,
+                       <a href="?Species=schweinfurthii">Species: schweinfurthii</a>
+                </p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form.Genus|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-6">
+                        {{ form.Species|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="Location">
+                <p class="search-help-text">
+                    Search allometric equations by tree location and biome. <br>
+                    Example searches: 
+                       <a href="?Biome_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
+                       <a href="?Country=Benin">Country: Benin</a>
+                </p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form.Country|as_crispy_field }}
+                        {{ form.Biome_HOLDRIDGE|as_crispy_field }}
+                        {{ form.Biome_UDVARDY|as_crispy_field }}
+        	        </div>
+        	        <div class="col-lg-6">
+                        {{ form.Biome_FAO|as_crispy_field }}
+                        {{ form.Biome_WWF|as_crispy_field }}
+                        {{ form.Division_BAILEY|as_crispy_field }}
+                    </div>
+
+                </div>
+    
+            </div>
+     
+    
+            <div class="tab-pane" id="components">
+                <p class="search-help-text">
+                    Search allometric equations by tree components such as branch diameter, leaves, stump and fruit. <br>
+                    Example searches: 
+                       <a href="?B=Yes&amp;Rf=Yes">B Bark: Yes + Rf Fine Roots: Yes</a>,
+                       <a href="?F=No&amp;S=Yes">F Fruit: No +  S Stump: Yes</a>
+                </p>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        {{ form.B|as_crispy_field }}
+                        {{ form.Bd|as_crispy_field }}
+                        {{ form.Bg|as_crispy_field }}
+                        {{ form.Bt|as_crispy_field }}
+                        {{ form.L|as_crispy_field }}
+                        {{ form.Rb|as_crispy_field }}
+                        {{ form.Rf|as_crispy_field }}
+                        {{ form.Rm|as_crispy_field }}
+                        {{ form.S|as_crispy_field }}
+                        {{ form.T|as_crispy_field }}
+                        {{ form.F|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-8">
+                        <img src="{% static 'images/components.png' %}" width="500" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="input_Output">
+                <p class="search-help-text">
+                    Search allometric equations by equation input and output characteristics. <br>
+                    Example searches: 
+                       <a href="?Output=Biomass">Output: Biomass</a>,
+                       <a href="?Unit_X=cm&amp;Min_X__gte=10&amp;Min_X__lte=50">Unit X: cm + Min X From: 10 + Min X To: 50</a>
+                </p>
+                <div class="row smallInputs">
+                    <div class="col-lg-3">
+                        {{ form.U|as_crispy_field }}
+                        {{ form.V|as_crispy_field }}
+                        {{ form.W|as_crispy_field }}
+                        {{ form.X|as_crispy_field }}
+                        {{ form.Z|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-3">
+                        {{ form.Unit_U|as_crispy_field }}
+                        {{ form.Unit_V|as_crispy_field }}
+                        {{ form.Unit_W|as_crispy_field }}
+                        {{ form.Unit_X|as_crispy_field }}
+                        {{ form.Unit_Y|as_crispy_field }}
+                        {{ form.Unit_Z|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-3">
+                        {{ form.Min_X__gte|as_crispy_field }}
+                        {{ form.Max_X__gte|as_crispy_field }}
+                        {{ form.Min_Z__gte|as_crispy_field }}
+                        {{ form.Max_Z__gte|as_crispy_field }}
+                        {{ form.Output|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-3">
+                        {{ form.Min_X__lte|as_crispy_field }}
+                        {{ form.Max_X__lte|as_crispy_field }}
+                        {{ form.Min_Z__lte|as_crispy_field }}
+                        {{ form.Max_Z__lte|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+     
+    
+            <div class="tab-pane" id="allometry">
+                <p class="search-help-text">
+                    Search inside the equation <br>
+                    Example searches: 
+                       <a href="?Equation=log(H)">Equation contains: log(H)</a>,
+                       <a href="?Equation=DBH^2">Equation contains: DBH^2</a>
+                </p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form.Equation|as_crispy_field }}
+                    </div>
+                </div>  
+            </div>
+
+            <div class="tab-pane" id="reference">
+                <p class="search-help-text">
+                    Search allometric equations by author, year, and reference. <br>
+                    Example searches: 
+                       <a href="?Author=Henry+M.">Author: Henry M.</a>,
+                       <a href="?Reference=Pieper,+Y.+%26+Laumans">Reference: Pieper, Y. &amp; Laumans,</a>
+                       <a href="?Year=2004">Year: 2004</a>
+                </p>
+    
+                <div class="row">
+                    <div class="col-lg-4">
+                        {{ form.Author|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        {{ form.Reference|as_crispy_field }}
+                    </div>        
+                    <div class="col-lg-4">
+                        {{ form.Year|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+        {{ form.order_by }} 
+        
+        <input type="hidden" name="page" value="1">
+        <div id="search-submit-holder">
+            <input id="searchButton" style="float:right" class="btn btn-succcess" type="submit" value="Search">
+        </div>
+        
+    </div>
+            
+</form>

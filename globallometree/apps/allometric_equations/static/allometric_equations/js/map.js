@@ -19,67 +19,6 @@
 		[40,130] //Northeast
 	];
 	
-	//List of all possible GET parameters and the type of value.  May be useful for other
-	//functions other than generating term filters
-	var urlParams = {
-		//Keyword
-		q : 'query',
-		//Identification
-		Ecosystem : 'term',
-		Population : 'term',
-		//Taxonomy
-		Genus : 'term',
-		Species : 'term',
-		//Location
-		Country : 'term',
-		Biome_HOLDRIDGE : 'term',
-		Biome_UDVARDY : 'term',
-		Biome_FAO : 'term',
-		Biome_WWF : 'term',
-		Division_BAILEY : 'term',
-		//Components
-		B : 'term',
-		Bd : 'term',
-		Bg : 'term',
-		Bt : 'term',
-		L : 'term',
-		Rb : 'term',
-		Rf : 'term',
-		Rm : 'term',
-		S : 'term',
-		T : 'term',
-		F : 'term',
-		//Input/Output
-		U : 'term',
-		V : 'term',
-		W : 'term',
-		X : 'term',
-		Z : 'term',
-		Unit_U : 'term',
-		Unit_V : 'term',
-		Unit_W : 'term',
-		Unit_X : 'term',
-		Unit_Y : 'term',
-		Unit_Z : 'term',
-		Min_X__gte : 'term',
-		Max_X__gte : 'term',
-		Min_Z__gte : 'term',
-		Max_Z__gte : 'term',
-		Output : 'term',
-		Min_X__lte : 'term',
-		Max_X__lte : 'term',
-		Min_Z__lte : 'term',
-		Max_Z__lte : 'term',
-		//Allometry
-		Equation : 'term',
-		//Reference
-		Author : 'term',
-		Reference : 'term',
-		Year : 'term',
-		//Pagination Properties
-		order_by : 'ignore',
-		page : 'ignore'
-	};
 	
 	//Lookup object for determining the Elastic Search GeoHash precision to use
 	//at each map zoom level
@@ -284,7 +223,7 @@
 				.precision(precision)
 				.aggregation(
 					ejs.TermsAggregation('species')
-						.field('Species')
+						.field('ID')
 				)
 				.aggregation(
 					ejs.TermsAggregation('geohashes')
@@ -316,6 +255,14 @@
 		return query;
 	}
 
+	function bindMarker(m, geohash) {
+		setTimeout(function() {
+			m.on('mouseover', function() {
+				m.getPopup().setContent('hi ' + geohash);
+			});
+		}, 2000);
+	}
+
 	/**
 	* Adds allometric aggregations to the map
 	* @param {json} return object from an Elastic Search query 
@@ -344,7 +291,7 @@
 
 			//Generate text for html hover events
 			for (j=0;j<aggs[i].species.buckets.length;j++){
-				html += aggs[i].species.buckets[j].key + " (" + aggs[i].species.buckets[j]['doc_count']  + ")<br>";
+				html += aggs[i].species.buckets[j].key + " (" + aggs[i].species.buckets[j]['doc_count']  + ") ";
 			}
 			
 			// Here we loop through and get locations that are inside the geohash 
@@ -377,7 +324,7 @@
 			// 
 			// While the geohash grid count is 538, that is the count of all locations 
 			// in all matched documents even if those locations fall outside the parent buckets geohash
-			// What we really what is just the count of all matched documents 
+			// What we really want is just the count of all matched documents 
 			// So in the case here, we want key: "dnhjv2bwdk4u" with doc_count: 112
 
 			for(j=0; j < aggs[i].geohashes.buckets.length; j++ ) {
@@ -423,7 +370,11 @@
 			}
 
 
-
+			//In some cases (very few) the totalDocs will be empty 
+			//since the only docs in the aggregation are actually in another geohash
+			//It does not seem to be an issue though since there are other aggregations
+			//that correctly include and display these docs - most likely it is a bug
+			//in the new aggregatio
 			if(totalDocs) {
 
 				//Actual center of records
@@ -447,40 +398,11 @@
 					})
 				});
 				
+				//marker.bindPopup( 'loading...' + aggs[i].geohashes.buckets[j].key, {showOnMouseOver: true});
+				//bindMarker(marker, aggs[i].geohashes.buckets[j].key);
+
 				marker.bindPopup(html, {showOnMouseOver: true});
 				markers.addLayer(marker);
-			
-			} else {
-
-				//console.log('mismatch! ', aggs[i].geohashes.buckets.length, ' ', aggs[i].key);
-				
-				// var aggLatLon = decodeGeoHash(aggs[i].key);
-
-				// console.log(aggLatLon.latitude[0] + ' to '  + aggLatLon.latitude[1],
-				// 			aggLatLon.longitude[0] + ' to ' + aggLatLon.longitude[1]);
-
-				for(j=0; j < aggs[i].geohashes.buckets.length; j++ ) {
-					
-					var geohashLatLon = decodeGeoHash(aggs[i].geohashes.buckets[j].key);				
-					var marker = new CustomMarker([
-						geohashLatLon.latitude[2],
-						geohashLatLon.longitude[2]
-					], {
-						icon: L.divIcon({
-							className: 'agg-icon agg-icon-1 agg-icon-red',
-							html:aggs[i].geohashes.buckets.length,
-							iconSize: [iconSize, iconSize]
-						})
-					});
-					
-					marker.bindPopup( 'mismatch! ' + html, {showOnMouseOver: true});
-					markers.addLayer(marker);
-				}
-				// //console.log('.')
-				// //console.log('.')
-				// //console.log('.')
-
-				
 
 			}
 		}

@@ -29,9 +29,11 @@ class SearchView(TemplateView):
         if self.form.is_valid():
             context['form_is_valid'] = True
             context['current_search_summary'] = self.current_search_summary()
+            context['mapping'] = json.dumps(AllometricEquationIndex.get_mapping())
+            context['search_dict'] = json.dumps(self.get_search_dict());
         else:
             context['form_is_valid'] = False
-            context['current_search_summary'] = False
+            
         
         return context
 
@@ -40,8 +42,34 @@ class SearchView(TemplateView):
             return HttpResponseRedirect('/accounts/login/')
         return super(SearchView, self).create_response( *args, **kwargs)
 
-    def export_link(self):
-        return self.get_query_string(export=True)
+   
+    def current_search(self):
+        current_search_ = []
+        if not self.form.is_valid():
+            return []
+        #Send search fields to the the sqs.filter
+        for field in self.form.cleaned_data:
+        
+            if field in ['order_by', 'page']:
+                continue
+            if self.form.cleaned_data.get(field, False): 
+                current_search.append( {'field' : self.form.fields[field].label,
+                                        'search_value' :  self.form.cleaned_data.get(field),
+                                        'clear_link'   :  self.get_query_string({
+                                         })
+                                    })
+        return current_search     
+
+
+    def get_search_dict(self, safe=False):
+        search_dict = {}
+        #Send search fields to the the sqs.filter
+        if self.form.is_valid():
+            for field in self.form.cleaned_data:
+                if self.form.cleaned_data.get(field, False):
+                    value = self.form.cleaned_data.get(field)
+                    search_dict[field] = self.form.cleaned_data.get(field)
+        return search_dict
 
     def current_search_summary(self):
         current_search = []
@@ -56,23 +84,20 @@ class SearchView(TemplateView):
                 current_search.append( {'field' : self.form.fields[field].label,
                                         'search_value' :  self.form.cleaned_data.get(field),
                                         'clear_link'   :  self.get_query_string({
-                                                                                 'page' : 1,
-                                                                                  field : ''
-                                                                                })
+                                         })
                                     })
         return current_search     
  
+    def export_link(self):
+        return self.get_query_string(export=True)
+
     def get_query_string(self, using_values = {}, export=False):
     
-        query_dict = {}
+        query_dict = self.get_search_dict()
         query_string = ''
         first = True
        
-        #Send search fields to the the sqs.filter
-        if self.form.is_valid():
-            for field in self.form.cleaned_data:
-                if self.form.cleaned_data.get(field, False):
-                    query_dict[field] = self.form.cleaned_data.get(field)
+        
         
         for field in using_values.keys():
             query_dict[field] = using_values[field]

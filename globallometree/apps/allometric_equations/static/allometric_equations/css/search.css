@@ -1,0 +1,66 @@
+/* Map Styles */
+#map {
+	height: 600px;
+	width: 1060px;
+}
+
+#search-results {
+    margin-top:25px;
+}
+
+.agg-icon {
+	background-color: #97FF38;
+	text-align:center;
+	vertical-align:middle;
+}
+
+.agg-icon-1 {
+    border:1px solid #668;
+    border-radius:12px;
+    line-height: 13px;
+    font-size: .65em;
+    font-weight: normal;
+}
+
+.agg-icon-red {
+   background-color: red;
+   border-radius:5px;
+   font-size: .3em;
+   line-height: 7px;
+}
+
+.agg-icon-yellow {
+    background-color: yellow;
+}
+
+.agg-icon-2 {
+    border:1px solid #557;
+    border-radius:14px;
+    line-height: 20px;
+    font-size: .75em;
+    font-weight: normal;
+}
+
+.agg-icon-3 {
+    border:1px solid #446;
+    border-radius:16px;
+    line-height: 23px;
+    font-size: .8em;
+    font-weight: normal;
+}
+
+.agg-icon-4 {
+    border:1px solid #335;
+    border-radius:18px;
+    line-height: 28px;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+.agg-icon-5 {
+    border:1.5px solid #224;
+    border-radius:18px;
+    line-height: 35px;
+    font-size: 1.4em;
+    font-weight: normal;
+}

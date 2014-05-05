@@ -1,436 +1,72 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
 {% block script %}
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
-<style>
-	/* Map Styles */
-	#map {
-		height: 600px;
-		width: 1060px;
-	}
-	
-	.agg-icon {
-		background-color: #97FF38;
-		text-align:center;
-		vertical-align:middle;
-	}
-    
-    .agg-icon-1 {
-        border:1px solid #668;
-        border-radius:12px;
-        line-height: 13px;
-        font-size: .65em;
-        font-weight: normal;
-    }
 
-    .agg-icon-red {
-       background-color: red;
-       border-radius:5px;
-       font-size: .3em;
-       line-height: 7px;
-    }
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+    <link rel="stylesheet" href="{% static 'allometric_equations/css/search.css' %}" />
 
-    .agg-icon-yellow {
-        background-color: yellow;
-    }
+    <script src="{% static 'allometric_equations/js/elastic.min.js' %}"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 
-    .agg-icon-2 {
-        border:1px solid #557;
-        border-radius:14px;
-        line-height: 20px;
-        font-size: .75em;
-        font-weight: normal;
-    }
 
-    .agg-icon-3 {
-        border:1px solid #446;
-        border-radius:16px;
-        line-height: 23px;
-        font-size: .8em;
-        font-weight: normal;
-    }
+    <script src="{% static 'allometric_equations/js/geohash.js' %}"></script>
+    <script src="{% static 'allometric_equations/js/search.js' %}"></script>
 
-    .agg-icon-4 {
-        border:1px solid #335;
-        border-radius:18px;
-        line-height: 28px;
-        font-size: 1em;
-        font-weight: normal;
-    }
+    {% if form_is_valid %}
+        <script type="text/javascript"> 
 
-    .agg-icon-5 {
-        border:1.5px solid #224;
-        border-radius:18px;
-        line-height: 35px;
-        font-size: 1.4em;
-        font-weight: normal;
-    }
-
-	
-</style>
-
-<script src="{% static 'allometric_equations/js/elastic.min.js' %}"></script>
-<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-<script src="{% static 'allometric_equations/js/map.js' %}"></script>
-<script src="{% static 'allometric_equations/js/geohash.js' %}"></script>
-<script>
-	
-    /*$(function() {
-		
-        $('a[href="#keyword"]').tab('show');
-
-        var autocompletes = ['Country',
-                             'Ecosystem',
-                             'Population',
-                             'Genus',
-                             'Species',
-                             'Biome_FAO',
-                             'Biome_UDVARDY',
-                             'Biome_WWF',
-                             'Division_BAILEY',
-                             'Biome_HOLDRIDGE',
-                             'Author',
-                             'Reference',
-                             'Output'];
-
-        $.each(autocompletes, function (index, field) {
-            $( "#id_" + field ).attr('autocomplete', 'off');
-            $( "#id_" + field ).typeahead({
-            source: function ( query, process) {
-                return $.get("/data/autocomplete/" + field + "/", { term: query }, function (data) {
-                    return process(data.options);
-                });
-            },
-            minLength: 2
+            $(function() {
+                window.app.config.mapping = {{mapping|safe}};
+                window.app.searchManager.search({{search_dict|safe}});
             });
-        });
-    });*/
-</script>
+
+        </script>
+    {% endif %}
+
 {% endblock %}
 
 {% block content %}
 
-
 	<div id="equations_page">
-        <div id="elasticsearch_query">{{query_entered}}</div>
 	    {% if current_search_summary %}
-	        <div id="currentSearch">
-               <div style="float:right"> 
-                    <a target="_blank" href="/data/export/{{form.export_link}}"
-                        class="btn btn-succcess" id="exportButton">
-                        Export Results
-                    </a>
-                </div>
-               <h3>Your current search</h3>
-               <h4>Equations found: {{ page.paginator.count}} </h4>
-    	       <table>
-        	       {% for item in current_search_summary %}
-        	           <tr>
-        	                <td style="width:150px;">{{item.field}}</td>
-        	                <td style="width:250px;">{{item.search_value|truncatechars:48 }}</td>
-                            <td style="width:30px;">
-                                <a href="{{item.clear_link}}">clear</a>
-                            </td>
-        	           </tr>
-        	       {% endfor %}
-    	       </table>
-	       </div>
+            <!-- Search Summary -->
+	        {% include 'allometric_equations/template.search.summary.html'%}
 	    {% endif %}
 
         <h3>Equations</h3>
+	    
 
-	    <form method="get" action="." id="searchForm" autocomplete="off">
-    	    <div id="search-box" style="clear:both;">    
-                <ul class="nav nav-tabs">                   
-                    <li><a href="#keyword" data-toggle="tab" class="active">Keyword</a></li>
-                    <li><a href="#identification" data-toggle="tab">Identification</a></li>
-                    <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
-                    <li><a href="#Location" data-toggle="tab">Location</a></li>
-                    <li><a href="#components" data-toggle="tab">Components</a></li>
-                    <li><a href="#input_Output" data-toggle="tab">Input/Output</a></li>
-                    <li><a href="#allometry" data-toggle="tab">Allometry</a></li>
-                    <li><a href="#reference" data-toggle="tab">Reference</a></li>
-                </ul>
-                <div class="tab-content" >
-               
-    	            <div class="tab-pane active" id="keyword">
-                        <p class="search-help-text">
-                            Search allometric equations by keyword. 
-                            This searches accross several text fields. <br>
-                            Example searches: <a href="?q=Acacia">Acacia</a>,
-                               <a href="?q=Zambia">Zambia</a>,
-                               <a href="?q=Bellefontaine">Bellefontaine</a>, 
-                               <a href="?q=Glutinosum">Glutinosum</a>,
-                               <a href="?q=rainforest">rainforest</a>
-                        </p>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                {{ form.q|as_crispy_field }}
-                            </div>
-                        </div>
-    	            </div>
+        <div class="clearfix"></div>
 
-    	            <div class="tab-pane" id="identification">
-            	       <p class="search-help-text">
-                            Search allometric equations by tree ecosystem and population. <br>
-                            Example searches: 
-                               <a href="?Ecosystem=Plantation">Ecosystem: Plantation</a>,
-                               <a href="?Population=STAND">Population: STAND</a>
-                        </p>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                {{ form.Ecosystem|as_crispy_field }}
-                            </div>
-                            <div class="col-lg-6">
-                                {{ form.Population|as_crispy_field }}
-                            </div>
-                        </div>
-    	            </div>
-
-                    <div class="tab-pane" id="taxonomy">
-                        <p class="search-help-text">
-                            Search allometric equations by tree genus or species. <br>
-                            Example searches: 
-                               <a href="?Genus=Gmelina">Genus: Gmelina</a>,
-                               <a href="?Species=schweinfurthii">Species: schweinfurthii</a>
-                        </p>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                {{ form.Genus|as_crispy_field }}
-                            </div>
-                            <div class="col-lg-6">
-                                {{ form.Species|as_crispy_field }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="Location">
-                        <p class="search-help-text">
-                            Search allometric equations by tree location and biome. <br>
-                            Example searches: 
-                               <a href="?Biome_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
-                               <a href="?Country=Benin">Country: Benin</a>
-                        </p>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                {{ form.Country|as_crispy_field }}
-                                {{ form.Biome_HOLDRIDGE|as_crispy_field }}
-                                {{ form.Biome_UDVARDY|as_crispy_field }}
-                	        </div>
-                	        <div class="col-lg-6">
-                                {{ form.Biome_FAO|as_crispy_field }}
-                                {{ form.Biome_WWF|as_crispy_field }}
-                                {{ form.Division_BAILEY|as_crispy_field }}
-                            </div>
-
-                        </div>
-            
-                    </div>
-             
-            
-                    <div class="tab-pane" id="components">
-                        <p class="search-help-text">
-                            Search allometric equations by tree components such as branch diameter, leaves, stump and fruit. <br>
-                            Example searches: 
-                               <a href="?B=Yes&amp;Rf=Yes">B Bark: Yes + Rf Fine Roots: Yes</a>,
-                               <a href="?F=No&amp;S=Yes">F Fruit: No +  S Stump: Yes</a>
-                        </p>
-                        <div class="row smallInputs">
-                            <div class="col-lg-4">
-                                {{ form.B|as_crispy_field }}
-                                {{ form.Bd|as_crispy_field }}
-                                {{ form.Bg|as_crispy_field }}
-                                {{ form.Bt|as_crispy_field }}
-                                {{ form.L|as_crispy_field }}
-                                {{ form.Rb|as_crispy_field }}
-                                {{ form.Rf|as_crispy_field }}
-                                {{ form.Rm|as_crispy_field }}
-                                {{ form.S|as_crispy_field }}
-                                {{ form.T|as_crispy_field }}
-                                {{ form.F|as_crispy_field }}
-                            </div>
-                            <div class="col-lg-8">
-                                <img src="{% static 'images/components.png' %}" width="500" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="input_Output">
-                        <p class="search-help-text">
-                            Search allometric equations by equation input and output characteristics. <br>
-                            Example searches: 
-                               <a href="?Output=Biomass">Output: Biomass</a>,
-                               <a href="?Unit_X=cm&amp;Min_X__gte=10&amp;Min_X__lte=50">Unit X: cm + Min X From: 10 + Min X To: 50</a>
-                        </p>
-                        <div class="row smallInputs">
-                            <div class="col-lg-3">
-                                {{ form.U|as_crispy_field }}
-                                {{ form.V|as_crispy_field }}
-                                {{ form.W|as_crispy_field }}
-                                {{ form.X|as_crispy_field }}
-                                {{ form.Z|as_crispy_field }}
-                            </div>
-                            <div class="col-lg-3">
-                                {{ form.Unit_U|as_crispy_field }}
-                                {{ form.Unit_V|as_crispy_field }}
-                                {{ form.Unit_W|as_crispy_field }}
-                                {{ form.Unit_X|as_crispy_field }}
-                                {{ form.Unit_Y|as_crispy_field }}
-                                {{ form.Unit_Z|as_crispy_field }}
-                            </div>
-                            <div class="col-lg-3">
-                                {{ form.Min_X__gte|as_crispy_field }}
-                                {{ form.Max_X__gte|as_crispy_field }}
-                                {{ form.Min_Z__gte|as_crispy_field }}
-                                {{ form.Max_Z__gte|as_crispy_field }}
-                                {{ form.Output|as_crispy_field }}
-                            </div>
-                            <div class="col-lg-3">
-                                {{ form.Min_X__lte|as_crispy_field }}
-                                {{ form.Max_X__lte|as_crispy_field }}
-                                {{ form.Min_Z__lte|as_crispy_field }}
-                                {{ form.Max_Z__lte|as_crispy_field }}
-                            </div>
-                        </div>
-                    </div>
-             
-            
-                    <div class="tab-pane" id="allometry">
-                        <p class="search-help-text">
-                            Search inside the equation <br>
-                            Example searches: 
-                               <a href="?Equation=log(H)">Equation contains: log(H)</a>,
-                               <a href="?Equation=DBH^2">Equation contains: DBH^2</a>
-                        </p>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                {{ form.Equation|as_crispy_field }}
-                            </div>
-                        </div>  
-                    </div>
-
-                    <div class="tab-pane" id="reference">
-                        <p class="search-help-text">
-                            Search allometric equations by author, year, and reference. <br>
-                            Example searches: 
-                               <a href="?Author=Henry+M.">Author: Henry M.</a>,
-                               <a href="?Reference=Pieper,+Y.+%26+Laumans">Reference: Pieper, Y. &amp; Laumans,</a>
-                               <a href="?Year=2004">Year: 2004</a>
-                        </p>
-            
-                        <div class="row">
-                            <div class="col-lg-4">
-                                {{ form.Author|as_crispy_field }}
-                            </div>
-                            <div class="col-lg-4">
-                                {{ form.Reference|as_crispy_field }}
-                            </div>        
-                            <div class="col-lg-4">
-                                {{ form.Year|as_crispy_field }}
-                            </div>
-                        </div>
-                    </div>
+        <!-- Search Form -->
+        {% include 'allometric_equations/template.search.form.html'%}
+		
+    	{% if form_is_valid %}
+            <div id="search-results">
+        		<!-- Result Tabs -->
+        		<ul id="results-tab" class="nav nav-tabs">
+        			<li>
+        				<a href="#results-list" data-toggle="tab" class="active">List</a>
+        			</li>
+        			<li>
+        				<a id="list-tab" href="#results-map" data-toggle="tab">Map</a>
+        			</li>
+        		</ul>
+        		
+        		<div class="tab-content">
+        			<div class="tab-pane active" id="results-list">
+        			
+        			</div>
+        			
+        			<div class="tab-pane" id="results-map">
+        				<div id="map"></div>
+        			</div>
                 </div>
-              
-                {{ form.order_by }} 
-                
-                <input type="hidden" name="page" value="1">
-                <div id="search-submit-holder">
-                    <input id="searchButton" style="float:right" class="btn btn-succcess" type="submit" value="Search">
-                </div>
-                <div class="clearfix"></div>
-            </div>
-    	            
-	    </form>
-		
-		{#% if not query_entered %#}
-			<!-- NO QUERY YET -->
-		{#% elif page.object_list %#}
-		
-		<br />
-        <br />
-		<ul id="results-tab" class="nav nav-tabs">
-			<li>
-				<a href="#results-list" data-toggle="tab" class="active">List</a>
-			</li>
-			<li>
-				<a id="list-tab" href="#results-map" data-toggle="tab">Map</a>
-			</li>
-		</ul>
-		
-		<div class="tab-content">
-			<div class="tab-pane active" id="results-list">
-			
-				<div style="float:left;width:1030px;overflow-x:auto;">	
-					<table class="equationTable" style="width:500px;">
-					<thead>   
-						<tr>
-							<th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}}">ID</a></th>
-							<th>Equation</th>
-							<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
-							<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
-							<th><a href="{{form.sort_link_Country_order}}">Country</a></th>
-							<th>Components</th>
-							<th><a href="{{form.sort_link_Output_order}}">Output</a></th>
-							<th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
-							<th><a href="{{form.sort_link_Author_order}}">Author</a></th>
-						</tr>
-					</thead>
-					<tbody>
-					{% for result in page.object_list %}
-						<tr>
-							<td style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{ result.object.get_absolute_url }}">{{ result.object.ID}}</a></td>
-							<td>{{ result.object.Substitute_equation }}</td>
-							<td>{{ result.object.species_group.genera_string }}</td>
-							<td>{{ result.object.species_group.species_string }}</td>
-							<td>{{ result.object.location_group.countries_string }}</td>
-							<td>{{ result.object.components_string}}</td>
-							<td>{{ result.object.Output}}</td>
-							<td>{{ result.object.location_group.biomes_fao_string }}</td>
-							<td>{{ result.object.reference.author }}</td>
-						</tr>
-					  {% endfor %}
-					 </tbody>
-					  <tfoot>   
-					   <tr>
-							<th style="width:100px;border-right: 1px solid #9BC56F;"><a href="{{form.sort_link_id}">Id</a></th>
-							<th>Equation</th>
-							<th><a href="{{form.sort_link_Genus_order}}">Genus</a></th>
-							<th><a href="{{form.sort_link_Species_order}}">Species</a></th>
-							<th><a href="{{form.sort_link_Country_order}}">Country</a></th>
-							<th>Components</th>
-							<th><a href="{{form.sort_link_Output_order}}">Output</a></th>
-							<th><a href="{{form.sort_link_Biome_FAO_order}}">Biome (FAO)</a></th>
-							<th><a href="{{form.sort_link_Author_order}}">Author</a></th>
-						</tr>
-					 </tfoot>   
-					 </table>
-				</div>
-				<div style="clear:both;"></div>
-				{% if page.has_previous or page.has_next %}
-					<p style="float:right">
-						
-						
-						{% if page.has_previous %}<a href="{{form.prev_page_link}}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-						|
-						{% if page.has_next %}<a href="{{form.next_page_link}}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-					</p>
-				{% endif %}
-				<p>Showing equations: {{ page.start_index }} to {{ page.end_index }} of {{ page.paginator.count}}</p>
-			</div>
-			
-			<div class="tab-pane" id="results-map">
-				<div id="map"</div>
-			</div>
-        </div>
-		
-		{#% else %#}
-        	<h4>No results were found that matched your search</h4>
-        	<p>Try making your search more general.</p>
-            {# Show some example queries to run, maybe query syntax, something else? #}
-        {#% endif %#}
-        
+        	</div>	
+        {% else %}
+            <h3> Invalid Search - Please revise the form for any errors</h3>
+    	{% endif %}
 	    
     </div>
+
 {% endblock %}
