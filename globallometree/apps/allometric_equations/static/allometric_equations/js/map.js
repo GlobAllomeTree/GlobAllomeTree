@@ -105,7 +105,7 @@
 		15 : 9 //4.773m/pixel : 38.2m x 19m
 	};
 	
-	//Elastic Search queries are filtered by the bounding box of the map view.  To faciliate smoother
+	//Elastic Search queries are filtered by the bounding box of the map view.  To facilitate smoother
 	//panning by loading in advance points slightly outside of the map view we can apply a buffer to
 	//the elastic search request.  This is done by adding padding to the coordinates passed to ES.
 	//Since we are using Latitude/Longitude, the length of a decimal degree will vary based on latitude
@@ -135,7 +135,7 @@
 	var map = L.map('map', {
 		minZoom: 2,
 		maxZoom: 15,
-		noWrap: true
+		maxBounds : [[90, -180], [-90, 180]]
 	});
 		
 	//Modified from:
