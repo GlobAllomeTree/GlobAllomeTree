@@ -5,12 +5,17 @@
 	//Prevents older browsers from breaking if a console.log() function is left in the code.
 	if(!window.console){ window.console = {log: function(){} }; } 
 	
+	var ES_THROTTLE_RATE = 500; //In ms
+	
 	var filters = [];
 	var q = getURLParameter('q');
+	var distance = parseInt(getURLParameter('Distance'));
+	var latitude = parseInt(getURLParameter('Latitude'));
+	var longitude = parseInt(getURLParameter('Longitude'));
 	var param;
 	var markers;
 	var dragTimer;
-	var ES_THROTTLE_RATE = 500; //In ms
+	
 	
 	// These are the default map bounds for the world
 	// coordinates will fit the whole globe when accounting for the padding of 50
@@ -37,6 +42,9 @@
 		Biome_FAO : 'term',
 		Biome_WWF : 'term',
 		Division_BAILEY : 'term',
+		Latitude : 'distance',
+		Longitude : 'distance',
+		Distance : 'distance',
 		//Components
 		B : 'term',
 		Bd : 'term',
@@ -245,16 +253,17 @@
 		
 		//Builds the term filters for the ES search concatenating the term filters and bounding
 		//box filters if both are set
+		
 		if (termFilters && boundingBox) {
 			var geoFilter = ejs.GeoBboxFilter('Locations')
 				.topLeft(ejs.GeoPoint([boundingBox[3], boundingBox[0]]))
 				.bottomRight(ejs.GeoPoint([boundingBox[1], boundingBox[2]]));
-			filters = $.extend([], termFilters, geoFilter);
+			filters = [].concat(termFilters, [geoFilter]);
 		} else {
 			filters = termFilters;
 		}
-		
-		//Creaates a simple_string query if the q parameter is set
+				
+		//Creates a simple_string query if the q parameter is set
 		//Defaults to only searching the "keywords" field using an "AND" operator
 		//If the q parameter is set, term filters are ignored since ES won't accept both
 		if (q) {
@@ -315,7 +324,7 @@
 		);
 		return query;
 	}
-
+	
 	/**
 	* Adds allometric aggregations to the map
 	* @param {json} return object from an Elastic Search query 
@@ -488,7 +497,7 @@
 	}
 	
 	/**
-	* Generates and elastic search query and retrieves the results from the server
+	* Generates an elastic search query and retrieves the results from the server
 	* drawing them on the map.  Query is limited to the extent of the map view (plus buffer)
 	* to limit the number of features returned from the server and drawn on the map.  This
 	* is particularly important when zoomed in as the number of features could be prohibitively
@@ -541,6 +550,16 @@
 				}
 			}
 		}
+	}
+	
+	//Check if limiting search to a radius from a specified point and add filter
+	if (latitude && longitude && distance) {
+		filters.push(ejs.GeoDistanceFilter('Locations')
+			.distance(distance)
+			.unit('km') //km or mi
+			.normalize(true)
+			.point(ejs.GeoPoint([latitude,longitude]))
+		)
 	}
 
 	markers = L.featureGroup().addTo(map);
