@@ -19,18 +19,15 @@ class CountryChoiceField(forms.ModelChoiceField):
 
 COMPONENT_CHOICES = (
             ('', ''),
-            ('No', 'No'),
-            ('Yes', 'Yes')
+            ('0', 'No'),
+            ('1', 'Yes')
         )
 
 
 class SearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
-        #Add on initial arguments
-        if not kwargs.get('initial', False):
-            kwargs['initial'] = {}
-        kwargs['initial']['page'] = 1
+        
 
         super(SearchForm, self).__init__(*args, **kwargs)
 
@@ -105,7 +102,7 @@ class SearchForm(forms.Form):
     
     #Ordering and paging
     order_by = forms.CharField(required=False, widget=forms.HiddenInput())
-    page     = forms.IntegerField(required=False)
+
     
     #Search Fields
     Genus         = forms.CharField(required=False, label='Genus')

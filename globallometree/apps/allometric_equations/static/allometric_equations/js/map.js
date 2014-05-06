@@ -1,16 +1,15 @@
-(function() {
+window.app.mapController = function() {
 	//Only use safe Javascript
 	"use strict";
 	
-	//Prevents older browsers from breaking if a console.log() function is left in the code.
-	if(!window.console){ window.console = {log: function(){} }; } 
-	
-	var filters = [];
-	var q = getURLParameter('q');
+	var ES_THROTTLE_RATE = 500; //In ms
+	var el;
+	var map;
 	var param;
 	var markers;
 	var dragTimer;
-	var ES_THROTTLE_RATE = 500; //In ms
+	var initialized = false;
+	
 	
 	// These are the default map bounds for the world
 	// coordinates will fit the whole globe when accounting for the padding of 50
@@ -44,7 +43,7 @@
 		15 : 9 //4.773m/pixel : 38.2m x 19m
 	};
 	
-	//Elastic Search queries are filtered by the bounding box of the map view.  To faciliate smoother
+	//Elastic Search queries are filtered by the bounding box of the map view.  To facilitate smoother
 	//panning by loading in advance points slightly outside of the map view we can apply a buffer to
 	//the elastic search request.  This is done by adding padding to the coordinates passed to ES.
 	//Since we are using Latitude/Longitude, the length of a decimal degree will vary based on latitude
@@ -70,13 +69,54 @@
 		15 : 0.013474668
 	}
 	
-	//The map object
-	var map = L.map('map', {
-		minZoom: 2,
-		maxZoom: 15,
-		noWrap: true
-	});
-		
+	var initOrShowMap = function (params) {
+
+		el = params['el'];
+
+		if(initialized) {
+			//confirm map zooms on invalidate size/fitbounds otherwise markers need to be added manually
+			return
+		}
+
+		initialized = true;
+
+		//The map object
+		map = L.map(el, {
+			minZoom: 2,
+			maxZoom: 15,
+			maxBounds : [[90, -180], [-90, 180]]
+		});
+
+		markers = L.featureGroup().addTo(map);
+		map.on('zoomend', updateMarkers);
+
+		dragTimer = null;
+		map.on('drag', function() {
+			if (dragTimer === null) {
+				dragTimer = setTimeout(function(){
+					updateMarkers(); 
+					dragTimer = null;
+				}, ES_THROTTLE_RATE);
+			}
+		});
+
+		// add an OpenStreetMap tile layer
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(map);
+
+		//Leaflet requires the div to be of a defined size before generating the map
+		//When leaflet is called on a hidden div, the map is created with a size of 0
+		//When we show the map, we need to reset the map so it draws at the correct dimensions
+		//Hiding and reshowing the map tab will reset the map to the mapBounds.  If the map
+		//should be reset to the last zoom and extent the user was viewing, then we need to 
+		//update the map bounds with an "onmove" event listener
+		map.invalidateSize();
+		map.fitBounds(mapBounds, {padding: [50, 50]});
+	}
+	
+	
+
 	//Modified from:
 	//http://jsfiddle.net/sowelie/3JbNY/
 	//Modifies the Leaflet Marker to have a native hover window
@@ -142,82 +182,12 @@
 		}
 	});
 	
-	/**
-	* Parses parameters from the URL, spliting by "?" or "&"
-	* @param {string} Name of parameter
-	*/
-	function getURLParameter(name) {
-		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
-	}
 
-	/**
-	* Generates an ElasticS earch aggregation query using the elastic.js library
-	* @param {string} query to be passed to an ES String_Query.  Can be a null value
-	* @param {array} An array of ejs.TermFilter objects. Can be a null value
-	* @param {array} An array of coordinates to filter the results by.  In the order of [minx, miny, maxx, maxy]
-	* @param {integer} A number specifiying the geoHash precision.  Values between 1-12 are acceptable
-	* @return {json}
-	*/
-	function generateESQuery(q,termFilters,boundingBox,precision) {
-		var query = ejs.Request();
-		var filters;
+	function getGeoAggregations(precision) {
 		
-		if (boundingBox) {
-			//Elastic Search treats values of 180 and -180 as a width of 0 and 90, -90 as a height of 0
-			//Makes sure to pass values that will actually return the required results.
-			//Additionally, Leaflet will pan from world copy to world copy.  This can create values infinitly
-			//far outside of allowed geographic coordinates.  This snaps requests back to the primary map
-			//We can prevent leaflet from loading outside of the defined geographic coordinates for the globe
-			if (boundingBox[0] < -179.99999) {
-				boundingBox[0] = -179.99999;
-			}
-			if (boundingBox[1] < -89.99999) {
-				boundingBox[1] = -89.99999;
-			}
-			if (boundingBox[2] > 179.99999) {
-				boundingBox[2] = 179.99999;
-			}
-			if (boundingBox[3] > 89.99999) {
-				boundingBox[3] = 89.99999;
-			}
-		}
+		var aggregations = [];
 		
-		//Builds the term filters for the ES search concatenating the term filters and bounding
-		//box filters if both are set
-		if (termFilters && boundingBox) {
-			var geoFilter = ejs.GeoBboxFilter('Locations')
-				.topLeft(ejs.GeoPoint([boundingBox[3], boundingBox[0]]))
-				.bottomRight(ejs.GeoPoint([boundingBox[1], boundingBox[2]]));
-			filters = $.extend([], termFilters, geoFilter);
-		} else {
-			filters = termFilters;
-		}
-		
-		//Creaates a simple_string query if the q parameter is set
-		//Defaults to only searching the "keywords" field using an "AND" operator
-		//If the q parameter is set, term filters are ignored since ES won't accept both
-		if (q) {
-			query.query(
-				ejs.FilteredQuery(
-					ejs.QueryStringQuery({
-						query : q, 
-						fields: ["Keywords"],
-						defaultOperator : "AND"})
-				)
-			);
-		//Otherwise we just set the query to MatchAll and filter by term filters
-		} else {
-			query.query(
-				ejs.FilteredQuery(
-					ejs.MatchAllQuery(),
-					ejs.AndFilter(filters)
-					
-				)
-			);
-		}
-
-		//Build the aggreagations
-		query.aggregation(
+		aggregations.push(
 			ejs.GeoHashGridAggregation('Locations-Grid')
 				.field('Locations')
 				.precision(precision)
@@ -229,8 +199,9 @@
 					ejs.TermsAggregation('geohashes')
 						.script("doc['Locations'].value.geohash")
 				)
-		)
-		.aggregation(
+		);
+
+		aggregations.push(
 			ejs.FilterAggregation('Locations-Bounds')
 				.filter(
 					ejs.ExistsFilter('Locations')
@@ -252,17 +223,11 @@
 						.script("doc['Locations'].value.lon")
 				)
 		);
-		return query;
+
+		return aggregations;
 	}
 
-	function bindMarker(m, geohash) {
-		setTimeout(function() {
-			m.on('mouseover', function() {
-				m.getPopup().setContent('hi ' + geohash);
-			});
-		}, 2000);
-	}
-
+	
 	/**
 	* Adds allometric aggregations to the map
 	* @param {json} return object from an Elastic Search query 
@@ -410,7 +375,7 @@
 	}
 	
 	/**
-	* Generates and elastic search query and retrieves the results from the server
+	* Generates an elastic search query and retrieves the results from the server
 	* drawing them on the map.  Query is limited to the extent of the map view (plus buffer)
 	* to limit the number of features returned from the server and drawn on the map.  This
 	* is particularly important when zoomed in as the number of features could be prohibitively
@@ -424,57 +389,26 @@
 		var minx = bounds._southWest.lng - zoomExtentBuffer[zoom];
 		var miny = bounds._southWest.lat - zoomExtentBuffer[zoom];
 		var precision = geoGridPrecision[map.getZoom()];
-		var query = generateESQuery(q, filters, [minx, miny, maxx, maxy], precision);
+		var boundingBox = [minx, miny, maxx, maxy];
 		
-		$.ajax({
-			type: "POST",
-			url: 'http://localhost:9200/globallometree/allometricequation/_search',
-			data: JSON.stringify(query.toJSON()),
+		var query = window.app.searchManager.getQuery({
+			aggregations : getGeoAggregations(precision),
+			boundingBox : boundingBox
+		});
+
+		window.app.searchManager.search({
+			query : query,
 			success: function (e) {
 				map.removeLayer(markers);
 				addToMap(e);
 			}
 		});
 	}
-	
-	//Leaflet requires the div to be of a defined size before generating the map
-	//When leaflet is called on a hidden div, the map is created with a size of 0
-	//When we show the map, we need to reset the map so it draws at the correct dimensions
-	//Hiding and reshowing the map tab will reset the map to the mapBounds.  If the map
-	//should be reset to the last zoom and extent the user was viewing, then we need to 
-	//update the map bounds with an "onmove" event listener
-	$('a[href="#results-map"]').on('shown.bs.tab', function(){
-		//confirm map zooms on invalidate size/fitbounds otherwise markers need to be added manually
-		map.invalidateSize();
-		map.fitBounds(mapBounds, {padding: [50, 50]});
-	});
-	
-	// add an OpenStreetMap tile layer
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
 
-	//Build ES Query from URL Parameters
-	for (param in urlParams) {
-		if (urlParams.hasOwnProperty(param)) {
-			if (urlParams[param] == 'term') {
-				if (getURLParameter(param)) {
-					filters.push(ejs.TermFilter(param, getURLParameter(param)));
-				}
-			}
-		}
+
+	//Public objects
+	return {
+		initOrShowMap : initOrShowMap,
+		map : map
 	}
-
-	markers = L.featureGroup().addTo(map);
-	map.on('zoomend', updateMarkers);
-
-	dragTimer = null;
-	map.on('drag', function() {
-		if (dragTimer === null) {
-			dragTimer = setTimeout(function(){
-				updateMarkers(); 
-				dragTimer = null;
-			}, ES_THROTTLE_RATE);
-		}
-	});
-}());
+}();

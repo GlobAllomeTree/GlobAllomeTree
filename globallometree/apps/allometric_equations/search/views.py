@@ -29,12 +29,10 @@ class SearchView(TemplateView):
         if self.form.is_valid():
             context['form_is_valid'] = True
             context['current_search_summary'] = self.current_search_summary()
-            context['mapping'] = json.dumps(AllometricEquationIndex.get_mapping())
             context['search_dict'] = json.dumps(self.get_search_dict());
         else:
             context['form_is_valid'] = False
             
-        
         return context
 
     def create_response(self, *args, **kwargs):

@@ -7,19 +7,30 @@
 
     <script src="{% static 'allometric_equations/js/elastic.min.js' %}"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
 
     <script src="{% static 'allometric_equations/js/geohash.js' %}"></script>
     <script src="{% static 'allometric_equations/js/search.js' %}"></script>
+    <script src="{% static 'allometric_equations/js/list.js' %}"></script>
+    <script src="{% static 'allometric_equations/js/map.js' %}"></script>
 
     {% if form_is_valid %}
         <script type="text/javascript"> 
 
             $(function() {
-                window.app.config.mapping = {{mapping|safe}};
-                window.app.searchManager.search({{search_dict|safe}});
-            });
+                //Get the search manager from allometric_equations/js/search.js
+                var app = window.app;
+                app.searchManager.setSearchDict({{search_dict|safe}});
+                app.listController.init({
+                    el : 'results-list-container'           
+                });
+                $('a[href="#results-map"]').on('shown.bs.tab', function(){
+                    app.mapController.initOrShowMap({
+                        el : 'map'            
+                    });
+                });    
 
+            });
         </script>
     {% endif %}
 
@@ -33,7 +44,7 @@
 	        {% include 'allometric_equations/template.search.summary.html'%}
 	    {% endif %}
 
-        <h3>Equations</h3>
+        <h3>Allometric Equation Search</h3>
 	    
 
         <div class="clearfix"></div>
@@ -45,17 +56,18 @@
             <div id="search-results">
         		<!-- Result Tabs -->
         		<ul id="results-tab" class="nav nav-tabs">
-        			<li>
-        				<a href="#results-list" data-toggle="tab" class="active">List</a>
+        			<li class="active">
+        				<a href="#results-list" data-toggle="tab" class="active"><span class="glyphicon glyphicon-list"></span> List View</a>
+
         			</li>
         			<li>
-        				<a id="list-tab" href="#results-map" data-toggle="tab">Map</a>
+        				<a id="list-tab" href="#results-map" data-toggle="tab"><span class="glyphicon glyphicon-globe"></span> Map View</a>
         			</li>
         		</ul>
         		
         		<div class="tab-content">
         			<div class="tab-pane active" id="results-list">
-        			
+        			     <div id="results-list-container"></div>
         			</div>
         			
         			<div class="tab-pane" id="results-map">

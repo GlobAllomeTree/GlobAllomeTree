@@ -8,6 +8,15 @@
     margin-top:25px;
 }
 
+#map {
+    margin-top:25px;
+}
+
+.results-info {
+    text-align:right;
+    padding:10px;
+}
+
 .agg-icon {
 	background-color: #97FF38;
 	text-align:center;

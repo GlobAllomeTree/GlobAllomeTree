@@ -6,7 +6,7 @@
         </a>
     </div>
    <h3>Your current search</h3>
-   <h4>Equations found: {{ page.paginator.count}} </h4>
+   <h4>Equations found: <span id="summary-results-total"></span> </h4>
    <table>
        {% for item in current_search_summary %}
            <tr>
