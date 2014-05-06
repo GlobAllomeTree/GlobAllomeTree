@@ -21,16 +21,16 @@ window.app.listController = function () {
 								  <dd><code>{{Equation}}</code></dd>				\
 								 													\
 								  <dt><small>FAO Biomes</small></dt>				\
-								  <dd><small>a {{Biome_FAO}}</small></dd>   			\
+								  <dd><small>{{Biome_FAO}}</small></dd>   			\
 								 													\
 								  <dt><small>Species</small></dt>					\
-								  <dd><small>b {{Species}}</small></dd>				\
+								  <dd><small>{{Species}}</small></dd>				\
 								  								 					\
 								  <dt><small>Countries</small></dt>					\
-								  <dd><small>c {{Country}}</small></dd>				\
+								  <dd><small>{{Country}}</small></dd>				\
 								  													\
 								  <dt><small>Year</small></dt>						\
-								  <dd><small>d {{Year}}</small></dd>					\
+								  <dd><small>{{Year}}</small></dd>					\
 								</dl>												\
 							</div>													\
 					   </div>';

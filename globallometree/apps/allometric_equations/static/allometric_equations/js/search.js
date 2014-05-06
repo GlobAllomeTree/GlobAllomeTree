@@ -79,8 +79,6 @@ window.app.searchManager = function (){
 
 	var search = function(params) {
 		
-		console.log(JSON.stringify(params['query'].toJSON()));
-
 		$.ajax({
 			type: "POST",
 			url: 'http://localhost:9200/globallometree/allometricequation/_search',

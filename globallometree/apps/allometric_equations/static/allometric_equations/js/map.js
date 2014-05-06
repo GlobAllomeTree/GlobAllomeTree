@@ -69,6 +69,8 @@ window.app.mapController = function() {
 		15 : 0.013474668
 	}
 	
+
+
 	var initOrShowMap = function (params) {
 
 		el = params['el'];
@@ -113,6 +115,14 @@ window.app.mapController = function() {
 		//update the map bounds with an "onmove" event listener
 		map.invalidateSize();
 		map.fitBounds(mapBounds, {padding: [50, 50]});
+
+
+		//Bind the popups to load when they are opened
+		map.on('popupopen', function(e) {
+		  var marker = e.popup._source;
+		  loadSummaryToPopup(marker, e.popup);
+		});
+
 	}
 	
 	
@@ -192,10 +202,6 @@ window.app.mapController = function() {
 				.field('Locations')
 				.precision(precision)
 				.aggregation(
-					ejs.TermsAggregation('species')
-						.field('ID')
-				)
-				.aggregation(
 					ejs.TermsAggregation('geohashes')
 						.script("doc['Locations'].value.geohash")
 				)
@@ -252,13 +258,7 @@ window.app.mapController = function() {
 			var iconSize;
 			var sizeClass;
 			
-			
-
-			//Generate text for html hover events
-			for (j=0;j<aggs[i].species.buckets.length;j++){
-				html += aggs[i].species.buckets[j].key + " (" + aggs[i].species.buckets[j]['doc_count']  + ") ";
-			}
-			
+		
 			// Here we loop through and get locations that are inside the geohash 
 			// so that we can average out the matching locations and find the best
 			// place to put the marker.
@@ -363,12 +363,12 @@ window.app.mapController = function() {
 					})
 				});
 				
-				//marker.bindPopup( 'loading...' + aggs[i].geohashes.buckets[j].key, {showOnMouseOver: true});
-				//bindMarker(marker, aggs[i].geohashes.buckets[j].key);
-
-				marker.bindPopup(html, {showOnMouseOver: true});
+				marker.bindPopup('<p>loading...</p>', {showOnMouseOver: true});
+				//We tag the geohash onto the marker for later use in the lookup
+				marker.geohash = aggs[i].key;
+				marker.geohashContentLoaded = false;
+				marker.docCount = totalDocs;
 				markers.addLayer(marker);
-
 			}
 		}
 		map.addLayer(markers);
@@ -401,6 +401,64 @@ window.app.mapController = function() {
 			success: function (e) {
 				map.removeLayer(markers);
 				addToMap(e);
+			}
+		});
+	}
+
+	var getBucketsAsList = function(buckets, separator) {
+		var items = [];
+		//Generate text for html hover events
+		for (j=0;j<buckets.length;j++){
+			items.push(buckets[j].key + " (" + buckets[j]['doc_count']  + ")");
+		}
+		return items.join(separator);
+	}
+
+	//When someone opens a popup, we get the summary
+	var loadSummaryToPopup = function(marker, popup) {
+		//Prevent double loading
+		if(marker.geohashContentLoaded) return;
+		marker.geohashContentLoaded = true;
+		//Get our geohash bounds from the marker where we monkepathed them on
+		var geohashBounds =  decodeGeoHash(marker.geohash);
+
+		var minx = geohashBounds['longitude'][0];
+		var maxx = geohashBounds['longitude'][1];
+		var miny = geohashBounds['latitude'][0];
+		var maxy = geohashBounds['latitude'][1];
+		var boundingBox = [minx, miny, maxx, maxy];
+	
+		var query = window.app.searchManager.getQuery({
+			aggregations : [
+				ejs.TermsAggregation('Species').field('Genus_Species'),
+				ejs.TermsAggregation('Biome_FAO').field('Biome_FAO'),
+				ejs.TermsAggregation('Reference').field('Reference'),		
+			],
+			boundingBox : boundingBox
+		});
+
+		window.app.searchManager.search({
+			query : query,
+			success: function (data) {
+				var html = "<br>";
+				//marker.docCount was also monkey patched
+				html += '<h4>Equations: ' + marker.docCount + '</h4>';
+
+				if(data.aggregations['Species'].buckets.length) {
+					html += '<h5>Species Represented</h5>'  
+					html += '<p style="margin-top:0px;">' + getBucketsAsList(data.aggregations['Species'].buckets, ', ') + '</p>';
+				}
+				
+				if(data.aggregations['Biome_FAO'].buckets.length){
+					html += '<h5>FAO Biomes</h5>'  
+					html += '<p style="margin-top:0px;">' + getBucketsAsList(data.aggregations['Biome_FAO'].buckets, ', ') + '</p>';
+				}
+				
+				html += '<h5>Summary Area</h5>'
+				html += '<p style="margin-top:0px;"> Latitude: ' + geohashBounds['latitude'][0] + ' to ' + geohashBounds['latitude'][1] + '<br>';
+				html += 'Longitude: ' + geohashBounds['longitude'][0] + ' to ' + geohashBounds['longitude'][1] + '</p>';
+
+				popup.setContent(html);
 			}
 		});
 	}
