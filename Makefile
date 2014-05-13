@@ -10,8 +10,8 @@ WEB_BASE_DIR := $(abspath $(patsubst %/,%,$(dir $(WEB_BASE_PATH))))
 
 
 #This will get evaluated when used below
-WEB_SERVER_BASE_ENV = --link postgresql_server:DB 
-WEB_SERVER_BASE_ENV += --link elasticsearch:ES 
+WEB_SERVER_BASE_ENV = --link ${PSQL_SERVER_CONTAINER_NAME}:DB 
+WEB_SERVER_BASE_ENV += --link ${ELASTIC_CONTAINER_NAME}:ES
 WEB_SERVER_BASE_ENV += --link ${REDIS_CONTAINER_NAME}:REDIS  
 WEB_SERVER_BASE_ENV += -v ${WEB_BASE_DIR}:/opt/code 
 WEB_SERVER_BASE_ENV += -e SECRET_KEY=${SECRET_KEY}  
@@ -64,6 +64,20 @@ web-debug-run: web-debug-clean
 web-commit-from-debug:
 	docker commit -m "commit from debug server" ${WEB_CONTAINER_NAME}_debug ${WEB_TAG_NAME} 
 
+
+######################################### CELERY ####################################
+
+celery-run: celery-clean
+	#Run celery using the web container
+	docker run -d --name ${WEB_CONTAINER_NAME}_celery ${WEB_SERVER_BASE_ENV} ${WEB_TAG_NAME} bash /opt/code/server/startup_celery.sh
+
+celery-stop:
+	echo ${WEB_CONTAINER_NAME}
+	docker stop ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
+
+celery-clean: celery-stop
+	docker rm ${WEB_CONTAINER_NAME}_celery 2>/dev/null || true
+
 ####################################### DJANGO SPECIFIC #####################################
 
 django-manage:
@@ -88,4 +102,5 @@ graph-data-models:
 
 graph-p1-data-models:
 	$(MAKE) django-manage COMMAND="graph_models data -o data_models_phase_1.png"
+
 

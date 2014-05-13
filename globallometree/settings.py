@@ -130,11 +130,6 @@ INSTALLED_APPS = (
     'south',
     'crispy_forms',
 
-    #Search related apps
-    'haystack',
-    'elasticstack',
-
-    # Django CMS apps
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'cms',
     'menus',
@@ -142,6 +137,7 @@ INSTALLED_APPS = (
     'sekizai',
     'djangocms_link',
     'djangocms_file',
+    'globallometree.plugins.linkbox',
 
     # project apps
     'globallometree.apps.common',
@@ -155,10 +151,8 @@ INSTALLED_APPS = (
     'globallometree.apps.bootstrap_3_theme', #our app must got first here for overrides
     'bootstrap3', 
 
-    # 'globallometree.apps.original_theme',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
-    'globallometree.plugins.linkbox',
 
     # askbot
     'longerusername',
@@ -181,6 +175,7 @@ INSTALLED_APPS = (
     #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
     'compressor',
     'group_messaging',
+
 )
 
 
@@ -195,10 +190,27 @@ STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
 STATIC_URL = '/static/'
 
 
-#Encoding used for export and import of data
+#Encoding used for export and import of data for Allometric Equations
 DATA_EXPORT_ENCODING = 'cp1252'
 DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
-from settings_search import *
-from settings_askbot import *
-from settings_local import *
+
+#elasticutils django contrib settings
+ES_URLS = ['http://127.0.01:9200',]
+ES_INDEXES = {'default': 'globallometree'}
+
+
+#Celery
+CELERY_ACCEPT_CONTENT = ['json',]
+BROKER_URL = 'redis://localhost:6379/0'
+
+
+if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
+    print "No file: settings_local.py"
+    print "Copy settings_local.py.server to settings_local.py?"
+    raise ImportError
+else:
+    try:
+        from settings_local import *
+    except ImportError:
+        print "Probably an error in the settings_local.py file."

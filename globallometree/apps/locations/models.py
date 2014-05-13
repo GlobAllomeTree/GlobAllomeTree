@@ -214,11 +214,6 @@ class Location(models.Model):
     biome_holdridge = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
     original_ID_Location = models.IntegerField(null=True, blank=True, help_text="The original ID_Location from the global import")
 
-    def point(self):
-        # Remember, longitude FIRST!
-        if self.Longitude is not None and self.Latitude is not None:
-            return Point(float(self.Longitude), float(self.Latitude))
-        return None
 
     def __unicode__(self):
         return self.name

@@ -1,0 +1,21 @@
+<div id="currentSearch">
+   <div style="float:right"> 
+        <a target="_blank" href="/data/export/{{form.export_link}}"
+            class="btn btn-succcess" id="exportButton">
+            Export Results
+        </a>
+    </div>
+   <h3>Your current search</h3>
+   <h4>Equations found: <span id="summary-results-total"></span> </h4>
+   <table>
+       {% for item in current_search_summary %}
+           <tr>
+                <td style="width:150px;">{{item.field}}</td>
+                <td style="width:250px;">{{item.search_value|truncatechars:48 }}</td>
+                <td style="width:30px;">
+                    <a href="{{item.clear_link}}">clear</a>
+                </td>
+           </tr>
+       {% endfor %}
+   </table>
+</div>
