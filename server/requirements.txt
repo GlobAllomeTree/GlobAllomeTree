@@ -10,12 +10,6 @@ south==0.8.4
 ######################## Django Extras 
 django-crispy-forms==1.4.0
 django-extensions==1.3.3
-pygraphviz==1.2 #for shell plus graph models
-
-
-######################## Debugging
-ipdb==0.8 #Iron Python shell use: import ipdb; ipdb.set_trace() 
-
 
 
 ######################## ElasticUtils based search
@@ -26,7 +20,7 @@ redis==2.9.1
 
 
 ######################## PDF Export of Search Results 
-xhtml2pdf==0.0.5
+xhtml2pdf==0.0.6
 reportlab==2.7
 
 
@@ -46,4 +40,6 @@ djangocms-link==1.3.4
 ####################### Frontend
 django-bootstrap3==3.0.0
 
+
+####################### Testing
 mock==1.0.1

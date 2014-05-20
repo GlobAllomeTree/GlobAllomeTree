@@ -1,28 +1,27 @@
-import json
+#This looks for the secret key if it already exists
+#otherwise it writes one
+def get_secret_key():
+    with open('/opt/data/secrey_key') as f:
+        secret_key  = f.readlines()
+    return secret_key
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
-with open('/opt/env.json') as infile:
-    env = json.load(infile)
-
-DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env['POSTGRESQL_DB'],      
-        'USER': env['POSTGRESQL_USER'],        
-        'PASSWORD': env['POSTGRESQL_PASS'],                  
-        'HOST': env['DB_PORT_5432_TCP_ADDR'],
-        'PORT': env['DB_PORT_5432_TCP_PORT'], 
-    }
+SECRET_KEY = get_secret_key()
+LOGGING = {
+'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/opt/logs/django.log',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
 }
-
-
-ES_URLS = ['http://%s:%s' % (env['ES_PORT_9200_TCP_ADDR'], env['ES_PORT_9200_TCP_PORT'])]
-
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env['SECRET_KEY']
-
-#Celery Settings
-BROKER_URL = 'redis://localhost:6379/0'

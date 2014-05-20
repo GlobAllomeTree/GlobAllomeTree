@@ -7,10 +7,11 @@ gettext = lambda s: s
 PROJECT_PATH = os.path.join(os.path.dirname(__file__))
 BASE_PATH = os.path.abspath(os.path.join(PROJECT_PATH, '../'))
 
-
-ALLOWED_HOSTS = []
+DEBUG = True
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
+ALLOWED_HOSTS = ('globallometree.org', 'www.globallometree.org', 'localhost')
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -41,7 +42,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(BASE_PATH, 'media')
+MEDIA_ROOT = '/opt/data/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -147,7 +148,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 FORCE_SCRIPT_NAME = ''
 
 #Static files configuration
-STATIC_ROOT = os.path.join(BASE_PATH, 'static_collected')
+STATIC_ROOT = '/opt/data/static'
 STATIC_URL = '/static/'
 
 
@@ -167,12 +168,30 @@ CELERY_ACCEPT_CONTENT = ['json',]
 BROKER_URL = 'redis://localhost:6379/0'
 
 
+import json
+
+
+DATABASES = {
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'globallometree',      
+        'USER': 'globallometree',        
+        'PASSWORD': 'globallometree',                  
+        'HOST': '127.0.0.1',
+        'PORT': 5432, 
+    }
+}
+
+SECRET_KEY = 'KEEP_SECRET'
+
+
+
 if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
-    print "No file: settings_local.py"
-    print "Copy settings_local.py.server to settings_local.py?"
-    raise ImportError
+    print "settings_local.py not present - skipping"
 else:
     try:
         from settings_local import *
+        print "loading settings_local.py"
     except ImportError:
-        print "Probably an error in the settings_local.py file."
+        print "import error in the settings_local.py file."
+        raise

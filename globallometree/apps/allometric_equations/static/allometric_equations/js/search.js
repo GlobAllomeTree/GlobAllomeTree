@@ -5,7 +5,8 @@ window.app = {};
 
 window.app.config = {
 	//address of elastic search
-	elasticsearch :'http://localhost:9200/',
+	//elasticsearch :'http://localhost:9200/',
+	elasticsearch : '/search/',
 	index : 'globallometree',
 	type : 'allometricequation'
 }
