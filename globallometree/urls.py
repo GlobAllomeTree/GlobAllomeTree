@@ -33,6 +33,6 @@ urlpatterns = patterns(
     
     #cms urls LAST!
     url(r'^', include('cms.urls')),
-
+    url(r'^$', RedirectView.as_view(url='/home/')),
 
 )
