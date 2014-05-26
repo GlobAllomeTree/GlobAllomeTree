@@ -14,7 +14,12 @@
 
 .results-info {
     text-align:right;
-    padding:10px;
+    padding:10px 0px;
+    height:40px;
+}
+
+.result-count {
+    margin-right:10px;
 }
 
 .agg-icon {

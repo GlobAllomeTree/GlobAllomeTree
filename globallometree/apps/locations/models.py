@@ -30,6 +30,7 @@ class Country(models.Model):
     class Meta:
         verbose_name ='Country'
         verbose_name_plural = 'Countries'
+        ordering = ('common_name',)
 
 
 class BiomeFAO(models.Model):
@@ -41,6 +42,7 @@ class BiomeFAO(models.Model):
     class Meta:
         verbose_name = 'Biome FAO'
         verbose_name_plural = 'Biome FAO List'
+        ordering = ('name',)
 
 
 class BiomeUdvardy(models.Model):
@@ -52,6 +54,8 @@ class BiomeUdvardy(models.Model):
     class Meta:
         verbose_name = 'Biome Udvardy'
         verbose_name_plural = 'Biome Udvardy List'
+        ordering = ('name',)
+
 
 
 class BiomeWWF(models.Model):
@@ -63,6 +67,7 @@ class BiomeWWF(models.Model):
     class Meta:
         verbose_name = 'Biome WWF'
         verbose_name_plural = 'Biome WWF List'
+        ordering = ('name',)
 
 
 class DivisionBailey(models.Model):
@@ -74,6 +79,7 @@ class DivisionBailey(models.Model):
     class Meta:
         verbose_name = 'Division Bailey'
         verbose_name_plural = 'Division Bailey List'
+        ordering = ('name',)
 
 
 class BiomeHoldridge(models.Model):
@@ -85,6 +91,7 @@ class BiomeHoldridge(models.Model):
     class Meta:
         verbose_name = 'Biome Holdridge'
         verbose_name_plural = 'Biome Holdridge List'
+        ordering = ('name',)
 
 
 class LocationGroup(models.Model):    
@@ -217,3 +224,7 @@ class Location(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name',)
+

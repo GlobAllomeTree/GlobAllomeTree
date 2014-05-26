@@ -5,13 +5,12 @@ window.app.listController = function () {
 	//Only use safe Javascript
 	"use strict";
 	var $el, $resultsInfo, $resultsList;
-	var page = 0;
-	var resultsPerPage = 20;
+	var currentPage = 0;
+	var resultsPerPage = 50;
 	var totalResults;
 	var showingUntil = 0;
 
-	var resultTemplate = '';
-	resultTemplate  = '<div class="panel panel-default"">							\
+	var resultTemplate  = '<div class="panel panel-default"">							\
 							<div class="panel-heading">								\
 								<h3 class="panel-title">Equation ID {{ID}}</h3>		\
 							</div>													\
@@ -38,7 +37,9 @@ window.app.listController = function () {
 	var init = function (params) {
 		//Get the element where we will render the list results
 		$el = $('#' + params['el']);	
-		$el.append('<div class="results-info"></div><div id="results-list"></div><div class="results-info"></div>');
+		$el.append('<div class="results-info"></div>		\
+					<div id="results-list"></div>			\
+					<div id="results-info-bottom" class="results-info"></div>');
 		$resultsInfo = $('.results-info', $el);
 		$resultsList = $('#results-list', $el);
 		loadPage();
@@ -46,17 +47,54 @@ window.app.listController = function () {
 
 	var loadPage = function() {
 		var sm = window.app.searchManager;   
+
+		var from = currentPage * resultsPerPage;
         sm.search({
-            query : sm.getQuery(),
+        	//Get the current query and paginate it
+            query : sm.getQuery().from(from).size(resultsPerPage),
             success : handleResponse
         });
+
+        currentPage += 1;
 	}
 
 	var updateResultsInfo = function () {
+		$resultsInfo.css('visibility', 'visible').html('');
 		//Not totally clean, but update the search summary 
 		//which is outside this view
 		$('#summary-results-total').html(totalResults);
-		$resultsInfo.html('Showing results 1 to ' +  15 + ' out of ' + totalResults); 
+
+		if(totalResults < 5) {
+			$('#results-info-bottom').hide();
+		}
+		if(totalResults == 0) {
+			$resultsInfo.append('<p class="pull-left">No results were found for your query</p>');
+			return;
+		}
+		
+
+		var resultsShownCount = currentPage * resultsPerPage;
+		if(resultsShownCount > totalResults) {
+			resultsShownCount = totalResults;
+		}
+
+		if(resultsShownCount < totalResults) {
+			var numToLoad = resultsPerPage;
+			if (resultsShownCount > (totalResults - resultsPerPage)) {
+				numToLoad = totalResults - resultsShownCount;
+			}			
+			$resultsInfo.append(' <button type="button" class="load-more-button btn btn-info btn-xs pull-right">Load next '+ numToLoad + '</span>  </button>')
+		
+			$('.load-more-button').click(function() {
+				var anchorName = 'results-'+ (resultsShownCount + 1);
+				$resultsList.append('<div id="'+ anchorName +'" class="alert alert-info">Results ' + (resultsShownCount + 1) + ' to ' +  (resultsShownCount + numToLoad) + '</div>');
+				loadPage();
+				$resultsInfo.css('visibility', 'hidden');
+				$("html, body").animate({ scrollTop: $('#' + anchorName).offset().top - 20 }, 500);
+			});
+		}
+		$resultsInfo.append('<p class="result-count pull-right">Showing results 1 to ' +  resultsShownCount + ' out of ' + totalResults + "</p>"); 
+
 	}
 
 	var handleResponse = function(response) {
