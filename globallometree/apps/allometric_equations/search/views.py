@@ -81,8 +81,7 @@ class SearchView(TemplateView):
             if self.form.cleaned_data.get(field, False): 
                 current_search.append( {'field' : self.form.fields[field].label,
                                         'search_value' :  self.form.cleaned_data.get(field),
-                                        'clear_link'   :  self.get_query_string({
-                                         })
+                                        'clear_link'   :  self.get_query_string({ field : None})
                                     })
         return current_search     
  
@@ -95,10 +94,11 @@ class SearchView(TemplateView):
         query_string = ''
         first = True
        
-        
-        
         for field in using_values.keys():
-            query_dict[field] = using_values[field]
+            if using_values[field] is None:
+                del query_dict[field]
+            else:
+                query_dict[field] = using_values[field]
             
         if export and 'page' in query_dict.keys():
             del query_dict['page']
@@ -111,5 +111,8 @@ class SearchView(TemplateView):
                 c = '&'
                 
             query_string += '%s%s=%s' % (c, field, query_dict[field])
-                    
+          
+        if not len(query_string):
+            query_string = '?'
+
         return query_string

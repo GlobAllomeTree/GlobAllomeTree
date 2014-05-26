@@ -203,7 +203,7 @@ window.app.mapController = function() {
 				.precision(precision)
 				.aggregation(
 					ejs.TermsAggregation('geohashes')
-						.script("doc['Locations'].value.geohash")
+						.script("locations_geohash")
 				)
 		);
 
@@ -214,19 +214,19 @@ window.app.mapController = function() {
 				)
 				.aggregation(
 					ejs.MinAggregation('min_lat')
-						.script("doc['Locations'].value.lat")
+						.script("locations_latitude")
 				)
 				.aggregation(
 					ejs.MaxAggregation('max_lat')
-						.script("doc['Locations'].value.lat")
+						.script("locations_latitude")
 				)
 				.aggregation(
 					ejs.MinAggregation('min_lon')
-						.script("doc['Locations'].value.lon")
+						.script("locations_longitude")
 				)
 				.aggregation(
 					ejs.MaxAggregation('max_lon')
-						.script("doc['Locations'].value.lon")
+						.script("locations_longitude")
 				)
 		);
 

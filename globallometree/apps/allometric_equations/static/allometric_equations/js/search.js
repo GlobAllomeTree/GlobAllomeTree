@@ -20,18 +20,14 @@ window.app.searchManager = function (){
 	var searchDict;
 	var termFilterKeys = [  'Ecosystem', 
 							'Population',
-							//Taxonomy
 							'Genus',
 							'Species',
-							//Location
 							'Country',
 							'Biome_HOLDRIDGE',
 							'Biome_UDVARDY',
 							'Biome_FAO',
 							'Biome_WWF',
 							'Division_BAILEY',
-							//Reference
-							//Reference
 							'Author',
 							'Reference',
 							'Year'];
@@ -89,15 +85,6 @@ window.app.searchManager = function (){
 		
 	}
 	
-	var getMappingForField = function (key) {
-		var properties = window.app.config.mapping.properties;
-		try {
-			return properties[key];
-		} catch (e) {
-			return false;
-		}
-	}
-
 	var getQuery = function (params) {
 		
 		if (!params) { params = {};}
