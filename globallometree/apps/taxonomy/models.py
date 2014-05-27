@@ -8,7 +8,8 @@ class Family(models.Model):
 
     class Meta:
         verbose_name_plural = 'Families'
-
+        ordering = ('name',)
+        
     def __unicode__(self):
         return self.name
 
@@ -21,6 +22,7 @@ class Genus(models.Model):
 
     class Meta:
         verbose_name_plural = 'Genera'
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name
@@ -38,6 +40,7 @@ class Species(models.Model):
 
     class Meta:
         verbose_name_plural = 'Species'
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name

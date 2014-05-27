@@ -11,7 +11,7 @@ DEBUG = True
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
-ALLOWED_HOSTS = ('globallometree.org', 'www.globallometree.org', 'localhost')
+ALLOWED_HOSTS = ('globallometree.org', 'www.globallometree.org')
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

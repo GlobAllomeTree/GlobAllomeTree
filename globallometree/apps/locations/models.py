@@ -11,18 +11,12 @@ class Continent(models.Model):
 class Country(models.Model):
     common_name = models.CharField(max_length=159, blank=True)
     formal_name = models.CharField(max_length=159, blank=True)
-    type = models.CharField(max_length=69, blank=True)
-    sub_type = models.CharField(max_length=102, blank=True)
-    sovereignty = models.CharField(max_length=72, blank=True)
-    capital = models.CharField(max_length=234, blank=True)
-    iso_4217_currency_code = models.CharField(max_length=33, blank=True)
-    iso_4217_currency_name = models.CharField(max_length=42, blank=True)
-    telephone_code = models.CharField(max_length=48, blank=True)
     iso_3166_1_2_letter_code = models.CharField(max_length=6, blank=True)
     iso_3166_1_3_letter_code = models.CharField(max_length=9,blank=True)
     iso_3166_1_number = models.IntegerField(null=True, blank=True)
-    iana_country_code_tld = models.CharField(max_length=33, blank=True)
     continent = models.ForeignKey(Continent, blank=True, null=True)
+    centroid_latitude = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=5)
+    centroid_longitude = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=5)
 
     def __unicode__(self):
         return self.common_name

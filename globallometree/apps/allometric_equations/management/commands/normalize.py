@@ -1,5 +1,10 @@
+import os
 import sys
+import csv
+import codecs
 
+from django.db import transaction
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from globallometree.apps.data.models import TreeEquation
 from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
@@ -14,6 +19,9 @@ class Command(BaseCommand):
     help = 'Imports from the old data.TreeEquation model to the new normalized structure'
 
     def handle(self,*args, **options):
+
+        country_data = self.load_countries_csv()
+
         if len(args) == 1:
             limit = int(args[0])
         elif len(args) > 1:
@@ -44,7 +52,7 @@ class Command(BaseCommand):
 
             print n, 'out of', total, '\r',
             sys.stdout.flush()
-
+            
             if orig_equation.Family is None:
                 family = None
             else:
@@ -120,22 +128,24 @@ class Command(BaseCommand):
             if orig_equation.Country is None:
                 country = None
             else:
-                country = Country.objects.get_or_create(
+                country, created = Country.objects.get_or_create(
                     common_name=orig_equation.Country.common_name,
                     formal_name=orig_equation.Country.formal_name,
-                    type=orig_equation.Country.type,
-                    sub_type=orig_equation.Country.sub_type,
-                    sovereignty=orig_equation.Country.sovereignty,
-                    capital=orig_equation.Country.capital,
-                    iso_4217_currency_code=orig_equation.Country.iso_4217_currency_code,
-                    iso_4217_currency_name=orig_equation.Country.iso_4217_currency_name,
-                    telephone_code=orig_equation.Country.telephone_code,
                     iso_3166_1_2_letter_code=orig_equation.Country.iso_3166_1_2_letter_code,
                     iso_3166_1_3_letter_code=orig_equation.Country.iso_3166_1_3_letter_code,
                     iso_3166_1_number=orig_equation.Country.iso_3166_1_number,
-                    iana_country_code_tld=orig_equation.Country.iana_country_code_tld,
                     continent=continent
-                )[0]
+                )
+
+                if created:
+                    #save looping over this every time
+                    for cd_row in country_data:
+                        if cd_row['ISO3166A3'] == orig_equation.Country.iso_3166_1_3_letter_code:
+                            country.centroid_latitude = cd_row['latitude']
+                            country.centroid_longitude = cd_row['longitude']    
+                            country.save()
+                            break
+                        
 
             location, location_created = Location.objects.get_or_create(
                 original_ID_Location=orig_equation.ID_Location,
@@ -284,3 +294,17 @@ class Command(BaseCommand):
             )
         )
 
+    def load_countries_csv(self):
+        #csv file with country lats/lons
+        csv_file_path = os.path.join(settings.BASE_PATH, 'globallometree', 'apps', 'locations', 'resources', 'cow.txt')
+        headers = []
+        countries = []
+        with codecs.open(csv_file_path, 'r', encoding='latin-1') as csv_file:
+            for row in csv_file:
+                if not len(headers):
+                    headers = row.split('\t')
+                    continue
+                row_fields = row.replace('\r', '').split('\t')
+                row_fields = [v.strip() for v in row_fields]
+                countries.append(dict(zip(headers, row_fields)))
+        return countries

@@ -22,12 +22,19 @@ class Population(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ('name',)
+
 
 class Ecosystem(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
+
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name',)
 
 
 class Submission(models.Model):

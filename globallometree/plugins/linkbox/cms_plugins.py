@@ -20,6 +20,7 @@ class LinkBoxPlugin(CMSPluginBase):
             'placeholder':placeholder,
             'link':link
         })
+
         return context 
  
 plugin_pool.register_plugin(LinkBoxPlugin)

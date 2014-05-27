@@ -1,0 +1,35 @@
+
+-------------------------- cow.txt ------------------------------
+Countries of the World 
+http://opengeocode.org/download/cow.php
+Western Latin 1 encoding
+delimiter = ;
+
+# Countries of the World (COW)
+# Created by OpenGeoCode.Org, Submitted into the Public Domain August 10, 2012 (version 11)
+#
+# Abbreviations:
+# ISO : International Standards Organization
+# BGN : U.S. Board on Geographic Names
+# UNGEGN : United Nations Group of Experts on Geographic Names
+# PCGN: U.K. Permanent Committee on Geographic Names
+# UN : United Nations
+# FAO : Food and Agriculture Organization of the United Nations
+# FIPS : Federal Information Processing Standard
+# EKI : Institute of Estonian Language
+#
+# Metadata (one entry per line)
+# ISO 3166-1 alpha-2; ISO 3166-1 alpha-3; ISO 3166-1 numeric; FIPS 10-4 country code;
+# ISO 3166-1 English short name (Gazetteer order); ISO 3166-1 English short name (proper reading order); ISO 3166-1 English romanized short name (Gazetteer order); ISO 3166-1 English romanized short name (proper reading oorder);
+# ISO 3166-1 French short name (Gazetteer order); ISO 3166-1 French short name (proper reading order); ISO 3166-1 Spanish short name (Gazetteer order);
+# UNGEGN English short name; UNGEGN English formal name; UNGEGN French short name; UNGEGN French formal name; UNGEGN Spanish short name; UNGEGN Spanish formal name; # UNGEGN Russian cyrillic short name; UNGEGN Russian cyrillic formal name; UNGEGN local romanized short name; UNGEGN local romanized formal name;
+# BGN English short name (Gazetteer order); BGN English short name (proper reading order); BGN English long name; BGN local short name; BGN local long name
+# PCGN English short name (Gazetteer order); PCGN English short name (proper reading order); PCGN English long name;
+# FAO Italian short name (Gazetteer order); FAO Italian short name (proper reading order); FAO Italian long name;
+# EKI Estonian short name (Gazetteer order); EKI Estonian official name (proper reading order); # Conventional Abbreviation for country name;
+# has capital city; BGN English capital city name; UNGEGN local capital city name; UN terms English capital city name; UN terms French capital city name; UN terms Spanish capital city name; UN terms Russian cyrillic capital city name; EKI capital city name; BGN capital latitude; BGN capital longitude; UNGEGN capital latitude; UNGEGN capital longitude;
+# continent; subcontinent; ISO 3166-1 numeric region code; ISO 3166-1 numeric subregion code;
+# official languages; population; population-year; nationality (noun); nationality (adjective); international dialing code; international vehicle code;
+# land; water; land mass (land+water); country latitude; country longitude; country maximum latitude; country minimum latitude; country maximum longitude; country minimum longitude;
+# government portal website; national statistics website; national geographic information system website; national postal service website
+#

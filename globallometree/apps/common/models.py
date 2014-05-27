@@ -8,12 +8,18 @@ class DataReference(models.Model):
     reference = models.TextField(null=True, blank=True)
     original_ID_REF = models.IntegerField(null=True, blank=True)
 
+    class Meta:
+        ordering = ('label',)
+
     def __unicode__(self):
         return unicode(('' if self.year is None else self.year + ' ') + self.author)
 
 
 class Institution(models.Model):
     name = models.CharField(max_length=150, null=True, blank=True)
+
+    class Meta:
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name
