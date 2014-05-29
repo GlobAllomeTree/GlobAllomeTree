@@ -5,8 +5,8 @@ def get_secret_key():
         secret_key  = f.readlines()[0].replace('\n', '')
     return secret_key
 
-
-DEBUG=False
+#Change to false before actual launch
+DEBUG=True
 
 SECRET_KEY = get_secret_key()
 LOGGING = {

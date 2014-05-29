@@ -1,8 +1,9 @@
-FROM tomgruner/globallometree-base-web
+FROM tomgruner/docker-base
 
 MAINTAINER Thomas Gruner "tom.gruner@gmail.com"
 
 #Install the requirements first to keep image changes as minimal as possible
+#This takes advantage of the caching mechanism
 ADD ./server/requirements.txt  /tmp/requirements.txt
 RUN pip install -vr /tmp/requirements.txt --allow-external pyPdf --allow-unverified pyPdf
 

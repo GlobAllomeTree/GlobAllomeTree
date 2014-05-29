@@ -10,9 +10,18 @@ window.app.listController = function () {
 	var totalResults;
 	var showingUntil = 0;
 
-	var resultTemplate  = '<div class="panel panel-default"">							\
+	var resultTemplate  = '<div class="panel panel-default"">						\
 							<div class="panel-heading">								\
-								<h3 class="panel-title">Equation ID {{ID}}</h3>		\
+								<a href="/allometric-equations/{{ID}}/"				\
+								   class="btn btn-default pull-right btn-xs"> 		\
+									Detailed information 							\
+									<span class="glyphicon glyphicon-chevron-right"></span> \
+								</a>												\
+								<h3 class="panel-title">							\
+									<a href="/allometric-equations/{{ID}}/">		\
+										Equation ID {{ID}}							\
+									</a>											\
+								</h3>												\
 							</div>													\
 							<div class="panel-body">								\
 								<dl class="dl-horizontal">							\

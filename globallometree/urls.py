@@ -18,7 +18,7 @@ urlpatterns = patterns(
     
     #redirects from removed pages
     url(r'^data/search', RedirectView.as_view(url=reverse_lazy('equation_search'))),
-
+    url(r'^data/submit-data/', RedirectView.as_view(url=reverse_lazy('equations_upload'))),
     #cms urls LAST!
     url(r'^', include('cms.urls')),
 

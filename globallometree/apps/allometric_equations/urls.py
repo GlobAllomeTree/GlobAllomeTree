@@ -8,7 +8,7 @@ urlpatterns = patterns('apps.allometric_equations.views',
 
     url(r'^export/$', 'export'),
             
-    url(r'^submit$', SubmissionView.as_view()),
+    url(r'^submit$', SubmissionView.as_view(), name='equations_upload'),
     url(r'^submit/complete/$', SubmissionCompleteView.as_view()),
 
     #Single equation
