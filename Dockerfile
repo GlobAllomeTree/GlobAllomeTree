@@ -7,6 +7,8 @@ MAINTAINER Thomas Gruner "tom.gruner@gmail.com"
 ADD ./server/requirements.txt  /tmp/requirements.txt
 RUN pip install -vr /tmp/requirements.txt --allow-external pyPdf --allow-unverified pyPdf
 
+RUN mkdir -p /opt/logs/
+
 # install our code
 # add from repository root
 ADD . /opt/code/ 

@@ -1,3 +1,3 @@
 
 build:
-	docker build -t tomgruner/globallometree-web .
+	docker build -t tomgruner/globallometree .
