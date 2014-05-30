@@ -5,7 +5,6 @@ window.app = {};
 
 window.app.config = {
 	//address of elastic search
-	//elasticsearch :'http://localhost:9200/',
 	elasticsearch : '/search/',
 	index : 'globallometree',
 	type : 'allometricequation'
@@ -78,7 +77,7 @@ window.app.searchManager = function (){
 		
 		$.ajax({
 			type: "POST",
-			url: 'http://localhost:9200/globallometree/allometricequation/_search',
+			url: window.app.config.search,
 			data: JSON.stringify(params['query'].toJSON()),
 			success: params['success']
 		});
