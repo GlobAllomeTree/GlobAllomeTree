@@ -45,7 +45,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/opt/data/media'
+MEDIA_ROOT = '/opt/data/web/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -68,6 +68,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'cms.context_processors.cms_settings',
     'sekizai.context_processors.sekizai',
+    'globallometree.apps.common.context_processors.template_settings'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -151,7 +152,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 FORCE_SCRIPT_NAME = ''
 
 #Static files configuration
-STATIC_ROOT = '/opt/data/static'
+STATIC_ROOT = '/opt/data/web/static'
 STATIC_URL = '/static/'
 
 
@@ -165,13 +166,14 @@ DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 ES_URLS = ['http://127.0.01:9200',]
 ES_INDEXES = {'default': 'globallometree'}
 
+#Search url is the url that the browser sends requests to
+#It should be the public url of the proxy server
+SEARCH_URL = 'http://127.0.0.1:9200'
 
 #Celery
 CELERY_ACCEPT_CONTENT = ['json',]
 BROKER_URL = 'redis://localhost:6379/0'
 
-
-import json
 
 
 DATABASES = {

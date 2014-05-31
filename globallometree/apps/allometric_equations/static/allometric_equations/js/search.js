@@ -1,15 +1,5 @@
 
 
-//Declare a global namespace for our app
-window.app = {};
-
-window.app.config = {
-	//address of elastic search
-	elasticsearch : '/search/',
-	index : 'globallometree',
-	type : 'allometricequation'
-}
-
 //Add in functionality for searching
 window.app.searchManager = function (){
 	
@@ -77,7 +67,7 @@ window.app.searchManager = function (){
 		
 		$.ajax({
 			type: "POST",
-			url: window.app.config.search,
+			url: window.app.config.search_url + '/globallometree/allometricequation/_search',
 			data: JSON.stringify(params['query'].toJSON()),
 			success: params['success']
 		});

@@ -1,4 +1,4 @@
-
+from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import patterns, url, include
 from django.views.generic import RedirectView
@@ -21,5 +21,5 @@ urlpatterns = patterns(
     url(r'^data/submit-data/', RedirectView.as_view(url=reverse_lazy('equations_upload'))),
     #cms urls LAST!
     url(r'^', include('cms.urls')),
-
 )
+
