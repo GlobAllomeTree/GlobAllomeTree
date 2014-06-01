@@ -32,7 +32,6 @@ class AllometricEquationIndex(MappingType, Indexable):
         """Returns an Elasticsearch mapping for this MappingType"""
         mapping = {
             'properties': {
-                'Keywords' :        estype_string_analyzed,
                 'ID':               estype_integer,
                 'Population' :      estype_string_not_analyzed,
                 'Ecosystem' :       estype_string_not_analyzed,
@@ -120,39 +119,6 @@ class AllometricEquationIndex(MappingType, Indexable):
             return getattr(obj, field)
         else:
             raise Exception("No model field or prepare method found for field %s" % field)
-
-       
-
-    @classmethod
-    def prepare_Keywords(cls, obj):
-        """ Return keywords for the document, this uses the mapping to 
-            generate a list of keywords based on all fields of string type 
-            or fields in include_list
-            """
-        keywords = u''
-        mapping = cls.get_mapping()['properties']
-        #Create the document dynamically using the mapping, obj, and prepare methods
-        
-        #String types to skip (Keywords is skipped to avoid recursion)
-        skip_list = ['Keywords', 'Equation']
-        
-        #Non string types to include
-        include_list = ['Year',]
-
-        for field in mapping.keys():
-            if field in skip_list:
-                continue
-            if mapping[field]['type'] == 'string' or field in include_list:
-                value = cls.get_field_value(obj, field)
-                if type(value) == list:
-                    keywords += " ".join([v for v in value if v]) + u" "
-                elif value:
-                    keywords += unicode(value) + u" "
-
-        keywords = " ".join([k for k in keywords.split(' ') if len(k) > 2])
-        keywords = keywords.replace('.', '')
-        keywords = keywords.replace(',', '')
-        return keywords
 
     @classmethod
     def prepare_Ecosystem(cls, obj):

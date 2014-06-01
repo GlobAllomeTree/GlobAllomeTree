@@ -3,12 +3,12 @@ window.app.mapController = function() {
 	"use strict";
 	
 	var ES_THROTTLE_RATE = 500; //In ms
-	var el;
-	var map;
-	var param;
+	var el;	//dom element to show the map in, used by the init function
+	var map; //reference to the leaflet map
 	var markers;
 	var dragTimer;
 	var initialized = false;
+	var initialMapBoundsFit = false;
 	
 	
 	// These are the default map bounds for the world
@@ -85,8 +85,7 @@ window.app.mapController = function() {
 		//The map object
 		map = L.map(el, {
 			minZoom: 2,
-			maxZoom: 15,
-			maxBounds : [[90, -180], [-90, 180]]
+			maxZoom: 15
 		});
 
 		markers = L.featureGroup().addTo(map);
@@ -124,73 +123,6 @@ window.app.mapController = function() {
 		});
 
 	}
-	
-	
-
-	//Modified from:
-	//http://jsfiddle.net/sowelie/3JbNY/
-	//Modifies the Leaflet Marker to have a native hover window
-	//Ensures that hover continues even when moving mouse over symbol text
-	var CustomMarker = L.Marker.extend({
-		bindPopup: function(htmlContent, options) {
-			if (options && options.showOnMouseOver) {
-				//call the super method
-				L.Marker.prototype.bindPopup.apply(this, [htmlContent, options]);
-				//Default behavior shows popup on click
-				//Turn that off so that we only popup on hover.
-				this.off("click", this.openPopup, this);
-				// bind to mouse over
-				this.on("mouseover", function(e) {
-					// get the element that the mouse hovered onto
-					var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
-					var parent = this._getParent(target, "leaflet-popup");
-					// check to see if the element is a popup, and if it is this marker's popup
-					if (parent == this._popup._container)
-						return true;
-					// show the popup
-					this.openPopup();
-				}, this);
-				
-				// and mouse out
-				this.on("mouseout", function(e) {
-					// get the element that the mouse hovered onto
-					var target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
-					// check to see if the element is a popup
-					if (this._getParent(target, "leaflet-popup")) {
-						L.DomEvent.on(this._popup._container, "mouseout", this._popupMouseOut, this);
-						return true;
-					}
-					// hide the popup
-					this.closePopup();
-				}, this);
-			}
-		},
-		
-		_popupMouseOut: function(e) {
-			// detach the event
-			L.DomEvent.off(this._popup, "mouseout", this._popupMouseOut, this);
-			// get the element that the mouse hovered onto
-			var target = e.toElement || e.relatedTarget;
-			// check to see if the element is a popup
-			if (this._getParent(target, "leaflet-popup"))
-				return true;
-			// check to see if the marker was hovered back onto
-			if (target == this._icon)
-				return true;
-			// hide the popup
-			this.closePopup();
-		},
-		
-		_getParent: function(element, className) {
-			var parent = element.parentNode;
-			while (parent !== null) {
-				if (parent.className && L.DomUtil.hasClass(parent, className))
-					return parent;
-				parent = parent.parentNode;
-			}
-			return false;
-		}
-	});
 	
 
 	function getGeoAggregations(precision) {
@@ -236,18 +168,39 @@ window.app.mapController = function() {
 	
 	/**
 	* Adds allometric aggregations to the map
-	* @param {json} return object from an Elastic Search query 
+	* @param {data} return object from an Elastic Search query 
 	*/
 	function addToMap (data) {
 		markers = L.featureGroup();
 		var i;
 		var aggs = data.aggregations['Locations-Grid'].buckets;
 		
-		//Updates the map bounds object that contains all of the request points
-		mapBounds = [
-			[data.aggregations['Locations-Bounds']['min_lat'].value, data.aggregations['Locations-Bounds']['min_lon'].value],
-			[data.aggregations['Locations-Bounds']['max_lat'].value, data.aggregations['Locations-Bounds']['max_lon'].value]
-		];
+		if(!initialMapBoundsFit) {
+			var min_lat = data.aggregations['Locations-Bounds']['min_lat'].value;
+			var min_lon = data.aggregations['Locations-Bounds']['min_lon'].value;
+			var max_lat = data.aggregations['Locations-Bounds']['max_lat'].value;
+			var max_lon = data.aggregations['Locations-Bounds']['max_lon'].value;
+
+			//Keep the initial map bounds from being to small
+			var diff = 5 - Math.abs(max_lon - min_lon);
+			if(diff > 0) {
+				diff = diff / 2;
+				max_lon += diff;
+				min_lon -= diff;
+				max_lat += diff;
+				min_lat -= diff;
+			}
+
+			//Updates the map bounds object that contains all of the request points
+			mapBounds = [
+				[min_lat, min_lon],
+				[max_lat, max_lon]
+			];
+
+			map.fitBounds(mapBounds, {padding: [50, 50]});
+			initialMapBoundsFit = true;
+		}
+
 		
 		for (i=0;i<aggs.length;i++) {
 			var html = "";
@@ -352,7 +305,7 @@ window.app.mapController = function() {
 				//var aggLat = aggLatLon.latitude[2]; //center of bucket
 				//var aggLon = aggLatLon.longitude[2]; //center of bucket 
 
-				var marker = new CustomMarker([
+				var marker = new L.Marker([
 					avgLat,
 					avgLon
 				], {
@@ -371,7 +324,9 @@ window.app.mapController = function() {
 				markers.addLayer(marker);
 			}
 		}
+		
 		map.addLayer(markers);
+
 	}
 	
 	/**

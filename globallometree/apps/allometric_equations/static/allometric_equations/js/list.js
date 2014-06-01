@@ -19,7 +19,7 @@ window.app.listController = function () {
 								</a>												\
 								<h3 class="panel-title">							\
 									<a href="/allometric-equations/{{ID}}/">		\
-										Equation ID {{ID}}							\
+										Equation {{ID}}							\
 									</a>											\
 								</h3>												\
 							</div>													\
@@ -29,16 +29,16 @@ window.app.listController = function () {
 								  <dd><code>{{Equation}}</code></dd>				\
 								 													\
 								  <dt><small>FAO Biomes</small></dt>				\
-								  <dd><small>{{Biome_FAO}}</small></dd>   			\
+								  <dd><small>{{Biome_FAO}}&nbsp;</small></dd>   			\
 								 													\
 								  <dt><small>Species</small></dt>					\
-								  <dd><small>{{Species}}</small></dd>				\
+								  <dd><small>{{Species}}&nbsp;</small></dd>				\
 								  								 					\
 								  <dt><small>Countries</small></dt>					\
-								  <dd><small>{{Country}}</small></dd>				\
+								  <dd><small>{{Country}}&nbsp;</small></dd>				\
 								  													\
 								  <dt><small>Year</small></dt>						\
-								  <dd><small>{{Year}}</small></dd>					\
+								  <dd><small>{{Year}}&nbsp;</small></dd>					\
 								</dl>												\
 							</div>													\
 					   </div>';

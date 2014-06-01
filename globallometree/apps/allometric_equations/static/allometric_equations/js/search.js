@@ -7,53 +7,60 @@ window.app.searchManager = function (){
 	"use strict";
 
 	var searchDict;
-	var termFilterKeys = [  'Ecosystem', 
-							'Population',
-							'Genus',
-							'Species',
-							'Country',
-							'Biome_HOLDRIDGE',
-							'Biome_UDVARDY',
-							'Biome_FAO',
-							'Biome_WWF',
-							'Division_BAILEY',
-							'Author',
-							'Reference',
-							'Year'];
 
-		//Components
-		// B : 'term',
-		// Bd : 'term',
-		// Bg : 'term',
-		// Bt : 'term',
-		// L : 'term',
-		// Rb : 'term',
-		// Rf : 'term',
-		// Rm : 'term',
-		// S : 'term',
-		// T : 'term',
-		// F : 'term',
-		// //Input/Output
-		// U : 'term',
-		// V : 'term',
-		// W : 'term',
-		// X : 'term',
-		// Z : 'term',
-		// Unit_U : 'term',
-		// Unit_V : 'term',
-		// Unit_W : 'term',
-		// Unit_X : 'term',
-		// Unit_Y : 'term',
-		// Unit_Z : 'term',
-		// Min_X__gte : 'term',
-		// Max_X__gte : 'term',
-		// Min_Z__gte : 'term',
-		// Max_Z__gte : 'term',
-		// Output : 'term',
-		// Min_X__lte : 'term',
-		// Max_X__lte : 'term',
-		// Min_Z__lte : 'term',
-		// Max_Z__lte : 'term',
+	//Simple term filters which can be string or boolean mapping types
+	//When boolean 0,f alse, off, no and and empty string are false 
+	var termFilterKeys = [  
+		'Ecosystem', 
+		'Population',
+		'Genus',
+		'Species',
+		'Country',
+		'Biome_HOLDRIDGE',
+		'Biome_UDVARDY',
+		'Biome_FAO',
+		'Biome_WWF',
+		'Division_BAILEY',
+		'Author',
+		'Reference',
+		'Year',
+		'B',
+		'Bd',
+		'Bg',
+		'Bt',
+		'L',
+		'Rb',
+		'Rf',
+		'Rm',
+		'S',
+		'T',
+		'F',
+		'U',
+		'V',
+		'W',
+		'X',
+		'Z',
+		'Unit_U', 
+		'Unit_V',
+		'Unit_W',
+		'Unit_X',
+		'Unit_Y',
+		'Unit_Z',
+		'Output'
+	];
+
+	//range filters
+	var rangeFilterKeys = [
+		'Min_X__gte',
+		'Max_X__gte',
+		'Min_Z__gte',
+		'Max_Z__gte',
+		'Min_X__lte',
+		'Max_X__lte',
+		'Min_Z__lte',
+		'Max_Z__lte'
+	]
+
 		// //Allometry
 		// Equation : 'term',
 		
@@ -75,15 +82,20 @@ window.app.searchManager = function (){
 	}
 	
 	var getQuery = function (params) {
-		
+		//This base getQuery function is called by both the map and 
+		//list views
+		//The map view sometimes needs to pass a more restrictive bounding box
 		if (!params) { params = {};}
 			
 		//Set the query and filters
 		var dict = searchDict;
 		var filters = [];
 
+		//If there is a keyword search, we match _all
+		//which is a special field in elastic search that has
+		//text indexed from all of the other fields and is available by default
 		if (searchDict['q']) {
-			var keywordQuery = ejs.MatchQuery("Keywords", searchDict['q']).type('phrase');
+			var keywordQuery = ejs.MatchQuery("_all", searchDict['q']);
 		} else {
 			var keywordQuery = ejs.MatchAllQuery();
 		}
@@ -100,13 +112,31 @@ window.app.searchManager = function (){
 			)
 		}	
 
-		//Simple term filters
+		if (searchDict['Equation']) {
+			filters.push(ejs.RegexpFilter('Equation', searchDict['Equation']))
+		}
+
 		for (var key in searchDict) {
-			if($.inArray(key, termFilterKeys)) {
-				var searchValue = searchDict[key];
+			var searchValue = searchDict[key];
+			//Simple term filters
+			if($.inArray(key, termFilterKeys) != -1) {		
 				filters.push(ejs.TermFilter(key, searchValue));
 			}
+			//Range filters
+			if($.inArray(key, rangeFilterKeys) != -1) {
+				//Key is assumed to look like fieldname__gte
+				var parts = key.split('__')
+				var field = parts[0];
+				var filterTypeName = parts[1];
+				if (filterTypeName == 'gte') {
+					filters.push(ejs.RangeFilter(field).gte(searchValue))
+				} else if (filterTypeName == 'lte') {
+					filters.push(ejs.RangeFilter(field).lte(searchValue))
+				}
+			}
+
 		}
+
 
 		//Allow a custom bounding box to be passed in from the map
 		//to further limit results
