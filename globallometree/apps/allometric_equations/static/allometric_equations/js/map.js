@@ -524,7 +524,7 @@ window.app.mapController = function() {
 				var html = getMarkerSummaryHTML(data);
 				html += '<h5>Summary Area</h5>';
 				html += '<p style="margin-top:0px;"> Country summary for <strong>' + country + '</strong>.<br>';
-				html += 'Only includes results in this country that do not have a precise latitude or longitude </p>';
+				html += '<small>Only includes results in this country that do not have a precise latitude or longitude</small></p>';
 				popup.setContent(html);
 			}
 		});
