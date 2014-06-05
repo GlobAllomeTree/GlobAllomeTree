@@ -503,7 +503,6 @@ window.app.mapController = function() {
 		//grab the country value that was patched onto the marker
 		var country =  marker.country;
 
-		
 		var query = window.app.searchManager.getQuery({
 			aggregations : [
 				ejs.TermsAggregation('Species').field('Genus_Species'),

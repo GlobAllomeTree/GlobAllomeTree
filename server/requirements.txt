@@ -1,13 +1,6 @@
 #Python Library Requirements File
 
 
-######################## Django Core 
-django==1.6.2
-psycopg2==2.5.2 #Requires the ubuntu package libpq-dev to be installed
-south==0.8.4
-gunicorn==18.0
-
-
 ######################## Django Extras 
 django-crispy-forms==1.4.0
 django-extensions==1.3.3

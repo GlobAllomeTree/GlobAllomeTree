@@ -1,0 +1,8 @@
+######################## Django Core 
+django==1.6.2
+psycopg2==2.5.2 #Requires the ubuntu package libpq-dev to be installed
+south==0.8.4
+gunicorn==18.0
+
+####################### Testing
+mock==1.0.1

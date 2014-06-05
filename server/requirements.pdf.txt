@@ -1,0 +1,5 @@
+
+######################## PDF Export of Search Results 
+xhtml2pdf==0.0.6
+reportlab==2.7
+
