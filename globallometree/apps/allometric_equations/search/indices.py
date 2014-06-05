@@ -40,6 +40,7 @@ class AllometricEquationIndex(MappingType, Indexable):
                 'Genus_Species':    estype_string_not_analyzed,
                 'Locations' :       estype_geopoint_geohashed,
                 'Country' :         estype_string_not_analyzed,
+                'Country_3166_3' :  estype_string_not_analyzed,
                 'Biome_FAO' :       estype_string_not_analyzed,
                 'Biome_UDVARDY' :   estype_string_not_analyzed,
                 'Biome_WWF' :       estype_string_not_analyzed,
@@ -75,7 +76,11 @@ class AllometricEquationIndex(MappingType, Indexable):
                 'Equation' :        estype_string_not_analyzed, 
                 'Author' :          estype_string_not_analyzed,
                 'Year' :            estype_integer,
-                'Reference' :       estype_string_not_analyzed
+                'Reference' :       estype_string_not_analyzed,
+
+                #utility
+                'has_precise_location' :        estype_boolean,
+
             }
         }
 
@@ -165,6 +170,15 @@ class AllometricEquationIndex(MappingType, Indexable):
         ]))
 
     @classmethod
+    def prepare_Country_3166_3(cls, obj):
+        return list(set([
+            country.iso_3166_1_3_letter_code for country in [
+                location.country for location in
+                obj.location_group.locations.all()
+            ] if country is not None
+        ]))
+
+    @classmethod
     def prepare_Biome_FAO(cls, obj):
         return list(set([
             biome_fao.name for biome_fao in [
@@ -211,6 +225,9 @@ class AllometricEquationIndex(MappingType, Indexable):
 
     @classmethod
     def prepare_Locations(cls, obj):
+        if hasattr(obj, '_locations_cache'):
+            return obj._locations_cache
+
         locations = []
         for location in obj.location_group.locations.all():
 
@@ -225,6 +242,7 @@ class AllometricEquationIndex(MappingType, Indexable):
                     "lat" : location.Latitude,
                     "lon" : location.Longitude
                 })
+        obj._locations_cache = locations
         return locations
 
     @classmethod
@@ -240,4 +258,12 @@ class AllometricEquationIndex(MappingType, Indexable):
         if obj.reference.year:
             return list(set(re.findall(r'\d{4}', obj.reference.year)))
         return None
+    
+    @classmethod
+    def prepare_has_precise_location(cls, obj):
+        if len(cls.prepare_Locations(obj)):
+            return True
+        else:
+            return False
+
        

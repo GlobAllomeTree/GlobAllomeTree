@@ -5,7 +5,7 @@ window.app.mapController = function() {
 	var ES_THROTTLE_RATE = 500; //In ms
 	var el;	//dom element to show the map in, used by the init function
 	var map; //reference to the leaflet map
-	var markers;
+	var geohash_markers, country_markers;
 	var dragTimer;
 	var initialized = false;
 	var initialMapBoundsFit = false;
@@ -76,7 +76,7 @@ window.app.mapController = function() {
 		el = params['el'];
 
 		if(initialized) {
-			//confirm map zooms on invalidate size/fitbounds otherwise markers need to be added manually
+			//confirm map zooms on invalidate size/fitbounds otherwise geohash_markers need to be added manually
 			return
 		}
 
@@ -88,14 +88,15 @@ window.app.mapController = function() {
 			maxZoom: 15
 		});
 
-		markers = L.featureGroup().addTo(map);
-		map.on('zoomend', updateMarkers);
+		geohash_markers = L.featureGroup().addTo(map);
+		country_markers = L.featureGroup().addTo(map);
+		map.on('zoomend', updateGeohashMarkers);
 
 		dragTimer = null;
 		map.on('drag', function() {
 			if (dragTimer === null) {
 				dragTimer = setTimeout(function(){
-					updateMarkers(); 
+					updateGeohashMarkers(); 
 					dragTimer = null;
 				}, ES_THROTTLE_RATE);
 			}
@@ -116,100 +117,89 @@ window.app.mapController = function() {
 		map.fitBounds(mapBounds, {padding: [50, 50]});
 
 
+		//Since the country markers don't change on zoom,
+		//we add them in once at the beginning
+		loadCountryMarkers();
+
+
 		//Bind the popups to load when they are opened
+		//We have monkey patched a few properties onto the
+		//marker to be able to show a summary
 		map.on('popupopen', function(e) {
 		  var marker = e.popup._source;
-		  loadSummaryToPopup(marker, e.popup);
+		  if(marker.aggType == 'country') {
+		  	loadCountrySummaryToPopup(marker, e.popup);
+		  } else if (marker.aggType == 'geohash') {
+		  	loadGeoSummaryToPopup(marker, e.popup);
+		  }
 		});
+
 
 	}
 	
 
-	function getGeoAggregations(precision) {
-		
-		var aggregations = [];
-		
-		aggregations.push(
-			ejs.GeoHashGridAggregation('Locations-Grid')
-				.field('Locations')
-				.precision(precision)
-				.aggregation(
-					ejs.TermsAggregation('geohashes')
-						.script("locations_geohash")
-				)
-		);
+	
+	/**
+	* Adds allometric aggregations to the map with only a country specified for location
+	* @param {data} return object from an Elastic Search query 
+	*/
+	function addCountryMarkersToMap(data) {
+		var country_aggs = data.aggregations['Country-Location-Only']['country_3166_3'].buckets;
 
-		aggregations.push(
-			ejs.FilterAggregation('Locations-Bounds')
-				.filter(
-					ejs.ExistsFilter('Locations')
-				)
-				.aggregation(
-					ejs.MinAggregation('min_lat')
-						.script("locations_latitude")
-				)
-				.aggregation(
-					ejs.MaxAggregation('max_lat')
-						.script("locations_latitude")
-				)
-				.aggregation(
-					ejs.MinAggregation('min_lon')
-						.script("locations_longitude")
-				)
-				.aggregation(
-					ejs.MaxAggregation('max_lon')
-						.script("locations_longitude")
-				)
-		);
+		country_markers = L.featureGroup();
 
-		return aggregations;
+
+		for (var i=0;i<country_aggs.length;i++) {
+			var key = country_aggs[i]['key'];
+			var totalDocs = country_aggs[i]['doc_count'];
+			var centroid = window.app.country_centroids[key];
+			var iconProps = getIconProps(totalDocs);
+			var iconSize = iconProps['iconSize'];
+			var sizeClass = iconProps['sizeClass'];
+			var marker = new L.Marker([
+			 	centroid.latitude,
+			 	centroid.longitude
+			], {
+			    icon: L.divIcon({
+			 		className: 'country-agg agg-icon ' + sizeClass,
+			 		html: totalDocs,
+			 		iconSize: [iconSize, iconSize]
+			 	})
+		    });
+			
+			marker.bindPopup('<p>loading...</p>');
+			//We tag the geohash onto the marker for later use in the lookup
+			//marker.geohash = geohash_aggs[i].key;
+			//marker.geohashContentLoaded = false;
+			marker.aggType = 'country';
+			marker.country = country_aggs[i]['key'];
+			marker.docCount = totalDocs;
+			country_markers.addLayer(marker);
+		}
+
+		map.addLayer(country_markers);
+
 	}
 
 	
 	/**
-	* Adds allometric aggregations to the map
+	* Adds allometric aggregations to the map with precise latitude and longitude
 	* @param {data} return object from an Elastic Search query 
 	*/
-	function addToMap (data) {
-		markers = L.featureGroup();
-		var i;
-		var aggs = data.aggregations['Locations-Grid'].buckets;
+	function addGeoHashMarkersToMap (data) {
+		geohash_markers = L.featureGroup();
+	
+		var geohash_aggs = data.aggregations['Locations-Grid'].buckets;
 		
-		if(!initialMapBoundsFit) {
-			var min_lat = data.aggregations['Locations-Bounds']['min_lat'].value;
-			var min_lon = data.aggregations['Locations-Bounds']['min_lon'].value;
-			var max_lat = data.aggregations['Locations-Bounds']['max_lat'].value;
-			var max_lon = data.aggregations['Locations-Bounds']['max_lon'].value;
-
-			//Keep the initial map bounds from being to small
-			var diff = 5 - Math.abs(max_lon - min_lon);
-			if(diff > 0) {
-				diff = diff / 2;
-				max_lon += diff;
-				min_lon -= diff;
-				max_lat += diff;
-				min_lat -= diff;
-			}
-
-			//Updates the map bounds object that contains all of the request points
-			mapBounds = [
-				[min_lat, min_lon],
-				[max_lat, max_lon]
-			];
-
-			map.fitBounds(mapBounds, {padding: [50, 50]});
-			initialMapBoundsFit = true;
-		}
 
 		
-		for (i=0;i<aggs.length;i++) {
+		for (var i=0;i<geohash_aggs.length;i++) {
 			var html = "";
 			var j;
 			var totalLat = 0;
 			var totalLon = 0;
 			var totalDocs = 0;
-			var iconSize;
-			var sizeClass;
+			var min_lon, min_lat, max_lon, max_lat;
 			
 		
 			// Here we loop through and get locations that are inside the geohash 
@@ -245,48 +235,57 @@ window.app.mapController = function() {
 			// What we really want is just the count of all matched documents 
 			// So in the case here, we want key: "dnhjv2bwdk4u" with doc_count: 112
 
-			for(j=0; j < aggs[i].geohashes.buckets.length; j++ ) {
-				var geohashKey = aggs[i].geohashes.buckets[j].key;
+			for(j=0; j < geohash_aggs[i].geohashes.buckets.length; j++ ) {
+				var geohashKey = geohash_aggs[i].geohashes.buckets[j].key;
 				//if the parent aggregation key is at the start of the location geohash
-				if (geohashKey.indexOf(aggs[i].key) === 0) {
+				if (geohashKey.indexOf(geohash_aggs[i].key) === 0) {
 					var geohashLatLon = decodeGeoHash(geohashKey);
-					var geohashDocs = aggs[i].geohashes.buckets[j]['doc_count'];
+					var geohashDocs = geohash_aggs[i].geohashes.buckets[j]['doc_count'];
 					
 					//Since these documents do belong to the geohash we are interested in, 
 					//we add the documents to our total count
 					totalDocs += geohashDocs;
 					totalLat += (geohashLatLon.latitude[2] * geohashDocs); //['lat'][2] is the middle of the geohash
 					totalLon +=	(geohashLatLon.longitude[2] * geohashDocs); //['lon'][2] is the middle of the geohash
+				
+					//If this is the first time the map is displayed, 
+					//we figure out our map bounds here
+					// if(!initialMapBoundsFit) {
+			
+			
+					// }
+
 				}  
 
-				var aggDocCount = aggs[i]['doc_count'];
-				var currentAgg = aggs[i];
-				// if (geohashDocs < aggDocCount) {
-				// 	debugger;
-				// }
+				var aggDocCount = geohash_aggs[i]['doc_count'];
+				var currentAgg = geohash_aggs[i];
 			}
 			
-		
-			//Set the marker icon size based on the number of aggregations
-			iconSize = totalDocs / 15 + 10;
-			if(iconSize > 35) iconSize = 35;
-			if (iconSize > 10 && iconSize < 11 ) {
-				iconSize = 14;
-				sizeClass = 'agg-icon-1';
-			} else if (iconSize >= 11 && iconSize < 20 ) { 
-				iconSize = 20;
-				sizeClass = 'agg-icon-2';
-			} else if (iconSize >= 20 && iconSize < 25 ) { 
-				iconSize = 24;
-				sizeClass = 'agg-icon-3';
-			} else if (iconSize >= 25 && iconSize < 30 ) { 
-				iconSize = 29;
-				sizeClass = 'agg-icon-4';
-			} else if (iconSize >= 30 && iconSize <= 35 ) { 
-				iconSize = 35;
-				sizeClass = 'agg-icon-5';
-			}
+			// if(!initialMapBoundsFit) {
+			
+			// 	//Keep the initial map bounds from being to small
+			// 	var diff = 5 - Math.abs(max_lon - min_lon);
+			// 	if(diff > 0) {
+			// 		diff = diff / 2;
+			// 		max_lon += diff;
+			// 		min_lon -= diff;
+			// 		max_lat += diff;
+			// 		min_lat -= diff;
+			// 	}
 
+			// 	//Updates the map bounds object that contains all of the request points
+			// 	mapBounds = [
+			// 		[min_lat, min_lon],
+			// 		[max_lat, max_lon]
+			// 	];
+
+			// 	map.fitBounds(mapBounds, {padding: [50, 50]});
+			// 	initialMapBoundsFit = true;
+			// }
+
+			var iconProps = getIconProps(totalDocs);
+			var iconSize = iconProps['iconSize'];
+			var sizeClass = iconProps['sizeClass'];
 
 			//In some cases (very few) the totalDocs will be empty 
 			//since the only docs in the aggregation are actually in another geohash
@@ -301,7 +300,7 @@ window.app.mapController = function() {
 
 				//Center of aggregation geohash
 				//Decode the geohash key for the bucket
-				//var aggLatLon = decodeGeoHash(aggs[i].key);
+				//var aggLatLon = decodeGeoHash(geohash_aggs[i].key);
 				//var aggLat = aggLatLon.latitude[2]; //center of bucket
 				//var aggLon = aggLatLon.longitude[2]; //center of bucket 
 
@@ -316,19 +315,46 @@ window.app.mapController = function() {
 					})
 				});
 				
-				marker.bindPopup('<p>loading...</p>', {showOnMouseOver: true});
+				marker.bindPopup('<p>loading...</p>');
 				//We tag the geohash onto the marker for later use in the lookup
-				marker.geohash = aggs[i].key;
+				marker.geohash = geohash_aggs[i].key;
 				marker.geohashContentLoaded = false;
+				marker.aggType = 'geohash';
 				marker.docCount = totalDocs;
-				markers.addLayer(marker);
+				geohash_markers.addLayer(marker);
 			}
 		}
-		
-		map.addLayer(markers);
-
+		map.addLayer(geohash_markers);
 	}
 	
+	function getIconProps(totalDocs) {
+		//Set the marker icon size based on the number of aggregations
+		var sizeClass = 'agg-icon-1';
+		var iconSize = totalDocs / 15 + 10;
+		if(iconSize > 35) iconSize = 35;
+		if (iconSize > 10 && iconSize < 11 ) {
+			iconSize = 14;
+			sizeClass = 'agg-icon-1';
+		} else if (iconSize >= 11 && iconSize < 20 ) { 
+			iconSize = 20;
+			sizeClass = 'agg-icon-2';
+		} else if (iconSize >= 20 && iconSize < 25 ) { 
+			iconSize = 24;
+			sizeClass = 'agg-icon-3';
+		} else if (iconSize >= 25 && iconSize < 30 ) { 
+			iconSize = 29;
+			sizeClass = 'agg-icon-4';
+		} else if (iconSize >= 30 && iconSize <= 35 ) { 
+			iconSize = 35;
+			sizeClass = 'agg-icon-5';
+		}
+
+		return {
+			'sizeClass' : sizeClass,
+			'iconSize' : iconSize
+		}
+	}
+
 	/**
 	* Generates an elastic search query and retrieves the results from the server
 	* drawing them on the map.  Query is limited to the extent of the map view (plus buffer)
@@ -336,7 +362,7 @@ window.app.mapController = function() {
 	* is particularly important when zoomed in as the number of features could be prohibitively
 	* large
 	*/
-	function updateMarkers() {
+	function updateGeohashMarkers() {
 		var bounds = map.getBounds();
 		var zoom = map.getZoom();
 		var maxx = bounds._northEast.lng + zoomExtentBuffer[zoom];
@@ -345,17 +371,67 @@ window.app.mapController = function() {
 		var miny = bounds._southWest.lat - zoomExtentBuffer[zoom];
 		var precision = geoGridPrecision[map.getZoom()];
 		var boundingBox = [minx, miny, maxx, maxy];
+
+		var aggregations = [];
 		
-		var query = window.app.searchManager.getQuery({
-			aggregations : getGeoAggregations(precision),
+		aggregations.push(
+			ejs.GeoHashGridAggregation('Locations-Grid')
+				.field('Locations')
+				.precision(precision)
+				.aggregation(
+					ejs.TermsAggregation('geohashes')
+						.script("locations_geohash")
+				)
+		);
+
+		var geohash_query = window.app.searchManager.getQuery({
+			aggregations : aggregations,
 			boundingBox : boundingBox
 		});
 
 		window.app.searchManager.search({
-			query : query,
+			query : geohash_query,
 			success: function (e) {
-				map.removeLayer(markers);
-				addToMap(e);
+				map.removeLayer(geohash_markers);
+				addGeoHashMarkersToMap(e);
+			}
+		});
+	}
+
+
+	/**
+	* Generates an elastic search query and retrieves the results from the server
+	* drawing them on the map. 
+	* This query only shows markers for records with only a country
+	* specified and no exact lat/lon so they do not get updated on the zoom
+	* like the geohash markers do 
+	*/
+	function loadCountryMarkers() {
+		
+		var aggregations = [];
+		aggregations.push(
+			//Country-Location-Only is the name of our parent filtering aggregation
+			ejs.FilterAggregation('Country-Location-Only')
+			.filter(
+				//has_precise_location is an indexed field from the equation model
+				ejs.TermFilter('has_precise_location', false)
+			)
+			.aggregation(
+				//'country_3166_3' is the name of the child aggregation
+				ejs.TermsAggregation('country_3166_3')
+					//'Country_3166_3' is the field in our index that we get value counts for
+					.field('Country_3166_3')
+			));
+
+		var country_query = window.app.searchManager.getQuery({
+			aggregations : aggregations
+		});
+
+		window.app.searchManager.search({
+			query : country_query,
+			success: function (e) {
+				map.removeLayer(country_markers);
+				addCountryMarkersToMap(e);
 			}
 		});
 	}
@@ -369,11 +445,13 @@ window.app.mapController = function() {
 		return items.join(separator);
 	}
 
-	//When someone opens a popup, we get the summary
-	var loadSummaryToPopup = function(marker, popup) {
+	//When someone clicks a geohash marker, it opens a popup
+	//We fetch the summary and put it in the popup
+	var loadGeoSummaryToPopup = function(marker, popup) {
 		//Prevent double loading
-		if(marker.geohashContentLoaded) return;
-		marker.geohashContentLoaded = true;
+		if(marker.contentLoaded) return;
+
+		marker.contentLoaded = true;
 		//Get our geohash bounds from the marker where we monkepathed them on
 		var geohashBounds =  decodeGeoHash(marker.geohash);
 
@@ -392,30 +470,82 @@ window.app.mapController = function() {
 			boundingBox : boundingBox
 		});
 
-		window.app.searchManager.search({
+		var sm = window.app.searchManager
+
+		sm.search({
 			query : query,
 			success: function (data) {
-				var html = "<br>";
-				//marker.docCount was also monkey patched
-				html += '<h4>Equations: ' + marker.docCount + '</h4>';
+				var params = {'Min_Latitude'  : miny,
+							  'Max_Latitude'  : maxy,
+							  'Min_Longitude' : minx,
+							  'Max_Longitude' : maxx,
+					};
+				var geohashedLink = sm.getLink(params);
 
-				if(data.aggregations['Species'].buckets.length) {
-					html += '<h5>Species Represented</h5>'  
-					html += '<p style="margin-top:0px;">' + getBucketsAsList(data.aggregations['Species'].buckets, ', ') + '</p>';
-				}
-				
-				if(data.aggregations['Biome_FAO'].buckets.length){
-					html += '<h5>FAO Biomes</h5>'  
-					html += '<p style="margin-top:0px;">' + getBucketsAsList(data.aggregations['Biome_FAO'].buckets, ', ') + '</p>';
-				}
-				
+				var html = getMarkerSummaryHTML(data);
 				html += '<h5>Summary Area</h5>'
 				html += '<p style="margin-top:0px;"> Latitude: ' + geohashBounds['latitude'][0] + ' to ' + geohashBounds['latitude'][1] + '<br>';
-				html += 'Longitude: ' + geohashBounds['longitude'][0] + ' to ' + geohashBounds['longitude'][1] + '</p>';
-
+				html += 'Longitude: ' + geohashBounds['longitude'][0] + ' to ' + geohashBounds['longitude'][1] + '<br>';
+				html += '<a href="' + geohashedLink +'">Redo search to view just these records &gt;&gt;</a></p>';
 				popup.setContent(html);
 			}
 		});
+	}
+
+	//When someone clicks a country marker, it opens a popup
+	//We fetch the summary and put it in the popup
+	var loadCountrySummaryToPopup = function(marker, popup) {
+		//Prevent double loading
+		if(marker.contentLoaded) return;
+
+		marker.contentLoaded = true;
+
+		//grab the country value that was patched onto the marker
+		var country =  marker.country;
+
+		
+		var query = window.app.searchManager.getQuery({
+			aggregations : [
+				ejs.TermsAggregation('Species').field('Genus_Species'),
+				ejs.TermsAggregation('Biome_FAO').field('Biome_FAO'),
+				ejs.TermsAggregation('Reference').field('Reference'),		
+			],
+			filters : [
+				ejs.TermFilter('Country_3166_3', country),
+				ejs.TermFilter('has_precise_location', false)
+			]
+		});
+
+		var sm = window.app.searchManager
+
+		sm.search({
+			query : query,
+			success: function (data) {
+				var html = getMarkerSummaryHTML(data);
+				html += '<h5>Summary Area</h5>';
+				html += '<p style="margin-top:0px;"> Country summary for <strong>' + country + '</strong>.<br>';
+				html += 'Only includes results in this country that do not have a precise latitude or longitude </p>';
+				popup.setContent(html);
+			}
+		});
+	}
+
+
+	function getMarkerSummaryHTML(data) {
+		var html = "";
+		//marker.docCount was also monkey patched
+		html += '<h4>Equations: ' + data.hits.total + '</h4>';
+
+		if(data.aggregations['Species'].buckets.length) {
+			html += '<h5>Species Represented</h5>'  
+			html += '<p style="margin-top:0px;">' + getBucketsAsList(data.aggregations['Species'].buckets, ', ') + '</p>';
+		}
+		
+		if(data.aggregations['Biome_FAO'].buckets.length){
+			html += '<h5>FAO Biomes</h5>'  
+			html += '<p style="margin-top:0px;">' + getBucketsAsList(data.aggregations['Biome_FAO'].buckets, ', ') + '</p>';
+		}
+		return html;
 	}
 
 

@@ -131,7 +131,12 @@ class SearchForm(forms.Form):
 
     Max_Z__gte = forms.DecimalField(required=False, label='Max Z From')
     Max_Z__lte = forms.DecimalField(required=False, label='Max Z To')
-    
+
+    Min_Latitude = forms.DecimalField(required=False, label='Min Latitude')
+    Max_Latitude = forms.DecimalField(required=False, label='Max Latitude')
+    Min_Longitude = forms.DecimalField(required=False, label='Min Longitude')
+    Max_Longitude = forms.DecimalField(required=False, label='Max Longitude')
+
     Output = forms.CharField(required=False, label='Output')
     Unit_Y = forms.CharField(required=False, label='Unit Y')
     

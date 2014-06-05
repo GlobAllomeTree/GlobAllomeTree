@@ -1,5 +1,6 @@
 import json
 import re
+from decimal import Decimal
 
 from django.conf import settings
 from django.views.generic import TemplateView
@@ -8,6 +9,8 @@ from django.core.paginator import Paginator
 
 #import the get_es object from contrib which reads settings.ES_URLS
 from elasticutils.contrib.django import get_es
+
+from globallometree.apps.locations.models import Country
 
 from .forms import SearchForm
 from .indices import AllometricEquationIndex
@@ -30,10 +33,23 @@ class SearchView(TemplateView):
             context['form_is_valid'] = True
             context['current_search_summary'] = self.current_search_summary()
             context['search_dict'] = json.dumps(self.get_search_dict());
+            context['country_centroids'] = json.dumps(self.get_country_centroids());
         else:
             context['form_is_valid'] = False
             
         return context
+
+    def get_country_centroids(self):
+        countries = {}
+        for country in Country.objects.all():
+            if country.iso_3166_1_3_letter_code:
+                countries[country.iso_3166_1_3_letter_code] = {
+                    'latitude' : str(country.centroid_latitude),
+                    'longitude' : str(country.centroid_longitude)
+                }
+            else:
+                print "MISSING COUNTRY 3166 3 for Country %s!" % country.common_name
+        return countries
 
     def create_response(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
@@ -44,13 +60,13 @@ class SearchView(TemplateView):
         search_dict = {}
         if self.form.is_valid():
             for field in self.form.cleaned_data:
-                if self.form.cleaned_data.get(field, False):
+                if self.form.cleaned_data.get(field, None) not in [None, '']:
                     value = self.form.cleaned_data.get(field)
                     #Handle decimal types which don't have unicode casting
                     #and instead use string
                     if hasattr(value, '__unicode__'):
                         value = unicode(value)
-                    else:
+                    elif type(value) == Decimal:
                         value = str(value)
                     search_dict[field] = value;
         return search_dict
@@ -64,7 +80,8 @@ class SearchView(TemplateView):
         
             if field in ['order_by', 'page']:
                 continue
-            if self.form.cleaned_data.get(field, False): 
+
+            if self.form.cleaned_data.get(field, None) not in [None, '']: 
                 current_search.append( {'field' : self.form.fields[field].label,
                                         'search_value' :  self.form.cleaned_data.get(field),
                                         'clear_link'   :  self.get_query_string({ field : None})

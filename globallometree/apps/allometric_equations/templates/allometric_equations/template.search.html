@@ -20,6 +20,7 @@
             $(function() {
                 //Get the search manager from allometric_equations/js/search.js
                 var app = window.app;
+                app.country_centroids = {{country_centroids|safe}};
                 app.searchManager.setSearchDict({{search_dict|safe}});
                 app.listController.init({
                     el : 'results-list-container'           
@@ -39,10 +40,7 @@
 {% block content %}
 
 	<div id="equations_page">
-	    {% if current_search_summary %}
-            <!-- Search Summary -->
-	        {% include 'allometric_equations/template.search.summary.html'%}
-	    {% endif %}
+	    
 
         <h3>Allometric Equation Search</h3>
 	    
@@ -55,14 +53,23 @@
     	{% if form_is_valid %}
             <div id="search-results">
         		<!-- Result Tabs -->
+                <div style="float:right"> 
+                    <a target="_blank" href="/data/export/{{form.export_link}}"
+                        class="btn btn-succcess" id="exportButton">
+                        Export
+                        <span class="glyphicon glyphicon-download"></span> 
+                    </a>
+                </div>
         		<ul id="results-tab" class="nav nav-tabs">
         			<li class="active">
-        				<a href="#results-list" data-toggle="tab" class="active"><span class="glyphicon glyphicon-list"></span> List View</a>
-
+        				<a href="#results-list" data-toggle="tab"><span class="glyphicon glyphicon-list"></span> Results List</a>
         			</li>
         			<li>
         				<a id="list-tab" href="#results-map" data-toggle="tab"><span class="glyphicon glyphicon-globe"></span> Map View</a>
         			</li>
+                    <li>
+                        <a href="#search-summary" data-toggle="tab"><span class="glyphicon  glyphicon-stats"></span> Search  Summary</a>
+                    </li>
         		</ul>
         		
         		<div class="tab-content">
@@ -73,6 +80,9 @@
         			<div class="tab-pane" id="results-map">
         				<div id="map"></div>
         			</div>
+                    <div class="tab-pane" id="search-summary">
+                        {% include 'allometric_equations/template.search.summary.html'%}
+                    </div>
                 </div>
         	</div>	
         {% else %}

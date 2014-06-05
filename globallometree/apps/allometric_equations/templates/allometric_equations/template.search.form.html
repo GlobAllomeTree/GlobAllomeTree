@@ -71,6 +71,7 @@
                        <a href="?Biome_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
                        <a href="?Country=Benin">Country: Benin</a>
                 </p>
+                <h3>Location by Country or Biome</h3>
                 <div class="row">
                     <div class="col-lg-6">
                         {{ form.Country|as_crispy_field }}
@@ -81,6 +82,21 @@
                         {{ form.Biome_FAO|as_crispy_field }}
                         {{ form.Biome_WWF|as_crispy_field }}
                         {{ form.Division_BAILEY|as_crispy_field }}
+                    </div>
+
+                </div>
+                <h3>By Precise Geographic Location</h3>
+                <p>Note that when you search by precise location on the map, records that do not have a latitude and longitude will not be displayed. This includes records that have only a country but no latitude or longitude, they will not be included in these search results.</p>
+                 <div class="row">
+                    <div class="col-lg-6">
+                        <h4>By Latitude and Longitude</h4>
+                        {{ form.Min_Latitude|as_crispy_field }}
+                        {{ form.Max_Latitude|as_crispy_field }}
+                        {{ form.Min_Longitude|as_crispy_field }}
+                        {{ form.Max_Longitude|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-6">
+                        <h4>Search within Distance from Point</h4>            
                     </div>
 
                 </div>

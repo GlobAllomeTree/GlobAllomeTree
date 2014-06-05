@@ -388,34 +388,6 @@ tbody tr:nth-child(2n) {
 	text-align: right;
 }
 
-/* currentSearch */
-
-#currentSearch {
-	float:right;
-	width:500px;
-	margin-bottom:20px;
-	border:1px solid #243F12;
-	border-radius: 4px;
-	padding:10px;
-	margin-right:5px;
-	background-color: #ddeedd;
-	-moz-box-shadow: 5px 5px 5px #bbb;
-	-webkit-box-shadow: 5px 5px 5px #bbb;
-	box-shadow: 5px 5px 5px #bbb;
-}
-
-#currentSearch  tbody tr:nth-child(2n) {
-    background-color: #eeffee;
-}
-
-#currentSearch  tbody td,
-#currentSearch  tbody th {
-	border-bottom: 1px solid #ccddcc
-}
-
-#exportButton:hover {
-	color:#fff;
-}
 
 
 /* registration */

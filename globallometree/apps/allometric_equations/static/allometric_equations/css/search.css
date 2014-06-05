@@ -28,6 +28,10 @@
 	vertical-align:middle;
 }
 
+.country-agg {
+    background-color: #77CF18;
+}
+
 .agg-icon-1 {
     border:1px solid #668;
     border-radius:12px;

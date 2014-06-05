@@ -19,7 +19,7 @@ class Country(models.Model):
     centroid_longitude = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=5)
 
     def __unicode__(self):
-        return self.common_name
+        return u'%s (%s)' % (self.common_name, self.iso_3166_1_3_letter_code)
 
     class Meta:
         verbose_name ='Country'

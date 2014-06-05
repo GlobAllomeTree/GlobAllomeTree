@@ -80,6 +80,16 @@ window.app.searchManager = function (){
 		});
 		
 	}
+
+	var isPreciseLocationSearch = function() {
+		var preciseSearchKeys = ['Min_Latitude', 'Max_Latitude', 'Min_Longitude', 'Max_Longitude'];
+		for (var i in preciseSearchKeys) {
+			if (preciseSearchKeys[i] in searchDict) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	var getQuery = function (params) {
 		//This base getQuery function is called by both the map and 
@@ -88,8 +98,8 @@ window.app.searchManager = function (){
 		if (!params) { params = {};}
 			
 		//Set the query and filters
-		var dict = searchDict;
 		var filters = [];
+		var boundingBox;
 
 		//If there is a keyword search, we match _all
 		//which is a special field in elastic search that has
@@ -137,15 +147,26 @@ window.app.searchManager = function (){
 
 		}
 
+		if(params['boundingBox'] || isPreciseLocationSearch()) {
+			//Allow a custom bounding box to be passed in from the map
+			//to further limit results
+			if(params['boundingBox']) {
+				boundingBox = params['boundingBox'];
+			} else {
+				boundingBox = [-179.9999, -89.9999, 179.9999, 89.9999];
+			}
+			boundingBox = _constrainBoundingBox(boundingBox);
 
-		//Allow a custom bounding box to be passed in from the map
-		//to further limit results
-		if (params['boundingBox']) {
-			var boundingBox = _constrainBoundingBox(params['boundingBox']);
 			var geoFilter = ejs.GeoBboxFilter('Locations')
 		 		.topLeft(ejs.GeoPoint([boundingBox[3], boundingBox[0]]))
 		 		.bottomRight(ejs.GeoPoint([boundingBox[1], boundingBox[2]]));
 		 	filters.push(geoFilter);
+		}
+		
+		if (params['filters']) {
+			for(var i = 0; i < params['filters'].length; i++) {
+				filters.push(params['filters'][i]);
+			}
 		}
 
 		var query = ejs.Request();
@@ -162,8 +183,53 @@ window.app.searchManager = function (){
 			}
 		}
 
+		
+
 		return query;
 	}
+
+	/*
+	* Get a link and replace out some params in the url
+	* Simplistic function that allows replacing the current search with a new one
+	* If this current url is ?q=Acacia
+	* window.app.searchManager.getLink({'foo' : 'bar'});
+	* "?q=Acacia&foo=bar"
+	* window.app.searchManager.getLink({'q' : 'bar'});
+	* "?q=bar"
+	*/
+	var getLink = function(params) {
+		var parts = [];
+
+		//create a local copy of the search dict to not edit the global one
+		var dict = {};
+		for (var key in searchDict) {
+			dict[key] = searchDict[key];
+		}
+		//override dict with params
+		for(var key in params) {
+			dict[key] = params[key];
+		}
+		for(var key in dict) {
+			parts.push(key + '=' + dict[key]); 
+		}
+		return '?' + parts.join('&');
+	}
+
+	// Currently done on the server side
+	// //Decodes the url to get the current params
+	// //returns a dictionary
+	// var getCurrentSearchDict = function() {
+	// 	var query = window.location.search.substring(1);
+	// 	var vars = query.split('&');
+	// 	var dict = {};
+	// 	for(var i = 0; i < vars.length; i ++) {
+	// 		var parts = vars[i].split('=');
+	// 		if (parts[1] !== '') {
+	// 			dict[parts[0]] = parts[1];
+	// 		}
+	// 	}
+	// 	return dict;
+	// }
 
 	var _constrainBoundingBox = function(boundingBox) {
 
@@ -172,26 +238,57 @@ window.app.searchManager = function (){
 		//Additionally, Leaflet will pan from world copy to world copy.  This can create values infinitly
 		//far outside of allowed geographic coordinates.  This snaps requests back to the primary map
 		//We can prevent leaflet from loading outside of the defined geographic coordinates for the globe
-		if (boundingBox[0] < -179.99999) {
-			boundingBox[0] = -179.99999;
+		
+		//This also takes into account the min/max latitude/longitude from the
+
+		var Min_Latitude = -89.99999;
+		var Max_Latitude = 89.99999;
+		var Min_Longitude = -179.99999;
+		var Max_Longitude = 179.99999;
+
+
+		if('Min_Latitude' in searchDict) {
+			Min_Latitude = 1 * searchDict['Min_Latitude'];
 		}
-		if (boundingBox[1] < -89.99999) {
-			boundingBox[1] = -89.99999;
+
+		if('Max_Latitude' in searchDict) {
+			Max_Latitude = 1 * searchDict['Max_Latitude'];
 		}
-		if (boundingBox[2] > 179.99999) {
-			boundingBox[2] = 179.99999;
+
+		if('Min_Longitude' in searchDict) {
+			Min_Longitude = 1 * searchDict['Min_Longitude'];
 		}
-		if (boundingBox[3] > 89.99999) {
-			boundingBox[3] = 89.99999;
+
+		if('Max_Longitude' in searchDict) {
+			Max_Longitude = 1 * searchDict['Max_Longitude'];
+		}
+		
+
+		if (boundingBox[0] < Min_Longitude) {
+			boundingBox[0] = Min_Longitude;
+		}
+		if (boundingBox[1] < Min_Latitude) {
+			boundingBox[1] = Min_Latitude;
+		}
+		if (boundingBox[2] > Max_Longitude) {
+			boundingBox[2] = Max_Longitude;
+		}
+		if (boundingBox[3] > Max_Latitude) {
+			boundingBox[3] = Max_Latitude;
 		}
 		return boundingBox;
 	}
 
+	var getCurrentSearchDict = function() {
+		return searchDict;
+	}
 
 	return {
 		setSearchDict : setSearchDict,
 		getQuery : getQuery,
-		search : search
+		search : search,
+		getLink : getLink,
+		getCurrentSearchDict : getCurrentSearchDict
 	}
 
 }();
