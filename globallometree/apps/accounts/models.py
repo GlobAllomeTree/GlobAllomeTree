@@ -6,9 +6,15 @@ from django.conf import settings
 from django.core.mail import mail_managers, send_mail
 from django.db import models
 
+from globallometree.apps.locations.models import Country
 
+#Monkey patch the User class for django 1.6
+def get_profile(self):
+    if not hasattr(self, 'profile'):
+        self.profile = self.profile_set.all()[0]
+    return self.profile
+User.get_profile = get_profile
 class UserProfile(models.Model):
-    
     DATA_MAY_PROVIDE_CHOICES = (('no_data',             'No data available'),
                                 ('Species_data',        'Species data'),
                                 ('wood_density',        'Wood Density'),
@@ -18,9 +24,14 @@ class UserProfile(models.Model):
                                 ('volume_tables',       'Volume Tables'),
                                 )
 
+
+    LOCATION_PRIVACY_CHOICES = (('none', "Private - Don't share my location at all"),
+                                ('anonymous', "Anonymous - Share my location anonymously"),
+                                ('public', "Public - Share my location with my profile information"),)
+
     user        = models.ForeignKey(User)
     address     = models.CharField(max_length=200)
-    country     = models.CharField(max_length=80)
+    country     = models.CharField(max_length=80, blank=True)
     region      = models.CharField(max_length=80, blank=True)
     subregion   = models.CharField(max_length=80, blank=True)
     
@@ -34,9 +45,19 @@ class UserProfile(models.Model):
 
     data_may_provide      = models.CharField(max_length=40, choices=DATA_MAY_PROVIDE_CHOICES, blank=True)
 
+    location_latitude     = models.DecimalField(
+        null=True, blank=True, max_digits=8, decimal_places=5
+    )
+    location_longitude     = models.DecimalField(
+        null=True, blank=True, max_digits=8, decimal_places=5
+    )
+    location_country     = models.ForeignKey(Country, blank=True, null=True)
+
+    location_privacy  = models.CharField(max_length=20, default='anonymous')
+
     def __unicode__(self):
         return u"User profile for %s" % self.user
-    
+
 
 # Notify a user their status has changed to active
 @receiver(pre_save, sender=User)

@@ -183,7 +183,6 @@ class SearchForm(forms.Form):
             return self.searchqueryset.all()
 
         sqs = self.searchqueryset.all()
-        # import pdb;pdb.set_trace()
         if self.cleaned_data.get('q'):
             sqs = sqs.auto_query(self.cleaned_data['q'])
 

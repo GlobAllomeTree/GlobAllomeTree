@@ -6,3 +6,6 @@ gunicorn==18.0
 
 ####################### Testing
 mock==1.0.1
+
+####################### Account Geocoding
+pygeocoder==1.2.4

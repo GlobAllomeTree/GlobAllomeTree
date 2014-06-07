@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class DataReference(models.Model):
     label = models.CharField(max_length=20, null=True, blank=True)
     author = models.CharField(max_length=200, null=True, blank=True)
@@ -12,8 +11,8 @@ class DataReference(models.Model):
         ordering = ('label',)
 
     def __unicode__(self):
-        return unicode(('' if self.year is None else self.year + ' ') + self.author)
 
+        return u'%s' % self.label
 
 class Institution(models.Model):
     name = models.CharField(max_length=150, null=True, blank=True)

@@ -201,13 +201,15 @@ class Command(BaseCommand):
             if orig_equation.data_submission is None:
                 data_submission = None
             else:
+                ods = orig_equation.data_submission
                 data_submission = Submission.objects.get_or_create(
                     submitted_file=orig_equation.data_submission.submitted_file,
                     submitted_notes=orig_equation.data_submission.submitted_notes,
-                    date_uploaded=orig_equation.data_submission.date_uploaded,
                     user=orig_equation.data_submission.user,
                     imported=orig_equation.data_submission.imported
                 )[0]
+                #Fix the upload date
+                Submission.objects.filter(pk=data_submission.pk).update(date_uploaded=ods.date_uploaded)
 
 ######################################## EQUATION ################################################
 

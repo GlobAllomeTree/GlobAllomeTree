@@ -9,8 +9,6 @@ BASE_PATH = os.path.abspath(os.path.join(PROJECT_PATH, '../'))
 
 DEBUG = True
 
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
-
 ALLOWED_HOSTS = ('globallometree.org',
                  'www.globallometree.org',
                  'localhost',

@@ -15,8 +15,9 @@ class EcosystemAdmin(admin.ModelAdmin):
 
 
 class SubmissionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'submitted_file', 'submitted_notes', 'imported')
+    list_display = ('user', 'submitted_file', 'submitted_notes', 'date_uploaded', 'imported')
     list_filter = ['user', 'imported']
+    read_only = ('date_uploaded',)
     actions = ['run_import']
 
     def run_import(self, request, queryset):
@@ -56,12 +57,12 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 
 class AllometricEquationAdmin(admin.ModelAdmin):
-    raw_id_fields = ('species_group','location_group','reference')
-    list_display = ('ID', 'Equation','data_submission', 'modified')
+    raw_id_fields = ('species_group','location_group','reference', 'data_submission')
+    list_display = ('ID', 'Equation', 'data_submission', 'modified')
     ordering = ("ID",)
+    list_filter = ("data_submission",)
     search_fields  = ('ID',)
-    list_filter = ('data_submission',)
-
+    pass
 
 admin.site.register(Population, PopulationAdmin)
 admin.site.register(Ecosystem, EcosystemAdmin)
