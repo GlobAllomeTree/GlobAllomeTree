@@ -7,7 +7,7 @@ class ContinentAdmin(admin.ModelAdmin):
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('common_name', 'continent', 'centroid_longitude', 'centroid_latitude')
+    list_display = ('common_name', 'common_name_fr', 'iso3166a2', 'continent', 'centroid_longitude', 'centroid_latitude')
     list_filter  = ('continent', )
 
 

@@ -6,7 +6,7 @@ import codecs
 from django.db import transaction
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from globallometree.apps.data.models import TreeEquation
+from globallometree.apps.data.models import TreeEquation, Country as OldCountry
 from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
 from globallometree.apps.allometric_equations.models import AllometricEquation, Submission
 from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
@@ -20,7 +20,36 @@ class Command(BaseCommand):
 
     def handle(self,*args, **options):
 
+        #First make sure we import all of the countries
         country_data = self.load_countries_csv()
+
+        continents = {
+            'AF' : 'Africa',
+            'AN' : 'Antatica',
+            'AS' : 'Asia',
+            'EU' : 'Europe',
+            'NA' : 'North America',
+            'OC' : 'Oceania',
+            'SA' : 'South America'
+        }
+
+        for key in continents.keys():
+            name = continents[key]
+            continents[key] = Continent.objects.create(code=key, name=name)
+
+        for cd_row in country_data:
+            Country.objects.create(
+                common_name=cd_row['ISOen_name'],
+                formal_name=cd_row['ISOen_proper'],
+                common_name_fr=cd_row['ISOfr_name'],
+                formal_name_fr=cd_row['ISOfr_proper'],
+                continent=continents[cd_row['continent']],
+                iso3166a2=cd_row['ISO3166A2'],
+                iso3166a3=cd_row['ISO3166A3'],
+                iso3166n3=cd_row['ISO3166N3'],
+                centroid_latitude = cd_row['latitude'],
+                centroid_longitude = cd_row['longitude'] 
+            )
 
         if len(args) == 1:
             limit = int(args[0])
@@ -125,26 +154,13 @@ class Command(BaseCommand):
             else:
                 continent = Continent.objects.get_or_create(name=orig_equation.Continent)[0]
 
-            if orig_equation.Country is None:
+            if orig_equation.Country is None or not orig_equation.Country.iso_3166_1_2_letter_code:
                 country = None
             else:
-                country, created = Country.objects.get_or_create(
-                    common_name=orig_equation.Country.common_name,
-                    formal_name=orig_equation.Country.formal_name,
-                    iso_3166_1_2_letter_code=orig_equation.Country.iso_3166_1_2_letter_code,
-                    iso_3166_1_3_letter_code=orig_equation.Country.iso_3166_1_3_letter_code,
-                    iso_3166_1_number=orig_equation.Country.iso_3166_1_number,
-                    continent=continent
-                )
-
-                if created:
-                    #save looping over this every time
-                    for cd_row in country_data:
-                        if cd_row['ISO3166A3'] == orig_equation.Country.iso_3166_1_3_letter_code:
-                            country.centroid_latitude = cd_row['latitude']
-                            country.centroid_longitude = cd_row['longitude']    
-                            country.save()
-                            break
+                country = Country.objects.get(iso3166a2=orig_equation.Country.iso_3166_1_2_letter_code)
+                if not country.continent and continent is not None:
+                    country.continent = continent
+                    country.save()
                         
 
             location, location_created = Location.objects.get_or_create(
@@ -301,12 +317,17 @@ class Command(BaseCommand):
         csv_file_path = os.path.join(settings.BASE_PATH, 'globallometree', 'apps', 'locations', 'resources', 'cow.txt')
         headers = []
         countries = []
-        with codecs.open(csv_file_path, 'r', encoding='latin-1') as csv_file:
+
+        def clean(row):
+            fields = row.replace('\r', '').replace(u'\ufeff','').split(';')
+            fields = [v.strip() for v in fields]
+            return fields
+
+        with codecs.open(csv_file_path, 'r', encoding='utf-8') as csv_file:
             for row in csv_file:
                 if not len(headers):
-                    headers = row.split('\t')
+                    headers = clean(row)
                     continue
-                row_fields = row.replace('\r', '').split('\t')
-                row_fields = [v.strip() for v in row_fields]
-                countries.append(dict(zip(headers, row_fields)))
+                countries.append(dict(zip(headers, clean(row))))
+
         return countries

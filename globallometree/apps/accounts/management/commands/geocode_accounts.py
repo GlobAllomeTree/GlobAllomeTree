@@ -66,9 +66,12 @@ class Command(BaseCommand):
             latitude = geocodes.raw[0]['geometry']['location']['lat']
             longitude = geocodes.raw[0]['geometry']['location']['lng']
 
+
+            print latitude, longitude, country_code
+
             try: 
                 country = Country.objects.get(iso_3166_1_2_letter_code=country_code)
-                profile.country = country
+                profile.location_country = country
             except Country.DoesNotExist:
                 print "Profile id %s - No results for country %s" % (profile.pk, country_code)
 
@@ -78,28 +81,28 @@ class Command(BaseCommand):
 
             profile.save()
 
-#(Pdb) pp geocode.raw[0]
-{u'address_components': [{u'long_name': u'Meurthe-et-Moselle',
-                          u'short_name': u'54',
-                          u'types': [u'administrative_area_level_2',
-                                     u'political']},
-                         {u'long_name': u'Lorraine',
-                          u'short_name': u'Lorraine',
-                          u'types': [u'administrative_area_level_1',
-                                     u'political']},
-                         {u'long_name': u'France',
-                          u'short_name': u'FR',
-                          u'types': [u'county', u'political']}],
- u'formatted_address': u'Meurthe-et-Moselle, France',
- u'geometry': {u'bounds': {u'northeast': {u'lat': 49.56326800000001,
-                                          u'lng': 7.123213100000001},
-                           u'southwest': {u'lat': 48.348987,
-                                          u'lng': 5.426108}},
-               u'location': {u'lat': 48.7997007, u'lng': 6.094701400000001},
-               u'location_type': u'APPROXIMATE',
-               u'viewport': {u'northeast': {u'lat': 49.56326800000001,
-                                            u'lng': 7.123213100000001},
-                             u'southwest': {u'lat': 48.348987,
-                                            u'lng': 5.426108}}},
- u'partial_match': True,
- u'types': [u'administrative_area_level_2', u'political']}
+# #(Pdb) pp geocode.raw[0]
+# {u'address_components': [{u'long_name': u'Meurthe-et-Moselle',
+#                           u'short_name': u'54',
+#                           u'types': [u'administrative_area_level_2',
+#                                      u'political']},
+#                          {u'long_name': u'Lorraine',
+#                           u'short_name': u'Lorraine',
+#                           u'types': [u'administrative_area_level_1',
+#                                      u'political']},
+#                          {u'long_name': u'France',
+#                           u'short_name': u'FR',
+#                           u'types': [u'county', u'political']}],
+#  u'formatted_address': u'Meurthe-et-Moselle, France',
+#  u'geometry': {u'bounds': {u'northeast': {u'lat': 49.56326800000001,
+#                                           u'lng': 7.123213100000001},
+#                            u'southwest': {u'lat': 48.348987,
+#                                           u'lng': 5.426108}},
+#                u'location': {u'lat': 48.7997007, u'lng': 6.094701400000001},
+#                u'location_type': u'APPROXIMATE',
+#                u'viewport': {u'northeast': {u'lat': 49.56326800000001,
+#                                             u'lng': 7.123213100000001},
+#                              u'southwest': {u'lat': 48.348987,
+#                                             u'lng': 5.426108}}},
+#  u'partial_match': True,
+#  u'types': [u'administrative_area_level_2', u'political']}
