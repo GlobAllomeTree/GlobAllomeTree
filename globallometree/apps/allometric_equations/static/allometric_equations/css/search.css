@@ -23,36 +23,27 @@
 }
 
 .agg-icon {
-	background-color: #97FF38;
+	background-color: rgba(102, 225, 20, 0.7);
 	text-align:center;
 	vertical-align:middle;
 }
 
 .country-agg {
-    background-color: #77CF18;
+    background-color: rgba(255, 255, 255, 0.7);
+    color:rgba(20, 20, 20, 0.85);
 }
 
 .agg-icon-1 {
-    border:1px solid #668;
+    border:1px solid rgba(100, 100, 100, 0.8);;
     border-radius:12px;
     line-height: 13px;
     font-size: .65em;
     font-weight: normal;
 }
 
-.agg-icon-red {
-   background-color: red;
-   border-radius:5px;
-   font-size: .3em;
-   line-height: 7px;
-}
-
-.agg-icon-yellow {
-    background-color: yellow;
-}
 
 .agg-icon-2 {
-    border:1px solid #557;
+    border:1px solid rgba(100, 100, 100, 0.7);;
     border-radius:14px;
     line-height: 20px;
     font-size: .75em;
@@ -60,7 +51,7 @@
 }
 
 .agg-icon-3 {
-    border:1px solid #446;
+    border:1px solid rgba(100, 100, 100, 0.6);;
     border-radius:16px;
     line-height: 23px;
     font-size: .8em;
@@ -68,7 +59,7 @@
 }
 
 .agg-icon-4 {
-    border:1px solid #335;
+    border:1px solid rgba(100, 100, 100, 0.5);;
     border-radius:18px;
     line-height: 28px;
     font-size: 1em;
@@ -76,9 +67,43 @@
 }
 
 .agg-icon-5 {
-    border:1.5px solid #224;
+    border:1.5px solid rgba(100, 100, 100, 0.4);;
     border-radius:18px;
     line-height: 35px;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: normal;
+}
+
+
+.geo-agg-icon-1 {
+    border:1px solid rgba(44, 97, 9, 0.6);
+    border-radius:3px;
+    width:0px;
+    height:0px;
+}
+
+.geo-agg-icon-2 {
+    border:1px solid rgba(44, 97, 9, 0.6);
+    border-radius:4px;
+    width:0px;
+    height:0px;
+}
+
+.geo-agg-icon-3 {
+    border:1px solid rgba(44, 97, 9, 0.6);
+    border-radius:5px;
+    width:0px;
+    height:0px;
+}
+.geo-agg-icon-4 {
+    border:1px solid rgba(44, 97, 9, 0.6);
+    border-radius:6px;
+    width:0px;
+    height:0px;
+}
+.geo-agg-icon-5 {
+    border:1px solid rgba(44, 97, 9, 0.6);
+    border-radius:7px;
+    width:0px;
+    height:0px;
 }

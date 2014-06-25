@@ -42,10 +42,11 @@ class SearchView(TemplateView):
     def get_country_centroids(self):
         countries = {}
         for country in Country.objects.all():
-            if country.iso_3166_1_3_letter_code:
-                countries[country.iso_3166_1_3_letter_code] = {
+            if country.iso3166a3:
+                countries[country.iso3166a3] = {
                     'latitude' : str(country.centroid_latitude),
-                    'longitude' : str(country.centroid_longitude)
+                    'longitude' : str(country.centroid_longitude),
+                    'common_name' : str(country.common_name)
                 }
             else:
                 print "MISSING COUNTRY 3166 3 for Country %s!" % country.common_name
@@ -78,14 +79,28 @@ class SearchView(TemplateView):
         #Send search fields to the the sqs.filter
         for field in self.form.cleaned_data:
         
-            if field in ['order_by', 'page']:
+            if field in ['order_by','Point_Latitude', 'Point_Longitude']:
                 continue
 
-            if self.form.cleaned_data.get(field, None) not in [None, '']: 
-                current_search.append( {'field' : self.form.fields[field].label,
-                                        'search_value' :  self.form.cleaned_data.get(field),
-                                        'clear_link'   :  self.get_query_string({ field : None})
-                                    })
+            if self.form.cleaned_data.get(field, None) not in [None, '']:
+                if field == 'Point_Distance':
+                    latitude = self.form.cleaned_data.get('Point_Latitude')
+                    longitude = self.form.cleaned_data.get('Point_Longitude')
+                    distance = self.form.cleaned_data.get('Point_Distance')
+                    summary = "%s km from %s and %s " % (distance, latitude, longitude)
+
+                    current_search.append( {'field' : 'Distance From Point',
+                                            'search_value' :  summary,
+                                            'clear_link'   :  self.get_query_string({ 'Point_Latitude' : None,
+                                                                                      'Point_Longitude' : None,
+                                                                                      'Point_Distance' : None,
+                                                                                     })
+                                        })
+                else: 
+                    current_search.append( {'field' : self.form.fields[field].label,
+                                            'search_value' :  self.form.cleaned_data.get(field),
+                                            'clear_link'   :  self.get_query_string({ field : None})
+                                        })
         return current_search     
  
     def export_link(self):

@@ -3,7 +3,7 @@ from globallometree.apps.locations.models import Continent, Country, Location, L
 from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 
 class ContinentAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('name', 'code')
 
 
 class CountryAdmin(admin.ModelAdmin):

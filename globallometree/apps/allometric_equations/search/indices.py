@@ -172,7 +172,7 @@ class AllometricEquationIndex(MappingType, Indexable):
     @classmethod
     def prepare_Country_3166_3(cls, obj):
         return list(set([
-            country.iso_3166_1_3_letter_code for country in [
+            country.iso3166a3 for country in [
                 location.country for location in
                 obj.location_group.locations.all()
             ] if country is not None

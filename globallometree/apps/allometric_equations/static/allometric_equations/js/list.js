@@ -12,14 +12,14 @@ window.app.listController = function () {
 
 	var resultTemplate  = '<div class="panel panel-default"">						\
 							<div class="panel-heading">								\
-								<a href="/allometric-equations/{{ID}}/"				\
+								<a href="/data/allometric-equations/{{ID}}/"				\
 								   class="btn btn-default pull-right btn-xs"> 		\
 									Detailed information 							\
 									<span class="glyphicon glyphicon-chevron-right"></span> \
 								</a>												\
 								<h3 class="panel-title">							\
-									<a href="/allometric-equations/{{ID}}/">		\
-										Equation {{ID}}							\
+									<a href="/data/allometric-equations/{{ID}}/">		\
+										Equation {{ID}}								\
 									</a>											\
 								</h3>												\
 							</div>													\
@@ -29,16 +29,20 @@ window.app.listController = function () {
 								  <dd><code>{{Equation}}</code></dd>				\
 								 													\
 								  <dt><small>FAO Biomes</small></dt>				\
-								  <dd><small>{{Biome_FAO}}&nbsp;</small></dd>   			\
+								  <dd><small>{{Biome_FAO}}&nbsp;</small></dd>   	\
 								 													\
 								  <dt><small>Species</small></dt>					\
-								  <dd><small>{{Species}}&nbsp;</small></dd>				\
+								  <dd><small>{{Species}}&nbsp;</small></dd>			\
 								  								 					\
 								  <dt><small>Countries</small></dt>					\
-								  <dd><small>{{Country}}&nbsp;</small></dd>				\
+								  <dd><small>{{Country}}&nbsp;</small></dd>			\
 								  													\
 								  <dt><small>Year</small></dt>						\
-								  <dd><small>{{Year}}&nbsp;</small></dd>					\
+								  <dd><small>{{Year}}&nbsp;</small></dd>			\
+										  								 			\
+								  <dt><small>Locations [Lat Lon]</small></dt>					\
+								  <dd><small>{{{Locations}}}&nbsp;</small></dd>		\
+								  													\
 								</dl>												\
 							</div>													\
 					   </div>';
@@ -132,6 +136,31 @@ window.app.listController = function () {
 			if(data['Year']) {
 				context['Year'] = data['Year'].join(', ');
 			}
+
+			if(data['Locations']) {
+				context['Locations'] = data['Locations'];
+				var searchDict = window.app.searchManager.getCurrentSearchDict();
+				var locationsSummaries = [];
+				for (var j=0; j < data['Locations'].length; j++) {
+					var location = data['Locations'][j];
+					var locationText = '[' + location['lat'] + ' ' + location['lon'] + ']';
+
+					if (   searchDict['Max_Latitude'] 
+						&& searchDict['Min_Latitude'] 
+						&& searchDict['Min_Longitude'] 
+						&& searchDict['Max_Longitude'] 
+						&& location['lat'] <= searchDict['Max_Latitude'] 
+						&& location['lat'] >= searchDict['Min_Latitude'] 
+						&& location['lon'] >= searchDict['Min_Longitude'] 
+						&& location['lon'] <= searchDict['Max_Longitude']) {
+
+							locationText = '<strong>' + locationText + '</strong>';
+					}	
+					locationsSummaries.push(locationText);
+				}
+				context['Locations'] = locationsSummaries.join(', ');
+			}
+
 			$resultsList.append(Mustache.render(resultTemplate, context));	
 		}
 	}

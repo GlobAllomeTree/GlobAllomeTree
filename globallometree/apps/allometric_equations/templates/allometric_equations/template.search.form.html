@@ -71,7 +71,7 @@
                        <a href="?Biome_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
                        <a href="?Country=Benin">Country: Benin</a>
                 </p>
-                <h3>Location by Country or Biome</h3>
+                <h3>Country or Biome</h3>
                 <div class="row">
                     <div class="col-lg-6">
                         {{ form.Country|as_crispy_field }}
@@ -85,7 +85,7 @@
                     </div>
 
                 </div>
-                <h3>By Precise Geographic Location</h3>
+                <h3>Geographic Location</h3>
                 <p>Note that when you search by precise location on the map, records that do not have a latitude and longitude will not be displayed. This includes records that have only a country but no latitude or longitude, they will not be included in these search results.</p>
                  <div class="row">
                     <div class="col-lg-6">
@@ -96,14 +96,14 @@
                         {{ form.Max_Longitude|as_crispy_field }}
                     </div>
                     <div class="col-lg-6">
-                        <h4>Search within Distance from Point</h4>            
+                        <h4>Search within Distance from Point</h4>
+                        {{ form.Point_Latitude|as_crispy_field }} 
+                        {{ form.Point_Longitude|as_crispy_field }}
+                        {{ form.Point_Distance|as_crispy_field }}         
                     </div>
-
                 </div>
-    
             </div>
      
-    
             <div class="tab-pane" id="components">
                 <p class="search-help-text">
                     Search allometric equations by tree components such as branch diameter, leaves, stump and fruit. <br>

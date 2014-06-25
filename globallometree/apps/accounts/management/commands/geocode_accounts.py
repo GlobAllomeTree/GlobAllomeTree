@@ -53,24 +53,30 @@ class Command(BaseCommand):
 
             geostring_2 = ', '.join([i for i in list_2 if i != ''])
 
+            #Otherwise, just try to geocode the country
+            geostring_3 = profile.country
+
             try:
                 geocodes = Geocoder.geocode(geostring_1)
             except GeocoderError:
                 try:
                     geocodes = Geocoder.geocode(geostring_2)
                 except GeocoderError:
-                    print "Profile id %s - No results for %s - %s " % (profile.pk, geostring_1, geostring_2)
-                    continue
-
+                    try:
+                        geocodes = Geocoder.geocode(geostring_3)
+                    except GeocoderError:
+                        print "Profile id %s - No results for '%s' or for '%s' " % (profile.pk, geostring_1, geostring_2)
+                        continue
+                   
             country_code = self.get_country_code(geocodes)
             latitude = geocodes.raw[0]['geometry']['location']['lat']
             longitude = geocodes.raw[0]['geometry']['location']['lng']
 
 
-            print latitude, longitude, country_code
+            #print latitude, longitude, country_code
 
             try: 
-                country = Country.objects.get(iso_3166_1_2_letter_code=country_code)
+                country = Country.objects.get(iso3166a2=country_code)
                 profile.location_country = country
             except Country.DoesNotExist:
                 print "Profile id %s - No results for country %s" % (profile.pk, country_code)

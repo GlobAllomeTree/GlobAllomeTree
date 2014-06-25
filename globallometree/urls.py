@@ -10,12 +10,12 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    ('^admin/', include(admin.site.urls)),
-
-    ('^allometric-equations/', include('apps.allometric_equations.urls')),
-    ('^accounts/', include('apps.accounts.urls')),
-    ('^journals/', include('apps.journals.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^accounts/', include('apps.accounts.urls')),
+    url(r'^journals/', include('apps.journals.urls')),
     
+    url(r'^data/allometric-equations/', include('apps.allometric_equations.urls')),
+
     #redirects from removed pages
     url(r'^data/search', RedirectView.as_view(url=reverse_lazy('equation_search'))),
     url(r'^data/submit-data/', RedirectView.as_view(url=reverse_lazy('equations_upload'))),

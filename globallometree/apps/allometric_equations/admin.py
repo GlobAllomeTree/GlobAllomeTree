@@ -62,7 +62,29 @@ class AllometricEquationAdmin(admin.ModelAdmin):
     ordering = ("ID",)
     list_filter = ("data_submission",)
     search_fields  = ('ID',)
-    pass
+    
+    fieldsets = [
+        ('Identification',   {'fields': [
+            'ID', 'IDequation', 'population', 'ecosystem'
+        ]}),
+        ('Taxonomy', {'fields': ['species_group']}),
+        ('Location', {'fields': ['location_group'], 'classes': ['collapse']}),
+        ('Components', {'fields': [
+            'B', 'Bd', 'Bg', 'Bt', 'L', 'Rb', 'Rf', 'Rm', 'S', 'T',
+            'F','Veg_Component'
+        ], 'classes': ['collapse']}),
+        ('Input/Output', {'fields': [
+            'X', 'Unit_X', 'Z', 'Unit_Z', 'W', 'Unit_W', 'U', 'Unit_U', 'V',
+            'Unit_V', 'Min_X', 'Max_X', 'Min_Z', 'Max_Z', 'Output', 'Output_TR',
+            'Unit_Y', 'Sample_size', 'R2', 'R2_Adjusted', 'RMSE', 'SEE',
+            'Top_dob', 'Stump_height', 'Corrected_for_bias', 'Bias_correction'
+        ], 'classes': ['collapse']}),
+        ('Allometry', {'fields': [
+            'Age', 'Equation', 'Substitute_equation', 'Ratio_equation',
+            'Segmented_equation'
+        ], 'classes': ['collapse']}),
+        ('Reference', {'fields': ['reference'], 'classes': ['collapse']}),
+    ]
 
 admin.site.register(Population, PopulationAdmin)
 admin.site.register(Ecosystem, EcosystemAdmin)

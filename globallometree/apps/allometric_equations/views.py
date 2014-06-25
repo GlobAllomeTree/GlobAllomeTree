@@ -14,7 +14,7 @@ from django.conf import settings
 from django.db import connection
 from django.views.generic.edit import FormView
 
-from .forms import SubmissionForm, SearchForm
+from .forms import SubmissionForm
 from .models import AllometricEquation, Submission
 
 from globallometree.apps.common.kill_gremlins import kill_gremlins
@@ -145,34 +145,6 @@ def species(request, selected_Genus=None):
                                {'genus_list': genus_list,
                                'is_page_data' : True }))
 
-
-class SearchView(FormView):
-    template_name = 'allometric_equations/template.search.html'
-    form_class = SearchForm
-
-
-    def form_valid(self, form):
-        pass
-
-
-def autocomplete(request, field): 
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect('/accounts/login/')
-        
-    term    = request.GET.get('term') 
-    sqs     = SearchQuerySet()
-    
-    kwargs = {field + '_auto':term} #ex) country_auto for the autocomplete index of country
-    sqs    = SearchQuerySet().facet(field).filter(**kwargs)
-
-    result_counts = sqs.facet_counts()['fields'][field]
-    
-    result = {'options':[]}
-
-    for result_count in result_counts:
-        result['options'].append(result_count[0])
-
-    return HttpResponse(json.dumps(result), mimetype='application/json; charset=utf8')
 
 
 def export(request):

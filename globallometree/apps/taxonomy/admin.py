@@ -8,7 +8,6 @@ class FamilyAdmin(admin.ModelAdmin):
 
 
 class GenusAdmin(admin.ModelAdmin):
-    raw_id_fields = ('family',)
     list_display = ('name', 'family',  'modified')
     search_fields  = ('name','family__name', )
     read_only_fields = ('created', 'modified')

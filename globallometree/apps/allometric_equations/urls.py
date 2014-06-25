@@ -4,8 +4,6 @@ from .search.views import SearchView
 
 urlpatterns = patterns('apps.allometric_equations.views',
 
-    url(r'^autocomplete/(.+)/$', 'autocomplete'),
-
     url(r'^export/$', 'export'),
             
     url(r'^submit$', SubmissionView.as_view(), name='equations_upload'),

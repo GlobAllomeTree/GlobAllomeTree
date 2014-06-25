@@ -112,13 +112,13 @@ window.app.searchManager = function (){
 
 		//If this search is trying to limit with a certain distance from a
 		//point then we use a Geo
-		if (searchDict['point_distance']) {
+		if (searchDict['Point_Latitude']) {
 			filters.push(ejs.GeoDistanceFilter('Locations')
-						.distance(searchDict['point_distance'])
+						.distance(1*searchDict['Point_Distance'])
 						.unit('km') //km or mi
 						.normalize(true)
-						.point(ejs.GeoPoint([searchDict['point_latitude'],
-										     searchDict['point_longitude']]))
+						.point(ejs.GeoPoint([1*searchDict['Point_Latitude'],
+										     1*searchDict['Point_Longitude']]))
 			)
 		}	
 
@@ -150,6 +150,11 @@ window.app.searchManager = function (){
 		if(params['boundingBox'] || isPreciseLocationSearch()) {
 			//Allow a custom bounding box to be passed in from the map
 			//to further limit results
+			//Bounding box 
+			//0 Min x (lon)
+			//1 Min y (lat)
+			//2 Max x (lon)
+			//3 Max y (lat)
 			if(params['boundingBox']) {
 				boundingBox = params['boundingBox'];
 			} else {
@@ -263,6 +268,10 @@ window.app.searchManager = function (){
 			Max_Longitude = 1 * searchDict['Max_Longitude'];
 		}
 		
+		//0 Min x (lon)
+		//1 Min y (lat)
+		//2 Max x (lon)
+		//3 Max y (lat)
 
 		if (boundingBox[0] < Min_Longitude) {
 			boundingBox[0] = Min_Longitude;

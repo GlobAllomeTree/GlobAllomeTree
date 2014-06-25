@@ -53,7 +53,7 @@ class UserProfile(models.Model):
     )
     location_country     = models.ForeignKey(Country, blank=True, null=True)
 
-    location_privacy  = models.CharField(max_length=20, default='anonymous')
+    location_privacy  = models.CharField(max_length=20, default='anonymous', choices=LOCATION_PRIVACY_CHOICES)
 
     def __unicode__(self):
         return u"User profile for %s" % self.user
@@ -62,8 +62,7 @@ class UserProfile(models.Model):
 # Notify a user their status has changed to active
 @receiver(pre_save, sender=User)
 def user_pre_save(sender, instance, signal, *args, **kwargs):
-    
-    
+
     try:
         #instance is the record about to be saved
         #compare user is the record in the db
