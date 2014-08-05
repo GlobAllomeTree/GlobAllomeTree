@@ -60,38 +60,27 @@ class SpeciesGroup(models.Model):
         help_text="The original ID_Group from the global import"
     )
 
-    def species_string(self):
-        string = ''
+    def species_set(self):
+        species_list = []
         for species in self.species.all():
-            if string != '': string += ', '
-            string += species.name
-        return string
+            #Allow for empty genus or family
+            names = []
+            
+            try:
+                names.append(species.genus.family.name)
+            except:
+                pass
 
-    def genera(self):
-        return list(set([
-            species.genus for species in
-                self.species.all() if species.genus is not None
-        ]))
+            try:
+                names.append(species.genus.name)
+            except:
+                pass
 
-    def genera_string(self):
-        string = ''
-        for genus in self.genera():
-            if string != '': string += ', '
-            string += genus.name
-        return string
+            names.append(species.name)
 
-    def families(self):
-        return list(set([
-            genus.family for genus in
-                self.genera() if genus.family is not None
-        ]))
+            species_list.append(' '.join(names))
 
-    def families_string(self):
-        string = ''
-        for family in self.families():
-            if string != '': string += ', '
-            string += family.name
-        return string
+        return list(set(species_list)) 
 
     def __unicode__(self):
         return self.name

@@ -40,7 +40,10 @@ window.app.listController = function () {
 								  <dt><small>Year</small></dt>						\
 								  <dd><small>{{Year}}&nbsp;</small></dd>			\
 										  								 			\
-								  <dt><small>Locations [Lat Lon]</small></dt>					\
+								  <dt><small>Output</small></dt>					\
+								  <dd><small>{{Output}}&nbsp;</small></dd>			\
+								  													\
+								  <dt><small>Locations [Lat Lon]</small></dt>		\
 								  <dd><small>{{{Locations}}}&nbsp;</small></dd>		\
 								  													\
 								</dl>												\
@@ -136,7 +139,9 @@ window.app.listController = function () {
 			if(data['Year']) {
 				context['Year'] = data['Year'].join(', ');
 			}
-
+			if(data['Output']) {
+				context['Output'] = data['Output'];
+			}
 			if(data['Locations']) {
 				context['Locations'] = data['Locations'];
 				var searchDict = window.app.searchManager.getCurrentSearchDict();

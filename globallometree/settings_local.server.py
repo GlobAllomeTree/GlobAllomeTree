@@ -7,9 +7,6 @@ def get_secret_key():
 
 DEBUG=True
 
-#This should coincide with the configuration in nginx that points to 
-#the elasticsearch proxy
-SEARCH_URL = '/searchapi'
 
 SECRET_KEY = get_secret_key()
 LOGGING = {

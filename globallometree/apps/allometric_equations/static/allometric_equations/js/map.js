@@ -332,6 +332,9 @@ window.app.mapController = function() {
 				.aggregation(
 					ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
 				)
+				.aggregation(
+					ejs.TermsAggregation('Output').field('Output')
+				)
 		);
 
 		var geohash_query = window.app.searchManager.getQuery({
@@ -368,6 +371,9 @@ window.app.mapController = function() {
 			)
 			.aggregation(
 				ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
+			)
+			.aggregation(
+					ejs.TermsAggregation('Output').field('Output')
 			)	
 		);
 
@@ -459,6 +465,12 @@ window.app.mapController = function() {
 			html += '<h5>FAO Biomes</h5>'  
 			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Biome_FAO'].buckets, ', ') + '</p>';
 		}
+
+		if(aggregation['Output'].buckets.length){
+			html += '<h5>Output</h5>'  
+			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Output'].buckets, ', ') + '</p>';
+		}
+		
 		return html;
 	}
 
