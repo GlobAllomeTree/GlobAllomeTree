@@ -74,13 +74,13 @@ class AllometricEquationIndex(MappingType, Indexable):
                 'T' :               estype_boolean, 
                 'F' :               estype_boolean, 
                 'Equation' :        estype_string_not_analyzed, 
+                'Substitute_equation' : estype_string_not_analyzed,
                 'Author' :          estype_string_not_analyzed,
                 'Year' :            estype_integer,
                 'Reference' :       estype_string_not_analyzed,
 
                 #utility
                 'has_precise_location' :        estype_boolean,
-
             }
         }
 

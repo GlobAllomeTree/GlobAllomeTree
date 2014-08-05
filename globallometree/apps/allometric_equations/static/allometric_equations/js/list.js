@@ -126,7 +126,7 @@ window.app.listController = function () {
 			var context = {};
 
 			context['ID'] = data['ID'];
-			context['Equation'] = data['Equation'];
+			context['Equation'] = data['Substitute_equation'];
 			if(data['Genus_Species']) {
 				context['Species'] = data['Genus_Species'].join(', ');
 			}

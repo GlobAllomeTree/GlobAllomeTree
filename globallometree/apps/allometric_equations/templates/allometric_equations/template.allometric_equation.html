@@ -80,86 +80,79 @@
         
 
 <div class="row">     
-    <div class="col-md-7">
+    <div class="col-md-12">
         <h3>Allometry</h3>
         <table class="table">
-            <tr><td> Equation: </td><td> <code>{{ allometric_equation.Substitute_equation }} </code> </td></tr>
-            <tr><td> Sample size: </td><td> {{ allometric_equation.Sample_size }} </td></tr>
-            <tr><td> R2: </td><td> {{ allometric_equation.R2|floatformat:"-2" }} </td></tr>
+            <tr><th style="width:200px"> Equation: </th><td> <code>{{ allometric_equation.Substitute_equation }} </code> </td></tr>
+            <tr><th> Sample size: </th><td> {{ allometric_equation.Sample_size }} </td></tr>
+            <tr><th> R2: </th><td> {{ allometric_equation.R2|floatformat:"-2" }} </td></tr>
         </table>
     </div>
 </div>
 <div class="row">     
-    <div class="col-md-7">
+    <div class="col-md-12">
         <h3>Taxonomy</h3>
         <table class="table">
-            <tr><td> Population: </td><td> {{ allometric_equation.population }} </td></tr>
-            <tr><td> Species:<br>
-            </td><td> {% for species in allometric_equation.species_group.species_set %} {{species}} <br> {% endfor %}</td></tr>
+            <tr><th style="width:200px"> Population: </th><td> {{ allometric_equation.population }} </td></tr>
+            <tr><th> Species:</th><td> {% for species in allometric_equation.species_group.species_set %} {{species}} <br> {% endfor %}</td></tr>
         </table>
   </div>
 </div>
 <div class="row">     
-    <div class="col-md-7">    
+    <div class="col-md-12">    
         <h3>Location</h3>
-        <div style="float:right;width:400px;">
-            <div id="regions_map_canvas"></div>
-            <br><br>
-            <div id="point_map_canvas_holder"></div>
-        </div>
+        
         <table class="table">  
-            <tr><td> Ecosystem: </td><td> {{ allometric_equation.ecosystem }} </td></tr>
-            <tr><td> Continent: </td><td> {{ allometric_equation.location_group.continents_string }} </td></tr>
-            <tr><td> Country: </td><td> {{ allometric_equation.location_group.countries_string }} </td></tr>
-            <tr><td> Location Name: </td><td> {{ allometric_equation.location_group.locations_string }} </td></tr>
-            <tr><td> Biome FAO: </td><td> {{ allometric_equation.location_group.biomes_fao_string }} </td></tr>
-            <tr><td> Biome UDVARDY: </td><td> {{ allometric_equation.location_group.biomes_udvardy_string }} </td></tr>
-            <tr><td> Biome WWF: </td><td> {{ allometric_equation.location_group.biomes_wwf_string }} </td></tr>
-            <tr><td> Biome HOLDRIDGE: </td><td> {{ allometric_equation.location_group.biomes_holdridge_string }} </td></tr>
-            <tr class="odds">  <td> Division BAILEY: </td><td> {{ allometric_equation.location_group.divisions_bailey_string }} </td></tr>
+            <tr><th style="width:200px"> Ecosystem: </th><td> {{ allometric_equation.ecosystem }} </td></tr>
+            <tr><th> Continent: </th><td> {{ allometric_equation.location_group.continents_string }} </td></tr>
+            <tr><th> Country: </th><td> {{ allometric_equation.location_group.countries_string }} </td></tr>
+            <tr><th> Location Name: </th><td> {{ allometric_equation.location_group.locations_string }} </td></tr>
+            <tr><th> Biome FAO: </th><td> {{ allometric_equation.location_group.biomes_fao_string }} </td></tr>
+            <tr><th> Biome UDVARDY: </th><td> {{ allometric_equation.location_group.biomes_udvardy_string }} </td></tr>
+            <tr><th> Biome WWF: </th><td> {{ allometric_equation.location_group.biomes_wwf_string }} </td></tr>
+            <tr><th> Biome HOLDRIDGE: </th><td> {{ allometric_equation.location_group.biomes_holdridge_string }} </td></tr>
+            <tr class="odds">  <th> Division BAILEY: </th><td> {{ allometric_equation.location_group.divisions_bailey_string }} </td></tr>
         </table>
   </div>
 </div>
 <div class="row">    
-    <div class="col-md-6">
+    <div class="col-md-12">
         <h3>Components</h3>
-        <table class="table" style="width:200px">
+        <table class="table" >
             <tr>
-                <td> Components: </td>
-                <td>
+                <th style="width:200px"> Components: </th>
+                <td >
                     {{ allometric_equation.components_string }}
                 </td>
             </tr>
         </table> 
-    </div>
-    <div class="col-md-6">
-        <br><br>
         <img src="{% static 'images/components.png' %}" width="300" />
-   </div>
+        <br><br>
+    </div>
 </div>
 <div class="row">     
-    <div class="col-md-7">
+    <div class="col-md-12">
         <h3>Input/Output</h3>
-        <table class="table" style="width:200px">
-            <tr><td> X: </td><td> {{ allometric_equation.X }} </td></tr>
-            <tr><td> Unit X: </td><td> {{ allometric_equation.Unit_X }} </td></tr>
-            <tr><td> Unit Y: </td><td> {{ allometric_equation.Unit_Y }} </td></tr>
-            <tr><td> Z: </td><td> {{ allometric_equation.Z }} </td></tr>
-            <tr><td> Unit Z: </td><td> {{ allometric_equation.Unit_Z }} </td></tr>
-            <tr><td> W: </td><td> {{ allometric_equation.W }} </td></tr>
-            <tr><td> Unit_W: </td><td> {{ allometric_equation.Unit_W }} </td></tr>
-            <tr><td> U: </td><td> {{ allometric_equation.U }} </td></tr>
-            <tr><td> Unit_U: </td><td> {{ allometric_equation.Unit_U }} </td></tr>
-            <tr><td> V: </td><td> {{ allometric_equation.V }} </td></tr>
-            <tr><td> Unit V: </td><td> {{ allometric_equation.Unit_V }} </td></tr>
-            <tr><td> Min X: </td><td> {{ allometric_equation.Min_X|floatformat:"-2" }} </td></tr>
-            <tr><td> Max X: </td><td> {{ allometric_equation.Max_X|floatformat:"-2" }} </td></tr>
-            <tr><td> Min Z: </td><td> {{ allometric_equation.Min_Z|floatformat:"-2" }} </td></tr>
-            <tr><td> Max Z: </td><td> {{ allometric_equation.Max_Z|floatformat:"-2" }} </td></tr>
-            <tr><td> Output: </td><td> {{ allometric_equation.Output }} </td></tr>
-            <tr><td> Output TR: </td><td> {{ allometric_equation.Output_TR }} </td></tr>
-            <tr><td> Age: </td><td> {{ allometric_equation.Age }} </td></tr>
-            <tr><td> Veg component: </td><td> {{ allometric_equation.Veg_Component }} </td></tr>
+        <table class="table">
+            <tr><th style="width:200px"> X: </th><td> {{ allometric_equation.X }} </td></tr>
+            <tr><th> Unit X: </th><td> {{ allometric_equation.Unit_X }} </td></tr>
+            <tr><th> Unit Y: </th><td> {{ allometric_equation.Unit_Y }} </td></tr>
+            <tr><th> Z: </th><td> {{ allometric_equation.Z }} </td></tr>
+            <tr><th> Unit Z: </th><td> {{ allometric_equation.Unit_Z }} </td></tr>
+            <tr><th> W: </th><td> {{ allometric_equation.W }} </td></tr>
+            <tr><th> Unit_W: </th><td> {{ allometric_equation.Unit_W }} </td></tr>
+            <tr><th> U: </th><td> {{ allometric_equation.U }} </td></tr>
+            <tr><th> Unit_U: </th><td> {{ allometric_equation.Unit_U }} </td></tr>
+            <tr><th> V: </th><td> {{ allometric_equation.V }} </td></tr>
+            <tr><th> Unit V: </th><td> {{ allometric_equation.Unit_V }} </td></tr>
+            <tr><th> Min X: </th><td> {{ allometric_equation.Min_X|floatformat:"-2" }} </td></tr>
+            <tr><th> Max X: </th><td> {{ allometric_equation.Max_X|floatformat:"-2" }} </td></tr>
+            <tr><th> Min Z: </th><td> {{ allometric_equation.Min_Z|floatformat:"-2" }} </td></tr>
+            <tr><th> Max Z: </th><td> {{ allometric_equation.Max_Z|floatformat:"-2" }} </td></tr>
+            <tr><th> Output: </th><td> {{ allometric_equation.Output }} </td></tr>
+            <tr><th> Output TR: </th><td> {{ allometric_equation.Output_TR }} </td></tr>
+            <tr><th> Age: </th><td> {{ allometric_equation.Age }} </td></tr>
+            <tr><th> Veg component: </th><td> {{ allometric_equation.Veg_Component }} </td></tr>
         </table>
     </div>
 </div>
@@ -167,7 +160,7 @@
     <div class="col-md-7">
         <h3>Reference</h3>
         <table class="table">
-            <tr><td> Label: </td><td> {{ allometric_equation.reference.label }} </td></tr>
+            <tr><td style="width:200px"> Label: </td><td> {{ allometric_equation.reference.label }} </td></tr>
             <tr><td> Author: </td><td> {{ allometric_equation.reference.author }} </td></tr>
             <tr><td> Year: </td><td> {{ allometric_equation.reference.year }} </td></tr>
             <tr><td> Reference: </td><td> {{ allometric_equation.reference.reference }} </td></tr>
