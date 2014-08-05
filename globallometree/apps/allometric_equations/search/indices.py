@@ -225,25 +225,7 @@ class AllometricEquationIndex(MappingType, Indexable):
 
     @classmethod
     def prepare_Locations(cls, obj):
-        if hasattr(obj, '_locations_cache'):
-            return obj._locations_cache
-
-        locations = []
-        for location in obj.location_group.locations.all():
-
-            if not location.Latitude or not location.Longitude:
-                #locations can just be countries or biomes
-                #so in that case we just skip over the object
-                continue
-
-            #dicts do not work with unique sets
-            if not any(l == {'lat' : location.Latitude,  'lon' : location.Longitude} for l in locations):
-                locations.append({
-                    "lat" : location.Latitude,
-                    "lon" : location.Longitude
-                })
-        obj._locations_cache = locations
-        return locations
+        return obj.location_group.get_precise_coordinates()
 
     @classmethod
     def prepare_Author(cls, obj):

@@ -105,6 +105,24 @@ class LocationGroup(models.Model):
             string += location.name
         return string
 
+    def lat_lon_string(self):
+        return ', '.join([u'[%s, %s]'%(co['lat'], co['lon']) for co in self.get_precise_coordinates()])
+
+    def get_precise_coordinates(self):
+        locations = []
+        for location in self.locations.all():
+            if not location.Latitude or not location.Longitude:
+                #locations can just be countries or biomes
+                #so in that case we just skip over the object
+                continue
+            #dicts do not work with unique sets
+            if not any(l == {'lat' : location.Latitude,  'lon' : location.Longitude} for l in locations):
+                locations.append({
+                    "lat" : location.Latitude,
+                    "lon" : location.Longitude
+                })
+        return locations
+
     def countries(self):
         return list(set([
             location.country for location in
@@ -217,7 +235,6 @@ class Location(models.Model):
     division_bailey = models.ForeignKey(DivisionBailey, blank=True, null=True)
     biome_holdridge = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
     original_ID_Location = models.IntegerField(null=True, blank=True, help_text="The original ID_Location from the global import")
-
 
     def __unicode__(self):
         return self.name

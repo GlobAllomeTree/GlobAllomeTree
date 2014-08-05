@@ -188,8 +188,6 @@ window.app.searchManager = function (){
 			}
 		}
 
-		
-
 		return query;
 	}
 
