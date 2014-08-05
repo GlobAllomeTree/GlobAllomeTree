@@ -13,116 +13,139 @@
     -->
     <title>GlobAllomaTree Equation {{ tree_equation.ID }}</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" href="{% static 'css/pdf.css' %}" />
     <style type="text/css">
 
-         @page {
+        @page {
             size: letter portrait;
             margin: .5in 0.25in 0.5in 0.25in;
             padding: 0;
         } 
 
+        body {
+            font-weight:normal;
+        }
+
+        h1, p, table, td {
+            display:block;
+        } 
+
+        .section-header {
+            font-size: 14pt;
+            color:#147A00;
+            padding:20px 0px 0px 0px;
+            margin:0px 0px 0px 0px;
+        }
+
+        .doc-header {
+            font-size: 16pt;
+            color:#444;
+            padding:0px 0px 10px 0px;
+        }
+
+        th {
+            border-top:1px solid #ddd;
+            font-size:10pt;
+            font-weight:bold;
+            vertical-align: top;
+            padding:4px;
+        }
+
+        td {
+            border-top:1px solid #ddd;
+            font-size:9pt;
+            font-weight:normal;
+            padding:4px;
+            vertical-align: top;
+        } 
 
     </style>
 </head>
 <body>
 
-    <p style="text-align:right;">Generated from <a href="http://globallometree.org/data/equation/{{ tree_equation.ID }}/">http://globallometree.org/data/equation/{{ tree_equation.ID }}/</a></p>
-
-    <p style="font-weight:bold;font-size:15pt">Equation {{ tree_equation.ID }}</p>
-
-
-    <p class="section-header" >Allometry</p>
-
-    <table>
-        <tr class="odd"> <td style="font-weight:normal"> Equation: </td> <td style="font-weight:normal"> {{ tree_equation.Equation }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Sample size: </td> <td style="font-weight:normal"> {{ tree_equation.Sample_size }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normalw"> R2: </td> <td style="font-weight:normal"> {{ tree_equation.R2|floatformat:"-2" }} </td> </tr>
-    </table>
-
-    <p class="section-header">Identification</p>
-
-    <table>
-        <tr class="odd"> <td style="font-weight:normal"> ID: </td> <td style="font-weight:normal"> {{ tree_equation.ID }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Population: </td> <td style="font-weight:normal"> {{ tree_equation.Population }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Ecosystem: </td> <td style="font-weight:normal"> {{ tree_equation.Ecosystem }} </td> </tr>
-    </table>
-
-
-    <p class="section-header">Taxonomy</p>
-
-    <table>
-        <tr class="odd"> <td style="font-weight:normal"> Family: </td> <td style="font-weight:normal"> {{ tree_equation.Family }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Genus: </td> <td style="font-weight:normal"> {{ tree_equation.Genus }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Species: </td> <td style="font-weight:normal"> {{ tree_equation.Species }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Species group: </td> <td style="font-weight:normal"> {{ tree_equation.Group_Species }} </td> </tr>
-    </table>
-
-
-    <p class="section-header">Location</p>
-
-    <table>
-        <tr class="odd"> <td style="font-weight:normal"> Continent: </td> <td style="font-weight:normal"> {{ tree_equation.Continent }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Country: </td> <td style="font-weight:normal"> {{ tree_equation.Country }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Location: </td> <td style="font-weight:normal"> {{ tree_equation.Location }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Location group: </td> <td style="font-weight:normal"> {{ tree_equation.Group_Location }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Biome FAO: </td> <td style="font-weight:normal"> {{ tree_equation.Biome_FAO }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Biome UDVARDY: </td> <td style="font-weight:normal"> {{ tree_equation.Biome_UDVARDY }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Biome WWF: </td> <td style="font-weight:normal"> {{ tree_equation.Biome_WWF }} </td> </tr>
-        <tr class="even"> <td style="font-weight:normal"> Biome HOLDRIDGE: </td> <td style="font-weight:normal"> {{ tree_equation.Biome_HOLDRIDGE }} </td> </tr>
-        <tr class="odd">  <td style="font-weight:normal"> Division BAILEY: </td> <td style="font-weight:normal"> {{ tree_equation.Division_BAILEY }} </td> </tr>
-    </table>
 
 
 
-    <p class="section-header" style="page-break-before: always;">Components</p>
-
-    <table>
-        <tr class="odd">
-            <td style="font-weight:normal"> Components: </td>
-            <td style="font-weight:normal">
-                {{ tree_equation.components_string }}
-                <br />
-                <img src="{% static 'images/components.jpg' %}" width="200" alt=""></img>
-            </td>
-        </tr>
-    </table>
+<p style="text-align:right;">Generated from <a href="http://globallometree.org/data/equation/{{ tree_equation.ID }}/">http://globallometree.org/data/allometric-equations/{{ allometric_equation.ID }}/</a></p>
 
 
-    <p class="section-header">Input / Output</p>
+<h2 class="doc-header">Allometric Equation {{ allometric_equation.ID }}</h2>
+      
+         
+<h3 class="section-header">Allometry</h3>
+<table class="table">
+    <tr><th style="width:210px"> Equation: </th><td> <code>{{ allometric_equation.Substitute_equation }} </code> </td></tr>
+    <tr><th> Sample size: </th><td> {{ allometric_equation.Sample_size }} </td></tr>
+    <tr><th> R2: </th><td> {{ allometric_equation.R2|floatformat:"-2" }} </td></tr>
+</table>
+  
+<h3 class="section-header">Taxonomy</h3>
+<table class="table">
+    <tr><th style="width:210px"> Population: </th><td> {{ allometric_equation.population }} </td></tr>
+    <tr><th> Species:</th><td> {% for species in allometric_equation.species_group.species_set %} {{species}} <br> {% endfor %}</td></tr>
+</table>
+  
+<h3 class="section-header">Location</h3>
 
-    <table>
-        <tr class="odd"> <td style="font-weight:normal"> X: </td> <td style="font-weight:normal"> {{ tree_equation.X }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Unit X: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_X }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Unit Y: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_Y }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Z: </td> <td style="font-weight:normal"> {{ tree_equation.Z }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Unit Z: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_Z }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> W: </td> <td style="font-weight:normal"> {{ tree_equation.W }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Unit_W: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_W }} </td> </tr>
-        <tr class="even"> <td style="font-weight:normal"> U: </td> <td style="font-weight:normal"> {{ tree_equation.U }} </td> </tr>
-        <tr class="odd">  <td style="font-weight:normal"> Unit_U: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_U }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> V: </td> <td style="font-weight:normal"> {{ tree_equation.V }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Unit V: </td> <td style="font-weight:normal"> {{ tree_equation.Unit_V }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Min X: </td> <td style="font-weight:normal"> {{ tree_equation.Min_X|floatformat:"-2" }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Max X: </td> <td style="font-weight:normal"> {{ tree_equation.Max_X|floatformat:"-2" }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Min Z: </td> <td style="font-weight:normal"> {{ tree_equation.Min_Z|floatformat:"-2" }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Max Z: </td> <td style="font-weight:normal"> {{ tree_equation.Max_Z|floatformat:"-2" }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Output: </td> <td style="font-weight:normal"> {{ tree_equation.Output }} </td> </tr>
-        <tr class="even"> <td style="font-weight:normal"> Output TR: </td> <td style="font-weight:normal"> {{ tree_equation.Output_TR }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Age: </td> <td style="font-weight:normal"> {{ tree_equation.Age }} </td> </tr>
-        <tr class="even"> <td style="font-weight:normal"> Veg component: </td> <td style="font-weight:normal"> {{ tree_equation.Veg_Component }} </td> </tr>
-    </table>
+<table class="table">  
+    
+    <tr><th style="width:210px"> Location Names: </th><td> {{ allometric_equation.location_group.locations_string }} </td></tr>  
+    <tr><th> Country: </th><td> {{ allometric_equation.location_group.countries_string }} </td></tr>
+    <tr><th> Continent: </th><td> {{ allometric_equation.location_group.continents_string }} </td></tr>
+    <tr><th > Ecosystem: </th><td> {{ allometric_equation.ecosystem }} </td></tr>
+    <tr><th> Biome FAO: </th><td> {{ allometric_equation.location_group.biomes_fao_string }} </td></tr>
+    <tr><th> Biome UDVARDY: </th><td> {{ allometric_equation.location_group.biomes_udvardy_string }} </td></tr>
+    <tr><th> Biome WWF: </th><td> {{ allometric_equation.location_group.biomes_wwf_string }} </td></tr>
+    <tr><th> Biome HOLDRIDGE: </th><td> {{ allometric_equation.location_group.biomes_holdridge_string }} </td></tr>
+    <tr> <th> Division BAILEY: </th><td> {{ allometric_equation.location_group.divisions_bailey_string }} </td></tr>
+     <tr> <th> Precise Locations [Lat Lon]: </th><td> {{ allometric_equation.location_group.lat_lon_string }}
 
+   </td></tr>
+
+</table>
+       
+<h3 class="section-header">Components</h3>
+<table class="table" >
+    <tr>
+        <th style="width:210px"> Components: </th>
+        <td >
+            <strong><em>{{ allometric_equation.components_string }}</em></strong>
+        </td>
+    </tr>
+</table> 
+<img src="{% static 'images/components.png' %}" width="300" />
+
+
+
+<h3 class="section-header">Input/Output</h3>
+<table class="table">
+    <tr><th style="width:210px"> X: </th><td> {{ allometric_equation.X }} </td></tr>
+    <tr><th> Unit X: </th><td> {{ allometric_equation.Unit_X }} </td></tr>
+    <tr><th> Unit Y: </th><td> {{ allometric_equation.Unit_Y }} </td></tr>
+    <tr><th> Z: </th><td> {{ allometric_equation.Z }} </td></tr>
+    <tr><th> Unit Z: </th><td> {{ allometric_equation.Unit_Z }} </td></tr>
+    <tr><th> W: </th><td> {{ allometric_equation.W }} </td></tr>
+    <tr><th> Unit_W: </th><td> {{ allometric_equation.Unit_W }} </td></tr>
+    <tr><th> U: </th><td> {{ allometric_equation.U }} </td></tr>
+    <tr><th> Unit_U: </th><td> {{ allometric_equation.Unit_U }} </td></tr>
+    <tr><th> V: </th><td> {{ allometric_equation.V }} </td></tr>
+    <tr><th> Unit V: </th><td> {{ allometric_equation.Unit_V }} </td></tr>
+    <tr><th> Min X: </th><td> {{ allometric_equation.Min_X|floatformat:"-2" }} </td></tr>
+    <tr><th> Max X: </th><td> {{ allometric_equation.Max_X|floatformat:"-2" }} </td></tr>
+    <tr><th> Min Z: </th><td> {{ allometric_equation.Min_Z|floatformat:"-2" }} </td></tr>
+    <tr><th> Max Z: </th><td> {{ allometric_equation.Max_Z|floatformat:"-2" }} </td></tr>
+    <tr><th> Output: </th><td> {{ allometric_equation.Output }} </td></tr>
+    <tr><th> Output TR: </th><td> {{ allometric_equation.Output_TR }} </td></tr>
+    <tr><th> Age: </th><td> {{ allometric_equation.Age }} </td></tr>
+    <tr><th> Veg component: </th><td> {{ allometric_equation.Veg_Component }} </td></tr>
+</table>
    
-
-    <p class="section-header" style="page-break-before: always;">Reference</p>
-
-    <table>
-        <tr class="odd"> <td style="font-weight:normal"> Label: </td> <td style="font-weight:normal"> {{ tree_equation.Label }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Author: </td> <td style="font-weight:normal"> {{ tree_equation.Author }} </td> </tr>
-        <tr class="odd"> <td style="font-weight:normal"> Year: </td> <td style="font-weight:normal"> {{ tree_equation.Year }} </td> </tr>
-        <tr class="even">  <td style="font-weight:normal"> Reference: </td> <td style="font-weight:normal"> {{ tree_equation.Reference }} </td> </tr>
-    </table>
+<h3 class="section-header">Reference</h3>
+<table class="table">
+    <tr><th style="width:210px"> Label: </th><td> {{ allometric_equation.reference.label }} </td></tr>
+    <tr><th> Author: </th><td> {{ allometric_equation.reference.author }} </td></tr>
+    <tr><th> Year: </th><td> {{ allometric_equation.reference.year }} </td></tr>
+    <tr><th> Reference: </th><td> {{ allometric_equation.reference.reference }} </td></tr>
+</table>
 
 </body>
 </html>
