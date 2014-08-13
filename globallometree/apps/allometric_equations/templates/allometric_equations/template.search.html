@@ -25,11 +25,18 @@
                 app.listController.init({
                     el : 'results-list-container'           
                 });
+
                 $('a[href="#results-map"]').on('shown.bs.tab', function(){
                     app.mapController.initOrShowMap({
                         el : 'map'            
                     });
                 });    
+
+                $('#export-form').submit(function(event) {
+                    var query = app.searchManager.getQuery().from(0).size(1000);
+                    query = JSON.stringify(query.toJSON());
+                    $('#export-query').val(query);
+                });
 
             });
         </script>
@@ -54,11 +61,14 @@
             <div id="search-results">
         		<!-- Result Tabs -->
                 <div style="float:right"> 
-                    <a target="_blank" href="/data/export/{{form.export_link}}"
-                        class="btn btn-succcess" id="exportButton">
-                        Export
-                        <span class="glyphicon glyphicon-download"></span> 
-                    </a>
+                    <form action='{% url 'equations_export' %}' id="export-form" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="query" id="export-query" />
+                        <button type="submit" class="btn btn-default">
+                            Export
+                            <span class="glyphicon glyphicon-download"></span> 
+                        </button>
+                    <form>
                 </div>
         		<ul id="results-tab" class="nav nav-tabs">
         			<li class="active">

@@ -4,7 +4,7 @@ from .search.views import SearchView
 
 urlpatterns = patterns('apps.allometric_equations.views',
 
-    url(r'^export/$', 'export'),
+    url(r'^export/$', 'export', name='equations_export'),
             
     url(r'^submit$', SubmissionView.as_view(), name='equations_upload'),
     url(r'^submit/complete/$', SubmissionCompleteView.as_view()),

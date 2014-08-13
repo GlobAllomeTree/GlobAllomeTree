@@ -61,8 +61,82 @@ window.app.searchManager = function (){
 		'Max_Z__lte'
 	]
 
-		// //Allometry
-		// Equation : 'term',
+	
+	// var export_simple = function(value) {
+	// 	if value : return value;
+	// 	return 'None'
+	// }
+
+
+	// var exportFunctionMap = {
+
+	// 	//Equation
+	// 	Equation: export_text,
+	// 	Substitute_equation: export_text,
+		
+	// 	//Reference
+	// 	Author: export_text,
+	// 	Reference: export_text,
+	// 	Year: export_text,
+
+	// 	//Equation Characteristics
+	// 	Unit_U: export_text,
+	// 	Unit_W: export_text,
+	// 	Unit_V: export_text,
+	// 	Unit_Y: export_text,
+	// 	Unit_X: export_text,
+	// 	Unit_Z: export_text,
+	// 	Output: export_text,
+
+	// 	//Sample Location 
+	// 	Country_3166_3: export_list_text,
+	// 	Division_BAILEY: export_list_text,
+	// 	Biome_UDVARDY: export_list_text,
+	// 	Biome_WWF: export_list_text,
+	// 	Biome_HOLDRIDGE: export_list_text,
+	// 	Biome_FAO: export_list_text,
+	// 	Country: export_list_text,
+	// 	Genus_Species: export_list_text,
+	// 	Population: export_list_text,
+	// 	Ecosystem: export_list_text,
+	// 	Locations: export_list_text, 
+		
+	// 	//Taxonomy
+	// 	Genus: export_list_text,
+	// 	Species: export_list_text,
+		
+
+	// 	//Equation Components
+	// 	Bd: export_bool,
+	// 	Bg: export_bool,
+	// 	B: export_bool,
+	// 	Bt: export_text,
+	// 	F: export_bool,
+	// 	L: export_bool,
+	// 	S: export_bool,
+	// 	T: export_bool,
+	// 	W: export_bool,
+
+	// 	Rf: export_text,
+	// 	Rb: export_text,
+	// 	Rm: export_text,
+
+	// 	//Equation input numbers
+	// 	U: export_numeric,
+	// 	V: export_numeric,
+	// 	X: export_numeric,
+	// 	Z: export_numeric,
+
+	// 	ID: export_numeric,
+	// 	Min_X: export_numeric,
+	// 	Min_Z: export_numeric,
+	// 	Max_X: export_numeric,
+	// 	Max_Z: export_numeric,
+
+	// 	has_precise_location: 'skip'
+	// };
+
+
 		
 
 	var setSearchDict = function(dict) {
@@ -78,7 +152,6 @@ window.app.searchManager = function (){
 			data: JSON.stringify(params['query'].toJSON()),
 			success: params['success']
 		});
-		
 	}
 
 	var isPreciseLocationSearch = function() {
@@ -295,7 +368,7 @@ window.app.searchManager = function (){
 		getQuery : getQuery,
 		search : search,
 		getLink : getLink,
-		getCurrentSearchDict : getCurrentSearchDict
+		getCurrentSearchDict : getCurrentSearchDict	
 	}
 
 }();

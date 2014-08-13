@@ -1,5 +1,5 @@
-import csv
 import json
+
 import cStringIO as StringIO
 import xhtml2pdf.pisa as pisa
 
@@ -13,6 +13,9 @@ from django.core.mail import mail_managers
 from django.conf import settings
 from django.db import connection
 from django.views.generic.edit import FormView
+
+#Get the elasticutils objects configured from settings.py
+from elasticutils.contrib.django import get_es
 
 from .forms import SubmissionForm
 from .models import AllometricEquation, Submission
@@ -146,66 +149,25 @@ def species(request, selected_Genus=None):
                                'is_page_data' : True }))
 
 
-
 def export(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
-
-    ignore_fields = ['data_submission',]
-
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect('/accounts/login/')
-
-    form = SearchForm(request.GET)
-    sqs = form.search()
-   
-    response = HttpResponse(mimetype='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=db-equations.txt'
-    writer = csv.writer(response, delimiter='\t')
-    # Write headers to CSV file
-    headers = []
-    for field in AllometricEquation._meta.fields:
-        if field.name in ignore_fields:
-            continue
-        headers.append(field.name.encode(settings.DATA_EXPORT_ENCODING))
-    writer.writerow(headers)
-    # Write data to CSV file
-    
-    for result in sqs:
-        obj = AllometricEquation.objects.get(pk=result.id)
-        row = []
-        for field in AllometricEquation._meta.fields:
-            if field.name in ignore_fields:
-                continue
-            val = getattr(obj, field.name)
-
-            if type(val) == bool:
-                if val:
-                    val = 'True'
-                else:
-                    val = 'False'
-            elif val in [None, '']:
-                val = 'None'
-           
-            if type(val) != unicode:
-                val = unicode(val)
-
-            try:
-                val_encoded = val.encode(settings.DATA_EXPORT_ENCODING)
-            except:
-                val = kill_gremlins(val)
-                try:
-                    val_encoded = val.encode(settings.DATA_EXPORT_ENCODING)
-                except:
-
-                    val_encoded = ''
-                    for letter in val:
-                        try:
-                            letter = letter.encode(settings.DATA_EXPORT_ENCODING)
-                        except:
-                            letter = '?'
-                        val_encoded += letter
-
-            row.append(val_encoded)
-        writer.writerow(row)
+    # Here we take the query that was generated client side and
+    # pass it to elasicsearch on the server to facilitate an easy
+    # way for the browser to download
+    # We also strip it down to make the json more useful for researchers
+    query = json.loads(request.POST.get('query'))
+    #Try to prevent any obvious hacking attempts
+    assert query.keys() == [u'query', u'from', u'size']
+    assert query['size'] <= 1000
+    assert query['from'] == 0
+    es = get_es(urls=settings.ES_URLS)
+    result = es.search(body=query)
+    cleaned = []
+    for hit in result['hits']['hits']:
+        del hit['_source']['has_precise_location']
+        cleaned.append(hit['_source'])
+    json_dump = json.dumps(cleaned, indent=4)
+    response = HttpResponse(json_dump)
+    response['Content-Disposition'] = 'attachment; filename=allometric_equations.json'
     return response
