@@ -2,7 +2,7 @@ FROM tomgruner/docker-base
 
 MAINTAINER Thomas Gruner "tom.gruner@gmail.com"
 
-RUN apt-get install libxml2-dev libxslt1-dev python-dev python-lxml
+RUN apt-get install -y libxml2-dev libxslt1-dev python-dev python-lxml
 #Install the requirements first to keep image changes as minimal as possible
 #This takes advantage of the caching mechanism
 #By adding the requirement files before the code, they only invalidate the cache
