@@ -6,6 +6,3 @@ django-extensions==1.3.3
 
 ######################## Parsing Journal Feeds
 feedparser==5.1.3
-
-####################### Frontend
-django-bootstrap3==3.0.0

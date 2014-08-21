@@ -1,13 +1,16 @@
-{% load cms_tags sekizai_tags staticfiles bootstrap3  %}
+{% load cms_tags sekizai_tags staticfiles %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GlobAllomeTree</title>
-    {% bootstrap_css %}
+    
     {% render_block "css" %}
+
     {% addtoblock "css" %}
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
     {% endaddtoblock %}
 
@@ -89,9 +92,9 @@
         </div>
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     {% render_block "js" %}
     {% addtoblock "js" %}
-    {% bootstrap_javascript %}
     <script type="text/javascript">
         $(function () {
             $('#jump-to-eq-button').click(function() {
@@ -104,6 +107,7 @@
             })
         });
     </script>
+
     <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-42545926-1']);

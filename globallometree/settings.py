@@ -134,9 +134,6 @@ INSTALLED_APPS = (
     'globallometree.apps.locations',
     'globallometree.apps.allometric_equations',
     'globallometree.apps.wood_densities',
-    'globallometree.apps.bootstrap_3_theme', #our app must got first here for overrides
-    'bootstrap3', 
-
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
 
@@ -150,8 +147,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 FORCE_SCRIPT_NAME = ''
 
 #Static files configuration
+#STATIC_ROOT This is where static files get collected for serving by nginx
 STATIC_ROOT = '/opt/data/web/static'
+#STATIC_URL is the location the browser requests static media from
 STATIC_URL = '/static/'
+#STATICFILES_DIRS are static source directories
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_PATH, "templates", "static"),
+)
 
 
 #Encoding used for export and import of data for Allometric Equations
