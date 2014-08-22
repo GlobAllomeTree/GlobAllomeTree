@@ -4,7 +4,7 @@ from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
-from globallometree.apps.common.estypes import *
+from globallometree.apps.search_helpers.estypes import *
 
 from ..models import UserProfile
 
@@ -33,14 +33,15 @@ class UserProfileIndex(MappingType, Indexable):
         """Returns an Elasticsearch mapping for this MappingType"""
         mapping = {
             'properties': {
-                'ID':  estype_integer,
+                'id':  estype_integer,
                 'Name' :  estype_string_not_analyzed,
                 'Institution_name' : estype_string_not_analyzed,
                 'Country' : estype_string_not_analyzed,
+                'Location' :  estype_geopoint_geohashed,
 
                 #utility
                 'anonymous' : estype_boolean,
-
+                'has_precise_location' : estype_boolean
             }
         }
 
@@ -57,9 +58,15 @@ class UserProfileIndex(MappingType, Indexable):
             obj = cls.get_model().objects.get(pk=obj_id)
 
         document = {}
-        #Create the document dynamically using the mapping, obj, and prepare methods
-        for field in cls.get_mapping()['properties'].keys():
-            document[field] = cls.get_field_value(obj, field)
+
+        if obj.location_privacy == 'anonymous':
+            #Use a more limited set of fields for the anonymous index
+            for field in ['id', 'Location', 'Institution_name', 'Country']:
+                document[field] = cls.get_field_value(obj, field)
+        else:
+            #Create the document dynamically using the mapping, obj, and prepare methods
+            for field in cls.get_mapping()['properties'].keys():
+                document[field] = cls.get_field_value(obj, field)
             
         return document
 
@@ -86,17 +93,33 @@ class UserProfileIndex(MappingType, Indexable):
             raise Exception("No model field or prepare method found for field %s" % field)
 
     @classmethod
+    def prepare_ID(cls, obj):
+        return obj.user.pk
+
+    @classmethod
     def prepare_Name(cls, obj):
         return obj.user.get_full_name()
 
     @classmethod
     def prepare_Institution_name(cls, obj):
-        return obj.user.get_full_name()
+        return obj.institution_name
 
     @classmethod
     def prepare_Country(cls, obj):
-        return obj.location_country.common_name
+        if obj.location_country:
+            return obj.location_country.common_name
+        else:
+            return None
 
+    @classmethod
+    def prepare_Location(cls, obj):
+        if obj.location_latitude:
+            return {
+                        "lat" : obj.location_latitude,
+                        "lon" : obj.location_longitude
+                    }
+
+      
     @classmethod
     def prepare_anonymous(cls, obj):
         return obj.location_privacy == 'anonymous'
