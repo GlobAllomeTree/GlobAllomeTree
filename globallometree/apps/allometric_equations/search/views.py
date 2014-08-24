@@ -4,20 +4,13 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.views.generic import TemplateView
-from django.core.urlresolvers import reverse
-from django.core.paginator import Paginator
-
-#import the get_es object from contrib which reads settings.ES_URLS
-from elasticutils.contrib.django import get_es
 
 from globallometree.apps.locations.models import Country
 
 from .forms import SearchForm
-from .indices import AllometricEquationIndex
 
 class SearchView(TemplateView):
     template_name = 'allometric_equations/template.search.html'
-    paginate_by = 40
 
     def get_context_data(self, **kwargs):
         context = super(SearchView, self).get_context_data(**kwargs)

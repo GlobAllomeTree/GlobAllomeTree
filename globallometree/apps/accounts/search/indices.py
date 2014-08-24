@@ -37,7 +37,8 @@ class UserProfileIndex(MappingType, Indexable):
                 'Name' :  estype_string_not_analyzed,
                 'Institution_name' : estype_string_not_analyzed,
                 'Country' : estype_string_not_analyzed,
-                'Location' :  estype_geopoint_geohashed,
+                'Country_3166_3' :  estype_string_not_analyzed,
+                'Locations' :  estype_geopoint_geohashed,
 
                 #utility
                 'anonymous' : estype_boolean,
@@ -61,7 +62,11 @@ class UserProfileIndex(MappingType, Indexable):
 
         if obj.location_privacy == 'anonymous':
             #Use a more limited set of fields for the anonymous index
-            for field in ['id', 'Location', 'Institution_name', 'Country']:
+            for field in ['id', 
+                          'Locations', 
+                          'Institution_name', 
+                          'Country', 
+                          'Country_3166_3']:
                 document[field] = cls.get_field_value(obj, field)
         else:
             #Create the document dynamically using the mapping, obj, and prepare methods
@@ -111,15 +116,23 @@ class UserProfileIndex(MappingType, Indexable):
         else:
             return None
 
+
     @classmethod
-    def prepare_Location(cls, obj):
+    def prepare_Country_3166_3(cls, obj):
+        if obj.location_country:
+            return obj.location_country.iso3166a3
+        else:
+            return None
+
+
+    @classmethod
+    def prepare_Locations(cls, obj):
         if obj.location_latitude:
             return {
                         "lat" : obj.location_latitude,
                         "lon" : obj.location_longitude
                     }
-
-      
+   
     @classmethod
     def prepare_anonymous(cls, obj):
         return obj.location_privacy == 'anonymous'

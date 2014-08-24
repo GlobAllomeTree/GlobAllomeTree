@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block script %}
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+    <link rel="stylesheet" href="{% static 'allometric_equations/css/search.css' %}" />
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+    <script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
+    <script src="{% static 'search_helpers/js/geohash.js' %}"></script>
+    <script src="{% static 'community/js/map.js' %}"></script>
+
+    <script type="text/javascript"> 
+
+        $(function() {
+            //Get the search manager from allometric_equations/js/search.js
+            var app = window.app;
+            app.country_centroids = {{country_centroids|safe}};
+            app.mapController.showMap({
+                    el : 'map'            
+            });    
+        });
+    </script>
+
+{% endblock %}
+
+{% block content %}
+
+        <h3>GlobAllomeTree Community Map</h3>
+	    
+        <div id="map"> </div>
+
+{% endblock %}

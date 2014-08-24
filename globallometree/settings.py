@@ -127,16 +127,17 @@ INSTALLED_APPS = (
 
     # project apps
     'globallometree.apps.common',
+    'globallometree.apps.community',
     'globallometree.apps.accounts',
     'globallometree.apps.journals',
     'globallometree.apps.data',
     'globallometree.apps.taxonomy',
     'globallometree.apps.locations',
+    'globallometree.apps.search_helpers',
     'globallometree.apps.allometric_equations',
     'globallometree.apps.wood_densities',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
-
 )
 
 
