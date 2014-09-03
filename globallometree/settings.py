@@ -176,7 +176,14 @@ SEARCH_URL = 'http://127.0.0.1:9200'
 CELERY_ACCEPT_CONTENT = ['json',]
 BROKER_URL = 'redis://localhost:6379/0'
 
-
+#Sessions are stored in redis so they can be shared
+#with askbot
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_HOST = 'localhost'
+SESSION_REDIS_PORT = 6379
+SESSION_REDIS_DB = 0
+SESSION_REDIS_PREFIX = 'session'
+SESSION_COOKIE_NAME = 'globsessionid'
 
 DATABASES = {
    'default': {
@@ -186,11 +193,18 @@ DATABASES = {
         'PASSWORD': 'globallometree',                  
         'HOST': '127.0.0.1',
         'PORT': 5432, 
-    }
+    },
+    'askbot': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'askbot',                      # Or path to database file if using sqlite3.
+        'USER': 'askbot',                      # Not used with sqlite3.
+        'PASSWORD': 'askbot',                  # Not used with sqlite3.
+        'HOST': '127.0.0.1',                   # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': 5432,                          # Set to empty string for default. Not used with sqlite3.
+    },
 }
 
 SECRET_KEY = 'KEEP_SECRET'
-
 
 
 if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
