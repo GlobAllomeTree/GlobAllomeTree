@@ -5,9 +5,8 @@ def get_secret_key():
         secret_key  = f.readlines()[0].replace('\n', '')
     return secret_key
 
-DEBUG=True
-
-
+DEBUG=False
+SEARCH_URL = '/elastic/'
 SECRET_KEY = get_secret_key()
 LOGGING = {
 'version': 1,
