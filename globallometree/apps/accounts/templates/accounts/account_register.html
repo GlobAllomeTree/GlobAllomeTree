@@ -57,6 +57,7 @@
 			{% with form.country as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 			{% with form.education as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 			{% with form.field_subject as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.privacy as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 		</fieldset>
 		<br>
 		<fieldset>
@@ -145,7 +146,7 @@
 
 
 	<div class="submit_block">
-		<input type="submit" value="Register" class="btn"/>
+		<input type="submit" value="Register" class="btn-success btn"/>
 	</div>
 	<input type="hidden" name="next" value="/loadui/" />
 	</form>

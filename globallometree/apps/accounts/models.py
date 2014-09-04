@@ -11,7 +11,10 @@ from globallometree.apps.locations.models import Country
 #Monkey patch the User class for django 1.6
 def get_profile(self):
     if not hasattr(self, 'profile'):
-        self.profile = self.profile_set.all()[0]
+        try:
+            self.profile = self.profile_set.all()[0]
+        except AttributeError:
+            self.profile = UserProfile(user=self)
     return self.profile
 User.get_profile = get_profile
 class UserProfile(models.Model):
@@ -24,14 +27,23 @@ class UserProfile(models.Model):
                                 ('volume_tables',       'Volume Tables'),
                                 )
 
+    PRIVACY_CHOICES =  (        ('none',               "Private   - Don't share my profile or location at all"),
+                                ('anonymous',           "Anonymous - Share my location anonymously, but don't share my profile"),
+                                ('public',              "Public    - Share my location and my profile information"),)
 
-    LOCATION_PRIVACY_CHOICES = (('none', "Private - Don't share my location at all"),
-                                ('anonymous', "Anonymous - Share my location anonymously"),
-                                ('public', "Public - Share my location with my profile information"),)
+    EDUCATION_CHOICES = (       (None,                 "--------"),
+                                ("bachelor" ,           "Bachelor's or equivalent" ),
+                                ("master" ,             "Master's or equivalent" ),
+                                ("doctoral" ,           "Doctoral or equivalent" ),
+                                ("postdoctoral" ,       "Postdoctoral" ),
+                                ("professional" ,       "Professional" ),
+                                ("other" ,              "Other/not applicable" ),
+                                )
 
     user        = models.ForeignKey(User)
     address     = models.CharField(max_length=200)
-    country     = models.CharField(max_length=80, blank=True)
+    country     = models.CharField(max_length=80, 
+                                   blank=True)
     region      = models.CharField(max_length=80, blank=True)
     subregion   = models.CharField(max_length=80, blank=True)
     
@@ -53,7 +65,7 @@ class UserProfile(models.Model):
     )
     location_country     = models.ForeignKey(Country, blank=True, null=True)
 
-    location_privacy  = models.CharField(max_length=20, default='anonymous', choices=LOCATION_PRIVACY_CHOICES)
+    privacy  = models.CharField(max_length=20, default='anonymous', choices=PRIVACY_CHOICES)
 
     def __unicode__(self):
         return u"User profile for %s" % self.user

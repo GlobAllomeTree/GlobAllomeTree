@@ -26,7 +26,7 @@ class UserProfileIndex(MappingType, Indexable):
     @classmethod
     def get_indexable(cls):
         #return a queryset of models that should be indexed
-        return cls.get_model().objects.exclude(location_privacy='none')
+        return cls.get_model().objects.exclude(privacy='none')
 
     @classmethod
     def get_mapping(cls):
@@ -60,7 +60,7 @@ class UserProfileIndex(MappingType, Indexable):
 
         document = {}
 
-        if obj.location_privacy == 'anonymous':
+        if obj.privacy == 'anonymous':
             #Use a more limited set of fields for the anonymous index
             for field in ['id', 
                           'Locations', 
@@ -135,6 +135,6 @@ class UserProfileIndex(MappingType, Indexable):
    
     @classmethod
     def prepare_anonymous(cls, obj):
-        return obj.location_privacy == 'anonymous'
+        return obj.privacy == 'anonymous'
 
  

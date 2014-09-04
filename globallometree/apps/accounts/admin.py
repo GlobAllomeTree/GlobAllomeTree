@@ -9,7 +9,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields  = ['user__username', 'institution_name','address', 'location_country__common_name', 'region']
     list_filter = ['institution_name', 'location_country__common_name']
     readonly_fields = ['user','user_link']
-    exclude_fields = ['country']
+    exclude = ['country',]
 
     def user_link(self, obj):
         change_url = urlresolvers.reverse('admin:auth_user_change', args=(obj.user.id,))

@@ -9,4 +9,4 @@ django-redis-sessions==0.4.0
 mock==1.0.1
 
 ####################### Account Geocoding
-pygeocoder==1.2.4
+pygeocoder==1.2.5

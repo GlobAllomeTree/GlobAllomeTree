@@ -23,8 +23,8 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.related.ForeignKey')(to=orm['locations.Country'], null=True, blank=True),
                       keep_default=False)
 
-        # Adding field 'UserProfile.location_privacy'
-        db.add_column(u'accounts_userprofile', 'location_privacy',
+        # Adding field 'UserProfile.privacy'
+        db.add_column(u'accounts_userprofile', 'privacy',
                       self.gf('django.db.models.fields.CharField')(default='anonymous', max_length=20),
                       keep_default=False)
 
@@ -39,8 +39,8 @@ class Migration(SchemaMigration):
         # Deleting field 'UserProfile.location_country'
         db.delete_column(u'accounts_userprofile', 'location_country_id')
 
-        # Deleting field 'UserProfile.location_privacy'
-        db.delete_column(u'accounts_userprofile', 'location_privacy')
+        # Deleting field 'UserProfile.privacy'
+        db.delete_column(u'accounts_userprofile', 'privacy')
 
 
     models = {
@@ -59,7 +59,7 @@ class Migration(SchemaMigration):
             'location_country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['locations.Country']", 'null': 'True', 'blank': 'True'}),
             'location_latitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '5', 'blank': 'True'}),
             'location_longitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '5', 'blank': 'True'}),
-            'location_privacy': ('django.db.models.fields.CharField', [], {'default': "'anonymous'", 'max_length': '20'}),
+            'privacy': ('django.db.models.fields.CharField', [], {'default': "'anonymous'", 'max_length': '20'}),
             'region': ('django.db.models.fields.CharField', [], {'max_length': '80', 'blank': 'True'}),
             'subregion': ('django.db.models.fields.CharField', [], {'max_length': '80', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})

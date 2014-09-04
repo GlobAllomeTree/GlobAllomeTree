@@ -562,7 +562,7 @@ window.app.mapController = function() {
 		}
 
 		if(anonInstitutionList.length) {
-			html += '<h5>Anonymous Users From:</h5>'
+			html += '<h5>Users From Institutions:</h5>'
 			html += '<div style="height:200px;overflow:auto;">'
 			html += "<p><li>" + anonInstitutionList.join('</li><li> ') + "</li></p>";
 			html += '</div>';

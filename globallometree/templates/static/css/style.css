@@ -365,7 +365,8 @@ fieldset {
 	height:300px;
 	overflow:scroll;
 	border:1px solid #999;
-	background-color: #E5FFD6;
+	background-color: #eee;
+	font-size:12px;
 
 }
 

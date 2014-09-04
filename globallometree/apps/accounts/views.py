@@ -34,7 +34,7 @@ def register(request):
             
             user_profile = models.UserProfile(user=user,
                                               address=form.cleaned_data['address'],
-                                              country=form.cleaned_data['country'],
+                                              location_country=form.cleaned_data['country'],
                                               subregion=form.cleaned_data['subregion'],
                                               region=form.cleaned_data['region'],
                                               education=form.cleaned_data['education'],
@@ -44,6 +44,7 @@ def register(request):
                                               institution_fax=form.cleaned_data['institution_fax'],
                                               field_subject=form.cleaned_data['field_subject'],
                                               data_may_provide=form.cleaned_data['data_may_provide'],
+                                              privacy=form.cleaned_data['privacy']
                                               )
             user_profile.save()
              
