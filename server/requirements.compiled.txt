@@ -1,0 +1,9 @@
+# Compiled requirements that take a long time to build
+# ubuntu python-dev package should be installed
+
+#Requires the ubuntu package libpq-dev to be installed
+psycopg2==2.5.2 
+
+# ubuntu packages libtiff4-dev libjpeg62-dev zlib1g-dev 
+# libfreetype6-dev tcl8.5-dev tk8.5-dev python-tk
+Pillow==2.5.3

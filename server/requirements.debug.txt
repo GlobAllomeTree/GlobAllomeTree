@@ -1,3 +1,0 @@
-######################## Debugging Requirements #############
-ipdb==0.8 #Iron Python shell use: import ipdb; ipdb.set_trace() 
-pygraphviz==1.2 #for shell plus graph models
