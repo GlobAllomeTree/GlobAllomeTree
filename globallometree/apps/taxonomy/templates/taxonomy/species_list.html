@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ 	<div class="row">
+        <div class="col-md-12">
+			<h2>Species in the GlobAllomeTree Database</h2>
+			<p>Currently there are about {{species_count}} species in the GlobAllometree database from {{genus_count}} genera and {{family_count}} families.</p>
+			<br>
+			<br>
+			<h4>Search by Family, Genus, or Species name</h4>
+			<form method="GET" action="." class="form-inline" role="form">
+				<div class="form-group">
+					<input type="text" name="q" class="form-control" {% if query%} value="{{query}}" {% endif%} />
+					<button type="submit" class="btn btn-success">Search</button>
+				</div>
+			</form>
+				<br>
+			<br>
+			{% for species in object_list %}
+			    <h4>{{ species.genus.family.name }} {{ species.genus.name }} {{ species.name }}</h4>
+			    <p>Present in Countries: 
+			    	{% for country in species.country_list %} 
+			    		{{ country.common_name }}{% if not forloop.last %}, {% endif %}
+			    	{% endfor %}
+			    </p>
+			    <p>Allometric Equations: {{ species.allometric_equation_count }}<br> <a href="{{ species.allometric_equation_link }}">view equations &gt;</a></p>
+			    <br>
+			    <br>
+			{% empty %}
+    			<h4>No records found matching your search.</h4>
+			{% endfor %}
+		</div>
+
+		{% if page_obj.paginator.num_pages > 1 %}
+			<ul class="pager">
+			   {% if page_obj.has_previous %}
+
+			  <li class="previous"><a href="?page={{ page_obj.previous_page_number }}&amp;q={{query}}">&larr; Previous Page</a></li>
+		        {% endif %}
+
+		         <li class="current">
+		            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} pages
+		        </li>
+
+			  {% if page_obj.has_next %}
+
+			  <li class="next"><a href="?page={{ page_obj.next_page_number }}&amp;q={{query}}">Next Page &rarr;</a></li>
+			  {% endif %}
+
+			</ul>
+		{% endif %}
+
+	</div>	
+{% endblock %}

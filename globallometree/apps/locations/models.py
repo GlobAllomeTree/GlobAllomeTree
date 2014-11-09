@@ -1,5 +1,5 @@
 from django.db import models
-
+from globallometree.apps.common.models import TimeStampedModel
 
 class Continent(models.Model):
     code = models.CharField(max_length=2)
@@ -91,9 +91,7 @@ class BiomeHoldridge(models.Model):
         ordering = ('name',)
 
 
-class LocationGroup(models.Model):    
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+class LocationGroup(TimeStampedModel):    
     name = models.CharField(max_length=255, null=True, blank=True, verbose_name="Group Name")
     locations = models.ManyToManyField('locations.Location', verbose_name="List of Locations", blank=True, null=True)
     original_Group_Location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")
@@ -217,10 +215,40 @@ class LocationGroup(models.Model):
     def __unicode__(self):
         return self.name
 
+
+class Region(TimeStampedModel):
+    """ Region of a country """
+    name = models.CharField(max_length=255)
+    name_latin = models.CharField(
+        max_length=255,
+        help_text="Name of the province in latin characters"
+    )
+    country = models.ForeignKey(Country, blank=True, null=True)
+
+
+class Province(TimeStampedModel):
+    """ State or Province """
+    name = models.CharField(max_length=255)
+    name_latin = models.CharField(
+        max_length=255,
+        help_text="Name of the province in latin characters"
+    )
+    region = models.ForeignKey(Region, blank=True, null=True)
+    #Country may be directly specified if there is no region available
+    country = models.ForeignKey(Country, blank=True, null=True)
+
+
+class Commune(TimeStampedModel):
+    """ Commune or Town """
+    name = models.CharField(max_length=255)
+    name_latin = models.CharField(
+        max_length=255,
+        help_text="Name of the district in latin characters"
+    )
+    province = models.ForeignKey(Province, blank=True, null=True)
+
         
-class Location(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+class Location(TimeStampedModel):
     name = models.CharField(max_length=255, null=True, blank=True)
     Latitude = models.DecimalField(
         null=True, blank=True, max_digits=12, decimal_places=9

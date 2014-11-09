@@ -1,9 +1,8 @@
 from django.db import models
+from django.core.urlresolvers import reverse
+from globallometree.apps.common.models import TimeStampedModel
 
-
-class Family(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True,verbose_name="Last modified")
+class Family(TimeStampedModel):
     name = models.CharField(max_length=80, null=True, blank=True)
 
     class Meta:
@@ -14,9 +13,7 @@ class Family(models.Model):
         return self.name
 
 
-class Genus(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True, verbose_name="Last modified")
+class Genus(TimeStampedModel):
     name  = models.CharField(max_length=80, null=True, blank=True)
     family = models.ForeignKey(Family, null=True, blank=True)
 
@@ -28,9 +25,7 @@ class Genus(models.Model):
         return self.name
 
 
-class Species(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True, verbose_name="Last modified")
+class Species(TimeStampedModel):
     name = models.CharField(max_length=80, null=True, blank=True)
     genus = models.ForeignKey(Genus, null=True, blank=True)
     original_ID_Species = models.IntegerField(
@@ -42,18 +37,77 @@ class Species(models.Model):
         verbose_name_plural = 'Species'
         ordering = ('name',)
 
+    def allometric_equation_count(self):
+        """How many allometric equations there are for this species """
+
+        equation_count = 0
+        for group in self.speciesgroup_set.all():
+            equation_count += group.allometricequation_set.count()
+        return equation_count
+
+    def allometric_equation_link(self):
+        """ Returns a link to the allometric equations for this species """
+        return u'%s?Species=%s&Genus=%s' % (
+                reverse('equation_search'),
+                self.name,
+                self.genus.name
+                )
+
+    def country_list(self):
+        """ Countries that this species is in """
+        countries = []
+        for group in self.speciesgroup_set.all():
+            for equation in group.allometricequation_set.all():
+                countries += equation.location_group.countries()
+        return list(set(countries))
+
     def __unicode__(self):
         return self.name
 
 
-class SpeciesGroup(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+class SpeciesLocalName(TimeStampedModel):
+    species = models.ForeignKey(Species)
+
+    local_name = models.CharField(
+        max_length=80,
+        help_text="The local name of this species in the local language"
+    )
+
+    local_name_latin = models.CharField(
+        max_length=80,
+        null=True,
+        blank=True,
+        help_text="A phonetic version of this local name using the latin alphabet"
+    )
+
+    language_iso_639_3 = models.CharField(
+        max_length=3, 
+        help_text="The ISO 639-3 Language Code for the language this local name is from"
+    )
+
+
+class SubSpecies(TimeStampedModel):
+    name = models.CharField(max_length=80)
+    species = models.ForeignKey(Species)
+    
+
+    class Meta:
+        verbose_name_plural = 'SubSpecies'
+        ordering = ('name',)
+
+    def __unicode__(self):
+        return self.name
+
+
+class SpeciesGroup(TimeStampedModel):
     name = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="Group Name"
     )
     species = models.ManyToManyField(
-        Species, verbose_name="List of Species", blank=True, null=True
+        Species, 
+        verbose_name="List of Species", 
+        blank=True, 
+        null=True,
     )
     original_ID_Group = models.IntegerField(
         null=True, blank=True,

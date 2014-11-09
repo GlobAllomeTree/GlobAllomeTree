@@ -22,3 +22,17 @@ class Institution(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class TimeStampedModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True, verbose_name="Last modified")
+
+    class Meta:
+        abstract = True
+
+
+class Operator(TimeStampedModel):
+    """Operator is at least used for the wood density database"""
+    name = models.CharField(max_length=200)
+    instituion = models.ForeignKey(Instition)

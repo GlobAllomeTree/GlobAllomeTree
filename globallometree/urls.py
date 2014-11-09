@@ -15,7 +15,7 @@ urlpatterns = patterns(
     url(r'^journals/', include('apps.journals.urls')),
     url(r'^community/', include('apps.community.urls')),
     url(r'^data/allometric-equations/', include('apps.allometric_equations.urls')),
-
+    url(r'^data/taxonomy/', include('apps.taxonomy.urls')),
     #redirects from removed pages
     url(r'^data/search', RedirectView.as_view(url=reverse_lazy('equation_search'))),
     url(r'^data/submit-data/', RedirectView.as_view(url=reverse_lazy('equations_upload'))),
