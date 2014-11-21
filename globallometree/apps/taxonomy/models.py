@@ -65,8 +65,23 @@ class Species(TimeStampedModel):
         return self.name
 
 
-class SpeciesLocalName(TimeStampedModel):
+class Subspecies(TimeStampedModel):
+    name = models.CharField(max_length=80)
     species = models.ForeignKey(Species)
+    
+
+    class Meta:
+        verbose_name_plural = 'Subspecies'
+        ordering = ('name',)
+
+    def __unicode__(self):
+        return self.name
+
+
+
+class SpeciesLocalName(TimeStampedModel):
+    # A local name could either be for a species or a subspecies
+    species = models.ForeignKey(Species, blank=True, null=True)
 
     local_name = models.CharField(
         max_length=80,
@@ -77,32 +92,50 @@ class SpeciesLocalName(TimeStampedModel):
         max_length=80,
         null=True,
         blank=True,
-        help_text="A phonetic version of this local name using the latin alphabet"
+        help_text="A phonetic version using the latin alphabet"
     )
 
     language_iso_639_3 = models.CharField(
         max_length=3, 
-        help_text="The ISO 639-3 Language Code for the language this local name is from"
+        help_text="The ISO 639-3 Language Code for the language"
     )
 
 
-class SubSpecies(TimeStampedModel):
-    name = models.CharField(max_length=80)
-    species = models.ForeignKey(Species)
-    
 
-    class Meta:
-        verbose_name_plural = 'SubSpecies'
-        ordering = ('name',)
+class SubspeciesLocalName(TimeStampedModel):
+    # A local name could either be for a species or a subspecies
+    subspecies = models.ForeignKey(Subspecies, blank=True, null=True)
 
-    def __unicode__(self):
-        return self.name
+    local_name = models.CharField(
+        max_length=80,
+        help_text="The local name of this subspecies in the local language"
+    )
+
+    local_name_latin = models.CharField(
+        max_length=80,
+        null=True,
+        blank=True,
+        help_text="A phonetic version using the latin alphabet"
+    )
+
+    language_iso_639_3 = models.CharField(
+        max_length=3, 
+        help_text="The ISO 639-3 Language Code for the language"
+    )
 
 
 class SpeciesGroup(TimeStampedModel):
     name = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="Group Name"
     )
+
+    subspecies = models.ManyToManyField(
+        Subspecies, 
+        verbose_name="List of Subspecies", 
+        blank=True, 
+        null=True,
+    )
+
     species = models.ManyToManyField(
         Species, 
         verbose_name="List of Species", 

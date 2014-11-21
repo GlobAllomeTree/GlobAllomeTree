@@ -9,6 +9,10 @@ getcontext().prec = 10
 class WoodDensity(TimeStampedModel):
     ID = models.IntegerField(primary_key=True)
 
+    dataset = models.ForeignKey(
+        'data_sharing.DataSet',null=True, blank=True,
+        help_text="The Shared Data Set that this wood denisty record came fromx")
+
     species_group = models.ForeignKey(
         'taxonomy.SpeciesGroup',null=True, blank=True)
 
@@ -62,7 +66,7 @@ class WoodDensity(TimeStampedModel):
 
     MC_V= models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
-        help_Text="Moisture content of the wood during measurement, ex: (%) 0, 12, 15, Sat for saturation")
+        help_text="Moisture content of the wood during measurement, ex: (%) 0, 12, 15, Sat for saturation")
 
     CR = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
@@ -70,13 +74,13 @@ class WoodDensity(TimeStampedModel):
 
     FSP = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
-        help_Text="Fiber saturation point (%)")
+        help_text="Fiber saturation point (%)")
 
     Methodology = models.CharField(
         blank=True, null=True, max_length=80,
         help_text="Water displacment or direct measurement")
 
-    Bark = models.BooleanField(
+    Bark = models.NullBooleanField(
         blank=True, null=True,
         help_text="is the bark included in the measure?")
 

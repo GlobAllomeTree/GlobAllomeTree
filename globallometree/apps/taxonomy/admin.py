@@ -4,7 +4,8 @@ from globallometree.apps.taxonomy.models import (
     Genus, 
     Species, 
     SpeciesGroup,
-    SpeciesLocalName
+    SpeciesLocalName, 
+    SubSpecies
     )
 
 
@@ -27,6 +28,24 @@ class SpeciesLocalNameAdmin(admin.ModelAdmin):
     raw_id_fields = ('species',)
     list_display = ('local_name_latin', 'species', 'local_name', 'language_iso_639_3')
     search_fields  = ('local_name', 'local_name_latin', 'language_iso_639_3')    
+
+
+class SubspeciesAdmin(admin.ModelAdmin):
+    raw_id_fields = ('species',)
+    list_display = ('name', 'species', 'modified')
+    search_fields  = ('name','species__genus__family__name', 'species__genus__name', 'species__name' )
+    read_only_fields = ('created', 'modified')
+    inlines = (SubspeciesLocalNameInline,)
+
+
+class SubspeciesLocalNameInline(admin.TabularInline):
+    model = SpeciesLocalName
+
+
+class SubspeciesLocalNameAdmin(admin.ModelAdmin):
+    raw_id_fields = ('subspecies',)
+    list_display = ('local_name_latin', 'subspecies', 'local_name', 'language_iso_639_3')
+    search_fields = ('local_name', 'local_name_latin', 'language_iso_639_3') 
 
 
 class SpeciesAdmin(admin.ModelAdmin):

@@ -120,4 +120,8 @@ class DataSet(models.Model):
 		null=True
 	)
 
+	imported = models.BooleanField(
+		default=False,
+		help_text="If this file has been imported into the GlobAllomeTree database yet or not"
+		)
 

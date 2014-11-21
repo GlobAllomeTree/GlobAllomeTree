@@ -1,7 +1,7 @@
 from django.db import models
 from globallometree.apps.common.models import TimeStampedModel
 
-class Continent(models.Model):
+class Continent(TimeStampedModel):
     code = models.CharField(max_length=2)
     name = models.CharField(max_length=100)
 
@@ -9,7 +9,7 @@ class Continent(models.Model):
         return self.name
 
 
-class Country(models.Model):
+class Country(TimeStampedModel):
     common_name = models.CharField(max_length=159, blank=True)
     formal_name = models.CharField(max_length=159, blank=True)
     common_name_fr = models.CharField(max_length=159, blank=True)
@@ -30,7 +30,7 @@ class Country(models.Model):
         ordering = ('common_name',)
 
 
-class BiomeFAO(models.Model):
+class BiomeFAO(TimeStampedModel):
     name = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
@@ -42,7 +42,7 @@ class BiomeFAO(models.Model):
         ordering = ('name',)
 
 
-class BiomeUdvardy(models.Model):
+class BiomeUdvardy(TimeStampedModel):
     name = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
@@ -55,7 +55,7 @@ class BiomeUdvardy(models.Model):
 
 
 
-class BiomeWWF(models.Model):
+class BiomeWWF(TimeStampedModel):
     name = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
@@ -67,7 +67,7 @@ class BiomeWWF(models.Model):
         ordering = ('name',)
 
 
-class DivisionBailey(models.Model):
+class DivisionBailey(TimeStampedModel):
     name = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
@@ -79,7 +79,7 @@ class DivisionBailey(models.Model):
         ordering = ('name',)
 
 
-class BiomeHoldridge(models.Model):
+class BiomeHoldridge(TimeStampedModel):
     name = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
@@ -216,38 +216,6 @@ class LocationGroup(TimeStampedModel):
         return self.name
 
 
-class Region(TimeStampedModel):
-    """ Region of a country """
-    name = models.CharField(max_length=255)
-    name_latin = models.CharField(
-        max_length=255,
-        help_text="Name of the province in latin characters"
-    )
-    country = models.ForeignKey(Country, blank=True, null=True)
-
-
-class Province(TimeStampedModel):
-    """ State or Province """
-    name = models.CharField(max_length=255)
-    name_latin = models.CharField(
-        max_length=255,
-        help_text="Name of the province in latin characters"
-    )
-    region = models.ForeignKey(Region, blank=True, null=True)
-    #Country may be directly specified if there is no region available
-    country = models.ForeignKey(Country, blank=True, null=True)
-
-
-class Commune(TimeStampedModel):
-    """ Commune or Town """
-    name = models.CharField(max_length=255)
-    name_latin = models.CharField(
-        max_length=255,
-        help_text="Name of the district in latin characters"
-    )
-    province = models.ForeignKey(Province, blank=True, null=True)
-
-        
 class Location(TimeStampedModel):
     name = models.CharField(max_length=255, null=True, blank=True)
     Latitude = models.DecimalField(
@@ -256,6 +224,9 @@ class Location(TimeStampedModel):
     Longitude = models.DecimalField(
         null=True, blank=True, max_digits=12, decimal_places=9
     )
+    commune = models.CharField(max_length=255, blank=True, null=True)
+    province = models.CharField(max_length=255, blank=True, null=True)
+    region = models.CharField(max_length=255, blank=True, null=True)
     country = models.ForeignKey(Country, blank=True, null=True)
     biome_fao = models.ForeignKey(BiomeFAO, blank=True, null=True)
     biome_udvardy = models.ForeignKey(BiomeUdvardy, blank=True, null=True)

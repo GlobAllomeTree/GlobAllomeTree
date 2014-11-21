@@ -35,4 +35,4 @@ class TimeStampedModel(models.Model):
 class Operator(TimeStampedModel):
     """Operator is at least used for the wood density database"""
     name = models.CharField(max_length=200)
-    instituion = models.ForeignKey(Instition)
+    institution = models.ForeignKey(Institution)
