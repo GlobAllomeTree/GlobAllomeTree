@@ -15,3 +15,5 @@ media
 reset_db.sh
 *.ignore
 Makefile.local
+*.sql
+
