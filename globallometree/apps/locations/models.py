@@ -54,7 +54,6 @@ class BiomeUdvardy(TimeStampedModel):
         ordering = ('name',)
 
 
-
 class BiomeWWF(TimeStampedModel):
     name = models.CharField(max_length=200, null=True, blank=True)
 

@@ -5,7 +5,8 @@ from globallometree.apps.taxonomy.models import (
     Species, 
     SpeciesGroup,
     SpeciesLocalName, 
-    SubSpecies
+    Subspecies,
+    SubspeciesLocalName
     )
 
 
@@ -30,6 +31,9 @@ class SpeciesLocalNameAdmin(admin.ModelAdmin):
     search_fields  = ('local_name', 'local_name_latin', 'language_iso_639_3')    
 
 
+class SubspeciesLocalNameInline(admin.TabularInline):
+    model = SubspeciesLocalName
+
 class SubspeciesAdmin(admin.ModelAdmin):
     raw_id_fields = ('species',)
     list_display = ('name', 'species', 'modified')
@@ -38,14 +42,10 @@ class SubspeciesAdmin(admin.ModelAdmin):
     inlines = (SubspeciesLocalNameInline,)
 
 
-class SubspeciesLocalNameInline(admin.TabularInline):
-    model = SpeciesLocalName
-
-
-class SubspeciesLocalNameAdmin(admin.ModelAdmin):
-    raw_id_fields = ('subspecies',)
-    list_display = ('local_name_latin', 'subspecies', 'local_name', 'language_iso_639_3')
-    search_fields = ('local_name', 'local_name_latin', 'language_iso_639_3') 
+# class SubspeciesLocalNameAdmin(admin.ModelAdmin):
+#     raw_id_fields = ('subspecies',)
+#     list_display = ('local_name_latin', 'subspecies', 'local_name', 'language_iso_639_3')
+#     search_fields = ('local_name', 'local_name_latin', 'language_iso_639_3') 
 
 
 class SpeciesAdmin(admin.ModelAdmin):
@@ -75,5 +75,5 @@ class SpeciesGroupAdmin(admin.ModelAdmin):
 admin.site.register(Family, FamilyAdmin)
 admin.site.register(Genus, GenusAdmin)
 admin.site.register(Species, SpeciesAdmin)
-admin.site.register(SpeciesLocalName, SpeciesLocalNameAdmin)
+admin.site.register(Subspecies, SubspeciesAdmin)
 admin.site.register(SpeciesGroup, SpeciesGroupAdmin)

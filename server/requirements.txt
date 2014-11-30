@@ -42,3 +42,6 @@ mock==1.0.1
 ####################### Account Geocoding
 pygeocoder==1.2.5
 
+####################### API
+djangorestframework==2.4.4
+django-filter==0.9.0

@@ -139,6 +139,8 @@ INSTALLED_APPS = (
     'globallometree.apps.wood_densities',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
+    'globallometree.apps.api',
+    'rest_framework',
 )
 
 
@@ -207,6 +209,18 @@ DATABASES = {
 
 SECRET_KEY = 'KEEP_SECRET'
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.XMLRenderer',
+    )
+}
 
 if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
     print "settings_local.py not present - skipping"

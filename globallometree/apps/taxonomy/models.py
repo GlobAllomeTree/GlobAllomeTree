@@ -81,7 +81,7 @@ class Subspecies(TimeStampedModel):
 
 class SpeciesLocalName(TimeStampedModel):
     # A local name could either be for a species or a subspecies
-    species = models.ForeignKey(Species, blank=True, null=True)
+    species = models.ForeignKey(Species, blank=True, null=True, related_name="local_names")
 
     local_name = models.CharField(
         max_length=80,
@@ -104,7 +104,7 @@ class SpeciesLocalName(TimeStampedModel):
 
 class SubspeciesLocalName(TimeStampedModel):
     # A local name could either be for a species or a subspecies
-    subspecies = models.ForeignKey(Subspecies, blank=True, null=True)
+    subspecies = models.ForeignKey(Subspecies, blank=True, null=True,related_name="local_names")
 
     local_name = models.CharField(
         max_length=80,

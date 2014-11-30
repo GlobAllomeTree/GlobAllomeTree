@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from globallometree.apps.common.models import TimeStampedModel
 
-
-class DataSharingAgreement(models.Model):
+class DataSharingAgreement(TimeStampedModel):
 
 	PERMITTED_USE_CHOICES = (
 		('assessment', 'Support tree and forest volume and biomass assessment'),
@@ -80,7 +80,7 @@ class DataSharingAgreement(models.Model):
 	)
 
 
-class DataSet(models.Model):
+class DataSet(TimeStampedModel):
 
 	user = models.ForeignKey(
 		User
@@ -102,7 +102,9 @@ class DataSet(models.Model):
 	)
 
 	uploaded_data_file = models.FileField(
-		upload_to = "data_sharing"
+		upload_to = "data_sharing",
+		blank=True,
+		null=True
 	)
 
 	data_type = models.CharField(
@@ -123,5 +125,24 @@ class DataSet(models.Model):
 	imported = models.BooleanField(
 		default=False,
 		help_text="If this file has been imported into the GlobAllomeTree database yet or not"
+		)
+
+
+class DataAccessRequest(TimeStampedModel):
+
+	user = models.ForeignKey(
+		User,
+		help_text="The user requesting access to the dataset"
+	)
+
+	data_set = models.ForeignKey(
+		DataSet)
+
+	granted = models.NullBooleanField(
+		help_text="If the owner of the data has granted access or not"
+		)
+
+	responded = models.BooleanField(
+		help_text="If the owner of the datahas responded"
 		)
 
