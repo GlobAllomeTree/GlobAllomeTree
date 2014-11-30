@@ -4,9 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from globallometree.apps.common.models import (
-    DataReference, 
-    Institution, 
-    Operator
+    DataReference
 )
 
 from globallometree.apps.allometric_equations.models import (
@@ -47,6 +45,13 @@ from globallometree.apps.locations.models import (
     LocationGroup, 
     Location
 )
+
+
+class DataReferenceSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = DataReference
+        fields = ('id', 'url', 'label', 'author', 'year', 'reference')
+
 
 class FamilySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

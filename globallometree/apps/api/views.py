@@ -1,5 +1,9 @@
 from rest_framework import viewsets
 
+from globallometree.apps.common.models import (
+    DataReference
+	)
+
 from globallometree.apps.taxonomy.models import (
     Family, 
     Genus, 
@@ -8,18 +12,18 @@ from globallometree.apps.taxonomy.models import (
     SpeciesLocalName, 
     SubspeciesLocalName, 
     SpeciesGroup
-)
+	)
 
 from globallometree.apps.allometric_equations.models import (
     Population, 
     Ecosystem, 
     Submission, 
     AllometricEquation
-)
+	)	
 
 from globallometree.apps.wood_densities.models import (
     WoodDensity
-)
+	)
 
 from globallometree.apps.locations.models import (
     Continent, 
@@ -31,9 +35,10 @@ from globallometree.apps.locations.models import (
     BiomeHoldridge, 
     LocationGroup, 
     Location
-)
+	)
 
 from globallometree.apps.api.serializers import (
+	DataReferenceSerializer,
 	FamilySerializer,
 	GenusSerializer,
 	SpeciesSerializer,
@@ -48,6 +53,15 @@ from globallometree.apps.api.serializers import (
     DivisionBaileySerializer, 
     BiomeHoldridgeSerializer
 	)
+
+
+class DataReferenceViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Scientific references from journals
+    """
+    queryset = DataReference.objects.all()
+    serializer_class = DataReferenceSerializer
+
 
 class FamilyViewSet(viewsets.ReadOnlyModelViewSet):
     """

@@ -2,7 +2,7 @@
 from django.conf.urls import patterns, include, url
 from rest_framework.routers import DefaultRouter
 from globallometree.apps.api.views import ( 
-#	DataReferenceViewSet, 
+	DataReferenceViewSet, 
 #	WoodDensityViewSet, 
 	FamilyViewSet, 
 	GenusViewSet, 
@@ -25,7 +25,7 @@ from globallometree.apps.api.views import (
 
 router = DefaultRouter()
 
-#router.register(r'references',DataReferenceViewSet)
+router.register(r'references', DataReferenceViewSet)
 #router.register(r'wood-densities',WoodDensityViewSet)
 router.register(r'families', FamilyViewSet)
 router.register(r'genera', GenusViewSet)
@@ -36,11 +36,11 @@ router.register(r'ecosystems', EcosystemViewSet)
 #router.register(r'allometric-equations',AllometricEquationViewSet)
 router.register(r'continents', ContinentViewSet)
 router.register(r'countries', CountryViewSet)
-router.register(r'fao-biomes',BiomeFAOViewSet)
-router.register(r'udvardy-biomes',BiomeUdvardyViewSet)
-router.register(r'wwf-biomes',BiomeWWFViewSet)
-router.register(r'bailey-divisions',DivisionBaileyViewSet)
-router.register(r'holdridge-biomes',BiomeHoldridgeViewSet)
+router.register(r'fao-biomes', BiomeFAOViewSet)
+router.register(r'udvardy-biomes', BiomeUdvardyViewSet)
+router.register(r'wwf-biomes', BiomeWWFViewSet)
+router.register(r'bailey-divisions', DivisionBaileyViewSet)
+router.register(r'holdridge-biomes', BiomeHoldridgeViewSet)
 #router.register(r'data-sharing-agreements',DataSharingAgreementViewSet)
 #router.register(r'data-sets',DataSetViewSet)
 #router.register(r'data-requests',DataAccessRequestViewSet)
