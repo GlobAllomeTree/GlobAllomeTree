@@ -42,7 +42,10 @@ from globallometree.apps.api.serializers import (
 	FamilySerializer,
 	GenusSerializer,
 	SpeciesSerializer,
+    SpeciesLocalNameSerializer,
 	SubspeciesSerializer,
+    SubspeciesLocalNameSerializer,
+    SpeciesGroupSerializer,
 	PopulationSerializer,
 	EcosystemSerializer,
 	ContinentSerializer,
@@ -51,7 +54,10 @@ from globallometree.apps.api.serializers import (
     BiomeUdvardySerializer, 
     BiomeWWFSerializer, 
     DivisionBaileySerializer, 
-    BiomeHoldridgeSerializer
+    BiomeHoldridgeSerializer,
+    AllometricEquationSerializer, 
+    LocationSerializer,
+    LocationGroupSerializer
 	)
 
 
@@ -93,6 +99,30 @@ class SubspeciesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Subspecies.objects.all()
     serializer_class = SubspeciesSerializer
 
+class SpeciesGroupViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A simple ViewSet for viewing subspecies.
+    """
+    queryset = SpeciesGroup.objects.all()
+    serializer_class = SpeciesGroupSerializer
+
+
+class SpeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A simple ViewSet for viewing species.
+    """
+    queryset = SpeciesLocalName.objects.all()
+    serializer_class = SpeciesLocalNameSerializer
+
+
+class SubspeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A simple ViewSet for viewing species.
+    """
+    queryset = SubspeciesLocalName.objects.all()
+    serializer_class = SubspeciesLocalNameSerializer
+
+
 class PopulationViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A simple ViewSet for viewing populations.
@@ -100,12 +130,14 @@ class PopulationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Population.objects.all()
     serializer_class = PopulationSerializer
 
+
 class EcosystemViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A simple ViewSet for viewing ecosystems.
     """
     queryset = Ecosystem.objects.all()
     serializer_class = EcosystemSerializer
+
 
 class ContinentViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -161,4 +193,28 @@ class BiomeHoldridgeViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = BiomeHoldridge.objects.all()
     serializer_class = BiomeHoldridgeSerializer
+
+
+class LocationViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A simple ViewSet for viewing locations.
+    """
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
+
+
+class LocationGroupViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A simple ViewSet for viewing locations.
+    """
+    queryset = LocationGroup.objects.all()
+    serializer_class = LocationGroupSerializer
+
+
+class AllometricEquationViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A simple ViewSet for viewing countries.
+    """
+    queryset = AllometricEquation.objects.all()
+    serializer_class = AllometricEquationSerializer
 

@@ -1,7 +1,7 @@
 ## api/views.py
 from django.contrib.auth.models import User
 
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from globallometree.apps.common.models import (
     DataReference
@@ -47,105 +47,140 @@ from globallometree.apps.locations.models import (
 )
 
 
-class DataReferenceSerializer(serializers.HyperlinkedModelSerializer):
+class HyperLinkedWithIdSerializer(serializers.HyperlinkedModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super(HyperLinkedWithIdSerializer, self).__init__(*args, **kwargs)
+        self.fields['id'] = fields.IntegerField()
+
+
+class DataReferenceSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = DataReference
-        fields = ('id', 'url', 'label', 'author', 'year', 'reference')
+        exclude = ('created', 'modified',)
 
 
-class FamilySerializer(serializers.HyperlinkedModelSerializer):
+class FamilySerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = Family
-        fields = ('id', 'url', 'id', 'name')
+        exclude = ('created', 'modified',)
 
 
-class GenusSerializer(serializers.HyperlinkedModelSerializer):
+class GenusSerializer(HyperLinkedWithIdSerializer):
     family = FamilySerializer(many=False)
+
     class Meta:
         model = Genus
-        fields = ('id', 'url','name', 'family')
+        exclude = ('created', 'modified',)
 
 
-class SpeciesLocalNameSerializer(serializers.ModelSerializer):
+class SpeciesLocalNameSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = SpeciesLocalName
-        fields = ('id', 'local_name','local_name_latin', 'language_iso_639_3')
+        exclude = ('created', 'modified',)
              
 
-class SpeciesSerializer(serializers.HyperlinkedModelSerializer):
+class SpeciesSerializer(HyperLinkedWithIdSerializer):
     genus = GenusSerializer(many=False)
     local_names = SpeciesLocalNameSerializer(many=True)
     class Meta:
         model = Species
-        fields = ('id', 'url','name', 'genus', 'local_names')
+        exclude = ('created', 'modified',)
 
 
-class SubspeciesLocalNameSerializer(serializers.ModelSerializer):
+class SubspeciesLocalNameSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = SubspeciesLocalName
-        fields = ('id', 'local_name','local_name_latin', 'language_iso_639_3')
+        exclude = ('created', 'modified',)
 
 
-class SubspeciesSerializer(serializers.HyperlinkedModelSerializer):
+class SubspeciesSerializer(HyperLinkedWithIdSerializer):
     species = SpeciesSerializer(many=False)
     local_names = SubspeciesLocalNameSerializer(many=True)
     class Meta:
         model = Subspecies
-        fields = ('id', 'url','name', 'species', 'local_names')
+        exclude = ('created', 'modified',)
 
 
-class PopulationSerializer(serializers.HyperlinkedModelSerializer):
+class SpeciesGroupSerializer(HyperLinkedWithIdSerializer):
+    subspecies = SubspeciesSerializer(many=True) 
+    species = SpeciesSerializer(many=True)
+    class Meta:
+        model = SpeciesGroup
+        exclude = ('created', 'modified',)
+
+
+class PopulationSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = Population
+        exclude = ('created', 'modified',)
 
 
-class EcosystemSerializer(serializers.HyperlinkedModelSerializer):
+class EcosystemSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = Ecosystem
+        exclude = ('created', 'modified',)
 
 
-class ContinentSerializer(serializers.HyperlinkedModelSerializer):
+class ContinentSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = Continent
-        fields = ('id', 'url','code', 'name')
+        exclude = ('created', 'modified',)
 
 
-class CountrySerializer(serializers.HyperlinkedModelSerializer):
+class CountrySerializer(HyperLinkedWithIdSerializer):
     continent = ContinentSerializer(many=False)
     class Meta:
         model = Country
-        fields = ('id', 'common_name','formal_name', 'common_name_fr', 'formal_name_fr',
-                  'iso3166a2', 'iso3166a3', 'iso3166n3', 'continent', 'centroid_latitude',
-                  'centroid_latitude')
+        exclude = ('created', 'modified',)
 
 
-class BiomeFAOSerializer(serializers.HyperlinkedModelSerializer):
+class BiomeFAOSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = BiomeFAO
-        fields = ('id', 'url', 'name')
+        exclude = ('created', 'modified',)
 
 
-class BiomeUdvardySerializer(serializers.HyperlinkedModelSerializer):
+class BiomeUdvardySerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = BiomeUdvardy
-        fields = ('id', 'url', 'name')
+        exclude = ('created', 'modified',)
 
 
-class BiomeWWFSerializer(serializers.HyperlinkedModelSerializer):
+class BiomeWWFSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = BiomeWWF
-        fields = ('id', 'url', 'name')
+        exclude = ('created', 'modified',)
 
 
-class DivisionBaileySerializer(serializers.HyperlinkedModelSerializer):
+class DivisionBaileySerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = DivisionBailey
-        fields = ('id', 'url', 'name')
+        exclude = ('created', 'modified',)
 
 
-class BiomeHoldridgeSerializer(serializers.HyperlinkedModelSerializer):
+class BiomeHoldridgeSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = BiomeHoldridge
-        fields = ('id', 'url', 'name')
+        exclude = ('created', 'modified',)
 
 
+class LocationSerializer(HyperLinkedWithIdSerializer):
+    class Meta:
+        model = Location
+        exclude = ('created', 'modified',)
+
+
+class LocationGroupSerializer(HyperLinkedWithIdSerializer):
+    locations = LocationSerializer(many=True)
+    class Meta:
+        model = LocationGroup    
+        exclude = ('created', 'modified',)
+
+
+class AllometricEquationSerializer(HyperLinkedWithIdSerializer):
+    species_group=SpeciesGroupSerializer(many=False)
+    location_group=LocationGroupSerializer(many=False)
+
+    class Meta:
+        model = AllometricEquation
+        exclude = ('created',)
