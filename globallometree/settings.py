@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'globallometree.apps.kibana_src',
     'globallometree.apps.api',
     'rest_framework',
+    'rest_framework_swagger'
 )
 
 
@@ -219,8 +220,40 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.XMLRenderer',
-    )
+        'rest_framework_csv.renderers.CSVRenderer',
+        'globallometree.apps.api.renderers.SimpleBrowsableAPIRenderer',
+        'globallometree.apps.api.renderers.SimpleJSONRenderer',
+        'globallometree.apps.api.renderers.SimpleXMLRenderer',
+        'globallometree.apps.api.renderers.SimpleCSVRenderer',
+    )   
 }
+
+
+SWAGGER_SETTINGS = {
+    "exclude_namespaces": [],
+    "api_version": '1',
+    "api_path": "/",
+    "enabled_methods": [
+        'get',
+        'post',
+        'put',
+        'patch',
+        'delete'
+    ],
+    "api_key": '',
+    "is_authenticated": False,
+    "is_superuser": False,
+    "permission_denied_handler": None,
+    "info": {
+        #'contact': 'apiteam@wordnik.com',
+        'description': 'This is automatically generated documentation for the GlobAllomeTree API in swagger format.',
+        #'license': 'Apache 2.0',
+        #'licenseUrl': 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        #'termsOfServiceUrl': 'http://globallometree.org/terms/',
+        'title': 'GlobAllomeTree API Docs',
+    },
+}
+
 
 if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
     print "settings_local.py not present - skipping"
