@@ -14,31 +14,29 @@ from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, BiomeFAO, BiomeUdvardy, 
     BiomeWWF, DivisionBailey, BiomeHoldridge
 )
-from globallometree.apps.common.models import DataReference, Institution
+from globallometree.apps.common.models import DataReference, Institution, BaseModel
 
-class Population(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        ordering = ('name',)
-
-
-class Ecosystem(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-
+class Population(BaseModel):
+    Name = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
-        return self.name
+        return self.Name
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('Name',)
 
 
-class Submission(models.Model):
-    # TODO: check if is better a more specific folder
+class Ecosystem(BaseModel):
+    Name = models.CharField(max_length=255, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.Name
+
+    class Meta:
+        ordering = ('Name',)
+
+
+class Submission(BaseModel):
     submitted_file = models.FileField(upload_to='data_submissions')
     submitted_notes = models.TextField(blank=True, null=True)
     date_uploaded = models.DateField(auto_now_add=True)
@@ -54,11 +52,8 @@ class Submission(models.Model):
         return u"%s by %s" % (self.submitted_file, self.user)
 
 
-class AllometricEquation(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True, verbose_name="Last modified")
+class AllometricEquation(BaseModel):
     
-    ID = models.IntegerField(primary_key=True)
     IDequation = models.IntegerField(null=True, blank=True) 
 
     X = models.CharField(max_length=20, null=True, blank=True)
@@ -129,27 +124,27 @@ class AllometricEquation(models.Model):
     Segmented_equation = models.NullBooleanField()
     Sample_size = models.CharField(max_length=150, null=True, blank=True)
     
-    population = models.ForeignKey(
+    Population = models.ForeignKey(
         Population, blank=True, null=True
     )
-    ecosystem = models.ForeignKey(
+    Ecosystem = models.ForeignKey(
         Ecosystem, blank=True, null=True
     )
 
-    species_group = models.ForeignKey('taxonomy.SpeciesGroup',null=True, blank=True)
-    location_group = models.ForeignKey('locations.LocationGroup',null=True, blank=True)
+    Species_group = models.ForeignKey('taxonomy.SpeciesGroup',null=True, blank=True)
+    Location_group = models.ForeignKey('locations.LocationGroup',null=True, blank=True)
 
     ID_REF = models.IntegerField(null=True, blank=True) 
-    reference = models.ForeignKey(
+    Reference = models.ForeignKey(
         DataReference, blank=True, null=True
     )
 
-    contributor = models.ForeignKey(
+    Contributor = models.ForeignKey(
         Institution, blank=True, null=True
     )
 
     Name_operator = models.CharField(max_length=150, null=True, blank=True)
-    data_submission = models.ForeignKey(
+    Data_submission = models.ForeignKey(
         Submission, blank=True, null=True
     )
 

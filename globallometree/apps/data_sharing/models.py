@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from globallometree.apps.common.models import TimeStampedModel
+from globallometree.apps.common.models import BaseModel
 
-class DataSharingAgreement(TimeStampedModel):
+class DataSharingAgreement(BaseModel):
 
 	PERMITTED_USE_CHOICES = (
 		('assessment', 'Support tree and forest volume and biomass assessment'),
@@ -22,67 +22,67 @@ class DataSharingAgreement(TimeStampedModel):
 		('on_date', 'On the indicated date'),
 	)
 
-	user = models.ForeignKey(
+	User = models.ForeignKey(
 		User
 	)
 
-	permitted_use = models.CharField(
+	Permitted_use = models.CharField(
 		max_length=100,
 		choices=PERMITTED_USE_CHOICES
 	)
 
-	permitted_use_other_value = models.TextField(
+	Permitted_use_other_value = models.TextField(
 		blank=True,
 		null=True
 	)
 
-	restrict_other_value = models.TextField(
+	Restrict_other_value = models.TextField(
 		blank=True,
 		null=True
 	)
 
-	restrict_resell = models.BooleanField(
+	Restrict_resell = models.BooleanField(
 		default=False,
 		help_text="The Data User shall not sell, market, rent, lease, sublicense, lend, assign, time-share, distribute, disseminate or transfer, in whole or in part, the Raw Data, any updates, or end user's rights under this Agreement." 
 	)
 
-	restrict_duplication = models.BooleanField(
+	Restrict_duplication = models.BooleanField(
 		default=False,
 		help_text="The Data User shall not duplicate the Data Provider's proprietary and copyright-protected Raw Data or attempt to do so by altering, decompiling, or disassembling the Raw Data."
 	)
 
-	restrict_reproduction = models.BooleanField(
+	Restrict_reproduction = models.BooleanField(
 		default=False,
 		help_text="The Data User shall not reproduce certain portions of the data for sale or any other commercial purposes with written permission of the data provider."
 	)
 
-	restrict_derivation = models.BooleanField(
+	Restrict_derivation = models.BooleanField(
 		default=False,
 		help_text="The Data User shall not publish the Derivative Data without acknowledging the Data Provider.")
 
-	restrict_attribution = models.BooleanField(
+	Restrict_attribution = models.BooleanField(
 		default=False,
 		help_text="The Data User shall not publish the Derivative Data without associating the Data Provider as a co-author.")
 
-	restrict_attributed_ownership = models.BooleanField(
+	Restrict_attributed_ownership = models.BooleanField(
 		default=False,
 		help_text="The Data Provider shall be acknowledged as the data source. If changes are made to the Raw Data, attribution should be given to the Data Provider as owner of the Raw Data."
 	)
 
-	expires = models.CharField(
+	Expires = models.CharField(
 		max_length=100,
 		choices=EXPIRE_CHOICES
 	)
 
-	expire_on_date = models.DateField(
+	Expires_on_date = models.DateField(
 		blank=True,
 		null=True
 	)
 
 
-class DataSet(TimeStampedModel):
+class DataSet(BaseModel):
 
-	user = models.ForeignKey(
+	User = models.ForeignKey(
 		User
 	)
 
@@ -92,57 +92,57 @@ class DataSet(TimeStampedModel):
 		('wood_density' , 'Wood Density Data'),
 	)
 
-	title = models.CharField(
+	Title = models.CharField(
 		max_length = 100
 	)
 
-	description = models.TextField(
+	Description = models.TextField(
 		blank=True,
 		null=True
 	)
 
-	uploaded_data_file = models.FileField(
+	Uploaded_data_file = models.FileField(
 		upload_to = "data_sharing",
 		blank=True,
 		null=True
 	)
 
-	data_type = models.CharField(
+	Data_type = models.CharField(
 		choices = DATA_TYPE_CHOICES,
 		max_length=100
 	)
 
-	is_restricted = models.BooleanField(
+	Is_restricted = models.BooleanField(
 		default=False
 	)
 
-	agreement = models.ForeignKey(
+	Agreement = models.ForeignKey(
 		DataSharingAgreement,
 		blank=True,
 		null=True
 	)
 
-	imported = models.BooleanField(
+	Imported = models.BooleanField(
 		default=False,
 		help_text="If this file has been imported into the GlobAllomeTree database yet or not"
 		)
 
 
-class DataAccessRequest(TimeStampedModel):
+class DataAccessRequest(BaseModel):
 
-	user = models.ForeignKey(
+	User = models.ForeignKey(
 		User,
 		help_text="The user requesting access to the dataset"
 	)
 
-	data_set = models.ForeignKey(
+	Data_set = models.ForeignKey(
 		DataSet)
 
-	granted = models.NullBooleanField(
+	Granted = models.NullBooleanField(
 		help_text="If the owner of the data has granted access or not"
 		)
 
-	responded = models.BooleanField(
-		help_text="If the owner of the datahas responded"
+	Responded = models.BooleanField(
+		help_text="If the owner of the data has responded"
 		)
 

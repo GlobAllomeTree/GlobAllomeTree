@@ -1,41 +1,41 @@
 from django.db import models
 from django.core.urlresolvers import reverse
-from globallometree.apps.common.models import TimeStampedModel
+from globallometree.apps.common.models import BaseModel
 
-class Family(TimeStampedModel):
-    name = models.CharField(max_length=80, null=True, blank=True)
+class Family(BaseModel):
+    Name = models.CharField(max_length=80, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Families'
-        ordering = ('name',)
+        ordering = ('Name',)
         
     def __unicode__(self):
-        return self.name
+        return self.Name
 
 
-class Genus(TimeStampedModel):
-    name  = models.CharField(max_length=80, null=True, blank=True)
-    family = models.ForeignKey(Family, null=True, blank=True)
+class Genus(BaseModel):
+    Name  = models.CharField(max_length=80, null=True, blank=True)
+    Family = models.ForeignKey(Family, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Genera'
-        ordering = ('name',)
+        ordering = ('Name',)
 
     def __unicode__(self):
-        return self.name
+        return self.Name
 
 
-class Species(TimeStampedModel):
-    name = models.CharField(max_length=80, null=True, blank=True)
-    genus = models.ForeignKey(Genus, null=True, blank=True)
-    original_ID_Species = models.IntegerField(
+class Species(BaseModel):
+    Name = models.CharField(max_length=80, null=True, blank=True)
+    Genus = models.ForeignKey(Genus, null=True, blank=True)
+    Original_ID_Species = models.IntegerField(
         null=True, blank=True,
         help_text="The original ID_Species from the global import"
     )
 
     class Meta:
         verbose_name_plural = 'Species'
-        ordering = ('name',)
+        ordering = ('Name',)
 
     def allometric_equation_count(self):
         """How many allometric equations there are for this species """
@@ -49,8 +49,8 @@ class Species(TimeStampedModel):
         """ Returns a link to the allometric equations for this species """
         return u'%s?Species=%s&Genus=%s' % (
                 reverse('equation_search'),
-                self.name,
-                self.genus.name
+                self.Name,
+                self.Genus.name
                 )
 
     def country_list(self):
@@ -65,109 +65,109 @@ class Species(TimeStampedModel):
         return self.name
 
 
-class Subspecies(TimeStampedModel):
-    name = models.CharField(max_length=80)
-    species = models.ForeignKey(Species)
-    
+class Subspecies(BaseModel):
+    Name = models.CharField(max_length=80)
+    Species = models.ForeignKey(Species)
 
     class Meta:
         verbose_name_plural = 'Subspecies'
-        ordering = ('name',)
+        ordering = ('Name',)
 
     def __unicode__(self):
-        return self.name
+        return self.Name
 
 
 
-class SpeciesLocalName(TimeStampedModel):
+class SpeciesLocalName(BaseModel):
     # A local name could either be for a species or a subspecies
-    species = models.ForeignKey(Species, blank=True, null=True, related_name="local_names")
+    Species = models.ForeignKey(Species, blank=True, null=True, related_name="Local_names")
 
-    local_name = models.CharField(
+    Local_name = models.CharField(
         max_length=80,
         help_text="The local name of this species in the local language"
     )
 
-    local_name_latin = models.CharField(
+    Local_name_latin = models.CharField(
         max_length=80,
         null=True,
         blank=True,
         help_text="A phonetic version using the latin alphabet"
     )
 
-    language_iso_639_3 = models.CharField(
+    Language_iso_639_3 = models.CharField(
         max_length=3, 
         help_text="The ISO 639-3 Language Code for the language"
     )
 
 
 
-class SubspeciesLocalName(TimeStampedModel):
+class SubspeciesLocalName(BaseModel):
     # A local name could either be for a species or a subspecies
-    subspecies = models.ForeignKey(Subspecies, blank=True, null=True,related_name="local_names")
+    Subspecies = models.ForeignKey(Subspecies, blank=True, null=True,related_name="Local_names")
 
-    local_name = models.CharField(
+    Local_name = models.CharField(
         max_length=80,
         help_text="The local name of this subspecies in the local language"
     )
 
-    local_name_latin = models.CharField(
+    Local_name_latin = models.CharField(
         max_length=80,
         null=True,
         blank=True,
         help_text="A phonetic version using the latin alphabet"
     )
 
-    language_iso_639_3 = models.CharField(
+    Language_iso_639_3 = models.CharField(
         max_length=3, 
         help_text="The ISO 639-3 Language Code for the language"
     )
 
 
-class SpeciesGroup(TimeStampedModel):
-    name = models.CharField(
+class SpeciesGroup(BaseModel):
+    Name = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="Group Name"
     )
 
-    subspecies = models.ManyToManyField(
+    Subspecies = models.ManyToManyField(
         Subspecies, 
         verbose_name="List of Subspecies", 
         blank=True, 
         null=True,
     )
 
-    species = models.ManyToManyField(
+    Species = models.ManyToManyField(
         Species, 
         verbose_name="List of Species", 
         blank=True, 
         null=True,
     )
-    original_ID_Group = models.IntegerField(
+
+    Original_ID_Group = models.IntegerField(
         null=True, blank=True,
         help_text="The original ID_Group from the global import"
     )
 
     def species_set(self):
         species_list = []
-        for species in self.species.all():
+        for species in self.Species.all():
             #Allow for empty genus or family
             names = []
             
             try:
-                names.append(species.genus.family.name)
+                names.append(species.Genus.Family.Name)
             except:
                 pass
 
             try:
-                names.append(species.genus.name)
+                names.append(species.Genus.Name)
             except:
                 pass
 
-            names.append(species.name)
+            names.append(species.Name)
 
-            species_list.append(' '.join(names))
+            species_list.append(' '.join(Names))
 
         return list(set(species_list)) 
 
     def __unicode__(self):
-        return self.name
+        return self.Name

@@ -166,9 +166,9 @@ class Command(BaseCommand):
 ######################################## COMMON ##################################################
 
             if orig_equation.Contributor is None:
-                contributor = None
+                Contributor = None
             else:
-                contributor = Institution.objects.get_or_create(name=orig_equation.Contributor)[0]
+                Contributor = Institution.objects.get_or_create(name=orig_equation.Contributor)[0]
 
             if orig_equation.Reference is None:
                 reference = None
@@ -259,7 +259,7 @@ class Command(BaseCommand):
                     Sample_size=orig_equation.Sample_size,
                     population=population,
                     ecosystem=ecosystem,
-                    contributor=contributor,
+                    Contributor=Contributor,
                     reference=reference,
                     species_group=species_group,
                     location_group=location_group,

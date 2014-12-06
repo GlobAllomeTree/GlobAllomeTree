@@ -46,7 +46,9 @@ from globallometree.apps.locations.models import (
 	)
 
 from globallometree.apps.api.serializers import (
-	DataReferenceSerializer,
+    
+	############## Full Serializers ##############
+    DataReferenceSerializer,
 	FamilySerializer,
 	GenusSerializer,
 	SpeciesSerializer,
@@ -70,18 +72,38 @@ from globallometree.apps.api.serializers import (
     DataSharingAgreementSerializer, 
     DataSetSerializer, 
     DataAccessRequestSerializer,
+
+    ############# Simple Serializers ################
     SimpleGenusSerializer,
     SimpleFamilySerializer,
     SimpleSpeciesSerializer,
+    SimpleSubspeciesSerializer,
+    SimpleSpeciesLocalNameSerializer,
+    SimpleSubspeciesLocalNameSerializer,   
     SimpleAllometricEquationSerializer,
+    SimpleSpeciesGroupSerializer,
+    SimpleBiomeFAOSerializer, 
+    SimpleBiomeUdvardySerializer, 
+    SimpleBiomeWWFSerializer, 
+    SimpleDivisionBaileySerializer, 
+    SimpleBiomeHoldridgeSerializer,
+    SimplePopulationSerializer,
+    SimpleLocationSerializer,
+    SimpleLocationGroupSerializer,
+    SimpleContinentSerializer,
+    SimpleCountrySerializer,
+    SimpleDataReferenceSerializer,
+    SimpleEcosystemSerializer,
+    SimpleWoodDensitySerializer
 	)
 
 
-class DataReferenceViewSet(viewsets.ReadOnlyModelViewSet):
+class DataReferenceViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = DataReference.objects.all()
     serializer_class = DataReferenceSerializer
+    simple_serializer_class = SimpleDataReferenceSerializer
 
 
 class FamilyViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
@@ -107,108 +129,124 @@ class SpeciesViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SpeciesSerializer
     simple_serializer_class = SimpleSpeciesSerializer
 
-class SubspeciesViewSet(viewsets.ReadOnlyModelViewSet):
+
+class SubspeciesViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Subspecies.objects.all()
     serializer_class = SubspeciesSerializer
+    simple_serializer_class = SimpleSubspeciesSerializer
 
-class SpeciesGroupViewSet(viewsets.ReadOnlyModelViewSet):
+
+class SpeciesGroupViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = SpeciesGroup.objects.all()
     serializer_class = SpeciesGroupSerializer
+    simple_serializer_class = SimpleSpeciesGroupSerializer
 
 
-class SpeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
+class SpeciesLocalNameViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = SpeciesLocalName.objects.all()
     serializer_class = SpeciesLocalNameSerializer
+    simple_serializer_class = SimpleSpeciesLocalNameSerializer
 
 
-class SubspeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
+class SubspeciesLocalNameViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = SubspeciesLocalName.objects.all()
     serializer_class = SubspeciesLocalNameSerializer
+    simple_serializer_class = SimpleSubspeciesLocalNameSerializer
 
 
-class PopulationViewSet(viewsets.ReadOnlyModelViewSet):
+class PopulationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Population.objects.all()
     serializer_class = PopulationSerializer
+    simple_serializer_class = SimplePopulationSerializer
 
 
-class EcosystemViewSet(viewsets.ReadOnlyModelViewSet):
+class EcosystemViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Ecosystem.objects.all()
     serializer_class = EcosystemSerializer
+    simple_serializer_class = SimpleEcosystemSerializer
 
 
-class ContinentViewSet(viewsets.ReadOnlyModelViewSet):
+class ContinentViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Continent.objects.all()
     serializer_class = ContinentSerializer
+    simple_serializer_class = SimpleContinentSerializer
 
 
-class CountryViewSet(viewsets.ReadOnlyModelViewSet):
+class CountryViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
+    simple_serializer_class = SimpleCountrySerializer
 
-
-class BiomeFAOViewSet(viewsets.ReadOnlyModelViewSet):
+class BiomeFAOViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeFAO.objects.all()
     serializer_class = BiomeFAOSerializer
+    simple_serializer_class = SimpleBiomeFAOSerializer
 
 
-class BiomeUdvardyViewSet(viewsets.ReadOnlyModelViewSet):
+class BiomeUdvardyViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeUdvardy.objects.all()
     serializer_class = BiomeUdvardySerializer
+    simple_serializer_class = SimpleBiomeUdvardySerializer
 
 
-class BiomeWWFViewSet(viewsets.ReadOnlyModelViewSet):
+class BiomeWWFViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeWWF.objects.all()
     serializer_class = BiomeWWFSerializer
+    simple_serializer_class = SimpleBiomeWWFSerializer
 
 
-class DivisionBaileyViewSet(viewsets.ReadOnlyModelViewSet):
+class DivisionBaileyViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = DivisionBailey.objects.all()
     serializer_class = DivisionBaileySerializer
+    simple_serializer_class = SimpleDivisionBaileySerializer
 
 
-class BiomeHoldridgeViewSet(viewsets.ReadOnlyModelViewSet):
+class BiomeHoldridgeViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeHoldridge.objects.all()
     serializer_class = BiomeHoldridgeSerializer
+    simple_serializer_class = SimpleBiomeHoldridgeSerializer
 
 
-class LocationViewSet(viewsets.ReadOnlyModelViewSet):
+class LocationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+    simple_serializer_class = SimpleLocationSerializer
 
 
-class LocationGroupViewSet(viewsets.ReadOnlyModelViewSet):
+class LocationGroupViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = LocationGroup.objects.all()
     serializer_class = LocationGroupSerializer
+    simple_serializer_class = SimpleLocationGroupSerializer
 
 
 class AllometricEquationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
@@ -219,11 +257,12 @@ class AllometricEquationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelVie
     simple_serializer_class = SimpleAllometricEquationSerializer
 
    
-class WoodDensityViewSet(viewsets.ReadOnlyModelViewSet):
+class WoodDensityViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = WoodDensity.objects.all()
     serializer_class = WoodDensitySerializer
+    simple_serializer_class = SimpleWoodDensitySerializer
 
 
 class DataSharingAgreementViewSet(viewsets.ReadOnlyModelViewSet):

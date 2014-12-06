@@ -101,21 +101,28 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'locations.continent': {
+            'Code': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
+            'Created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'ID': ('django.db.models.fields.PositiveIntegerField', [], {'primary_key': 'True'}),
             'Meta': {'object_name': 'Continent'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
+            'Modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'Name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'locations.country': {
-            'Meta': {'ordering': "('common_name',)", 'object_name': 'Country'},
-            'centroid_latitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '5', 'decimal_places': '2', 'blank': 'True'}),
-            'centroid_longitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '5', 'decimal_places': '2', 'blank': 'True'}),
-            'common_name': ('django.db.models.fields.CharField', [], {'max_length': '159', 'blank': 'True'}),
-            'continent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['locations.Continent']", 'null': 'True', 'blank': 'True'}),
-            'formal_name': ('django.db.models.fields.CharField', [], {'max_length': '159', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'iso_3166_1_2_letter_code': ('django.db.models.fields.CharField', [], {'max_length': '6', 'blank': 'True'}),
-            'iso_3166_1_3_letter_code': ('django.db.models.fields.CharField', [], {'max_length': '9', 'blank': 'True'}),
-            'iso_3166_1_number': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
+            'Centroid_latitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '5', 'decimal_places': '2', 'blank': 'True'}),
+            'Centroid_longitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '5', 'decimal_places': '2', 'blank': 'True'}),
+            'Common_name': ('django.db.models.fields.CharField', [], {'max_length': '159', 'blank': 'True'}),
+            'Common_name_fr': ('django.db.models.fields.CharField', [], {'max_length': '159', 'blank': 'True'}),
+            'Continent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['locations.Continent']", 'null': 'True', 'blank': 'True'}),
+            'Created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'Formal_name': ('django.db.models.fields.CharField', [], {'max_length': '159', 'blank': 'True'}),
+            'Formal_name_fr': ('django.db.models.fields.CharField', [], {'max_length': '159', 'blank': 'True'}),
+            'ID': ('django.db.models.fields.PositiveIntegerField', [], {'primary_key': 'True'}),
+            'Iso3166a2': ('django.db.models.fields.CharField', [], {'max_length': '6', 'blank': 'True'}),
+            'Iso3166a3': ('django.db.models.fields.CharField', [], {'max_length': '9', 'blank': 'True'}),
+            'Iso3166n3': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'Meta': {'ordering': "('Common_name',)", 'object_name': 'Country'},
+            'Modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
     }
 

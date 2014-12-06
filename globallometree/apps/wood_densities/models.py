@@ -1,31 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
-from globallometree.apps.common.models import DataReference, Institution, Operator, TimeStampedModel
+from globallometree.apps.common.models import DataReference, Institution, Operator, BaseModel
 
 
 from decimal import getcontext
 getcontext().prec = 10
 
-class WoodDensity(TimeStampedModel):
-    ID = models.IntegerField(primary_key=True)
+class WoodDensity(BaseModel):
 
-    dataset = models.ForeignKey(
+    Dataset = models.ForeignKey(
         'data_sharing.DataSet',null=True, blank=True,
         help_text="The Shared Data Set that this wood denisty record came fromx")
 
-    species_group = models.ForeignKey(
+    Species_group = models.ForeignKey(
         'taxonomy.SpeciesGroup',null=True, blank=True)
 
-    location_group = models.ForeignKey(
+    Location_group = models.ForeignKey(
         'locations.LocationGroup',null=True, blank=True)
 
-    reference = models.ForeignKey(
+    Reference = models.ForeignKey(
         DataReference, blank=True, null=True)
 
-    operator = models.ForeignKey(
+    Operator = models.ForeignKey(
         Operator, blank=True, null=True)
 
-    contributor = models.ForeignKey(
+    Contributor = models.ForeignKey(
         Institution, blank=True, null=True)
 
     H_tree_avg = models.DecimalField(

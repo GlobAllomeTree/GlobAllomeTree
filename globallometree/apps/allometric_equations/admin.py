@@ -7,11 +7,11 @@ from globallometree.apps.allometric_equations.models import (
 )
 
 class PopulationAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('Name', )
 
 
 class EcosystemAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('Name', )
 
 
 class SubmissionAdmin(admin.ModelAdmin):
@@ -57,18 +57,18 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 
 class AllometricEquationAdmin(admin.ModelAdmin):
-    raw_id_fields = ('species_group','location_group','reference', 'data_submission')
-    list_display = ('ID', 'Equation', 'data_submission', 'modified')
+    raw_id_fields = ('Species_group','Location_group','Reference', 'Data_submission')
+    list_display = ('ID', 'Equation', 'Data_submission', 'Modified')
     ordering = ("ID",)
-    list_filter = ("data_submission",)
+    list_filter = ("Data_submission",)
     search_fields  = ('ID',)
     
     fieldsets = [
         ('Identification',   {'fields': [
-            'ID', 'IDequation', 'population', 'ecosystem'
+            'ID', 'IDequation', 'Population', 'Ecosystem'
         ]}),
-        ('Taxonomy', {'fields': ['species_group']}),
-        ('Location', {'fields': ['location_group'], 'classes': ['collapse']}),
+        ('Taxonomy', {'fields': ['Species_group']}),
+        ('Location', {'fields': ['Location_group'], 'classes': ['collapse']}),
         ('Components', {'fields': [
             'B', 'Bd', 'Bg', 'Bt', 'L', 'Rb', 'Rf', 'Rm', 'S', 'T',
             'F','Veg_Component'
@@ -83,7 +83,7 @@ class AllometricEquationAdmin(admin.ModelAdmin):
             'Age', 'Equation', 'Substitute_equation', 'Ratio_equation',
             'Segmented_equation'
         ], 'classes': ['collapse']}),
-        ('Reference', {'fields': ['reference'], 'classes': ['collapse']}),
+        ('Reference', {'fields': ['Reference'], 'classes': ['collapse']}),
     ]
 
 admin.site.register(Population, PopulationAdmin)

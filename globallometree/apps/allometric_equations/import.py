@@ -79,7 +79,7 @@ def run_submission_import(data_submission,
 	eq_fields = [field.name for field in AllometricEquation._meta.fields]
 	foreign_key_fields = [
 	    'species_group', 'location_group', 'population',
-	    'ecosystem', 'contributor', 'reference'
+	    'ecosystem', 'Contributor', 'reference'
 	]                   
 	decimal_fields = [
 	    'R2', 'R2_Adjusted', 'RMSE', 'SEE',
@@ -268,11 +268,11 @@ def run_submission_import(data_submission,
 
 	        location_group.locations.add(location)
 
-	        # contributor and reference
+	        # Contributor and reference
 	        if row['Contributor'] in none_values:
-	            contributor = None
+	            Contributor = None
 	        else:
-	            contributor = Institution.objects.get_or_create(
+	            Contributor = Institution.objects.get_or_create(
 	                name=row['Contributor']
 	            )[0]
 
@@ -308,7 +308,7 @@ def run_submission_import(data_submission,
 	                allometric_equation = AllometricEquation(
 	                    population=population,
 	                    ecosystem=ecosystem,
-	                    contributor=contributor,
+	                    Contributor=Contributor,
 	                    reference=reference,
 	                    species_group=species_group,
 	                    location_group=location_group,
