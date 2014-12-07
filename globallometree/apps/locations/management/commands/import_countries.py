@@ -30,20 +30,20 @@ class Command(BaseCommand):
 
         for key in continents.keys():
             name = continents[key]
-            continents[key] = Continent.objects.get_or_create(code=key, name=name)[0]
+            continents[key] = Continent.objects.get_or_create(Code=key, Name=name)[0]
 
         for cd_row in country_data:
             Country.objects.get_or_create(
-                common_name=cd_row['ISOen_name'],
-                formal_name=cd_row['ISOen_proper'],
-                common_name_fr=cd_row['ISOfr_name'],
-                formal_name_fr=cd_row['ISOfr_proper'],
-                continent=continents[cd_row['continent']],
-                iso3166a2=cd_row['ISO3166A2'],
-                iso3166a3=cd_row['ISO3166A3'],
-                iso3166n3=cd_row['ISO3166N3'],
-                centroid_latitude = cd_row['latitude'],
-                centroid_longitude = cd_row['longitude'] 
+                Common_name=cd_row['ISOen_name'],
+                Formal_name=cd_row['ISOen_proper'],
+                Common_name_fr=cd_row['ISOfr_name'],
+                Formal_name_fr=cd_row['ISOfr_proper'],
+                Continent=continents[cd_row['continent']],
+                Iso3166a2=cd_row['ISO3166A2'],
+                Iso3166a3=cd_row['ISO3166A3'],
+                Iso3166n3=cd_row['ISO3166N3'],
+                Centroid_latitude = cd_row['latitude'],
+                Centroid_longitude = cd_row['longitude'] 
             )
 
     def load_countries_csv(self):

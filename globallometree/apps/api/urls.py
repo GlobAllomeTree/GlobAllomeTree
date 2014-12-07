@@ -30,8 +30,11 @@ from globallometree.apps.api.views import (
 
 router = DefaultRouter()
 
-router.register(r'references', DataReferenceViewSet)
+router.register(r'allometric-equations',AllometricEquationViewSet)
 router.register(r'wood-densities',WoodDensityViewSet)
+
+router.register(r'references', DataReferenceViewSet)
+
 router.register(r'families', FamilyViewSet)
 router.register(r'genera', GenusViewSet)
 router.register(r'species', SpeciesViewSet)
@@ -39,18 +42,20 @@ router.register(r'subspecies', SubspeciesViewSet)
 router.register(r'species-groups', SpeciesGroupViewSet)
 router.register(r'species-local-names', SpeciesLocalNameViewSet)
 router.register(r'subspecies-local-names', SubspeciesLocalNameViewSet)
-router.register(r'populations', PopulationViewSet)
-router.register(r'ecosystems', EcosystemViewSet)
-router.register(r'allometric-equations',AllometricEquationViewSet)
+
 router.register(r'continents', ContinentViewSet)
 router.register(r'countries', CountryViewSet)
-router.register(r'fao-biomes', BiomeFAOViewSet)
-router.register(r'udvardy-biomes', BiomeUdvardyViewSet)
-router.register(r'wwf-biomes', BiomeWWFViewSet)
-router.register(r'bailey-divisions', DivisionBaileyViewSet)
-router.register(r'holdridge-biomes', BiomeHoldridgeViewSet)
 router.register(r'locations', LocationViewSet)
 router.register(r'location-groups', LocationGroupViewSet)
+
+router.register(r'populations', PopulationViewSet)
+router.register(r'ecosystems', EcosystemViewSet)
+router.register(r'biomes-fao', BiomeFAOViewSet)
+router.register(r'biomes-udvardy', BiomeUdvardyViewSet)
+router.register(r'biomes-wwf', BiomeWWFViewSet)
+router.register(r'biomes-holdridge', BiomeHoldridgeViewSet)
+router.register(r'divisions-bailey', DivisionBaileyViewSet)
+
 router.register(r'data-sharing-agreements',DataSharingAgreementViewSet)
 router.register(r'data-sets',DataSetViewSet)
 router.register(r'data-requests',DataAccessRequestViewSet)

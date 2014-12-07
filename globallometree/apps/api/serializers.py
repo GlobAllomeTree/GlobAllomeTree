@@ -43,7 +43,8 @@ from globallometree.apps.locations.models import (
     DivisionBailey, 
     BiomeHoldridge, 
     LocationGroup, 
-    Location
+    Location,
+    GeoPoint
 )
 
 
@@ -165,19 +166,25 @@ class BiomeHoldridgeSerializer(HyperLinkedWithIdSerializer):
 
 
 class LocationSerializer(HyperLinkedWithIdSerializer):
-    Biome_fao = BiomeFAOSerializer(many=False)
-    Biome_udvardy = BiomeUdvardySerializer(many=False)
-    Biome_wwf = BiomeWWFSerializer(many=False)
-    Division_bailey = DivisionBaileySerializer(many=False)
-    Biome_holdridge = BiomeHoldridgeSerializer(many=False)
     Country = CountrySerializer(many=False)
     class Meta:
         model = Location
         exclude = ('Created', 'Modified', 'Original_ID_Location')
 
 
+class GeoPointSerializer(HyperLinkedWithIdSerializer):
+    class Meta:
+        model = GeoPoint
+
+
 class LocationGroupSerializer(HyperLinkedWithIdSerializer):
+    Biomes_FAO = BiomeFAOSerializer(many=True)
+    Biomes_UDVARDY = BiomeUdvardySerializer(many=True)
+    Biomes_WWF = BiomeWWFSerializer(many=True)
+    Divisions_BAILEY = DivisionBaileySerializer(many=True)
+    Biomes_HOLDRIDGE = BiomeHoldridgeSerializer(many=True)
     Locations = LocationSerializer(many=True)
+    Geo_points = GeoPointSerializer(many=True)
     class Meta:
         model = LocationGroup    
         exclude = ('Created', 'Modified', 'Original_group_location')
@@ -318,12 +325,6 @@ class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerialize
 
 class SimpleLocationSerializer(serializers.ModelSerializer):
     Country = fields.CharField(source="Country.Formal_name")
-    Biome_fao = fields.CharField(source="Biome_fao.Name")
-    Biome_udvardy = fields.CharField(source="Biome_udvardy.Name") 
-    Biome_wwf = fields.CharField(source="Biome_wwf.Name") 
-    Division_bailey = fields.CharField(source="Division_bailey.Name") 
-    Biome_holdridge = fields.CharField(source="Biome_holdridge.Name")
-
     class Meta: 
         model = Location
         exclude = ('Created', 'Modified', 'ID', "Original_ID_Location")
@@ -341,13 +342,6 @@ class LocationGroupMixin(object):
         for location in group.Locations.all():
             data.append(SimpleLocationSerializer(instance=location, many=False).data)
         return data
-
-class SimpleLocationGroupSerializer(LocationGroupMixin, 
-                                    serializers.ModelSerializer):
-    Location_group = fields.SerializerMethodField()
-    class Meta:
-        model = AllometricEquation
-        fields = ('Location_group', )
 
 
 class SimpleBiomeFAOSerializer(serializers.ModelSerializer):
@@ -380,6 +374,21 @@ class SimpleDivisionBaileySerializer(serializers.ModelSerializer):
         fields = ('Name',)
 
 
+class SimpleLocationGroupSerializer(LocationGroupMixin, 
+                                    serializers.ModelSerializer):
+    Location_group = fields.SerializerMethodField()
+    Biomes_FAO = SimpleBiomeFAOSerializer(many=True)
+    Biomes_UDVARDY = SimpleBiomeUdvardySerializer(many=True) 
+    Biomes_WWF = SimpleBiomeWWFSerializer(many=True) 
+    Divisions_BAILEY = SimpleDivisionBaileySerializer(many=True) 
+    Biomes_HOLDRIDGE = SimpleBiomeHoldridgeSerializer(many=True)
+
+    class Meta:
+        model = AllometricEquation
+        fields = ('Location_group', 'Biomes_FAO', 'Biomes_UDVARDY', 'Biomes_WWF', 'Divisions_BAILEY', 'Biomes_HOLDRIDGE')
+
+
+
 class SimplePopulationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Population
@@ -399,8 +408,8 @@ class SimpleContinentSerializer(serializers.ModelSerializer):
 
 
 class SimpleCountrySerializer(serializers.ModelSerializer):
-    name = fields.CharField(source='Formal_Name')
-    code = fields.CharField(source='Iso3166a3')
+    Name = fields.CharField(source='Formal_Name')
+    Code = fields.CharField(source='Iso3166a3')
     class Meta:
         model = Country
         fields = ('Name', 'Code')   

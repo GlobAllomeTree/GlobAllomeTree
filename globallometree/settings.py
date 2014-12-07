@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'globallometree.apps.locations',
     'globallometree.apps.search_helpers',
     'globallometree.apps.allometric_equations',
+    'globallometree.apps.raw_data',
     'globallometree.apps.wood_densities',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
