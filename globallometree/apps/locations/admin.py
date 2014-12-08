@@ -21,42 +21,15 @@ class LocationInline(admin.TabularInline):
     raw_id_fields = ('location',)
 
 
-class BiomeFAOInline(admin.TabularInline):
-    model = LocationGroup.Biomes_FAO.through
-
-
-class BiomeUdvardyInline(admin.TabularInline):
-    model = LocationGroup.Biomes_UDVARDY.through
-
-
-class BiomeWWFInline(admin.TabularInline):
-    model = LocationGroup.Biomes_WWF.through
-
-
-class BiomeHoldridgeInline(admin.TabularInline):
-    model = LocationGroup.Biomes_HOLDRIDGE.through
-
-
-class DivisionBaileyInline(admin.TabularInline):
-    model = LocationGroup.Divisions_BAILEY.through
-
-
-class GeoPointInline(admin.TabularInline):
-    model = LocationGroup.Geo_points.through
 
 
 class LocationGroupAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Original_group_location', 'Modified')
-    search_fields = ('Name', 'Original_group_location')
+    list_display = ('Name', 'Original_Group_Location', 'Modified')
+    search_fields = ('Name', 'Original_Group_Location')
     exclude = ('Locations',)
     fields = ('Name', )
     inlines = [
-    	 LocationInline,
-         BiomeUdvardyInline,
-         BiomeWWFInline,
-         BiomeHoldridgeInline,
-         DivisionBaileyInline,
-         GeoPointInline
+    	 LocationInline
     	]
 
 class BiomeFAOAdmin(admin.ModelAdmin):

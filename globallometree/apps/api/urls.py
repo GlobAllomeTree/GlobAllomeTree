@@ -25,7 +25,8 @@ from globallometree.apps.api.views import (
 	LocationGroupViewSet,
 	DataSharingAgreementViewSet, 
 	DataSetViewSet,
-	DataAccessRequestViewSet
+	DataAccessRequestViewSet,
+	InstitutionViewSet
 	)
 
 router = DefaultRouter()
@@ -34,6 +35,7 @@ router.register(r'allometric-equations',AllometricEquationViewSet)
 router.register(r'wood-densities',WoodDensityViewSet)
 
 router.register(r'references', DataReferenceViewSet)
+router.register(r'institutions', InstitutionViewSet)
 
 router.register(r'families', FamilyViewSet)
 router.register(r'genera', GenusViewSet)

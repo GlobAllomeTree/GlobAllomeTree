@@ -48,7 +48,7 @@ class Command(BaseCommand):
 
     def load_countries_csv(self):
         #csv file with country lats/lons
-        csv_file_path = os.path.join(settings.BASE_PATH, 'globallometree', 'apps', 'locations', 'resources', 'cow.txt')
+        csv_file_path = os.path.join(settings.BASE_PATH, 'globallometree', 'apps', 'locations', 'resources', 'countries.csv')
         headers = []
         countries = []
 

@@ -217,6 +217,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'PAGINATE_BY': 50,                # Default to 200
+    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
+    'MAX_PAGINATE_BY': 500,
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
@@ -229,7 +232,7 @@ REST_FRAMEWORK = {
     )   
 }
 
-
+ 
 SWAGGER_SETTINGS = {
     "exclude_namespaces": [],
     "api_version": '1',

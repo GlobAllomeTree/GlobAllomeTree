@@ -3,7 +3,8 @@ from rest_framework import viewsets
 from globallometree.apps.api.mixins import SimpleSerializerMixin
 
 from globallometree.apps.common.models import (
-    DataReference
+    DataReference, 
+    Institution
 	)
 
 from globallometree.apps.data_sharing.models import (
@@ -49,6 +50,7 @@ from globallometree.apps.api.serializers import (
     
 	############## Full Serializers ##############
     DataReferenceSerializer,
+    InstitutionSerializer,
 	FamilySerializer,
 	GenusSerializer,
 	SpeciesSerializer,
@@ -94,7 +96,8 @@ from globallometree.apps.api.serializers import (
     SimpleCountrySerializer,
     SimpleDataReferenceSerializer,
     SimpleEcosystemSerializer,
-    SimpleWoodDensitySerializer
+    SimpleWoodDensitySerializer,
+    SimpleInstitutionSerializer
 	)
 
 
@@ -104,6 +107,14 @@ class DataReferenceViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet)
     queryset = DataReference.objects.all()
     serializer_class = DataReferenceSerializer
     simple_serializer_class = SimpleDataReferenceSerializer
+
+
+class InstitutionViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    """
+    queryset = Institution.objects.all()
+    serializer_class = InstitutionSerializer
+    simple_serializer_class = SimpleInstitutionSerializer
 
 
 class FamilyViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):

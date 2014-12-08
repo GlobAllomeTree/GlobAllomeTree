@@ -90,15 +90,6 @@ class BiomeHoldridge(BaseModel):
         ordering = ('Name',)
 
 
-class GeoPoint(BaseModel):
-    Latitude = models.DecimalField(
-        null=True, blank=True, max_digits=12, decimal_places=9
-    )
-    Longitude = models.DecimalField(
-        null=True, blank=True, max_digits=12, decimal_places=9
-    )
-
-
 class Location(BaseModel):
     Name = models.CharField(max_length=255, null=True, blank=True)
     Commune = models.CharField(max_length=255, blank=True, null=True)
@@ -106,6 +97,17 @@ class Location(BaseModel):
     Region = models.CharField(max_length=255, blank=True, null=True)
     Country = models.ForeignKey(Country, blank=True, null=True)
     Original_ID_Location = models.IntegerField(null=True, blank=True, help_text="The original ID_Location from the global import")
+    Latitude = models.DecimalField(
+        null=True, blank=True, max_digits=12, decimal_places=9
+    )
+    Longitude = models.DecimalField(
+        null=True, blank=True, max_digits=12, decimal_places=9
+    )
+    Biome_FAO = models.ForeignKey(BiomeFAO, blank=True, null=True)
+    Biome_UDVARDY = models.ForeignKey(BiomeUdvardy, blank=True, null=True)
+    Biome_WWF = models.ForeignKey(BiomeWWF, blank=True, null=True)
+    Division_BAILEY = models.ForeignKey(DivisionBailey, blank=True, null=True)
+    Biome_HOLDRIDGE = models.ForeignKey(BiomeHoldridge, blank=True, null=True)
 
     def __unicode__(self):
         return self.Name
@@ -121,14 +123,8 @@ class LocationGroup(BaseModel):
         blank=True, 
         verbose_name="Group Name")
 
-    Original_group_location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")
-    Biomes_FAO = models.ManyToManyField(BiomeFAO, blank=True, null=True)
-    Biomes_UDVARDY = models.ManyToManyField(BiomeUdvardy, blank=True, null=True)
-    Biomes_WWF = models.ManyToManyField(BiomeWWF, blank=True, null=True)
-    Divisions_BAILEY = models.ManyToManyField(DivisionBailey, blank=True, null=True)
-    Biomes_HOLDRIDGE = models.ManyToManyField(BiomeHoldridge, blank=True, null=True)
+    Original_Group_Location = models.IntegerField(null=True, blank=True, help_text="The original Group_Location from the global import")   
     Locations = models.ManyToManyField(Location, verbose_name="List of Locations", blank=True, null=True)
-    Geo_points = models.ManyToManyField(GeoPoint, verbose_name="List of Geo Points", blank=True, null=True)
 
     def locations_string(self):
         string = ''

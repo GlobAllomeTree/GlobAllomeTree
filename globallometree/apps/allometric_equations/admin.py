@@ -65,7 +65,7 @@ class AllometricEquationAdmin(admin.ModelAdmin):
     
     fieldsets = [
         ('Identification',   {'fields': [
-            'ID', 'IDequation', 'Population', 'Ecosystem'
+           'Original_IDequation', 'Population', 'Ecosystem'
         ]}),
         ('Taxonomy', {'fields': ['Species_group']}),
         ('Location', {'fields': ['Location_group'], 'classes': ['collapse']}),

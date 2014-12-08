@@ -54,7 +54,9 @@ class Submission(BaseModel):
 
 class AllometricEquation(BaseModel):
     
-    IDequation = models.IntegerField(null=True, blank=True) 
+    Original_IDequation = models.IntegerField(null=True, 
+                                     blank=True, 
+                                     help_text="The old ID of the equation in the previous version of the platform") 
 
     X = models.CharField(max_length=20, null=True, blank=True)
     Unit_X = models.CharField(max_length=20, null=True, blank=True)

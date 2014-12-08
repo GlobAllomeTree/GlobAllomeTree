@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from rest_framework import serializers, fields
 
 from globallometree.apps.common.models import (
-    DataReference
+    DataReference,
+    Institution
 )
 
 from globallometree.apps.allometric_equations.models import (
@@ -40,11 +41,10 @@ from globallometree.apps.locations.models import (
     BiomeFAO, 
     BiomeUdvardy, 
     BiomeWWF, 
-    DivisionBailey, 
+    DivisionBailey,
     BiomeHoldridge, 
     LocationGroup, 
-    Location,
-    GeoPoint
+    Location
 )
 
 
@@ -57,6 +57,12 @@ class HyperLinkedWithIdSerializer(serializers.HyperlinkedModelSerializer):
 class DataReferenceSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = DataReference
+        exclude = ('Created', 'Modified',)
+
+
+class InstitutionSerializer(HyperLinkedWithIdSerializer):
+    class Meta:
+        model = Institution
         exclude = ('Created', 'Modified',)
 
 
@@ -103,8 +109,8 @@ class SubspeciesSerializer(HyperLinkedWithIdSerializer):
 
 
 class SpeciesGroupSerializer(HyperLinkedWithIdSerializer):
-    subspecies = SubspeciesSerializer(many=True) 
-    species = SpeciesSerializer(many=True)
+    Subspecies = SubspeciesSerializer(many=True) 
+    Species = SpeciesSerializer(many=True)
     class Meta:
         model = SpeciesGroup
         exclude = ('Created', 'Modified', 'Original_ID_Group')
@@ -167,27 +173,21 @@ class BiomeHoldridgeSerializer(HyperLinkedWithIdSerializer):
 
 class LocationSerializer(HyperLinkedWithIdSerializer):
     Country = CountrySerializer(many=False)
+    Biome_FAO = BiomeFAOSerializer(many=False)
+    Biome_UDVARDY = BiomeUdvardySerializer(many=False)
+    Biome_WWF = BiomeWWFSerializer(many=False)
+    Division_BAILEY = DivisionBaileySerializer(many=False)
+    Biome_HOLDRIDGE = BiomeHoldridgeSerializer(many=False)
     class Meta:
         model = Location
         exclude = ('Created', 'Modified', 'Original_ID_Location')
 
 
-class GeoPointSerializer(HyperLinkedWithIdSerializer):
-    class Meta:
-        model = GeoPoint
-
-
 class LocationGroupSerializer(HyperLinkedWithIdSerializer):
-    Biomes_FAO = BiomeFAOSerializer(many=True)
-    Biomes_UDVARDY = BiomeUdvardySerializer(many=True)
-    Biomes_WWF = BiomeWWFSerializer(many=True)
-    Divisions_BAILEY = DivisionBaileySerializer(many=True)
-    Biomes_HOLDRIDGE = BiomeHoldridgeSerializer(many=True)
     Locations = LocationSerializer(many=True)
-    Geo_points = GeoPointSerializer(many=True)
     class Meta:
         model = LocationGroup    
-        exclude = ('Created', 'Modified', 'Original_group_location')
+        exclude = ('Created', 'Modified', 'Original_Group_Location')
 
 
 class AllometricEquationSerializer(HyperLinkedWithIdSerializer):
@@ -198,7 +198,7 @@ class AllometricEquationSerializer(HyperLinkedWithIdSerializer):
     Reference = DataReferenceSerializer(many=False)
     class Meta:
         model = AllometricEquation
-        exclude = ('Created', 'Modified', 'ID_REF')
+        exclude = ('Created', 'Modified', 'ID_REF', 'Data_submission')
 
 
 class WoodDensitySerializer(HyperLinkedWithIdSerializer):
@@ -234,6 +234,12 @@ class DataAccessRequestSerializer(HyperLinkedWithIdSerializer):
 ########################################################################
 #############   SIMPLE SERIALIZERS #####################################
 ########################################################################
+
+
+class SimpleInstitutionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Institution
+        fields = ('Name',)
 
 
 class SimpleSpeciesLocalNameSerializer(serializers.ModelSerializer):
@@ -301,7 +307,7 @@ class SimpleSubspeciesSerializer(serializers.ModelSerializer):
 
 class SpeciesGroupMixin(object):
 
-    def get_species_group(self, obj):
+    def get_Species_group(self, obj):
 
         if(hasattr(obj, 'Species_group')):
             group = obj.Species_group
@@ -311,7 +317,7 @@ class SpeciesGroupMixin(object):
         for species in group.Species.all():
             data.append(SimpleSpeciesSerializer(instance=species, many=False).data)
 
-        for subspecies in group.subspecies.all():
+        for subspecies in group.Subspecies.all():
             data.append(SimpleSubspeciesSerializer(instance=subspecies, many=False).data)
         return data
 
@@ -323,11 +329,6 @@ class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerialize
         fields = ('Species_group', )
 
 
-class SimpleLocationSerializer(serializers.ModelSerializer):
-    Country = fields.CharField(source="Country.Formal_name")
-    class Meta: 
-        model = Location
-        exclude = ('Created', 'Modified', 'ID', "Original_ID_Location")
 
 
 class LocationGroupMixin(object):
@@ -374,19 +375,28 @@ class SimpleDivisionBaileySerializer(serializers.ModelSerializer):
         fields = ('Name',)
 
 
+
+
+class SimpleLocationSerializer(serializers.ModelSerializer):
+    Country = fields.CharField(source="Country.Formal_name")
+    Biome_FAO = fields.CharField(source="Biome_FAO.Name")
+    Biome_UDVARDY = fields.CharField(source="Biome_UDVARDY.Name")
+    Biome_WWF = fields.CharField(source="Biome_WWF.Name")
+    Division_BAILEY = fields.CharField(source="Division_BAILEY.Name")
+    Biome_HOLDRIDGE = fields.CharField(source="Biome_HOLDRIDGE.Name")
+
+    class Meta: 
+        model = Location
+        exclude = ('Created', 'Modified', 'ID', "Original_ID_Location")
+
+
 class SimpleLocationGroupSerializer(LocationGroupMixin, 
                                     serializers.ModelSerializer):
     Location_group = fields.SerializerMethodField()
-    Biomes_FAO = SimpleBiomeFAOSerializer(many=True)
-    Biomes_UDVARDY = SimpleBiomeUdvardySerializer(many=True) 
-    Biomes_WWF = SimpleBiomeWWFSerializer(many=True) 
-    Divisions_BAILEY = SimpleDivisionBaileySerializer(many=True) 
-    Biomes_HOLDRIDGE = SimpleBiomeHoldridgeSerializer(many=True)
 
     class Meta:
         model = AllometricEquation
-        fields = ('Location_group', 'Biomes_FAO', 'Biomes_UDVARDY', 'Biomes_WWF', 'Divisions_BAILEY', 'Biomes_HOLDRIDGE')
-
+        fields = ('Location_group',)
 
 
 class SimplePopulationSerializer(serializers.ModelSerializer):
@@ -408,11 +418,12 @@ class SimpleContinentSerializer(serializers.ModelSerializer):
 
 
 class SimpleCountrySerializer(serializers.ModelSerializer):
-    Name = fields.CharField(source='Formal_Name')
+    Name = fields.CharField(source='Formal_name')
     Code = fields.CharField(source='Iso3166a3')
+    Continent = fields.CharField(source="Continent.Name")
     class Meta:
         model = Country
-        fields = ('Name', 'Code')   
+        fields = ('Name', 'Code', 'Continent')   
 
 
 class SimpleDataReferenceSerializer(serializers.ModelSerializer):
@@ -430,7 +441,7 @@ class SimpleAllometricEquationSerializer(SpeciesGroupMixin,
 
     class Meta:
         model = AllometricEquation
-        exclude = ('Created', 'Modified', )
+        exclude = ('Created', 'Modified', 'Data_submission' )
 
 
 class SimpleWoodDensitySerializer(SpeciesGroupMixin, 
