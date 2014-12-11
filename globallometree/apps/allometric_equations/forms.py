@@ -2,7 +2,7 @@ from django import forms
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
-from .models import AllometricEquation, Ecosystem, Population
+from .models import AllometricEquation, Population
 from globallometree.apps.locations.models import (
     Country, BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 )

@@ -4,21 +4,20 @@ from django.contrib.auth.models import User
 from rest_framework import serializers, fields
 
 from globallometree.apps.common.models import (
-    DataReference,
+    Reference,
     Institution
 )
 
 from globallometree.apps.allometric_equations.models import (
     Population, 
-    Ecosystem, 
-    Submission, 
+    TreeType, 
     AllometricEquation
 )
 
 from globallometree.apps.data_sharing.models import (
-    DataSharingAgreement, 
-    DataSet, 
-    DataAccessRequest
+    DataLicense, 
+    Dataset, 
+    DataRequest
 )
 
 from globallometree.apps.taxonomy.models import (
@@ -44,7 +43,8 @@ from globallometree.apps.locations.models import (
     DivisionBailey,
     BiomeHoldridge, 
     LocationGroup, 
-    Location
+    Location,
+    ForestType
 )
 
 
@@ -54,9 +54,9 @@ class HyperLinkedWithIdSerializer(serializers.HyperlinkedModelSerializer):
         self.fields[self.Meta.model._meta.pk.name] = fields.IntegerField()
 
 
-class DataReferenceSerializer(HyperLinkedWithIdSerializer):
+class ReferenceSerializer(HyperLinkedWithIdSerializer):
     class Meta:
-        model = DataReference
+        model = Reference
         exclude = ('Created', 'Modified',)
 
 
@@ -91,7 +91,7 @@ class SpeciesSerializer(HyperLinkedWithIdSerializer):
     Local_names = SpeciesLocalNameSerializer(many=True)
     class Meta:
         model = Species
-        exclude = ('Created', 'Modified', 'Original_ID_Species')
+        exclude = ('Created', 'Modified')
 
 
 class SubspeciesLocalNameSerializer(HyperLinkedWithIdSerializer):
@@ -113,18 +113,12 @@ class SpeciesGroupSerializer(HyperLinkedWithIdSerializer):
     Species = SpeciesSerializer(many=True)
     class Meta:
         model = SpeciesGroup
-        exclude = ('Created', 'Modified', 'Original_ID_Group')
+        exclude = ('Created', 'Modified')
 
 
 class PopulationSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = Population
-        exclude = ('Created', 'Modified',)
-
-
-class EcosystemSerializer(HyperLinkedWithIdSerializer):
-    class Meta:
-        model = Ecosystem
         exclude = ('Created', 'Modified',)
 
 
@@ -171,6 +165,12 @@ class BiomeHoldridgeSerializer(HyperLinkedWithIdSerializer):
         exclude = ('Created', 'Modified',)
 
 
+class ForestTypeSerializer(HyperLinkedWithIdSerializer):
+    class Meta:
+        model = ForestType   
+        exclude = ('Created', 'Modified')
+
+
 class LocationSerializer(HyperLinkedWithIdSerializer):
     Country = CountrySerializer(many=False)
     Biome_FAO = BiomeFAOSerializer(many=False)
@@ -178,55 +178,61 @@ class LocationSerializer(HyperLinkedWithIdSerializer):
     Biome_WWF = BiomeWWFSerializer(many=False)
     Division_BAILEY = DivisionBaileySerializer(many=False)
     Biome_HOLDRIDGE = BiomeHoldridgeSerializer(many=False)
+    Forest_type = ForestTypeSerializer(many=False)
+
     class Meta:
         model = Location
-        exclude = ('Created', 'Modified', 'Original_ID_Location')
+        exclude = ('Created', 'Modified')
 
 
 class LocationGroupSerializer(HyperLinkedWithIdSerializer):
     Locations = LocationSerializer(many=True)
     class Meta:
         model = LocationGroup    
-        exclude = ('Created', 'Modified', 'Original_Group_Location')
+        exclude = ('Created', 'Modified')
 
+
+class TreeTypeSerializer(HyperLinkedWithIdSerializer):
+    class Meta:
+        model = TreeType   
+        exclude = ('Created', 'Modified')
 
 class AllometricEquationSerializer(HyperLinkedWithIdSerializer):
     Species_group = SpeciesGroupSerializer(many=False)
     Location_group = LocationGroupSerializer(many=False)
     Population = PopulationSerializer(many=False) 
-    Ecosystem = EcosystemSerializer(many=False)
-    Reference = DataReferenceSerializer(many=False)
+    Tree_type = TreeTypeSerializer(many=False)
+    Reference = ReferenceSerializer(many=False)
     class Meta:
         model = AllometricEquation
-        exclude = ('Created', 'Modified', 'ID_REF', 'Data_submission')
+        exclude = ('Created', 'Modified',)
 
 
 class WoodDensitySerializer(HyperLinkedWithIdSerializer):
     Species = SpeciesSerializer(many=False)
     Subspecies = SubspeciesSerializer(many=False)
     Population = PopulationSerializer(many=False) 
-    Ecosystem = EcosystemSerializer(many=False)
-    Reference = DataReferenceSerializer(many=False)
+    Reference = ReferenceSerializer(many=False)
     class Meta:
         model = AllometricEquation
         exclude = ('Created', 'Modified',)
 
 
-class DataSharingAgreementSerializer(HyperLinkedWithIdSerializer):
+class DataLicenseSerializer(HyperLinkedWithIdSerializer):
     class Meta:
-        model = DataSharingAgreement
+        model = DataLicense
         exclude = ('Created', 'Modified',)
 
 
-class DataSetSerializer(HyperLinkedWithIdSerializer):
+class DatasetSerializer(HyperLinkedWithIdSerializer):
     class Meta:
-        model = DataSet
-        exclude = ('Created', 'Modified',)
+        model = Dataset
+        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file')
 
 
-class DataAccessRequestSerializer(HyperLinkedWithIdSerializer):
+class DataRequestSerializer(HyperLinkedWithIdSerializer):
     class Meta:
-        model = DataAccessRequest
+        model = DataRequest
         exclude = ('Created', 'Modified',)
 
 
@@ -270,7 +276,9 @@ class SimpleGenusSerializer(serializers.ModelSerializer):
 
 
 class SimpleSpeciesSerializer(serializers.ModelSerializer):
+    Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
     Family = fields.CharField(source="Genus.Family.Name")
+    Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
     Genus = fields.CharField(source="Genus.Name")
     Species = fields.CharField(source="Name")
     Species_local_names = SimpleSpeciesLocalNameSerializer(
@@ -280,7 +288,13 @@ class SimpleSpeciesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Species
-        fields = ('Species', 'Genus', 'Family', 'Species_local_names')
+        fields = ('Family_ID',
+                  'Family', 
+                  'Genus_ID',
+                  'Genus',
+                  'Species_ID',
+                  'Species',
+                  'Species_local_names')
 
 
 class SimpleSubspeciesSerializer(serializers.ModelSerializer):
@@ -323,91 +337,88 @@ class SpeciesGroupMixin(object):
 
 
 class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerializer):
-    species_group = fields.SerializerMethodField()
+    Species_group = fields.SerializerMethodField()
     class Meta: 
         model = SpeciesGroup
-        fields = ('Species_group', )
+        fields = ('Species_group_ID', 'Species_group')
 
 
-
-
-class LocationGroupMixin(object):
-
-    def get_Location_group(self, obj):
-
-        if(hasattr(obj, 'Location_group')):
-            group = obj.Location_group
-        else:
-            group = obj
-        data = []
-        for location in group.Locations.all():
-            data.append(SimpleLocationSerializer(instance=location, many=False).data)
-        return data
+class SimpleForestTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BiomeFAO
+        fields = ('Forest_type_ID', 'Name',)
 
 
 class SimpleBiomeFAOSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiomeFAO
-        fields = ('Name',)
+        fields = ('Biome_FAO_ID', 'Name',)
 
 
 class SimpleBiomeUdvardySerializer(serializers.ModelSerializer):
     class Meta:
         model = BiomeUdvardy
-        fields = ('Name',)
+        fields = ('Biome_UDVARDY_ID', 'Name',)
 
 
 class SimpleBiomeWWFSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiomeWWF
-        fields = ('Name',)
+        fields = ('Biome_WWF_ID', 'Name',)
 
 
 class SimpleBiomeHoldridgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiomeHoldridge
-        fields = ('Name',)
+        fields = ('Biome_HOLDRIDGE_ID','Name',)
 
 
 class SimpleDivisionBaileySerializer(serializers.ModelSerializer):
     class Meta:
         model = DivisionBailey
-        fields = ('Name',)
-
-
+        fields = ('Division_BAILEY_ID', 'Name',)
 
 
 class SimpleLocationSerializer(serializers.ModelSerializer):
+    Country_ID = fields.IntegerField(source="Country.Country_ID")
     Country = fields.CharField(source="Country.Formal_name")
+    
+    Biome_FAO_ID = fields.IntegerField(source="Biome_FAO.Biome_FAO_ID")
     Biome_FAO = fields.CharField(source="Biome_FAO.Name")
+    
+    Biome_UDVARDY_ID = fields.IntegerField(source="Biome_UDVARDY.Biome_UDVARDY_ID")
     Biome_UDVARDY = fields.CharField(source="Biome_UDVARDY.Name")
+
+    Biome_WWF_ID = fields.IntegerField(source="Biome_WWF.Biome_WWF_ID")    
     Biome_WWF = fields.CharField(source="Biome_WWF.Name")
+
+    Division_BAILEY_ID = fields.IntegerField(source="Division_BAILEY.Division_BAILEY_ID") 
     Division_BAILEY = fields.CharField(source="Division_BAILEY.Name")
+
+    Biome_HOLDRIDGE_ID = fields.IntegerField(source="Biome_HOLDRIDGE.Biome_HOLDRIDGE_ID") 
     Biome_HOLDRIDGE = fields.CharField(source="Biome_HOLDRIDGE.Name")
+
+    Forest_type_ID = fields.IntegerField(source="Forest_type.Forest_type_ID") 
+    Forest_type = fields.CharField(source="Forest_type.Name")
+
 
     class Meta: 
         model = Location
-        exclude = ('Created', 'Modified', 'ID', "Original_ID_Location")
+        exclude = ('Created', 'Modified', )
 
 
-class SimpleLocationGroupSerializer(LocationGroupMixin, 
-                                    serializers.ModelSerializer):
-    Location_group = fields.SerializerMethodField()
+class SimpleLocationGroupSerializer(serializers.ModelSerializer):
+    
+    Locations = SimpleLocationSerializer(many=True)
 
     class Meta:
-        model = AllometricEquation
-        fields = ('Location_group',)
+        model = LocationGroup
+        fields = ('Location_group_ID', 'Name','Locations',)
 
 
 class SimplePopulationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Population
-        fields = ('Name',)
-
-
-class SimpleEcosystemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ecosystem
         fields = ('Name',)
 
 
@@ -423,40 +434,27 @@ class SimpleCountrySerializer(serializers.ModelSerializer):
     Continent = fields.CharField(source="Continent.Name")
     class Meta:
         model = Country
-        fields = ('Name', 'Code', 'Continent')   
+        fields = ('Country_ID', 'Name', 'Code', 'Continent')   
 
 
-class SimpleDataReferenceSerializer(serializers.ModelSerializer):
+class SimpleReferenceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DataReference
+        model = Reference
         fields = ('Label', 'Author', 'Year', 'Reference')
 
 
-class SimpleAllometricEquationSerializer(SpeciesGroupMixin, 
-                                         LocationGroupMixin, 
-                                         serializers.ModelSerializer):
+class SimpleLinkedModelSerializer(serializers.ModelSerializer):
+    Species_group = SimpleSpeciesGroupSerializer(many=False)
+    Location_group = SimpleLocationGroupSerializer(many=False)
 
-    Species_group = fields.SerializerMethodField()
-    Location_group = fields.SerializerMethodField()
 
+class SimpleAllometricEquationSerializer(SimpleLinkedModelSerializer):
     class Meta:
         model = AllometricEquation
-        exclude = ('Created', 'Modified', 'Data_submission' )
+        exclude = ('Created', 'Modified')
 
 
-class SimpleWoodDensitySerializer(SpeciesGroupMixin, 
-                                  LocationGroupMixin, 
-                                  serializers.ModelSerializer):
-
-    Species_group = fields.SerializerMethodField()
-    Location_group = fields.SerializerMethodField()
-
+class SimpleWoodDensitySerializer(SimpleLinkedModelSerializer):
     class Meta:
         model = WoodDensity
         exclude = ('Created', 'Modified', )
-        
-       
-              
-
-
-

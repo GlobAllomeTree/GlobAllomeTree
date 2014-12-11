@@ -5,7 +5,36 @@
 
 {% block content %}
 
-    <h3>Shared Data Overview</h3>
+<div class="row">
+    <div class="col-md-12">
+		<h3>GlobAllomeTree Shared Data</h3>
+		<p>GlobAllomeTree allows you to share and license your data in an easy way. It also lets you find data shared by others and request use of that data by agreeing to the terms and conditions.</p>
+	</div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+    	<div>
+		    <h4>Share Your Data</h4>
+		    <p>Sharing yor data is an easy process and involves the following steps.</p>
+		    <ul>
+		    	<li>Decide if use of your data will be restricted or not.</li>
+		    	<li>For restricted data, use our license creation tool on this site to create your own license.</li>
+		    	<li>Upload your data in one of the formats that can be used by GlobAllomeTree (csv, json, or xml). GlobAllomeTree is currently accepting raw data, biomass data, allometric equations, and wood density data. To submit your data, it is first required to download a submission template in one of the supported formats.</li>
+		    	<li>Your data will be approved by the GlobAllomeTree team and then approved based on quality.</li>
+		    	<li>For restricted data, you will be able to approve or deny requests from individual users directly on the GlobAllomeTree website. You will be sent an email from this site when a new request is made.</li>
+		    </ul>
+		    <a class="pull-right btn btn-success" href="{% url "data-sharing-choose-license" %}">Share your data</a>
+
+	    </div>
+    </div>
+    <div class="col-md-6">
+    	<div>
+	    	<h4>Discover and Use Shared Data</h4>
+	    	<p>You can find and use shared data through the regular GlobAllomeTree search interface. Data that has an open license is already has the values available, while data that is subject to a license has the values hidden until you have an approved data sharing agreement with the data provider.<p>
+	    </div>
+    </div>
+</div>
 
 	    
 {% endblock %}

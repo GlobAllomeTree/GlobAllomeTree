@@ -14,9 +14,11 @@ from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, BiomeFAO, BiomeUdvardy, 
     BiomeWWF, DivisionBailey, BiomeHoldridge
 )
-from globallometree.apps.common.models import DataReference, Institution, BaseModel
+from globallometree.apps.common.models import BaseModel, LinkedBaseModel
+
 
 class Population(BaseModel):
+    Population_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
@@ -24,9 +26,11 @@ class Population(BaseModel):
 
     class Meta:
         ordering = ('Name',)
+        db_table = 'Population'
 
 
-class Ecosystem(BaseModel):
+class TreeType(BaseModel):
+    Tree_type_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
@@ -34,30 +38,12 @@ class Ecosystem(BaseModel):
 
     class Meta:
         ordering = ('Name',)
+        db_table = 'Tree_type'
 
 
-class Submission(BaseModel):
-    submitted_file = models.FileField(upload_to='data_submissions')
-    submitted_notes = models.TextField(blank=True, null=True)
-    date_uploaded = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(User)
-    imported = models.BooleanField()
-
-    def import_data(self, run_verified, import_good_rows_anyway):
-        return run_submission_import(data_submission=self,
-                                     run_verified=run_verified, 
-                                     import_good_rows_anyway=import_good_rows_anyway)
-
-    def __unicode__(self):
-        return u"%s by %s" % (self.submitted_file, self.user)
-
-
-class AllometricEquation(BaseModel):
-    
-    Original_IDequation = models.IntegerField(null=True, 
-                                     blank=True, 
-                                     help_text="The old ID of the equation in the previous version of the platform") 
-
+class AllometricEquation(LinkedBaseModel):
+    Allometric_equation_ID = models.AutoField(primary_key=True)
+    Allometric_equation_ID_original = models.IntegerField(blank=True, null=True)
     X = models.CharField(max_length=20, null=True, blank=True)
     Unit_X = models.CharField(max_length=20, null=True, blank=True)
     Z = models.CharField(max_length=20, null=True, blank=True)
@@ -125,30 +111,9 @@ class AllometricEquation(BaseModel):
     Ratio_equation = models.NullBooleanField()
     Segmented_equation = models.NullBooleanField()
     Sample_size = models.CharField(max_length=150, null=True, blank=True)
-    
-    Population = models.ForeignKey(
-        Population, blank=True, null=True
-    )
-    Ecosystem = models.ForeignKey(
-        Ecosystem, blank=True, null=True
-    )
 
-    Species_group = models.ForeignKey('taxonomy.SpeciesGroup',null=True, blank=True)
-    Location_group = models.ForeignKey('locations.LocationGroup',null=True, blank=True)
-
-    ID_REF = models.IntegerField(null=True, blank=True) 
-    Reference = models.ForeignKey(
-        DataReference, blank=True, null=True
-    )
-
-    Contributor = models.ForeignKey(
-        Institution, blank=True, null=True
-    )
-
-    Name_operator = models.CharField(max_length=150, null=True, blank=True)
-    Data_submission = models.ForeignKey(
-        Submission, blank=True, null=True
-    )
+    Population = models.ForeignKey(Population, blank=True, null=True, db_column="Population_ID")
+    Tree_type = models.ForeignKey(TreeType, blank=True, null=True, db_column="Tree_type_ID")
 
     def components_string(self):
         c_string = ''
@@ -166,3 +131,4 @@ class AllometricEquation(BaseModel):
     class Meta:
         verbose_name ='Allometric Equation'
         verbose_name_plural = 'Allometric Equations'
+        db_table = "Allometric_equation"

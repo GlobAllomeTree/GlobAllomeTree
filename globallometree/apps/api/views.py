@@ -3,14 +3,14 @@ from rest_framework import viewsets
 from globallometree.apps.api.mixins import SimpleSerializerMixin
 
 from globallometree.apps.common.models import (
-    DataReference, 
+    Reference, 
     Institution
 	)
 
 from globallometree.apps.data_sharing.models import (
-    DataSharingAgreement, 
-    DataSet, 
-    DataAccessRequest
+    DataLicense, 
+    Dataset, 
+    DataRequest
 )
 
 from globallometree.apps.taxonomy.models import (
@@ -25,8 +25,7 @@ from globallometree.apps.taxonomy.models import (
 
 from globallometree.apps.allometric_equations.models import (
     Population, 
-    Ecosystem, 
-    Submission, 
+    TreeType, 
     AllometricEquation
 	)	
 
@@ -43,13 +42,14 @@ from globallometree.apps.locations.models import (
     DivisionBailey, 
     BiomeHoldridge, 
     LocationGroup, 
-    Location
+    Location, 
+    ForestType,
 	)
 
 from globallometree.apps.api.serializers import (
     
 	############## Full Serializers ##############
-    DataReferenceSerializer,
+    ReferenceSerializer,
     InstitutionSerializer,
 	FamilySerializer,
 	GenusSerializer,
@@ -59,9 +59,9 @@ from globallometree.apps.api.serializers import (
     SubspeciesLocalNameSerializer,
     SpeciesGroupSerializer,
 	PopulationSerializer,
-	EcosystemSerializer,
 	ContinentSerializer,
 	CountrySerializer,
+    ForestTypeSerializer,
 	BiomeFAOSerializer, 
     BiomeUdvardySerializer, 
     BiomeWWFSerializer, 
@@ -71,9 +71,9 @@ from globallometree.apps.api.serializers import (
     WoodDensitySerializer, 
     LocationSerializer,
     LocationGroupSerializer,
-    DataSharingAgreementSerializer, 
-    DataSetSerializer, 
-    DataAccessRequestSerializer,
+    DataLicenseSerializer, 
+    DatasetSerializer, 
+    DataRequestSerializer,
 
     ############# Simple Serializers ################
     SimpleGenusSerializer,
@@ -84,6 +84,7 @@ from globallometree.apps.api.serializers import (
     SimpleSubspeciesLocalNameSerializer,   
     SimpleAllometricEquationSerializer,
     SimpleSpeciesGroupSerializer,
+    SimpleForestTypeSerializer,
     SimpleBiomeFAOSerializer, 
     SimpleBiomeUdvardySerializer, 
     SimpleBiomeWWFSerializer, 
@@ -94,19 +95,18 @@ from globallometree.apps.api.serializers import (
     SimpleLocationGroupSerializer,
     SimpleContinentSerializer,
     SimpleCountrySerializer,
-    SimpleDataReferenceSerializer,
-    SimpleEcosystemSerializer,
+    SimpleReferenceSerializer,
     SimpleWoodDensitySerializer,
     SimpleInstitutionSerializer
 	)
 
 
-class DataReferenceViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class ReferenceViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = DataReference.objects.all()
-    serializer_class = DataReferenceSerializer
-    simple_serializer_class = SimpleDataReferenceSerializer
+    queryset = Reference.objects.all()
+    serializer_class = ReferenceSerializer
+    simple_serializer_class = SimpleReferenceSerializer
 
 
 class InstitutionViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
@@ -181,14 +181,6 @@ class PopulationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     simple_serializer_class = SimplePopulationSerializer
 
 
-class EcosystemViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
-    """
-    """
-    queryset = Ecosystem.objects.all()
-    serializer_class = EcosystemSerializer
-    simple_serializer_class = SimpleEcosystemSerializer
-
-
 class ContinentViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
@@ -203,6 +195,15 @@ class CountryViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     simple_serializer_class = SimpleCountrySerializer
+
+
+class ForestTypeViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    """
+    queryset = ForestType.objects.all()
+    serializer_class = ForestTypeSerializer
+    simple_serializer_class = SimpleForestTypeSerializer
+
 
 class BiomeFAOViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
@@ -276,23 +277,23 @@ class WoodDensityViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     simple_serializer_class = SimpleWoodDensitySerializer
 
 
-class DataSharingAgreementViewSet(viewsets.ReadOnlyModelViewSet):
+class DataLicenseViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = DataSharingAgreement.objects.all()
-    serializer_class = DataSharingAgreementSerializer
+    queryset = DataLicense.objects.all()
+    serializer_class = DataLicenseSerializer
 
 
-class DataSetViewSet(viewsets.ReadOnlyModelViewSet):
+class DatasetViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = DataSet.objects.all()
-    serializer_class = DataSetSerializer
+    queryset = Dataset.objects.all()
+    serializer_class = DatasetSerializer
 
 
-class DataAccessRequestViewSet(viewsets.ReadOnlyModelViewSet):
+class DataRequestViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = DataAccessRequest.objects.all()
-    serializer_class = DataAccessRequestSerializer
+    queryset = DataRequest.objects.all()
+    serializer_class = DataRequestSerializer
 

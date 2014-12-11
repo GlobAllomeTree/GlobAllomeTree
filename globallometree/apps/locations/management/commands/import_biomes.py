@@ -16,35 +16,35 @@ class Command(BaseCommand):
         data = self.load_csv('biomes_udvardy.csv')
         for row in data:
             BiomeUdvardy.objects.create(
-                ID = row['ID'], 
+                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_fao.csv')
         for row in data:
             BiomeFAO.objects.create(
-                ID = row['ID'], 
+                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_wwf.csv')
         for row in data:
             BiomeWWF.objects.create(
-                ID = row['ID'], 
+                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_holdridge.csv')
         for row in data:
             BiomeHoldridge.objects.create(
-                ID = row['ID'], 
+                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('division_bailey.csv')
         for row in data:
             DivisionBailey.objects.create(
-                ID = row['ID'], 
+                pk = row['ID'], 
                 Name = row['Name']
             )
 

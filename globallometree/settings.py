@@ -217,14 +217,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'PAGINATE_BY': 50,                # Default to 200
-    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
-    'MAX_PAGINATE_BY': 500,
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.XMLRenderer',
-        'rest_framework_csv.renderers.CSVRenderer',
+        #'rest_framework_csv.renderers.CSVRenderer', #Does not work with paginated data
         'globallometree.apps.api.renderers.SimpleBrowsableAPIRenderer',
         'globallometree.apps.api.renderers.SimpleJSONRenderer',
         'globallometree.apps.api.renderers.SimpleXMLRenderer',

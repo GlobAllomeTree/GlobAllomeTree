@@ -8,31 +8,50 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from globallometree.apps.data.models import TreeEquation, Country as OldCountry
 from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
-from globallometree.apps.allometric_equations.models import AllometricEquation, Submission
+from globallometree.apps.allometric_equations.models import AllometricEquation, Population, TreeType
 from globallometree.apps.locations.models import (BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge,
-                                                  Location, Country, Continent, LocationGroup)
-from globallometree.apps.allometric_equations.models import Population, Ecosystem
-from globallometree.apps.common.models import DataReference, Institution
-
-
-#Mappings to correct values from the old database schema to the new on
-biome_fao_mapping = {
-    'Subtropical Mountain System' : 'Subtropical mountain system',
-    'Tropical rain forest' :  'Tropical rainforest'
-}
+                                                  Location, Country, Continent, LocationGroup, ForestType)
+from globallometree.apps.common.models import Reference, Institution
+from globallometree.apps.data_sharing.models import Dataset
 
 missed_udvardy = {}
 missed_wwf = {}
 missed_holdridge = {}
 missed_bailey = {}
 missed_fao = {}
-location_errors = []
-location_ids_with_errors = []
-missing_id_location = []
+
 
 class Command(BaseCommand):
     args = '<limit (optional)>'
     help = 'Imports from the old data.TreeEquation model to the new normalized structure'
+
+
+    def load_csv(self, file_name):
+        #csv file with country lats/lons
+        csv_file_path = os.path.join(settings.BASE_PATH, 'globallometree', 'apps', 'allometric_equations', 'resources', file_name)
+        headers = []
+        data = []
+
+        def clean(row):
+            fields = row.replace('\r', '').replace('\n', '').replace(u'\ufeff','').split(';')
+            fields = [v.strip() for v in fields]
+            return fields
+
+        with codecs.open(csv_file_path, 'r', encoding='utf-8') as csv_file:
+            for row in csv_file:
+                if not len(headers):
+                    headers = clean(row)
+                    continue
+                data.append(dict(zip(headers, clean(row))))
+
+        return data
+
+    def get_mapping(self, file_name):
+        file_dict = self.load_csv(file_name)
+        mapping = {}
+        for row in file_dict:
+            mapping[row['old']] = row['new']
+        return mapping
 
     def handle(self,*args, **options):
 
@@ -84,7 +103,6 @@ class Command(BaseCommand):
                 species, species_created = Species.objects.get_or_create(
                     Name=orig_equation.Species, 
                     Genus=genus,
-                    Original_ID_Species=orig_equation.ID_Species
                 )
                 if species_created:
                     species_inserted = species_inserted + 1
@@ -92,7 +110,6 @@ class Command(BaseCommand):
             if species:
                 if orig_equation.Group_Species and orig_equation.ID_Group:
                     species_group, species_group_created = SpeciesGroup.objects.get_or_create(
-                        Original_ID_Group=orig_equation.ID_Group,
                         Name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
                     )
                     if species_group_created:
@@ -109,138 +126,131 @@ class Command(BaseCommand):
 
 ######################################## LOCATIONS ################################################
 
+            #Mappings to correct values from the old database schema to the new on
+            biome_fao_mapping = self.get_mapping('conversions_fao.csv')
+            biome_wwf_mapping = self.get_mapping('conversions_wwf.csv')
+            division_bailey_mapping = self.get_mapping('conversions_bailey.csv')
+            biome_udvardy_mapping = self.get_mapping('conversions_udvardy.csv')
+
             if orig_equation.Country is None or not orig_equation.Country.iso_3166_1_2_letter_code:
                 country = None
             else:
                 country = Country.objects.get(Iso3166a2=orig_equation.Country.iso_3166_1_2_letter_code)
         
-            if not orig_equation.ID_Location:
-                location_group = None
-                missing_id_location.append(orig_equation.IDequation)
+            none_values = ['NA', None]
+
+            if orig_equation.Biome_FAO:
+                biome_fao_val = orig_equation.Biome_FAO.strip()
+                if biome_fao_val in biome_fao_mapping.keys():
+                    biome_fao_val = biome_fao_mapping[biome_fao_val]
+
+                if biome_fao_val in none_values:
+                    biome_fao = None
+                else:
+                    try:
+                        biome_fao = BiomeFAO.objects.get(Name__iexact=biome_fao_val)
+                    except:
+                        missed_fao[biome_fao_val] = True
+                        biome_fao = None
+
+            if orig_equation.Biome_UDVARDY:
+                biome_udvardy_val = orig_equation.Biome_UDVARDY.strip()
+
+                if biome_udvardy_val in biome_udvardy_mapping.keys():
+                    biome_udvardy_val = biome_udvardy_mapping[biome_udvardy_val]
+
+                if biome_udvardy_val in none_values:
+                   biome_udvardy = None
+                else:
+                    try:
+                        biome_udvardy = BiomeUdvardy.objects.get(Name__iexact=biome_udvardy_val)
+                    except:
+                        missed_udvardy[biome_udvardy_val] = True
+                        biome_udvardy = None
+
+            if orig_equation.Biome_WWF:
+                biome_wwf_val = orig_equation.Biome_WWF.strip()
+                if biome_wwf_val in biome_wwf_mapping.keys():
+                    biome_wwf_val = biome_wwf_mapping[biome_wwf_val]
+
+                if biome_wwf_val in none_values:
+                   biome_wwf = None
+                else:
+                    try:
+                        biome_wwf = BiomeWWF.objects.get(Name__iexact=biome_wwf_val)
+                    except:
+                        missed_wwf[biome_wwf_val] = True
+                        biome_wwf = None
+                   
+            if orig_equation.Biome_HOLDRIDGE:
+                biome_holdridge_val = orig_equation.Biome_HOLDRIDGE.strip()
+                if biome_holdridge_val in none_values:
+                   biome_holdridge = None
+                else:
+                    try:
+                        biome_holdridge = BiomeHoldridge.objects.get(Name__iexact=biome_holdridge_val)
+                    except:
+                        missed_holdridge[biome_holdridge_val] = True
+                        biome_holdridge = None
+
+            if orig_equation.Division_BAILEY:
+                division_bailey_val = orig_equation.Division_BAILEY.strip()
+                if division_bailey_val in division_bailey_mapping.keys():
+                    division_bailey_val = division_bailey_mapping[division_bailey_val]
+
+                if division_bailey_val in none_values:
+                   division_bailey = None
+                else:
+                    try:
+                        division_bailey = DivisionBailey.objects.get(Name__iexact=division_bailey_val)
+                    except:
+                        missed_bailey[division_bailey_val] = True
+                        division_bailey = None
+
+            if orig_equation.Latitude:
+                latitude = orig_equation.Latitude
             else:
-                location, location_created = Location.objects.get_or_create(
-                    Original_ID_Location=orig_equation.ID_Location
+                latitude = None
+
+            if orig_equation.Longitude:
+                longitude = orig_equation.Longitude
+            else:
+                longitude = None
+
+            if orig_equation.Location:
+                name_val = orig_equation.Location.strip()
+            else:
+                name_val = None
+
+            location, location_created = Location.objects.get_or_create(
+               Name = name_val,
+               Biome_FAO = biome_fao,
+               Biome_WWF = biome_wwf,
+               Biome_HOLDRIDGE = biome_holdridge,
+               Biome_UDVARDY = biome_udvardy,
+               Division_BAILEY = division_bailey,
+               Country = country,
+               Latitude = latitude,
+               Longitude = longitude
+            )
+
+            if location_created:
+                locations_inserted = locations_inserted + 1 
+
+            if orig_equation.Group_Location:
+                location_group, location_group_created = LocationGroup.objects.get_or_create(
+                    Name="Auto existing for Equation Group_Location %s" % orig_equation.Group_Location
                 )
+                if location_group_created:
+                    original_location_groups_inserted = original_location_groups_inserted + 1
+            else:   
+                location_group, location_group_created = LocationGroup.objects.get_or_create(
+                    Name="Auto new group for Equation %s" % orig_equation.IDequation
+                )
+                if location_group_created:
+                    new_location_groups_inserted = new_location_groups_inserted + 1
 
-                if orig_equation.Biome_FAO:
-                    biome_fao_val = orig_equation.Biome_FAO.strip()
-                    if biome_fao_val in biome_fao_mapping.keys():
-                        biome_fao_val = biome_fao_mapping[biome_fao_val]
-
-                if orig_equation.Biome_UDVARDY:
-                    biome_udvardy_val = orig_equation.Biome_UDVARDY.strip()
-                
-                if orig_equation.Biome_WWF:
-                    biome_wwf_val = orig_equation.Biome_WWF.strip()
-                
-                if orig_equation.Biome_HOLDRIDGE:
-                    biome_holdridge_val = orig_equation.Biome_HOLDRIDGE.strip()
-                
-                if orig_equation.Division_BAILEY:
-                    division_bailey_val = orig_equation.Division_BAILEY.strip()
-
-                if orig_equation.Location:
-                    name_val = orig_equation.Location.strip()
-                else:
-                    name_val = None
-
-                if location_created:
-                    locations_inserted = locations_inserted + 1 
-                    location.Name = name_val
-                    location.Country = country
-      
-                    if orig_equation.Latitude:
-                        location.Latitude=orig_equation.Latitude
-                        location.Longitude=orig_equation.Longitude
-
-                    if orig_equation.Biome_FAO:
-                        try:
-                            location.Biome_FAO = BiomeFAO.objects.get(Name=biome_fao_val)
-                        except:
-                            missed_fao[biome_fao_val] = True
-
-                    if orig_equation.Biome_UDVARDY:
-                        try:
-                            location.Biomes_UDVARDY = BiomeUdvardy.objects.get(Name=biome_udvardy_val)
-                        except:
-                            missed_udvardy[biome_udvardy_val] = True
-
-                    if orig_equation.Biome_WWF:
-                        try:
-                            location.Biome_WWF = BiomeWWF.objects.get(Name=biome_wwf_val)
-                        except:
-                            missed_wwf[biome_wwf_val] = True
-                       
-                    if orig_equation.Division_BAILEY:
-                        try:
-                            location.Division_BAILEY = DivisionBailey.objects.get(Name=division_bailey_val)
-                        except:
-                            missed_bailey[division_bailey_val] = True
-
-                    if orig_equation.Biome_HOLDRIDGE:
-                        try:
-                            location.Biome_HOLDRIDGE = BiomeHoldridge.objects.get(Name=biome_holdridge_val)
-                        except:
-                            missed_holdridge[biome_holdridge_val] = True
-
-                    location.save()
-
-                else:
-
-                    identifier = "ID_Location: %s" % (orig_equation.ID_Location)
-
-                    if location.Biome_FAO and location.Biome_FAO.Name != biome_fao_val:
-                        location_errors.append("%s :: Biome FAO :: %s != %s" % (identifier, location.Biome_FAO.Name, biome_fao_val))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Biome_UDVARDY and location.Biome_UDVARDY.Name != biome_udvardy_val:
-                        location_errors.append("%s :: Biome UDVARDY :: %s != %s" % (identifier, location.Biome_UDVARDY.Name, biome_udvardy_val))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Biome_WWF and location.Biome_WWF.Name != biome_wwf_val:
-                        location_errors.append("%s :: Biome WWF :: %s != %s" % (identifier, location.Biome_WWF.Name, biome_wwf_val))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Biome_HOLDRIDGE and location.Biome_HOLDRIDGE.Name != biome_holdridge_val:
-                        location_errors.append("%s :: Biome HOLDRIDGE :: %s != %s" % (identifier, location.Biome_HOLDRIDGE.Name, biome_holdridge_val))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Division_BAILEY and location.Division_BAILEY.Name != division_bailey_val:
-                        location_errors.append("%s :: Division BAILEY :: %s != %s" % (identifier, location.Division_BAILEY.Name, division_bailey_val))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Latitude and location.Latitude != orig_equation.Latitude:
-                        location_errors.append("%s :: Latitude :: %s != %s" % (identifier, location.Latitude,orig_equation.Latitude))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Longitude and location.Longitude != orig_equation.Longitude:
-                        location_errors.append("%s :: Longitude :: %s != %s" % (identifier, location.Longitude,orig_equation.Longitude))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Country and location.Country != country:
-                        location_errors.append("%s :: Country :: %s != %s" % (identifier, location.Country, country))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                    if location.Name and location.Name != name_val:
-                        location_errors.append("%s :: Name :: %s != %s" % (identifier, location.Name,orig_equation.Location))
-                        location_ids_with_errors.append(orig_equation.ID_Location)
-
-                if orig_equation.Group_Location:
-                    location_group, location_group_created = LocationGroup.objects.get_or_create(
-                        Original_Group_Location=orig_equation.Group_Location,
-                        Name="Auto for Group_Location %s" % orig_equation.Group_Location
-                    )
-                    if location_group_created:
-                        original_location_groups_inserted = original_location_groups_inserted + 1
-                else:   
-                    location_group, location_group_created = LocationGroup.objects.get_or_create(
-                        Name="Auto for Equation %s" % orig_equation.IDequation
-                    )
-                    if location_group_created:
-                        new_location_groups_inserted = new_location_groups_inserted + 1
-
-                
-                location_group.Locations.add(location)
+            location_group.Locations.add(location)
 
 
 ######################################## COMMON ##################################################
@@ -253,100 +263,93 @@ class Command(BaseCommand):
             if orig_equation.Reference is None:
                 reference = None
             else:
-                reference = DataReference.objects.get_or_create(
+                reference = Reference.objects.get_or_create(
                     Label=orig_equation.Label,
                     Author=orig_equation.Author,
                     Year=orig_equation.Year,
                     Reference=orig_equation.Reference,
-                    Original_ID_REF=orig_equation.ID_REF
             )[0]
 
 ######################################## SUBMISSION ##############################################
 
             if orig_equation.data_submission is None:
-                data_submission = None
+                dataset = None
             else:
                 ods = orig_equation.data_submission
-                data_submission = Submission.objects.get_or_create(
-                    submitted_file=orig_equation.data_submission.submitted_file,
-                    submitted_notes=orig_equation.data_submission.submitted_notes,
-                    user=orig_equation.data_submission.user,
-                    imported=orig_equation.data_submission.imported
+                dataset = Dataset.objects.get_or_create(
+                    Title = 'Allometric Equations %s' % ods.pk,
+                    Uploaded_data_file = orig_equation.data_submission.submitted_file,
+                    Description = orig_equation.data_submission.submitted_notes,
+                    User = orig_equation.data_submission.user,
+                    Data_type = 'allometric_equations',
+                    Imported = orig_equation.data_submission.imported,
+                    Is_restricted = False,
                 )[0]
-                #Fix the upload date
-                Submission.objects.filter(pk=data_submission.pk).update(date_uploaded=ods.date_uploaded)
+
 
 ######################################## EQUATION ################################################
 
+        
             if orig_equation.Population is None:
                 population = None
             else:
                 population = Population.objects.get_or_create(Name=orig_equation.Population)[0]
 
-            if orig_equation.Ecosystem is None:
-                ecosystem = None
-            else:
-                ecosystem = Ecosystem.objects.get_or_create(Name=orig_equation.Ecosystem)[0]
-
-            try: 
-                new_equation = AllometricEquation.objects.get(Original_IDequation=orig_equation.IDequation)
-            except AllometricEquation.DoesNotExist:
-                new_equation = AllometricEquation(
-                    ID=orig_equation.ID,
-                    Original_IDequation=orig_equation.IDequation,
-                    X=orig_equation.X,
-                    Unit_X=orig_equation.Unit_X, 
-                    Z=orig_equation.Z,
-                    Unit_Z=orig_equation.Unit_Z, 
-                    W=orig_equation.W, 
-                    Unit_W=orig_equation.Unit_W,
-                    U=orig_equation.U,
-                    Unit_U=orig_equation.Unit_U,
-                    V=orig_equation.V,
-                    Unit_V=orig_equation.Unit_V,
-                    Min_X=orig_equation.Min_X,
-                    Max_X=orig_equation.Max_X, 
-                    Min_Z=orig_equation.Min_Z, 
-                    Max_Z=orig_equation.Max_Z,
-                    Output=orig_equation.Output,
-                    Output_TR=orig_equation.Output_TR,
-                    Unit_Y=orig_equation.Unit_Y,
-                    Age=orig_equation.Age,
-                    Veg_Component=orig_equation.Veg_Component,
-                    B=orig_equation.B,
-                    Bd=orig_equation.Bd,
-                    Bg=orig_equation.Bg,
-                    Bt=orig_equation.Bt,
-                    L=orig_equation.L,
-                    Rb=orig_equation.Rb,
-                    Rf=orig_equation.Rf,
-                    Rm=orig_equation.Rm,
-                    S=orig_equation.S,
-                    T=orig_equation.T,
-                    F=orig_equation.F,
-                    Equation=orig_equation.Equation,
-                    Substitute_equation=orig_equation.Substitute_equation,
-                    Top_dob=orig_equation.Top_dob,
-                    Stump_height=orig_equation.Stump_height,
-                    R2=orig_equation.R2,
-                    R2_Adjusted=orig_equation.R2_Adjusted,
-                    RMSE=orig_equation.RMSE,
-                    SEE=orig_equation.SEE,
-                    Corrected_for_bias=orig_equation.Corrected_for_bias,
-                    Bias_correction=orig_equation.Bias_correction,
-                    Ratio_equation=orig_equation.Ratio_equation,
-                    Segmented_equation=orig_equation.Segmented_equation,
-                    Sample_size=orig_equation.Sample_size,
-                    Population=population,
-                    Ecosystem=ecosystem,
-                    Contributor=Contributor,
-                    Reference=reference,
-                    Species_group=species_group,
-                    Location_group=location_group,
-                    Data_submission=data_submission
-                )
-                new_equation.save()
-                equations_insterted = equations_insterted + 1
+            new_equation = AllometricEquation(
+                Allometric_equation_ID=orig_equation.ID,
+                Allometric_equation_ID_original=orig_equation.ID,
+                Dataset = dataset,
+                X=orig_equation.X,
+                Unit_X=orig_equation.Unit_X, 
+                Z=orig_equation.Z,
+                Unit_Z=orig_equation.Unit_Z, 
+                W=orig_equation.W, 
+                Unit_W=orig_equation.Unit_W,
+                U=orig_equation.U,
+                Unit_U=orig_equation.Unit_U,
+                V=orig_equation.V,
+                Unit_V=orig_equation.Unit_V,
+                Min_X=orig_equation.Min_X,
+                Max_X=orig_equation.Max_X, 
+                Min_Z=orig_equation.Min_Z, 
+                Max_Z=orig_equation.Max_Z,
+                Output=orig_equation.Output,
+                Output_TR=orig_equation.Output_TR,
+                Unit_Y=orig_equation.Unit_Y,
+                Age=orig_equation.Age,
+                Veg_Component=orig_equation.Veg_Component,
+                B=orig_equation.B,
+                Bd=orig_equation.Bd,
+                Bg=orig_equation.Bg,
+                Bt=orig_equation.Bt,
+                L=orig_equation.L,
+                Rb=orig_equation.Rb,
+                Rf=orig_equation.Rf,
+                Rm=orig_equation.Rm,
+                S=orig_equation.S,
+                T=orig_equation.T,
+                F=orig_equation.F,
+                Equation=orig_equation.Equation,
+                Substitute_equation=orig_equation.Substitute_equation,
+                Top_dob=orig_equation.Top_dob,
+                Stump_height=orig_equation.Stump_height,
+                R2=orig_equation.R2,
+                R2_Adjusted=orig_equation.R2_Adjusted,
+                RMSE=orig_equation.RMSE,
+                SEE=orig_equation.SEE,
+                Corrected_for_bias=orig_equation.Corrected_for_bias,
+                Bias_correction=orig_equation.Bias_correction,
+                Ratio_equation=orig_equation.Ratio_equation,
+                Segmented_equation=orig_equation.Segmented_equation,
+                Sample_size=orig_equation.Sample_size,
+                Contributor=Contributor,
+                Reference=reference,
+                Species_group=species_group,
+                Location_group=location_group,
+                Population=population
+            )
+            new_equation.save()
+            equations_insterted = equations_insterted + 1
 
         print 
         self.stdout.write(
@@ -379,17 +382,6 @@ class Command(BaseCommand):
         for key in missed_fao.keys():
             print 'FAO: ' + key
 
-        print "IDequation WITH MISSING ID_Location"
-        print ", ".join([str(id) for id in missing_id_location])
-        
-        print 
-        for error in set(location_errors):
-            print 'LOCATION MULTIVALUE ERROR: %s' % error
-
-        for loc_id in set(location_ids_with_errors):
-            print "IDequation list for ID_Location %s:" % loc_id
-            print ", ".join([str(o['IDequation']) for o in TreeEquation.objects.filter(ID_Location=loc_id).values('IDequation')])
-            print 
 
 
 

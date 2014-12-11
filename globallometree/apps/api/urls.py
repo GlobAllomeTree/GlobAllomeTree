@@ -2,7 +2,7 @@
 from django.conf.urls import patterns, include, url
 from rest_framework.routers import DefaultRouter
 from globallometree.apps.api.views import ( 
-	DataReferenceViewSet, 
+	ReferenceViewSet, 
 	WoodDensityViewSet, 
 	FamilyViewSet, 
 	GenusViewSet, 
@@ -12,10 +12,10 @@ from globallometree.apps.api.views import (
 	SpeciesLocalNameViewSet,
 	SubspeciesLocalNameViewSet,
 	PopulationViewSet, 
-	EcosystemViewSet, 
 	AllometricEquationViewSet, 
 	ContinentViewSet, 
 	CountryViewSet, 
+	ForestTypeViewSet,
 	BiomeFAOViewSet, 
 	BiomeUdvardyViewSet, 
 	BiomeWWFViewSet, 
@@ -23,9 +23,9 @@ from globallometree.apps.api.views import (
 	BiomeHoldridgeViewSet, 
 	LocationViewSet,
 	LocationGroupViewSet,
-	DataSharingAgreementViewSet, 
-	DataSetViewSet,
-	DataAccessRequestViewSet,
+	DataLicenseViewSet, 
+	DatasetViewSet,
+	DataRequestViewSet,
 	InstitutionViewSet
 	)
 
@@ -34,8 +34,10 @@ router = DefaultRouter()
 router.register(r'allometric-equations',AllometricEquationViewSet)
 router.register(r'wood-densities',WoodDensityViewSet)
 
-router.register(r'references', DataReferenceViewSet)
+router.register(r'references', ReferenceViewSet)
 router.register(r'institutions', InstitutionViewSet)
+
+router.register(r'populations', PopulationViewSet)
 
 router.register(r'families', FamilyViewSet)
 router.register(r'genera', GenusViewSet)
@@ -50,17 +52,16 @@ router.register(r'countries', CountryViewSet)
 router.register(r'locations', LocationViewSet)
 router.register(r'location-groups', LocationGroupViewSet)
 
-router.register(r'populations', PopulationViewSet)
-router.register(r'ecosystems', EcosystemViewSet)
+router.register(r'forest-types', ForestTypeViewSet)
 router.register(r'biomes-fao', BiomeFAOViewSet)
 router.register(r'biomes-udvardy', BiomeUdvardyViewSet)
 router.register(r'biomes-wwf', BiomeWWFViewSet)
 router.register(r'biomes-holdridge', BiomeHoldridgeViewSet)
 router.register(r'divisions-bailey', DivisionBaileyViewSet)
 
-router.register(r'data-sharing-agreements',DataSharingAgreementViewSet)
-router.register(r'data-sets',DataSetViewSet)
-router.register(r'data-requests',DataAccessRequestViewSet)
+router.register(r'data-sharing-agreements',DataLicenseViewSet)
+router.register(r'datasets',DatasetViewSet)
+router.register(r'data-requests',DataRequestViewSet)
 
 urlpatterns = patterns('',
     url(r'^v1/', include(router.urls)),

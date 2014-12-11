@@ -5,7 +5,6 @@ from .models import UserProfile
 from globallometree.apps.locations.models import Country
 
 
-
 class RegistrationForm(forms.ModelForm):
     """
     A form that creates a user, with no privileges, from the given username and password.

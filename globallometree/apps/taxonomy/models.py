@@ -3,22 +3,27 @@ from django.core.urlresolvers import reverse
 from globallometree.apps.common.models import BaseModel
 
 class Family(BaseModel):
+    Family_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=80, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Families'
+        db_table = "Family"
         ordering = ('Name',)
         
     def __unicode__(self):
         return self.Name
 
 
+
 class Genus(BaseModel):
+    Genus_ID = models.AutoField(primary_key=True)
     Name  = models.CharField(max_length=80, null=True, blank=True)
-    Family = models.ForeignKey(Family, null=True, blank=True)
+    Family = models.ForeignKey(Family, null=True, blank=True, db_column="Family_ID")
 
     class Meta:
         verbose_name_plural = 'Genera'
+        db_table = "Genus"
         ordering = ('Name',)
 
     def __unicode__(self):
@@ -26,15 +31,13 @@ class Genus(BaseModel):
 
 
 class Species(BaseModel):
+    Species_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=80, null=True, blank=True)
-    Genus = models.ForeignKey(Genus, null=True, blank=True)
-    Original_ID_Species = models.IntegerField(
-        null=True, blank=True,
-        help_text="The original ID_Species from the global import"
-    )
-
+    Genus = models.ForeignKey(Genus, null=True, blank=True, db_column="Genus_ID")
+    
     class Meta:
         verbose_name_plural = 'Species'
+        db_table = "Species"
         ordering = ('Name',)
 
     def allometric_equation_count(self):
@@ -66,11 +69,13 @@ class Species(BaseModel):
 
 
 class Subspecies(BaseModel):
+    Subspecies_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=80)
-    Species = models.ForeignKey(Species)
+    Species = models.ForeignKey(Species, db_column="Species_ID")
 
     class Meta:
         verbose_name_plural = 'Subspecies'
+        db_table = "Subspecies"
         ordering = ('Name',)
 
     def __unicode__(self):
@@ -79,8 +84,11 @@ class Subspecies(BaseModel):
 
 
 class SpeciesLocalName(BaseModel):
+
+    Species_local_name_ID = models.AutoField(primary_key=True)
+    
     # A local name could either be for a species or a subspecies
-    Species = models.ForeignKey(Species, blank=True, null=True, related_name="Local_names")
+    Species = models.ForeignKey(Species, blank=True, null=True, related_name="Local_names", db_column="Species_ID")
 
     Local_name = models.CharField(
         max_length=80,
@@ -99,11 +107,15 @@ class SpeciesLocalName(BaseModel):
         help_text="The ISO 639-3 Language Code for the language"
     )
 
+    class Meta:
+        db_table = "Species_local_name"
 
 
 class SubspeciesLocalName(BaseModel):
+    Subspecies_local_name_ID = models.AutoField(primary_key=True)
+    
     # A local name could either be for a species or a subspecies
-    Subspecies = models.ForeignKey(Subspecies, blank=True, null=True,related_name="Local_names")
+    Subspecies = models.ForeignKey(Subspecies, blank=True, null=True,related_name="Local_names", db_column="Subspecies_ID")
 
     Local_name = models.CharField(
         max_length=80,
@@ -122,8 +134,14 @@ class SubspeciesLocalName(BaseModel):
         help_text="The ISO 639-3 Language Code for the language"
     )
 
+    class Meta:
+        db_table = "Subspecies_local_name"
+
 
 class SpeciesGroup(BaseModel):
+
+    Species_group_ID = models.AutoField(primary_key=True)
+
     Name = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="Group Name"
     )
@@ -142,10 +160,8 @@ class SpeciesGroup(BaseModel):
         null=True,
     )
 
-    Original_ID_Group = models.IntegerField(
-        null=True, blank=True,
-        help_text="The original ID_Group from the global import"
-    )
+    class Meta:
+        db_table = "Species_group"
 
     def species_set(self):
         species_list = []

@@ -18,4 +18,8 @@ class SimpleSerializerMixin(object):
         and requested_format.startswith('simple') \
         and hasattr(self, 'simple_serializer_class'):
             self.serializer_class = self.simple_serializer_class
+        else:
+            # The hyperlinked views are paginated since they are slower to render
+            # and cannot use the elasticsearch database
+            self.paginate_by = 10
         return request

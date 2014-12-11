@@ -2,70 +2,70 @@ from django.contrib import admin
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from globallometree.apps.allometric_equations.models import (
-    AllometricEquation, Population, Ecosystem, Submission
+from apps.allometric_equations.models import (
+    AllometricEquation, Population, TreeType
 )
+
 
 class PopulationAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
-class EcosystemAdmin(admin.ModelAdmin):
+class TreeTypeAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
-class SubmissionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'submitted_file', 'submitted_notes', 'date_uploaded', 'imported')
-    list_filter = ['user', 'imported']
-    read_only = ('date_uploaded',)
-    actions = ['run_import']
+# class AllometricEquationSubmissionAdmin(admin.ModelAdmin):
+#     list_display = ('User', 'Submitted_file', 'Submitted_notes', 'Date_uploaded', 'Imported')
+#     list_filter = ['User', 'Imported']
+#     read_only = ('Date_uploaded',)
+#     actions = ['Run_import']
 
-    def run_import(self, request, queryset):
+#     def run_import(self, request, queryset):
 
-        #Make sure that there are some selected rows 
-        n = queryset.count()
-        if not n:
-            self.message_user(request, "Please select a file to import")
-            return None
+#         #Make sure that there are some selected rows 
+#         n = queryset.count()
+#         if not n:
+#             self.message_user(request, "Please select a file to import")
+#             return None
 
-        #Make sure multiple objects were not selected
-        if n > 1:
-            self.message_user(
-                request, "Please select only ONE file to import at a time"
-            )
-            return None
+#         #Make sure multiple objects were not selected
+#         if n > 1:
+#             self.message_user(
+#                 request, "Please select only ONE file to import at a time"
+#             )
+#             return None
 
-        #Now that we have one row, we get the data submission from the query set
-        data_submission = queryset[0]
+#         #Now that we have one row, we get the data submission from the query set
+#         data_submission = queryset[0]
 
-        run_verified = request.POST.get('run', False)
-        import_good_rows_anyway = request.POST.get(
-            'import_good_rows_anyway', False
-        )
+#         run_verified = request.POST.get('run', False)
+#         import_good_rows_anyway = request.POST.get(
+#             'import_good_rows_anyway', False
+#         )
 
-        context = data_submission.import_data(
-            run_verified, import_good_rows_anyway
-        )
-        context['action_checkbox_name'] =  admin.helpers.ACTION_CHECKBOX_NAME
-        context['data_submission'] = data_submission
-        context['queryset'] = queryset
+#         context = data_submission.import_data(
+#             run_verified, import_good_rows_anyway
+#         )
+#         context['action_checkbox_name'] =  admin.helpers.ACTION_CHECKBOX_NAME
+#         context['data_submission'] = data_submission
+#         context['queryset'] = queryset
 
-        return render_to_response(
-            'allometric_equations/template.admin.run_import_confirm.html',
-            context, context_instance=RequestContext(request)
-        )
+#         return render_to_response(
+#             'allometric_equations/template.admin.run_import_confirm.html',
+#             context, context_instance=RequestContext(request)
+#         )
 
 
 class AllometricEquationAdmin(admin.ModelAdmin):
-    raw_id_fields = ('Species_group','Location_group','Reference', 'Data_submission')
-    list_display = ('ID', 'Equation', 'Data_submission', 'Modified')
-    ordering = ("ID",)
-    list_filter = ("Data_submission",)
-    search_fields  = ('ID',)
+    raw_id_fields = ('Species_group','Location_group','Reference')
+    list_display = ("Allometric_equation_ID", 'Equation', 'Modified')
+    ordering = ("Allometric_equation_ID",)
+    search_fields  = ("Allometric_equation_ID",)
     
     fieldsets = [
         ('Identification',   {'fields': [
-           'Original_IDequation', 'Population', 'Ecosystem'
+          'Population', 'TreeType',
         ]}),
         ('Taxonomy', {'fields': ['Species_group']}),
         ('Location', {'fields': ['Location_group'], 'classes': ['collapse']}),
@@ -80,13 +80,13 @@ class AllometricEquationAdmin(admin.ModelAdmin):
             'Top_dob', 'Stump_height', 'Corrected_for_bias', 'Bias_correction'
         ], 'classes': ['collapse']}),
         ('Allometry', {'fields': [
-            'Age', 'Equation', 'Substitute_equation', 'Ratio_equation',
-            'Segmented_equation'
+            'Age', 'Equation','Ratio_equation', 'Segmented_equation'
         ], 'classes': ['collapse']}),
         ('Reference', {'fields': ['Reference'], 'classes': ['collapse']}),
     ]
 
-admin.site.register(Population, PopulationAdmin)
-admin.site.register(Ecosystem, EcosystemAdmin)
-admin.site.register(Submission, SubmissionAdmin)
+
 admin.site.register(AllometricEquation, AllometricEquationAdmin)
+admin.site.register(TreeType, TreeTypeAdmin)
+admin.site.register(Population, PopulationAdmin)
+

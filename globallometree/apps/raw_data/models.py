@@ -1,31 +1,15 @@
-from django.db import models
-from django.contrib.auth.models import User
-from globallometree.apps.common.models import DataReference, Institution, Operator, BaseModel
-
-
 from decimal import getcontext
 getcontext().prec = 10
 
-class RawData(BaseModel):
+from django.db import models
+from django.contrib.auth.models import User
 
-    Dataset = models.ForeignKey(
-        'data_sharing.DataSet',null=True, blank=True,
-        help_text="The Dataset that this raw data record came from")
+from globallometree.apps.common.models import LinkedBaseModel
 
-    Species_group = models.ForeignKey(
-        'taxonomy.SpeciesGroup',null=True, blank=True)
 
-    Location_group = models.ForeignKey(
-        'locations.LocationGroup',null=True, blank=True)
+class RawData(LinkedBaseModel):
 
-    Reference = models.ForeignKey(
-        DataReference, blank=True, null=True)
-
-    Operator = models.ForeignKey(
-        Operator, blank=True, null=True)
-
-    Contributor = models.ForeignKey(
-        Institution, blank=True, null=True)
+    Raw_data_ID = models.AutoField(primary_key=True)
 
     H_tree_avg = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
@@ -170,3 +154,4 @@ class RawData(BaseModel):
     class Meta:
         verbose_name = 'Raw Data Instance'
         verbose_name_plural = 'Raw Data'
+        db_table = "Raw_data"

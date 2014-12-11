@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block script %}
+
+<script type="text/javascript">
+	$(function() {
+		$('#id_choose_license').change(function() {
+			if($(this).val() == 'new') {
+				$('#new-license').slideDown();
+			} else {
+				$('#new-license').slideUp();	
+			}
+
+			if($(this).val() == 'existing') {
+				$('#existing-license').slideDown();
+			} else {
+				$('#existing-license').slideUp();	
+			}
+
+			if($(this).val() == 'cc0') {
+				setTimeout(function() {
+					$('#use-open-license').slideDown();
+				}, 500);
+			} else {
+				$('#use-open-license').hide();
+			}
+		});
+
+		function showOrHidePermittedUseOther() {
+			if($('#id_Permitted_use').val() == 'other') {
+				$('#div_id_Permitted_use_other_value').slideDown();
+			} else {
+				$('#div_id_Permitted_use_other_value').slideUp();
+			}
+		}
+		$('#id_Permitted_use').change(function() {
+			showOrHidePermittedUseOther();
+		});
+		showOrHidePermittedUseOther();
+
+		function showOrHideExpiresDate() {
+			if($('#id_Expires').val() == 'on_date') {
+				$('#div_id_Expires_on_date').slideDown();
+			} else {
+				$('#div_id_Expires_on_date').slideUp();
+			}
+		}
+		$('#id_Expires').change(function() {
+			showOrHideExpiresDate();
+		});
+		showOrHideExpiresDate();
+
+	});
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+		<h3>Shared Data</h3>
+		<h4>Step 1. Choose or create a license</h4>
+		<p>Fields marked with an asterisk(*) are required</p>
+	</div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+	    <p>
+	    	<form method="post">
+	    		{% csrf_token %}
+	   	 		{{choose_license_form|crispy}}
+	   	 		<input type="hidden" name="submitted" value="open"/>
+	   	 		<button id="use-open-license" style="display:none" type="submit" class="btn btn-success pull-right">Continue</button>
+	   	 	</form>
+	    </p>
+	    <div style="clear:both"></div>
+	    <div id="new-license">
+			<form method="post">
+				{% csrf_token %}
+			    {{ agreement_form|crispy }}
+			    <input type="hidden" name="submitted" value="new"/>
+			    <button type="submit" class="btn btn-success pull-right">Save license and continue</button>
+			</form>
+		</div>
+		<div style="clear:both"></div>
+		<div id="existing-license" style="display:none">
+			<form method="post">
+				{% csrf_token %}
+			    {{ existing_form|crispy }}
+			    <input type="hidden" name="submitted" value="existing"/>
+			    <button type="submit" class="btn btn-success pull-right">Use this license and continue</button>
+			</form>
+		</div>
+    </div>
+    <div class="col-md-4 well">
+    	<p>Some text instructions here...</p>
+    </div>
+</div>
+
+	    
+{% endblock %}

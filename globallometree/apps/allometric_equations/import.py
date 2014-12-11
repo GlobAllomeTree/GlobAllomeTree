@@ -6,7 +6,7 @@ from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, BiomeFAO, BiomeUdvardy, 
     BiomeWWF, DivisionBailey, BiomeHoldridge
 )
-from globallometree.apps.common.models import DataReference, Institution
+from globallometree.apps.common.models import Reference, Institution
 
 
 country_mappings = {}
@@ -279,12 +279,11 @@ def run_submission_import(data_submission,
 	        if row['Reference'] in none_values:
 	            reference = None
 	        else:
-	            reference = DataReference.objects.get_or_create(
+	            reference = Reference.objects.get_or_create(
 	                label=row['Label'],
 	                author=row['Author'],
 	                year=row['Year'],
 	                reference=row['Reference'],
-	                original_ID_REF=row['ID_REF']
 	            )[0]
 
 	        # population and ecosystem

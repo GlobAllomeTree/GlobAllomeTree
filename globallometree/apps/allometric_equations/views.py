@@ -18,7 +18,7 @@ from django.views.generic.edit import FormView
 from elasticutils.contrib.django import get_es
 
 from .forms import SubmissionForm
-from .models import AllometricEquation, Submission
+from .models import AllometricEquation
 
 from globallometree.apps.common.kill_gremlins import kill_gremlins
 from globallometree.apps.locations.models import Country
@@ -35,7 +35,7 @@ class SubmissionView(FormView):
         return super(SubmissionView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):      
-        ds = Submission()
+        ds = AllometricEquationSubmission()
         ds.submitted_file = form.cleaned_data['file']
         ds.submitted_notes = form.cleaned_data['notes']
         ds.user = self.request.user
@@ -74,7 +74,7 @@ class SubmissionCompleteView(TemplateView):
 
 
 def allometric_equation_id(request, id):
-    allometric_equation = AllometricEquation.objects.get(ID=id)
+    allometric_equation = AllometricEquation.objects.get(pk=id)
     return render_to_response(
         'allometric_equations/template.allometric_equation.html', 
         context_instance = RequestContext(
@@ -87,7 +87,7 @@ def allometric_equation_id(request, id):
 
 
 def allometric_equation_id_pdf(request, id):
-    allometric_equation = AllometricEquation.objects.get(ID=id)
+    allometric_equation = AllometricEquation.objects.get(pk=id)
 
     template = get_template('allometric_equations/template.allometric_equation.pdf.html')
 

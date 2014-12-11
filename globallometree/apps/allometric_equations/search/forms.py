@@ -4,12 +4,11 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
 
 
-from ..models import AllometricEquation, Ecosystem, Population
+from ..models import AllometricEquation, Population
 from globallometree.apps.locations.models import (
     Country, BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 )
 from globallometree.apps.taxonomy.models import Genus, Species
-
 
 
 class CountryChoiceField(forms.ModelChoiceField):
@@ -37,7 +36,6 @@ class SearchForm(forms.Form):
             ('Biome_WWF','Biome (WWF)'),
             ('Division_BAILEY', 'Division (BAILEY)' ),
             ('Biome_HOLDRIDGE','Biome (HOLDRIDGE)'),
-            ('Ecosystem','Ecosystem'),
             ('Population','Population'),
             ('Country','Country'),
             ('Output','Output'),
@@ -73,10 +71,7 @@ class SearchForm(forms.Form):
                 choices = [('', '')] + list(BiomeHoldridge.objects.all().values_list(
                     'name', 'name'
                 ))
-            elif select_name == 'Ecosystem':
-                choices = [('', '')] + list(Ecosystem.objects.all().values_list(
-                    'name', 'name'
-                ))
+          
             elif select_name == 'Population':
                 choices = [('', '')] + list(Population.objects.all().values_list(
                     'name', 'name'
