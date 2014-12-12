@@ -3,12 +3,12 @@ from django.contrib import admin
 from . import models
 
 class DatasetAdmin(admin.ModelAdmin):
-    list_display = ('Title',  'User', 'Data_type',  'Is_restricted',)
+    list_display = ('Title',  'User', 'Data_type',  'Data_license',)
     search_fields  = ['Title', 'Description']
     raw_id_fields = ('User',)
        
 class DataLicenseAdmin(admin.ModelAdmin):
-    list_display = ('Title', 'User', 'Permitted_use', 'Expires')
+    list_display = ('Title', 'User', 'Public_choice',)
     search_fields  = ['Title',]
     raw_id_fields = ('User',)
 

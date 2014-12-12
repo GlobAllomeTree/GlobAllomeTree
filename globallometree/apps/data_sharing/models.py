@@ -8,30 +8,49 @@ class DataLicense(BaseModel):
         ('assessment', 'Support tree and forest volume and biomass assessment'),
         ('unrestricted', 'No restrictions on the purpose of use of the data'),
         ('other', 'Other'),
-    )
+        )
 
     SHARING_CHOICES = (
         ('raw_yes__derivative_no', 'The Data User is not permitted to share the Raw Data with a third Party, but is allowed to share Derivative Data.'),
         ('raw_no__derivative_no', 'The Data user is not permitted to share the Raw Data or Derivative Data to a third Party.'),
         ('raw_yes__deritive_yes', 'The Data user is permitted to share the Raw Data and Derivative Data to a third Party without informing the Data Provider.'),
-    )
+        )
 
     EXPIRE_CHOICES = (
         ('on_activity_completion', 'When Data User has completed the activities for which the Raw Data were provided.'),
-        ('on_three_months_notice', 'If either Party terminates this Agreement by notifying the other by email of its intent to terminate at least three months in advance of the effective date of termination, and indicating suchtermination date.'),
+        ('on_three_months_notice', 'If either Party terminates this Agreement by notifying the other by email of its intent to terminate at least three months in advance of the effective date of termination, and indicating such termination date.'),
         ('on_date', 'On the indicated date'),
-    )
+        ('none', 'No expiry'),
+        )
+
 
     Data_license_ID = models.AutoField(primary_key=True)
-
-    User = models.ForeignKey(
-        User,
-        db_column="User_ID"
-    )
 
     Title = models.CharField(
         verbose_name='License Title',
         max_length=200,
+        )
+
+    Restrictive = models.BooleanField(
+        default=True,
+        help_text="Normally True for custom licenses, but set to false for creative commons"
+        )
+
+    Public_choice = models.BooleanField(
+        default=True,
+        help_text="Should all GlobAllomeTree users have the option to choose this license when uploading data?"
+        )
+
+    License_url = models.URLField(
+        verbose_name='Link to License',
+        help_text="This is shown in the admin only and is mostly used for creative commons licenses"
+        )
+
+    User = models.ForeignKey(
+        User,
+        db_column="User_ID",
+        blank=True,
+        null=True
         )
 
     Permitted_use = models.CharField(
@@ -82,7 +101,8 @@ class DataLicense(BaseModel):
 
     Expires = models.CharField(
         max_length=100,
-        choices=EXPIRE_CHOICES
+        choices=EXPIRE_CHOICES,
+        default='on_activity_completion'
     )
 
     Expires_on_date = models.DateField(
@@ -113,35 +133,33 @@ class Dataset(BaseModel):
         ('wood_density' , 'Wood Density Data'),
         ('allometric_equations' , 'Allometric Equations'),
     )
-
+  
     Title = models.CharField(
-        max_length = 100
-    )
-
-    Description = models.TextField(
-        blank=True,
-        null=True
+        max_length = 100,
+        verbose_name = 'Dataset Title'
     )
 
     Uploaded_data_file = models.FileField(
         upload_to = "data_sharing",
         blank=True,
-        null=True
+        null=True,
+        verbose_name='CSV File'
+    )
+
+    Description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name = 'Brief description of the data in this dataset'
     )
 
     Data_type = models.CharField(
         choices = DATA_TYPE_CHOICES,
-        max_length=100
-    )
-
-    Is_restricted = models.BooleanField(
-        default=False
+        max_length=100,
+        verbose_name = 'Dataset Type'
     )
 
     Data_license = models.ForeignKey(
         DataLicense,
-        blank=True,
-        null=True,
         db_column="Data_license_ID"
     )
 

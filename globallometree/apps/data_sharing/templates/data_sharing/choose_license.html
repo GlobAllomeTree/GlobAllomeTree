@@ -19,39 +19,38 @@
 				$('#existing-license').slideUp();	
 			}
 
-			if($(this).val() == 'cc0') {
-				setTimeout(function() {
-					$('#use-open-license').slideDown();
-				}, 500);
+			if($(this).val() == 'creative' ) {
+				$('#creative-license').slideDown();
 			} else {
-				$('#use-open-license').hide();
+				$('#creative-license').slideUp();
 			}
 		});
 
 		function showOrHidePermittedUseOther() {
-			if($('#id_Permitted_use').val() == 'other') {
+			var value = $('[name="Permitted_use"]:checked').val();
+			if(value == 'other') {
 				$('#div_id_Permitted_use_other_value').slideDown();
 			} else {
 				$('#div_id_Permitted_use_other_value').slideUp();
 			}
 		}
-		$('#id_Permitted_use').change(function() {
-			showOrHidePermittedUseOther();
+		$('[name="Permitted_use"]').click(function() {
+			showOrHidePermittedUseOther($(this).attr('value'));
 		});
 		showOrHidePermittedUseOther();
 
 		function showOrHideExpiresDate() {
-			if($('#id_Expires').val() == 'on_date') {
+			var value = $('[name="Expires"]:checked').val();
+			if(value == 'on_date') {
 				$('#div_id_Expires_on_date').slideDown();
 			} else {
 				$('#div_id_Expires_on_date').slideUp();
 			}
 		}
-		$('#id_Expires').change(function() {
+		$('[name="Expires"]').click(function() {
 			showOrHideExpiresDate();
 		});
 		showOrHideExpiresDate();
-
 	});
 </script>
 
@@ -60,15 +59,10 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-md-12">
-		<h3>Shared Data</h3>
+    <div class="col-md-8">
+   	    <h3>Shared Data</h3>
 		<h4>Step 1. Choose or create a license</h4>
 		<p>Fields marked with an asterisk(*) are required</p>
-	</div>
-</div>
-
-<div class="row">
-    <div class="col-md-8">
 	    <p>
 	    	<form method="post">
 	    		{% csrf_token %}
@@ -78,12 +72,12 @@
 	   	 	</form>
 	    </p>
 	    <div style="clear:both"></div>
-	    <div id="new-license">
+	    <div id="new-license" style="display:none">
 			<form method="post">
 				{% csrf_token %}
 			    {{ agreement_form|crispy }}
 			    <input type="hidden" name="submitted" value="new"/>
-			    <button type="submit" class="btn btn-success pull-right">Save license and continue</button>
+			    <button type="submit" class="btn btn-success pull-right">Save custom license and continue</button>
 			</form>
 		</div>
 		<div style="clear:both"></div>
@@ -92,12 +86,31 @@
 				{% csrf_token %}
 			    {{ existing_form|crispy }}
 			    <input type="hidden" name="submitted" value="existing"/>
-			    <button type="submit" class="btn btn-success pull-right">Use this license and continue</button>
+			    <button type="submit" class="btn btn-success pull-right">Use your custom license and continue</button>
+			</form>
+		</div>
+		<div id="creative-license" style="display:none">
+			<form method="post">
+				{% csrf_token %}
+			    {{ creative_form|crispy }}
+			    <input type="hidden" name="submitted" value="creative"/>
+			    <button type="submit" class="btn btn-success pull-right">Use this open license and continue</button>
 			</form>
 		</div>
     </div>
-    <div class="col-md-4 well">
-    	<p>Some text instructions here...</p>
+    <div class="col-md-4 ">
+    	<div class="well">
+	    	<h4>License Instructions</h4>
+	    	<p>The first step in sharing data is choosing a license. You may either create your own license, reuse a license that you already created, or use a predefined Creative Commons license. We encourage organizations to choose or create a license that meets their requirements.</p>
+	    	<p>In the next step you will be asked to upload and validate your data for inclusion in our database.</p>
+	    	<br>
+	    	<h5>Custom License</h5>
+	    	<p>Use the form to define your own license and use restrictions. Data will NOT be made available to other parties until you have granted them individual access on this platform with the specified license.</p>
+	    	<br>
+	    	<h5>Creative Commons Licenses</h5>
+	    	<p>Learn more about the creative common licenses at <a href="http://creativecommons.org/licenses/">creativecommons.org</a>.</p>
+	    	
+	    </div>
     </div>
 </div>
 
