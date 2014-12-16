@@ -143,7 +143,8 @@ class Dataset(BaseModel):
         upload_to = "data_sharing",
         blank=True,
         null=True,
-        verbose_name='CSV File'
+        verbose_name='Dataset File',
+        help_text="In csv format"
     )
 
     Description = models.TextField(

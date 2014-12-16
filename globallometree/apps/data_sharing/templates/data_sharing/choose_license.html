@@ -6,25 +6,29 @@
 
 <script type="text/javascript">
 	$(function() {
-		$('#id_choose_license').change(function() {
-			if($(this).val() == 'new') {
+
+		var showSubForm = function () {		
+		
+			var val = $('#id_choose_license').val();
+			if(val == 'new') {
 				$('#new-license').slideDown();
 			} else {
 				$('#new-license').slideUp();	
 			}
-
-			if($(this).val() == 'existing') {
+			if(val == 'existing') {
 				$('#existing-license').slideDown();
 			} else {
 				$('#existing-license').slideUp();	
 			}
-
-			if($(this).val() == 'creative' ) {
+			if(val == 'creative' ) {
 				$('#creative-license').slideDown();
 			} else {
 				$('#creative-license').slideUp();
 			}
-		});
+
+		}
+
+		$('#id_choose_license').change(showSubForm);
 
 		function showOrHidePermittedUseOther() {
 			var value = $('[name="Permitted_use"]:checked').val();
@@ -37,7 +41,6 @@
 		$('[name="Permitted_use"]').click(function() {
 			showOrHidePermittedUseOther($(this).attr('value'));
 		});
-		showOrHidePermittedUseOther();
 
 		function showOrHideExpiresDate() {
 			var value = $('[name="Expires"]:checked').val();
@@ -51,6 +54,8 @@
 			showOrHideExpiresDate();
 		});
 		showOrHideExpiresDate();
+		showOrHidePermittedUseOther();
+		showSubForm();
 	});
 </script>
 
@@ -60,7 +65,7 @@
 
 <div class="row">
     <div class="col-md-8">
-   	    <h3>Shared Data</h3>
+   	    <h3>Share Data</h3>
 		<h4>Step 1. Choose or create a license</h4>
 		<p>Fields marked with an asterisk(*) are required</p>
 	    <p>
