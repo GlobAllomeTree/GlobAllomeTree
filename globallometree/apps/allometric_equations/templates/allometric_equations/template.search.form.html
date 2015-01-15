@@ -32,15 +32,11 @@
 
             <div class="tab-pane" id="identification">
     	       <p class="search-help-text">
-                    Search allometric equations by tree ecosystem and population. <br>
+                    Search allometric equations by tree type and population. <br>
                     Example searches: 
-                       <a href="?Ecosystem=Plantation">Ecosystem: Plantation</a>,
                        <a href="?Population=STAND">Population: STAND</a>
                 </p>
                 <div class="row">
-                    <div class="col-lg-6">
-                        {{ form.Ecosystem|as_crispy_field }}
-                    </div>
                     <div class="col-lg-6">
                         {{ form.Population|as_crispy_field }}
                     </div>

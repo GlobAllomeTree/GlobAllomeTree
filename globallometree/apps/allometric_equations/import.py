@@ -6,7 +6,7 @@ from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, BiomeFAO, BiomeUdvardy, 
     BiomeWWF, DivisionBailey, BiomeHoldridge
 )
-from globallometree.apps.common.models import Reference, Institution
+from globallometree.apps.source.models import Reference, Institution
 
 
 country_mappings = {}

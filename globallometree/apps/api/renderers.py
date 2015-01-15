@@ -6,17 +6,30 @@ from rest_framework_csv.renderers import CSVRenderer
 
 
 class SimpleJSONRenderer(JSONRenderer):
-	format='simple-json'
+	format='json'
 
 
 class SimpleXMLRenderer(XMLRenderer):
-	format='simple-xml'
+	format='xml'
 
 
 class SimpleBrowsableAPIRenderer(BrowsableAPIRenderer):
-	format='simple-api'
+	format='api'
 
 
 class SimpleCSVRenderer(CSVRenderer):
-	format='simple-csv'
+	format='csv'
+
+
+class FullJSONRenderer(JSONRenderer):
+	format='json-full'
+
+
+class FullXMLRenderer(XMLRenderer):
+	format='xml-full'
+
+
+class FullBrowsableAPIRenderer(BrowsableAPIRenderer):
+	format='api-full'
+
 

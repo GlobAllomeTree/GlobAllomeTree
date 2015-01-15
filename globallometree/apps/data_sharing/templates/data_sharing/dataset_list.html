@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ 	<div class="row">
+        <div class="col-md-12">
+			<h2>Datasets</h2>
+			{% for dataset in datasets %}  
+			<div class="col-md-6">
+			  	<div class="panel panel-default">
+				   <div class="panel-heading">
+				   <a href="/data/sharing/datasets/{{ dataset.Dataset_ID }}/"				\
+					   class="btn btn-default pull-right btn-xs"> 		
+						Detailed information 							
+						<span class="glyphicon glyphicon-chevron-right"></span> 
+					</a>
+				    <h3 class="panel-title">Dataset: {{ dataset.Title|truncatechars:30 }}</h3>
+				  </div>
+				  <div class="panel-body">
+				  	<h5>{{ dataset.Title }}</h5><br>
+				    <table class="table">
+				    	{% if dataset.Description %}	
+						  	<tr>
+						  		<td>Description</td>
+						  		<td>{{ dataset.Description }}</td>
+						  	</tr>
+					  	{% endif %}
+					  	{% if dataset.Data_license %}	
+						  	<tr>
+						  		<td>License</td>
+						  		<td>{{ dataset.Data_license.Title }}</td>
+						  	</tr>	
+					 	{% endif %}
+					 	<tr>
+					  		<td>Type</td>
+					  		<td>{{ dataset.Data_type_text }}</td>
+					  	</tr>
+				  	</table>
+				  </div>
+				</div>
+			</div>
+			{% empty %}
+    			<h4>No datasets available</h4>
+			{% endfor %}
+		</div>
+
+		{% if page_obj.paginator.num_pages > 1 %}
+			<ul class="pager">
+			   {% if page_obj.has_previous %}
+
+			  <li class="previous"><a href="?page={{ page_obj.previous_page_number }}&amp;q={{query}}">&larr; Previous Page</a></li>
+		        {% endif %}
+
+		         <li class="current">
+		            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} pages
+		        </li>
+
+			  {% if page_obj.has_next %}
+
+			  <li class="next"><a href="?page={{ page_obj.next_page_number }}&amp;q={{query}}">Next Page &rarr;</a></li>
+			  {% endif %}
+			</ul>
+
+		{% endif %}
+
+	</div>	
+{% endblock %}

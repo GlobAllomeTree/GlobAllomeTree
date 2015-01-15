@@ -49,32 +49,32 @@ class SearchForm(forms.Form):
             if select_name == 'Country':
                 #country_ids = AllometricEquation.objects.distinct('Country').values_list('Country', flat=True)
                 choices = [('', '')] + list(Country.objects.all().values_list(
-                    'common_name', 'common_name'
+                    'Common_name', 'Common_name'
                 ))
             elif select_name == 'Biome_FAO':
                 choices = [('', '')] + list(BiomeFAO.objects.all().values_list(
-                    'name', 'name'
+                    'Name', 'Name'
                 ))
             elif select_name == 'Biome_UDVARDY':
                 choices = [('', '')] + list(BiomeUdvardy.objects.all().values_list(
-                    'name', 'name'
+                    'Name', 'Name'
                 ))
             elif select_name == 'Biome_WWF':
                 choices = [('', '')] + list(BiomeWWF.objects.all().values_list(
-                    'name', 'name'
+                    'Name', 'Name'
                 ))
             elif select_name == 'Division_BAILEY':
                 choices = [('', '')] + list(DivisionBailey.objects.all().values_list(
-                    'name', 'name'
+                    'Name', 'Name'
                 ))
             elif select_name == 'Biome_HOLDRIDGE':
                 choices = [('', '')] + list(BiomeHoldridge.objects.all().values_list(
-                    'name', 'name'
+                    'Name', 'Name'
                 ))
           
             elif select_name == 'Population':
                 choices = [('', '')] + list(Population.objects.all().values_list(
-                    'name', 'name'
+                    'Name', 'Name'
                 ))
             else:
                 choices = [('', '')] + list(AllometricEquation.objects

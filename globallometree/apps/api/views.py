@@ -2,7 +2,7 @@ from rest_framework import viewsets
 
 from globallometree.apps.api.mixins import SimpleSerializerMixin
 
-from globallometree.apps.common.models import (
+from globallometree.apps.source.models import (
     Reference, 
     Institution
 	)
@@ -97,7 +97,9 @@ from globallometree.apps.api.serializers import (
     SimpleCountrySerializer,
     SimpleReferenceSerializer,
     SimpleWoodDensitySerializer,
-    SimpleInstitutionSerializer
+    SimpleInstitutionSerializer,
+    SimpleDatasetSerializer,
+    SimpleDataLicenseSerializer
 	)
 
 
@@ -277,18 +279,20 @@ class WoodDensityViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     simple_serializer_class = SimpleWoodDensitySerializer
 
 
-class DataLicenseViewSet(viewsets.ReadOnlyModelViewSet):
+class DataLicenseViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = DataLicense.objects.all()
     serializer_class = DataLicenseSerializer
+    simple_serializer_class = SimpleDataLicenseSerializer
 
 
-class DatasetViewSet(viewsets.ReadOnlyModelViewSet):
+class DatasetViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
+    simple_serializer_class = SimpleDatasetSerializer
 
 
 class DataRequestViewSet(viewsets.ReadOnlyModelViewSet):

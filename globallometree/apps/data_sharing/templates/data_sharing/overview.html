@@ -19,10 +19,10 @@
 		    <p>Sharing yor data is an easy process and involves the following steps.</p>
 		    <ul>
 		    	<li>Decide if use of your data will be restricted or not.</li>
-		    	<li>For restricted data, use our license creation tool on this site to create your own license.</li>
-		    	<li>Upload your data in one of the formats that can be used by GlobAllomeTree (csv, json, or xml). GlobAllomeTree is currently accepting raw data, biomass data, allometric equations, and wood density data. To submit your data, it is first required to download a submission template in one of the supported formats.</li>
-		    	<li>Your data will be approved by the GlobAllomeTree team and then approved based on quality.</li>
-		    	<li>For restricted data, you will be able to approve or deny requests from individual users directly on the GlobAllomeTree website. You will be sent an email from this site when a new request is made.</li>
+		    	<li>For restricted data you may use our license creation tool on this site to create your own license. It is also easy to choose a creative commons license for your data.</li>
+		    	<li>Upload your data in one of the formats that can be used by GlobAllomeTree (csv, json, or xml). GlobAllomeTree is currently accepting raw data, biomass data, allometric equations, and wood density data. To submit your data, it is first required to download a template in one of the supported formats.</li>
+		    	<li>Your data will be approved by the GlobAllomeTree team.</li>
+		    	<li>For restricted data, you have the option to approve or deny requests from individual users directly on the GlobAllomeTree website. You will be sent an email from this site when a new request is made.</li>
 		    </ul>
 		    <a class="pull-right btn btn-success" href="{% url "data-sharing-choose-license" %}">Share your data</a>
 
@@ -31,10 +31,10 @@
     <div class="col-md-6">
     	<div>
 	    	<h4>Discover and Use Shared Data</h4>
-	    	<p>You can find and use shared data through the regular GlobAllomeTree search interface. Data that has an open license is already has the values available, while data that is subject to a license has the values hidden until you have an approved data sharing agreement with the data provider.<p>
+	    	<p>You can find and use shared data through the regular GlobAllomeTree search interface. Data that has an open license is already has the values available, while data that is subject to a license has some values hidden until you have an approved data sharing agreement with the data provider.<p>
 	    </div>
+	     <a class="pull-right btn btn-success" href="{% url "data-sharing-datasets" %}">Browse datasets</a>
     </div>
 </div>
-
 	    
 {% endblock %}

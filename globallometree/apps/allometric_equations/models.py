@@ -126,7 +126,7 @@ class AllometricEquation(LinkedBaseModel):
         return '/allometric-equations/%s' % self.ID
 
     def __unicode__(self):
-        return u"Equation %s: %s" % (self.ID, self.Equation)
+        return u"Equation %s: %s" % (self.Allometric_equation_ID, self.Equation)
 
     class Meta:
         verbose_name ='Allometric Equation'

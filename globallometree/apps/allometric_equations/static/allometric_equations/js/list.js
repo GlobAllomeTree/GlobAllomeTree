@@ -29,21 +29,18 @@ window.app.listController = function () {
 								  <dd><code>{{Equation}}</code></dd>				\
 								 													\
 								  <dt><small>FAO Biomes</small></dt>				\
-								  <dd><small>{{Biome_FAO}}&nbsp;</small></dd>   	\
+								  <dd><small>{{{Biome_FAO}}}&nbsp;</small></dd>   	\
 								 													\
 								  <dt><small>Species</small></dt>					\
-								  <dd><small>{{Species}}&nbsp;</small></dd>			\
+								  <dd><small>{{{Species}}}&nbsp;</small></dd>			\
 								  								 					\
-								  <dt><small>Countries</small></dt>					\
-								  <dd><small>{{Country}}&nbsp;</small></dd>			\
-								  													\
 								  <dt><small>Year</small></dt>						\
 								  <dd><small>{{Year}}&nbsp;</small></dd>			\
 										  								 			\
 								  <dt><small>Output</small></dt>					\
 								  <dd><small>{{Output}}&nbsp;</small></dd>			\
 								  													\
-								  <dt><small>Locations [Lat Lon]</small></dt>		\
+								  <dt><small>Locations</small></dt>		\
 								  <dd><small>{{{Locations}}}&nbsp;</small></dd>		\
 								  													\
 								</dl>												\
@@ -120,16 +117,83 @@ window.app.listController = function () {
 	}
 
 	var appendResults = function (hits) {
+		var searchDict = window.app.searchManager.getCurrentSearchDict();
 		for (var i = 0; i < hits.length; i++) {
 			//Use the elasticsearch document source
 			var data = hits[i]['_source'];
 			var context = {};
 
-			context['ID'] = data['ID'];
+			context['ID'] = data['Allometric_equation_ID'];
 			context['Equation'] = data['Substitute_equation'];
-			if(data['Genus_Species']) {
-				context['Species'] = data['Genus_Species'].join(', ');
+			try {
+				var speciesList = [];
+				for (var j=0; j < data['Species_group']['Species'].length; j++ ) {
+					var species_record = data['Species_group']['Species'][j];
+					var speciesHTML = species_record['Family'];
+					speciesHTML += ' ' + species_record['Genus'];
+					speciesHTML += ' ' + species_record['Species'];
+					speciesList.push(speciesHTML);
+				}
+				context['Species'] = speciesList.join('<br>');
+
+			} catch (e) {
+				context['Species'] = '';
 			}
+
+
+			try {
+				var biomeFAOList = [];
+				var countryList = [];
+				var locationList = [];
+				for (var j=0; j < data['Location_group']['Locations'].length; j++ ) {
+					var location_record = data['Location_group']['Locations'][j];
+					if (!_.contains(biomeFAOList,location_record['Biome_FAO'])) {
+						biomeFAOList.push(location_record['Biome_FAO'])
+					}
+
+					if (!_.contains(countryList,location_record['Country'])) {
+						countryList.push(location_record['Country'])
+					}
+					var locationHTML = '';
+					if (location_record['Name']) {
+						locationHTML += location_record['Name'] + ', ';
+					}
+					if (location_record['Country']) {
+						locationHTML += ' ' + location_record['Country'];
+					}
+
+					if (location_record['Latitude']) {
+
+						var latLonText = ' (lat ' + location_record['Latitude'] +  ', lon ' + location_record['Longitude'] + ')';	
+						
+						if (searchDict['Max_Latitude'] 
+						&& searchDict['Min_Latitude'] 
+						&& searchDict['Min_Longitude'] 
+						&& searchDict['Max_Longitude'] 
+						&& location_record['Latitude'] <= searchDict['Max_Latitude'] 
+						&& location_record['Latitude'] >= searchDict['Min_Latitude'] 
+						&& location_record['Longitude'] >= searchDict['Min_Longitude'] 
+						&& location_record['Longitude'] <= searchDict['Max_Longitude']) {
+							latLonText = '<strong>' + latLonText + '</strong>';
+						} else {
+							latLonText = '<span style="color:#888">' + latLonText + '</span>';
+						}
+		
+						locationHTML += latLonText;
+					}
+
+					locationList.push(locationHTML);
+				}
+				context['Biome_FAO'] = biomeFAOList.join('<br>');
+				context['Country'] = countryList.join('<br>');
+				context['Locations'] = locationList.join('<br> ');
+
+			} catch (e) {
+				context['Biome_FAO'] = '';
+				context['Country'] = '';
+				context['Locations'] = '';
+			}
+
 			if(data['Country']) {
 				context['Country'] = data['Country'].join(', ');
 			}
@@ -141,29 +205,6 @@ window.app.listController = function () {
 			}
 			if(data['Output']) {
 				context['Output'] = data['Output'];
-			}
-			if(data['Locations']) {
-				context['Locations'] = data['Locations'];
-				var searchDict = window.app.searchManager.getCurrentSearchDict();
-				var locationsSummaries = [];
-				for (var j=0; j < data['Locations'].length; j++) {
-					var location = data['Locations'][j];
-					var locationText = '[' + location['lat'] + ' ' + location['lon'] + ']';
-
-					if (   searchDict['Max_Latitude'] 
-						&& searchDict['Min_Latitude'] 
-						&& searchDict['Min_Longitude'] 
-						&& searchDict['Max_Longitude'] 
-						&& location['lat'] <= searchDict['Max_Latitude'] 
-						&& location['lat'] >= searchDict['Min_Latitude'] 
-						&& location['lon'] >= searchDict['Min_Longitude'] 
-						&& location['lon'] <= searchDict['Max_Longitude']) {
-
-							locationText = '<strong>' + locationText + '</strong>';
-					}	
-					locationsSummaries.push(locationText);
-				}
-				context['Locations'] = locationsSummaries.join(', ');
 			}
 
 			$resultsList.append(Mustache.render(resultTemplate, context));	

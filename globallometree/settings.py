@@ -124,9 +124,9 @@ INSTALLED_APPS = (
     'djangocms_link',
     'djangocms_file',
     'globallometree.plugins.linkbox',
-
     # project apps
     'globallometree.apps.common',
+    'globallometree.apps.source',
     'globallometree.apps.data_sharing',
     'globallometree.apps.community',
     'globallometree.apps.accounts',
@@ -218,15 +218,14 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.BrowsableAPIRenderer',
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.XMLRenderer',
-        #'rest_framework_csv.renderers.CSVRenderer', #Does not work with paginated data
         'globallometree.apps.api.renderers.SimpleBrowsableAPIRenderer',
         'globallometree.apps.api.renderers.SimpleJSONRenderer',
         'globallometree.apps.api.renderers.SimpleXMLRenderer',
         'globallometree.apps.api.renderers.SimpleCSVRenderer',
-    )   
+        'globallometree.apps.api.renderers.FullBrowsableAPIRenderer',
+        'globallometree.apps.api.renderers.FullJSONRenderer',
+        'globallometree.apps.api.renderers.FullXMLRenderer',
+    )
 }
 
  

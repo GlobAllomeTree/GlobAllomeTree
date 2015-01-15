@@ -4,7 +4,7 @@ from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesG
 from globallometree.apps.allometric_equations.models import AllometricEquation, Population, TreeType
 from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup, ForestType
-from globallometree.apps.common.models import Reference, Institution
+from globallometree.apps.source.models import Reference, Institution
 from globallometree.apps.data_sharing.models import Dataset
 
 class Command(BaseCommand):

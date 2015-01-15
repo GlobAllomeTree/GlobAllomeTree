@@ -136,7 +136,7 @@ class Location(BaseModel):
     Biome_WWF = models.ForeignKey(BiomeWWF, blank=True, null=True, db_column="Biome_WWF_ID")
     Division_BAILEY = models.ForeignKey(DivisionBailey, blank=True, null=True, db_column="Division_BAILEY_ID")
     Biome_HOLDRIDGE = models.ForeignKey(BiomeHoldridge, blank=True, null=True, db_column="Biome_HOLDRIDGE_ID")
-    Forest_type =  models.ForeignKey(ForestType, blank=True, null=True, db_column="Forest_type_ID") 
+    Forest_type =  models.ForeignKey(ForestType, blank=True, null=True, db_column="Forest_type_ID")
 
     def __unicode__(self):
         return self.Name
@@ -149,11 +149,12 @@ class Location(BaseModel):
 class Plot(BaseModel):
     Plot_ID = models.AutoField(primary_key=True)
     Location = models.ForeignKey(Location)
-    Plot_original_ID = models.IntegerField(help_text="several plots can have the same id, but ids should be unique for each location")
+    Plot_original_ID = models.IntegerField(
+        help_text="original id of the plot in the study, or data import")
     Plot_size_m2 = models.DecimalField(
-        blank=True, 
-        null=True, 
-        decimal_places=2, 
+        blank=True,
+        null=True,
+        decimal_places=2,
         max_digits=10,
         help_text="size of the plot in m2")
 
@@ -162,136 +163,33 @@ class Plot(BaseModel):
 
 
 class LocationGroup(BaseModel):
-    Location_group_ID = models.AutoField(primary_key=True)    
+    Location_group_ID = models.AutoField(primary_key=True)
     Name = models.CharField(
-        max_length=255, 
-        null=True, 
-        blank=True, 
+        max_length=255,
+        null=True,
+        blank=True,
         verbose_name="Group Name")
 
-    Locations = models.ManyToManyField(Location, verbose_name="List of Locations", blank=True, null=True)
+    Locations = models.ManyToManyField(Location,
+        verbose_name="List of Locations",
+        blank=True,
+        null=True
+        )
 
+    Plots = models.ManyToManyField(Plot,
+        verbose_name="List of Plots",
+        blank=True,
+        null=True
+        )
 
     class Meta:
         db_table = 'Location_group'
 
-    def locations_string(self):
-        string = ''
-        for location in self.Locations.all():
-            if string != '': string += ', '
-            string += location.Name
-        return string
 
     def lat_lon_string(self):
         return ', '.join([u'[%s, %s]'%(co['lat'], co['lon']) for co in self.get_precise_coordinates()])
 
-    def get_precise_coordinates(self):
-        locations = []
-        for location in self.Locations.all():
-            if not location.Latitude or not location.Longitude:
-                #locations can just be countries or biomes
-                #so in that case we just skip over the object
-                continue
-            #dicts do not work with unique sets
-            if not any(l == {'lat' : location.Latitude,  'lon' : location.Longitude} for l in locations):
-                locations.append({
-                    "lat" : location.Latitude,
-                    "lon" : location.Longitude
-                })
-        return locations
 
-    def countries(self):
-        return list(set([
-            location.Country for location in
-                self.Locations.all() if location.Country is not None
-        ]))
-
-    def countries_string(self):
-        string = ''
-        for country in self.countries():
-            if string != '': string += ', '
-            string += country.Common_name
-        return string
-
-    def continents(self):
-        return list(set([
-            country.Continent for country in
-                self.countries() if country.Continent is not None
-        ]))
-
-    def continents_string(self):
-        string = ''
-        for continent in self.continents():
-            if string != '': string += ', '
-            string += continent.name
-        return string
-
-    def biomes_fao(self):
-        return list(set([
-            location.Biome_fao for location in
-                self.Locations.all() if location.Biome_fao is not None
-        ]))
-
-    def biomes_fao_string(self):
-        string = ''
-        for biome_fao in self.biomes_fao():
-            if string != '': string += ', '
-            string += biome_fao.name
-        return string
-
-    def biomes_udvardy(self):
-        return list(set([
-            location.Biome_udvardy for location in
-                self.Locations.all() if location.Biome_udvardy is not None
-        ]))
-
-    def biomes_udvardy_string(self):
-        string = ''
-        for biome_udvardy in self.biomes_udvardy():
-            if string != '': string += ', '
-            string += biome_udvardy.name
-        return string
-
-    def biomes_wwf(self):
-        return list(set([
-            location.Biome_wwf for location in
-                self.Locations.all() if location.Biome_wwf is not None
-        ]))
-
-    def biomes_wwf_string(self):
-        string = ''
-        for biome_wwf in self.biomes_wwf():
-            if string != '': string += ', '
-            string += biome_wwf.name
-        return string
-
-    def divisions_bailey(self):
-        return list(set([
-            location.Division_bailey for location in
-                self.Locations.all() if location.Division_bailey is not None
-        ]))
-
-    def divisions_bailey_string(self):
-        string = ''
-        for division_bailey in self.divisions_bailey():
-            if string != '': string += ', '
-            string += division_bailey.name
-        return string
-
-    def biomes_holdridge(self):
-        return list(set([
-            location.Biome_holdridge for location in
-                self.Locations.all() if location.Biome_holdridge is not None
-        ]))
-
-    def biomes_holdridge_string(self):
-        string = ''
-        for biome_holdridge in self.biomes_holdridge():
-            if string != '': string += ', '
-            string += biome_holdridge.name
-        return string
 
     def __unicode__(self):
         return self.Name
-
-

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+        <span style="font-weight:normal">Dataset:</span> {{ dataset.Title }}</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-6">
+            <h4>Dataset details</h4>
+          <table class="table">
+            <tr><td>Type</td><td>{{ dataset.Data_type_text }}</td></tr>
+            <tr><td>Description</td><td>{{ dataset.Description }}</td></tr>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <h4>License</h4>
+          {% if dataset.Data_license %}
+            <table class="table">
+              <tr><td colspan="2"><strong>{{ dataset.Data_license.Title }}</strong></td></tr>
+              {% if dataset.Data_license.Expires == 'on_date' %}
+               <tr>
+                  <td>Expires on date</td>
+                  <td>{{ dataset.Data_license.Expires_on_date }}</td>
+                </tr>
+              {% elif dataset.Data_license.Expires == 'on_three_months_notice' %}
+               <tr>
+                  <td>Expires</td>
+                  <td>3 months notice</td>
+                </tr>
+              {% elif dataset.Data_license.Expires == 'on_activity_completion' %}
+               <tr>
+                  <td>Expires</td>
+                  <td>on activity completion</td>
+                </tr>
+              {% endif %}
+              
+              {% if dataset.Data_license.License_url %}
+                <tr>
+                  <td>License URL</td>
+                  <td>
+                    <a href="{{ dataset.Data_license.License_url }}" target="blank" rel="nofollow">{{ dataset.Data_license.License_url }}</a>
+                  </td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Restrict_resell %}
+                <tr>
+                  <td>Resell data</td>
+                  <td><span class="glyphicon glyphicon-remove-circle"></span> No</td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Restrict_duplication %}
+                <tr>
+                  <td>Duplicate data</td>
+                  <td><span class="glyphicon glyphicon-remove-circle"></span> No</td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Restrict_reproduction %}
+                <tr>
+                  <td>Reproduce data without written permission</td>
+                  <td><span class="glyphicon glyphicon-remove-circle"></span> No</td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Restrict_derivation %}
+                <tr>
+                  <td>Acknowledge provider for publishing derivative data</td>
+                  <td><span class="glyphicon glyphicon-ok-circle"></span> Yes</td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Restrict_association %}
+                <tr>
+                  <td>Add provider as co-author for publishing derivative data</td>
+                  <td><span class="glyphicon glyphicon-ok-circle"></span> Yes</td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Restrict_attributed_ownership %}
+                <tr>
+                  <td>Provider retains ownership of changes</td>
+                  <td><span class="glyphicon glyphicon-ok-circle"></span> Yes</td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Restrict_other_value %}
+                <tr>
+                  <td colspan="2"><strong>Additional Restrictions</strong><br>
+                        {{ dataset.Data_license.Restrict_other_value }}
+                  </td>
+                </tr>
+              {% endif %}
+
+              {% if dataset.Data_license.Permitted_use != 'unrestricted' %}
+                <tr>
+                  <td colspan="2"><strong>Permitted Use</strong><br>
+                        {{ dataset.Data_license.Permitted_use_text }}
+                  </td>
+                </tr>
+              {% endif %}
+
+            </table>
+          {% else %}
+            <h5>License not specified</h5>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+{% endblock %}

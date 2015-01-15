@@ -53,16 +53,16 @@ class Species(BaseModel):
         return u'%s?Species=%s&Genus=%s' % (
                 reverse('equation_search'),
                 self.Name,
-                self.Genus.name
+                self.Genus.Name
                 )
 
-    def country_list(self):
-        """ Countries that this species is in """
-        countries = []
-        for group in self.speciesgroup_set.all():
-            for equation in group.allometricequation_set.all():
-                countries += equation.location_group.countries()
-        return list(set(countries))
+    # def country_list(self):
+    #     """ Countries that this species is in """
+    #     countries = []
+    #     for group in self.speciesgroup_set.all():
+    #         for equation in group.allometricequation_set.all():
+    #             countries += equation.Location_group.countries()
+    #     return list(set(countries))
 
     def __unicode__(self):
         return self.name

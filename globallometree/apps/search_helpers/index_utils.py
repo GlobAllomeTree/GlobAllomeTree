@@ -10,8 +10,11 @@ def rebuild(index_cls, limit):
         model = index_cls.get_model()
         type_name = index_cls.get_mapping_type_name()
         #Delete the index if it exists
-        es.indices.delete(index=index, ignore=404)
-        es.indices.create(index)
+        es.indices.delete_mapping(index=index, doc_type=type_name)
+
+        if not es.indices.exists(index=index):
+            es.indices.create(index)
+            
         #Put the mapping
         es.indices.put_mapping(
             index=index,

@@ -11,8 +11,8 @@ from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesG
 from globallometree.apps.allometric_equations.models import AllometricEquation, Population, TreeType
 from globallometree.apps.locations.models import (BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge,
                                                   Location, Country, Continent, LocationGroup, ForestType)
-from globallometree.apps.common.models import Reference, Institution
-from globallometree.apps.data_sharing.models import Dataset
+from globallometree.apps.source.models import Reference, Institution
+from globallometree.apps.data_sharing.models import Dataset, DataLicense
 
 missed_udvardy = {}
 missed_wwf = {}
@@ -76,6 +76,15 @@ class Command(BaseCommand):
         else:
             total = TreeEquation.objects.all().count()
 
+
+        # Create a license
+
+        license = DataLicense.objects.get_or_create(
+                Title='GlobAllomeTree Data License', 
+                Restrictive=False,
+                Public_choice=False,
+                License_url='http://globallometree.org',
+            )[0]
 
         for orig_equation in TreeEquation.objects.all().iterator():
             if limit and n > limit: break;
@@ -283,7 +292,7 @@ class Command(BaseCommand):
                     User = orig_equation.data_submission.user,
                     Data_type = 'allometric_equations',
                     Imported = orig_equation.data_submission.imported,
-                    Is_restricted = False,
+                    Data_license = license
                 )[0]
 
 

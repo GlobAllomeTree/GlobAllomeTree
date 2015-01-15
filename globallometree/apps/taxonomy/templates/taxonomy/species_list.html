@@ -16,14 +16,9 @@
 			</form>
 				<br>
 			<br>
-			{% for species in object_list %}
-			    <h4>{{ species.genus.family.name }} {{ species.genus.name }} {{ species.name }}</h4>
-			    <p>Present in Countries: 
-			    	{% for country in species.country_list %} 
-			    		{{ country.common_name }}{% if not forloop.last %}, {% endif %}
-			    	{% endfor %}
-			    </p>
-			    <p>Allometric Equations: {{ species.allometric_equation_count }}<br> <a href="{{ species.allometric_equation_link }}">view equations &gt;</a></p>
+			{% for Species in object_list %}
+			    <h4>{{ Species.Genus.Family.Name }} {{ Species.Genus.Name }} {{ Species.Name }}</h4>
+			    <p>Allometric Equations: {{ Species.allometric_equation_count }}<br> <a href="{{ Species.allometric_equation_link }}">view equations &gt;</a></p>
 			    <br>
 			    <br>
 			{% empty %}

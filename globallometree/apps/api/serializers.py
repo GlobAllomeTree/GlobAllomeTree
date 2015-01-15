@@ -1,9 +1,11 @@
 ## api/views.py
+import Geohash
+
 from django.contrib.auth.models import User
 
 from rest_framework import serializers, fields
 
-from globallometree.apps.common.models import (
+from globallometree.apps.source.models import (
     Reference,
     Institution
 )
@@ -74,7 +76,6 @@ class FamilySerializer(HyperLinkedWithIdSerializer):
 
 class GenusSerializer(HyperLinkedWithIdSerializer):
     Family = FamilySerializer(many=False)
-
     class Meta:
         model = Genus
         exclude = ('Created', 'Modified',)
@@ -197,6 +198,7 @@ class TreeTypeSerializer(HyperLinkedWithIdSerializer):
         model = TreeType   
         exclude = ('Created', 'Modified')
 
+
 class AllometricEquationSerializer(HyperLinkedWithIdSerializer):
     Species_group = SpeciesGroupSerializer(many=False)
     Location_group = LocationGroupSerializer(many=False)
@@ -225,6 +227,7 @@ class DataLicenseSerializer(HyperLinkedWithIdSerializer):
 
 
 class DatasetSerializer(HyperLinkedWithIdSerializer):
+
     class Meta:
         model = Dataset
         exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file')
@@ -276,15 +279,16 @@ class SimpleGenusSerializer(serializers.ModelSerializer):
 
 
 class SimpleSpeciesSerializer(serializers.ModelSerializer):
-    Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
+   
     Family = fields.CharField(source="Genus.Family.Name")
-    Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
     Genus = fields.CharField(source="Genus.Name")
     Species = fields.CharField(source="Name")
     Species_local_names = SimpleSpeciesLocalNameSerializer(
         many = True,
         source = 'Local_names'
         )
+    Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
+    Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
 
     class Meta:
         model = Species
@@ -321,7 +325,7 @@ class SimpleSubspeciesSerializer(serializers.ModelSerializer):
 
 class SpeciesGroupMixin(object):
 
-    def get_Species_group(self, obj):
+    def get_Species(self, obj):
 
         if(hasattr(obj, 'Species_group')):
             group = obj.Species_group
@@ -337,10 +341,10 @@ class SpeciesGroupMixin(object):
 
 
 class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerializer):
-    Species_group = fields.SerializerMethodField()
+    Species = fields.SerializerMethodField()
     class Meta: 
         model = SpeciesGroup
-        fields = ('Species_group_ID', 'Species_group')
+        fields = ('Species_group_ID', 'Species')
 
 
 class SimpleForestTypeSerializer(serializers.ModelSerializer):
@@ -380,27 +384,26 @@ class SimpleDivisionBaileySerializer(serializers.ModelSerializer):
 
 
 class SimpleLocationSerializer(serializers.ModelSerializer):
-    Country_ID = fields.IntegerField(source="Country.Country_ID")
+   
     Country = fields.CharField(source="Country.Formal_name")
-    
-    Biome_FAO_ID = fields.IntegerField(source="Biome_FAO.Biome_FAO_ID")
     Biome_FAO = fields.CharField(source="Biome_FAO.Name")
-    
-    Biome_UDVARDY_ID = fields.IntegerField(source="Biome_UDVARDY.Biome_UDVARDY_ID")
     Biome_UDVARDY = fields.CharField(source="Biome_UDVARDY.Name")
-
-    Biome_WWF_ID = fields.IntegerField(source="Biome_WWF.Biome_WWF_ID")    
     Biome_WWF = fields.CharField(source="Biome_WWF.Name")
-
-    Division_BAILEY_ID = fields.IntegerField(source="Division_BAILEY.Division_BAILEY_ID") 
     Division_BAILEY = fields.CharField(source="Division_BAILEY.Name")
-
-    Biome_HOLDRIDGE_ID = fields.IntegerField(source="Biome_HOLDRIDGE.Biome_HOLDRIDGE_ID") 
     Biome_HOLDRIDGE = fields.CharField(source="Biome_HOLDRIDGE.Name")
-
-    Forest_type_ID = fields.IntegerField(source="Forest_type.Forest_type_ID") 
     Forest_type = fields.CharField(source="Forest_type.Name")
+    
+    Country_ID = fields.IntegerField(source="Country.Country_ID")
+    Biome_FAO_ID = fields.IntegerField(source="Biome_FAO.Biome_FAO_ID")
+    Biome_UDVARDY_ID = fields.IntegerField(source="Biome_UDVARDY.Biome_UDVARDY_ID")
+    Biome_WWF_ID = fields.IntegerField(source="Biome_WWF.Biome_WWF_ID")    
+    Division_BAILEY_ID = fields.IntegerField(source="Division_BAILEY.Division_BAILEY_ID") 
+    Biome_HOLDRIDGE_ID = fields.IntegerField(source="Biome_HOLDRIDGE.Biome_HOLDRIDGE_ID") 
+    Forest_type_ID = fields.IntegerField(source="Forest_type.Forest_type_ID") 
+    Geohash = fields.SerializerMethodField()
 
+    def get_Geohash(self, obj):
+        return Geohash.encode(obj.Latitude, obj.Longitude)
 
     class Meta: 
         model = Location
@@ -413,7 +416,7 @@ class SimpleLocationGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LocationGroup
-        fields = ('Location_group_ID', 'Name','Locations',)
+        fields = ('Location_group_ID', 'Locations',)
 
 
 class SimplePopulationSerializer(serializers.ModelSerializer):
@@ -437,6 +440,30 @@ class SimpleCountrySerializer(serializers.ModelSerializer):
         fields = ('Country_ID', 'Name', 'Code', 'Continent')   
 
 
+class SimpleDataLicenseSerializer(serializers.ModelSerializer):
+    Permitted_use_text = fields.SerializerMethodField()
+    def get_Permitted_use_text(self, obj):
+        if obj.Permitted_use == 'other':
+            return obj.Permitted_use_other_value
+        else:
+            return obj.get_Permitted_use_display()
+    class Meta:
+        model = DataLicense
+        exclude = ('Created', 'Modified', 'User','Public_choice')
+
+
+class SimpleDatasetSerializer(serializers.ModelSerializer):
+    Data_license = SimpleDataLicenseSerializer(many=False)
+    Data_type_text = fields.CharField(
+        source="get_Data_type_display",
+        read_only=True
+        )
+    
+    class Meta:
+        model = Dataset
+        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file')
+
+
 class SimpleReferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
@@ -458,3 +485,5 @@ class SimpleWoodDensitySerializer(SimpleLinkedModelSerializer):
     class Meta:
         model = WoodDensity
         exclude = ('Created', 'Modified', )
+
+

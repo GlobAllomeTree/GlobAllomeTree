@@ -1,6 +1,6 @@
 
 from django.conf.urls import url, patterns
-from .views import SearchView
+
 
 urlpatterns = patterns('apps.allometric_equations.views',
 

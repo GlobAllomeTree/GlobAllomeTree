@@ -4,7 +4,13 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.db.models import Q
 
+from apps.api.serializers import SimpleDatasetSerializer
+
+from .models import Dataset
 from .forms import ( 
     DataLicenseForm, 
     LicenseChoiceForm, 
@@ -68,7 +74,7 @@ def choose_license(request, data_agreement=None):
     )
 
 
-def upload_data(request, dataset=None):
+def upload_data(request):
 
     if request.method == 'POST':
         form = DatasetUploadForm(request.POST, request.FILES, user=request.user)
@@ -85,5 +91,37 @@ def upload_data(request, dataset=None):
          },
         context_instance=RequestContext(request)
     )
+
+
+def dataset_detail(request, Dataset_ID):
+    dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
+    dataset_serialized = SimpleDatasetSerializer(dataset).data
+    return render_to_response(
+        "data_sharing/dataset_detail.html",
+        {
+          'dataset': dataset_serialized,
+        },
+        context_instance=RequestContext(request)
+    )
+
+
+class DatasetListView(ListView):
+    model = Dataset
+    template = 'data_sharing/dataset_list.html'
+    paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+        context = super(DatasetListView, self).get_context_data(**kwargs)
+        context['datasets'] = []
+        for dataset in self.object_list:
+            obj_serialized = SimpleDatasetSerializer(dataset).data
+            context['datasets'].append(obj_serialized)
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+       return Dataset.objects.filter(Imported=1)
+
+
+
 
 

@@ -43,7 +43,9 @@ class DataLicense(BaseModel):
 
     License_url = models.URLField(
         verbose_name='Link to License',
-        help_text="This is shown in the admin only and is mostly used for creative commons licenses"
+        help_text="This is shown in the admin only and is mostly used for creative commons licenses",
+        blank=True,
+        null=True
         )
 
     User = models.ForeignKey(
@@ -84,7 +86,7 @@ class DataLicense(BaseModel):
         default=False,
         help_text="The Data User shall not publish the Derivative Data without acknowledging the Data Provider.")
 
-    Restrict_attribution = models.BooleanField(
+    Restrict_association = models.BooleanField(
         default=False,
         help_text="The Data User shall not publish the Derivative Data without associating the Data Provider as a co-author.")
 
@@ -150,18 +152,19 @@ class Dataset(BaseModel):
     Description = models.TextField(
         blank=True,
         null=True,
-        verbose_name = 'Brief description of the data in this dataset'
+        verbose_name = 'Brief description'
     )
 
     Data_type = models.CharField(
         choices = DATA_TYPE_CHOICES,
         max_length=100,
-        verbose_name = 'Dataset Type'
+        verbose_name = 'Type'
     )
 
     Data_license = models.ForeignKey(
         DataLicense,
-        db_column="Data_license_ID"
+        db_column="Data_license_ID",
+        verbose_name = 'License'
     )
 
     Imported = models.BooleanField(

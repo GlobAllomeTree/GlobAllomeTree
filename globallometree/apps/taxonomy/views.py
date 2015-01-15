@@ -12,12 +12,12 @@ class SpeciesListView(ListView):
         context['species_count'] = Species.objects.all().count()
         context['family_count'] = Family.objects.all().count()
         context['genus_count'] = Genus.objects.all().count()
-        context['query'] = self.request.GET.get('q', None)
+        context['query'] = self.request.GET.get('q', '')
         return context
 
     def get_queryset(self, *args, **kwargs):
-    	qs = Species.objects.all().order_by('genus__family__name', 'genus__name')
+    	qs = Species.objects.all().order_by('Genus__Family__Name', 'Genus__Name')
     	q = self.request.GET.get('q', None)
     	if q is not None and q != '':
-    		qs = qs.filter(Q(genus__family__name=q) | Q(genus__name=q) | Q(name=q))
+    		qs = qs.filter(Q(Genus__Family__Name=q) | Q(Genus__Name=q) | Q(Name=q))
     	return qs

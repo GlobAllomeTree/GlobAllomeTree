@@ -14,5 +14,5 @@ urlpatterns = patterns('apps.allometric_equations.views',
     #Single equation PDF
     (r'^(\d+)/pdf$', 'allometric_equation_id_pdf'),
     
-    url(r'', include('apps.allometric_equations.search.urls')),
+    url(r'^$', SearchView.as_view(), name='equation_search'),  
 )
