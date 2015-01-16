@@ -162,42 +162,48 @@ window.app.mapController = function() {
 	function addGeoHashMarkersToMap (data) {
 		geohash_markers = L.featureGroup();
 	
-		var geohash_aggs = data.aggregations['Locations-Grid'].buckets;
-		
-
-		
+		var geohash_aggs = data.aggregations['Geohash-Grid'].buckets;
 		for (var i=0;i<geohash_aggs.length;i++) {
 			var html = "";
 			var j;
 			var totalLat = 0;
 			var totalLon = 0;
 			var centerLat, centerLon;
+			var minLat, minLon, maxLat, maxLon;
 			//var totalDocs = 0;
-			var min_lon, min_lat, max_lon, max_lat;
 			
 			//Some of the doc locations are in this geohash, while others are not
 			//So here, we figure out which documents are in this geohash 
 			//and average out the lats/lons from the geohashes terms agg
 			var totalDocs = 0;
-			for(j=0; j < geohash_aggs[i].geohashes.buckets.length; j++ ) {
-				var geohashKey = geohash_aggs[i].geohashes.buckets[j].key;				
+			var geohashKey = geohash_aggs[i].key;
+			var geohashLatLon = decodeGeoHash(geohashKey);
+			var minLat = geohashLatLon.latitude[0];
+			var minLon = geohashLatLon.longitude[0];
+			var maxLat = geohashLatLon.latitude[1];
+			var maxLon = geohashLatLon.longitude[1];
 
+			for(j=0; j < geohash_aggs[i].LatLon.buckets.length; j++ ) {
+				// geohash_aggs[i].LatLon.buckets[j]
+				// Object {key: "13.827800000,107.087500000", doc_count: 61}
+				var docLatLon = geohash_aggs[i].LatLon.buckets[j].key.split(',');
+				var docCount = geohash_aggs[i].LatLon.buckets[j].doc_count;				
+				var docLat = 1 * docLatLon[0];
+				var docLon = 1 * docLatLon[1];
 				//if the parent aggregation key is at the start of the location geohash
-				if (geohashKey.indexOf(geohash_aggs[i].key) === 0) {
-					var geohashLatLon = decodeGeoHash(geohashKey);
-					var geohashDocs = geohash_aggs[i].geohashes.buckets[j]['doc_count'];
-					
+				if ((docLat >= minLat) &&
+					(docLat <= maxLat) &&
+					(docLon >= minLon) &&
+					(docLon <= maxLon)) {
+				
 					//Since these documents do belong to the geohash we are interested in, 
 					//we add the documents to our total count
-					totalDocs += geohashDocs;
-					totalLat += (geohashLatLon.latitude[2] * geohashDocs); //['lat'][2] is the middle of the geohash
-					totalLon +=	(geohashLatLon.longitude[2] * geohashDocs); //['lon'][2] is the middle of the geohash
+					totalDocs += docCount;
+					totalLat += (docLat * docCount); 
+					totalLon +=	(docLon * docCount); 
 				}  
 			}
 			
-			var geohashKey = geohash_aggs[i].key;
-			var geohashLatLon = decodeGeoHash(geohashKey);
-
 			if(totalDocs) {
 				//Actual center of records
 				centerLat = totalLat / totalDocs;
@@ -318,16 +324,14 @@ window.app.mapController = function() {
 		var aggregations = [];
 	
 		aggregations.push(
-			ejs.GeoHashGridAggregation('Locations-Grid')
-				.field('Locations')
+			ejs.GeoHashGridAggregation('Geohash-Grid')
+				.field('Geohash')
 				.precision(precision)
 				.aggregation(
-					ejs.TermsAggregation('geohashes')
-						//The locations_geohash script is stored in ops/config/elasticsearch/scripts
-						.script("locations_geohash")
+					ejs.TermsAggregation('LatLon').field('LatLonString')
 				)
 				.aggregation(
-					ejs.TermsAggregation('Species').field('Genus_Species')
+					ejs.TermsAggregation('Species').field('Species')
 				)
 				.aggregation(
 					ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')

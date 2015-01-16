@@ -394,6 +394,8 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
     Forest_type = fields.CharField(source="Forest_type.Name")
     
     Country_ID = fields.IntegerField(source="Country.Country_ID")
+    Country_3166_3 = fields.CharField(source="Country.Iso3166a3")
+
     Biome_FAO_ID = fields.IntegerField(source="Biome_FAO.Biome_FAO_ID")
     Biome_UDVARDY_ID = fields.IntegerField(source="Biome_UDVARDY.Biome_UDVARDY_ID")
     Biome_WWF_ID = fields.IntegerField(source="Biome_WWF.Biome_WWF_ID")    
@@ -401,17 +403,28 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
     Biome_HOLDRIDGE_ID = fields.IntegerField(source="Biome_HOLDRIDGE.Biome_HOLDRIDGE_ID") 
     Forest_type_ID = fields.IntegerField(source="Forest_type.Forest_type_ID") 
     Geohash = fields.SerializerMethodField()
+    LatLonString = fields.SerializerMethodField()
 
+    # Geohash and LatLonString are designed to help out with elasticsearch queries 
     def get_Geohash(self, obj):
-        return Geohash.encode(obj.Latitude, obj.Longitude)
+        if obj.Latitude and obj.Longitude:
+            return Geohash.encode(obj.Latitude, obj.Longitude)
+        else:
+            return None
+
+    def get_LatLonString(self, obj):
+        if obj.Latitude:
+            lat_lon_string = "%s,%s" % (obj.Latitude,obj.Longitude)
+        else:
+            lat_lon_string = None  
+        return lat_lon_string
 
     class Meta: 
         model = Location
-        exclude = ('Created', 'Modified', )
+        exclude = ('Created', 'Modified')
 
 
 class SimpleLocationGroupSerializer(serializers.ModelSerializer):
-    
     Locations = SimpleLocationSerializer(many=True)
 
     class Meta:
@@ -461,18 +474,29 @@ class SimpleDatasetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Dataset
-        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file')
+        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file', 'Imported')
 
 
 class SimpleReferenceSerializer(serializers.ModelSerializer):
+    Year = fields.SerializerMethodField()
     class Meta:
         model = Reference
-        fields = ('Label', 'Author', 'Year', 'Reference')
+        fields = ('Label', 'Author', 'Year', 'Reference', 'Reference_ID')
+
+    def get_Year(self, obj):
+        #Trim 1986b to be 1986
+        #Maybe reference should have a Year and Year_string attribute?
+        if obj.Year and len(obj.Year) > 4: 
+            return obj.Year[0:4]
+        else:
+            return obj.Year
 
 
 class SimpleLinkedModelSerializer(serializers.ModelSerializer):
     Species_group = SimpleSpeciesGroupSerializer(many=False)
     Location_group = SimpleLocationGroupSerializer(many=False)
+    #Dataset = SimpleDatasetSerializer(many=False)
+    Reference = SimpleReferenceSerializer()
 
 
 class SimpleAllometricEquationSerializer(SimpleLinkedModelSerializer):

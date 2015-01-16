@@ -109,7 +109,7 @@ window.app.searchManager = function (){
 		//If this search is trying to limit with a certain distance from a
 		//point then we use a Geo
 		if (searchDict['Point_Latitude']) {
-			filters.push(ejs.GeoDistanceFilter('Locations')
+			filters.push(ejs.GeoDistanceFilter('Geohash')
 						.distance(1*searchDict['Point_Distance'])
 						.unit('km') //km or mi
 						.normalize(true)
@@ -158,7 +158,7 @@ window.app.searchManager = function (){
 			}
 			boundingBox = _constrainBoundingBox(boundingBox);
 
-			var geoFilter = ejs.GeoBboxFilter('Locations')
+			var geoFilter = ejs.GeoBboxFilter('Geohash')
 		 		.topLeft(ejs.GeoPoint([boundingBox[3], boundingBox[0]]))
 		 		.bottomRight(ejs.GeoPoint([boundingBox[1], boundingBox[2]]));
 		 	filters.push(geoFilter);

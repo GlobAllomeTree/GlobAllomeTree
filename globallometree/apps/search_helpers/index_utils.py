@@ -16,6 +16,7 @@ def rebuild(index_cls, limit):
             es.indices.create(index)
             
         #Put the mapping
+        #Comment this out for letting elasticsearch generate the mapping
         es.indices.put_mapping(
             index=index,
             doc_type=type_name,
@@ -36,7 +37,7 @@ def rebuild(index_cls, limit):
         documents=[]
         n = 0
         for obj in index_cls.get_indexable().iterator():
-            if limit and n > limit: break;
+            if limit and n == limit: break;
             n = n + 1; 
             print n, 'out of', total, '\r',
             sys.stdout.flush()

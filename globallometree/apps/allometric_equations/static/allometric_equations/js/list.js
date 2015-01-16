@@ -28,15 +28,15 @@ window.app.listController = function () {
 								  <dt><small>Equation</small></dt>					\
 								  <dd><code>{{Equation}}</code></dd>				\
 								 													\
+								  <dt><small>Reference</small></dt>						\
+								  <dd><small>{{{Reference}}}&nbsp;</small></dd>			\
+										  								 			\
 								  <dt><small>FAO Biomes</small></dt>				\
 								  <dd><small>{{{Biome_FAO}}}&nbsp;</small></dd>   	\
 								 													\
 								  <dt><small>Species</small></dt>					\
 								  <dd><small>{{{Species}}}&nbsp;</small></dd>			\
 								  								 					\
-								  <dt><small>Year</small></dt>						\
-								  <dd><small>{{Year}}&nbsp;</small></dd>			\
-										  								 			\
 								  <dt><small>Output</small></dt>					\
 								  <dd><small>{{Output}}&nbsp;</small></dd>			\
 								  													\
@@ -194,15 +194,12 @@ window.app.listController = function () {
 				context['Locations'] = '';
 			}
 
-			if(data['Country']) {
-				context['Country'] = data['Country'].join(', ');
+			try {
+				context['Reference'] = data['Reference']['Reference'];
+			} catch (e) {
+				context['Reference'] = '';
 			}
-			if(data['Biome_FAO']) {
-				context['Biome_FAO'] = data['Biome_FAO'].join(', ');
-			}
-			if(data['Year']) {
-				context['Year'] = data['Year'].join(', ');
-			}
+
 			if(data['Output']) {
 				context['Output'] = data['Output'];
 			}
