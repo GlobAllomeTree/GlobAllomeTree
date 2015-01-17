@@ -62,8 +62,10 @@ window.app.mapController = function() {
 			maxZoom: 15
 		});
 
-		geohash_markers = L.featureGroup().addTo(map);
 		country_markers = L.featureGroup().addTo(map);
+		geohash_markers = L.featureGroup().addTo(map);
+
+		
 		map.on('zoomend', updateGeohashMarkers);
 
 		dragTimer = null;
@@ -147,6 +149,7 @@ window.app.mapController = function() {
 			marker.country = centroid['common_name'];
 			marker.aggregation = country_aggs[i];
 			marker.docCount = totalDocs;
+			marker.setZIndexOffset(500);
 			country_markers.addLayer(marker);
 		}
 
@@ -310,49 +313,54 @@ window.app.mapController = function() {
 	function updateGeohashMarkers() {
 		var bounds = map.getBounds();
 		var zoom = map.getZoom();
-		//Add a 10% of the viewable map as a buffer
-		var lngbuffer = Math.abs((bounds._northEast.lng - bounds._southWest.lng) * 0.1);
-		var latbuffer = Math.abs((bounds._northEast.lat - bounds._southWest.lat) * 0.1);
-		var maxx = bounds._northEast.lng + lngbuffer;
-		var maxy = bounds._northEast.lat + latbuffer;
-		var minx = bounds._southWest.lng - lngbuffer;
-		var miny = bounds._southWest.lat - latbuffer;
-		var precision = geoGridPrecision[map.getZoom()];
+		
+		map.removeLayer(geohash_markers);
 
-		var boundingBox = [minx, miny, maxx, maxy];
+		if (zoom > 2) {
 
-		var aggregations = [];
-	
-		aggregations.push(
-			ejs.GeoHashGridAggregation('Geohash-Grid')
-				.field('Geohash')
-				.precision(precision)
-				.aggregation(
-					ejs.TermsAggregation('LatLon').field('LatLonString')
-				)
-				.aggregation(
-					ejs.TermsAggregation('Species').field('Species')
-				)
-				.aggregation(
-					ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
-				)
-				.aggregation(
-					ejs.TermsAggregation('Output').field('Output')
-				)
-		);
+			//Add a 10% of the viewable map as a buffer
+			var lngbuffer = Math.abs((bounds._northEast.lng - bounds._southWest.lng) * 0.1);
+			var latbuffer = Math.abs((bounds._northEast.lat - bounds._southWest.lat) * 0.1);
+			var maxx = bounds._northEast.lng + lngbuffer;
+			var maxy = bounds._northEast.lat + latbuffer;
+			var minx = bounds._southWest.lng - lngbuffer;
+			var miny = bounds._southWest.lat - latbuffer;
+			var precision = geoGridPrecision[map.getZoom()];
 
-		var geohash_query = window.app.searchManager.getQuery({
-			aggregations : aggregations,
-			boundingBox : boundingBox
-		});
+			var boundingBox = [minx, miny, maxx, maxy];
 
-		window.app.searchManager.search({
-			query : geohash_query,
-			success: function (e) {
-				map.removeLayer(geohash_markers);
-				addGeoHashMarkersToMap(e);
-			}
-		});
+			var aggregations = [];
+		
+			aggregations.push(
+				ejs.GeoHashGridAggregation('Geohash-Grid')
+					.field('Geohash')
+					.precision(precision)
+					.aggregation(
+						ejs.TermsAggregation('LatLon').field('LatLonString')
+					)
+					.aggregation(
+						ejs.TermsAggregation('Species').field('Species')
+					)
+					.aggregation(
+						ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
+					)
+					.aggregation(
+						ejs.TermsAggregation('Output').field('Output')
+					)
+			);
+
+			var geohash_query = window.app.searchManager.getQuery({
+				aggregations : aggregations,
+				boundingBox : boundingBox
+			});
+
+			window.app.searchManager.search({
+				query : geohash_query,
+				success: function (e) {
+					addGeoHashMarkersToMap(e);
+				}
+			});
+		} 
 	}
 
 	/**
