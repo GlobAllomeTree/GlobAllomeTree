@@ -1,49 +1,199 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block script %}
+	<script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
+	<script type="text/javascript">
+
+	var getAggregationRequest = function () {
+		
+		// We are just interested in aggregations, not actual results returned
+		var request = ejs.Request();
+		request.query(ejs.MatchAllQuery()).size(0);
+
+		var speciesAgg = ejs.TermsAggregation('Scientific_name').field('Scientific_name').size(10000).order('_term', 'asc');
+		var countryAgg = ejs.TermsAggregation('Country').field('Country').size(10000);
+		var typeAgg = ejs.TermsAggregation('Type').field('_type');
+		var biomeFAOAgg = ejs.TermsAggregation('Biome_FAO').field('Biome_FAO').size(400);
+		speciesAgg.aggregation(biomeFAOAgg);
+		speciesAgg.aggregation(typeAgg);
+		speciesAgg.aggregation(countryAgg);
+		request.aggregation(speciesAgg);
+			
+		return request;
+	}
+
+	var search = function(params) {
+		$.ajax({
+			type: "POST",
+			url: window.app.config.search_url + '/globallometree/allometricequation/_search',
+			data: JSON.stringify(params['request'].toJSON()),
+			success: params['success']
+		});
+	}
+
+	$(function(){
+		//var query = $('#query').val();
+		var request = getAggregationRequest();
+		var aggData = null;
+		var taxonomyIndex = {};
+	
+		var render = function() {
+			$speciesList = $('#speciesList');
+			$speciesList.html('');
+
+			_.each(aggData.aggregations.Scientific_name.buckets, function(Scientific_name_bucket, Scientific_name_index) {
+				//var family = familyBucket;
+				var speciesCount = 0;
+				var familySpeciesList = '';
+
+				var Scientific_name = Scientific_name_bucket.key;
+				var nameParts = Scientific_name.split(' ');
+				var family = nameParts[0];
+				var genus = nameParts[1];
+				var species = nameParts[2];
+				if (nameParts.length == 4) {
+					var subSpecies = nameParts[3];
+				} else {
+					var subSpecies = false;
+				}
+
+				if(!taxonomyIndex[family]) {
+					taxonomyIndex[family] = {
+						'genus' : {},
+						'genusCount' : 0,
+						'speciesCount' : 0
+					}
+				}
+
+				if(!taxonomyIndex[family]['genus'][genus]) {
+					taxonomyIndex[family]['genus'][genus] =  {
+						'species' : [],
+						'speciesCount' : 0
+					}
+					taxonomyIndex[family]['genusCount'] ++;
+				}
+				
+				taxonomyIndex[family]['speciesCount'] ++;
+				taxonomyIndex[family]['genus'][genus]['speciesCount'] ++;
+				taxonomyIndex[family]['genus'][genus]['species'].push({
+					'scientificName': Scientific_name,
+					'aggDataIndex' : Scientific_name_index
+				}); 
+			});
+
+			for (family in taxonomyIndex){
+				var familyDetails = taxonomyIndex[family];
+
+				$speciesList.append('<h4 style="cursor:pointer;" class="family" data-family="' + family + '">' + family + ' <small style="font-weight:normal;"> (' + familyDetails.genusCount + ' Genera, ' + familyDetails.speciesCount + ' Species)</small></h4>');
+
+				var speciesHTML = '<div style="display:none" id="family-' + family + '">';
+					 _.each(familyDetails['genus'], function(genus, genusIndex) {
+						_.each(genus['species'], function(species, speciesIndex) {
+					 		speciesHTML += '<h5 class="species" style="color:#888; cursor:pointer; padding-left:25px" data-species="' + species.aggDataIndex + '">' + species.scientificName + '</h5>';
+					 		speciesHTML += '<div id="species-' + species.aggDataIndex + '" style="display:none;padding-left:50px;" ></div>';
+					 	});
+					 });
+				speciesHTML += '</div>';
+				$speciesList.append(speciesHTML);
+			}
+
+			var addSpeciesInfo = function (speciesIndex) {
+				if($('#species-' + speciesIndex).html() != '') return;
+				var speciesBucket = aggData.aggregations.Scientific_name.buckets[speciesIndex];
+				var speciesDetail = '<dl class="dl-horizontal">';
+				var Scientific_name = speciesBucket.key;
+				var nameParts = Scientific_name.split(' ');
+				var family = nameParts[0];
+				var genus = nameParts[1];
+				var species = nameParts[2];
+				if (nameParts.length == 4) {
+					var subSpecies = nameParts[3];
+				} else {
+					var subSpecies = false;
+				}
+
+				var countries = [];
+				_.each(speciesBucket.Country.buckets, function (bucket) {
+					countries.push(bucket.key + ' (' + bucket.doc_count +')');
+				});
+				speciesDetail += '<dt><small>Data from countries</small></dt><dd>' + countries.join(', ') + '</dd>';
+
+				var biomes = [];
+				_.each(speciesBucket.Biome_FAO.buckets, function (bucket) {
+					biomes.push(bucket.key  + ' (' + bucket.doc_count +')');
+				});
+				speciesDetail += '<dt><small>Data in FAO Biomes</small></dt><dd>' + biomes.join(', ') + '</dd>';
+
+
+				var types = [];
+				_.each(speciesBucket.Type.buckets, function (bucket) {
+					var params = '?Family=' +  family + '&Species=' + species + '&Genus=' + genus
+					if (bucket.key == 'allometricequation') {
+						var link = '<a href="/data/allometric-equations/' + params + '">Allometric Equations</a>';
+					}
+					types.push(link  + ' (' + bucket.doc_count +')');
+				});
+				speciesDetail += '<dt><small>Types of data</small></dt><dd>' + types.join(', ') + '</dd>';
+
+				speciesDetail += '</dl>';
+				$('#species-' + speciesIndex).html(speciesDetail);
+			};
+
+			$('.family').click(function() {
+				var family = $(this).data('family');
+				$('#family-' + family).slideToggle();
+			});
+
+			$('.species').click(function() {
+				var speciesIndex = $(this).data('species');
+				addSpeciesInfo(speciesIndex);
+				$('#species-' + speciesIndex).slideToggle();
+			});
+
+		}
+
+		var success = function(data) {
+			aggData = data;
+			render();
+		};
+
+		search({
+			request: request,
+			success: success
+		});
+
+	});
+
+	</script>
+
+{% endblock %}
 
 {% block content %}
  	<div class="row">
         <div class="col-md-12">
-			<h2>Species in the GlobAllomeTree Database</h2>
-			<p>Currently there are about {{species_count}} species in the GlobAllometree database from {{genus_count}} genera and {{family_count}} families.</p>
-			<br>
-			<br>
-			<h4>Search by Family, Genus, or Species name</h4>
+			<h2>Species List</h2>
+			<p>Click on a family in the list below for more information on the species in that family.</p>
+			<!--
+			<h4>Search by Family, Genus, or Species</h4>
 			<form method="GET" action="." class="form-inline" role="form">
 				<div class="form-group">
-					<input type="text" name="q" class="form-control" {% if query%} value="{{query}}" {% endif%} />
+					<input id="query" style="width:400px" type="text" name="q" class="form-control" {% if query%} value="{{query}}" {% endif%} />
 					<button type="submit" class="btn btn-success">Search</button>
 				</div>
 			</form>
 				<br>
-			<br>
-			{% for Species in object_list %}
-			    <h4>{{ Species.Genus.Family.Name }} {{ Species.Genus.Name }} {{ Species.Name }}</h4>
-			    <p>Allometric Equations: {{ Species.allometric_equation_count }}<br> <a href="{{ Species.allometric_equation_link }}">view equations &gt;</a></p>
-			    <br>
-			    <br>
-			{% empty %}
-    			<h4>No records found matching your search.</h4>
-			{% endfor %}
+			<br> -->
+			<div id="speciesList">Loading Families....
+			</div>
+			<!--
+		    <h4>Family Genus Species</h4>
+		    <p>Allometric Equations: <br> <a href="">view equations &gt;</a></p>
+		    <br>
+		    <br>
+			-->
 		</div>
-
-		{% if page_obj.paginator.num_pages > 1 %}
-			<ul class="pager">
-			   {% if page_obj.has_previous %}
-
-			  <li class="previous"><a href="?page={{ page_obj.previous_page_number }}&amp;q={{query}}">&larr; Previous Page</a></li>
-		        {% endif %}
-
-		         <li class="current">
-		            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} pages
-		        </li>
-
-			  {% if page_obj.has_next %}
-
-			  <li class="next"><a href="?page={{ page_obj.next_page_number }}&amp;q={{query}}">Next Page &rarr;</a></li>
-			  {% endif %}
-
-			</ul>
-		{% endif %}
-
 	</div>	
+
+	
 {% endblock %}

@@ -339,7 +339,7 @@ window.app.mapController = function() {
 						ejs.TermsAggregation('LatLon').field('LatLonString')
 					)
 					.aggregation(
-						ejs.TermsAggregation('Species').field('Species')
+						ejs.TermsAggregation('Species').field('Scientific_name')
 					)
 					.aggregation(
 						ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
@@ -348,6 +348,7 @@ window.app.mapController = function() {
 						ejs.TermsAggregation('Output').field('Output')
 					)
 			);
+			
 
 			var geohash_query = window.app.searchManager.getQuery({
 				aggregations : aggregations,
@@ -361,6 +362,7 @@ window.app.mapController = function() {
 				}
 			});
 		} 
+
 	}
 
 	/**
@@ -379,7 +381,7 @@ window.app.mapController = function() {
 					.field('Country_3166_3')
 					.size(1000)
 			.aggregation(
-				ejs.TermsAggregation('Species').field('Genus_Species')
+				ejs.TermsAggregation('Species').field('Scientific_name')
 			)
 			.aggregation(
 				ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
@@ -405,7 +407,7 @@ window.app.mapController = function() {
 	var getBucketsAsList = function(buckets, separator) {
 		var items = [];
 		//Generate text for html hover events
-		for (j=0;j<buckets.length;j++){
+		for (var j=0;j<buckets.length;j++){
 			items.push(buckets[j].key + " (" + buckets[j]['doc_count']  + ")");
 		}
 		return items.join(separator);

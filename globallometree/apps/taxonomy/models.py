@@ -18,8 +18,8 @@ class Family(BaseModel):
 
 class Genus(BaseModel):
     Genus_ID = models.AutoField(primary_key=True)
-    Name  = models.CharField(max_length=80, null=True, blank=True)
-    Family = models.ForeignKey(Family, null=True, blank=True, db_column="Family_ID")
+    Name  = models.CharField(max_length=80)
+    Family = models.ForeignKey(Family, db_column="Family_ID")
 
     class Meta:
         verbose_name_plural = 'Genera'
@@ -32,40 +32,16 @@ class Genus(BaseModel):
 
 class Species(BaseModel):
     Species_ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=80, null=True, blank=True)
-    Genus = models.ForeignKey(Genus, null=True, blank=True, db_column="Genus_ID")
+    Name = models.CharField(max_length=80)
+    Genus = models.ForeignKey(Genus, db_column="Genus_ID")
     
     class Meta:
         verbose_name_plural = 'Species'
         db_table = "Species"
         ordering = ('Name',)
 
-    def allometric_equation_count(self):
-        """How many allometric equations there are for this species """
-
-        equation_count = 0
-        for group in self.speciesgroup_set.all():
-            equation_count += group.allometricequation_set.count()
-        return equation_count
-
-    def allometric_equation_link(self):
-        """ Returns a link to the allometric equations for this species """
-        return u'%s?Species=%s&Genus=%s' % (
-                reverse('equation_search'),
-                self.Name,
-                self.Genus.Name
-                )
-
-    # def country_list(self):
-    #     """ Countries that this species is in """
-    #     countries = []
-    #     for group in self.speciesgroup_set.all():
-    #         for equation in group.allometricequation_set.all():
-    #             countries += equation.Location_group.countries()
-    #     return list(set(countries))
-
     def __unicode__(self):
-        return self.name
+        return self.Name
 
 
 class Subspecies(BaseModel):

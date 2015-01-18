@@ -64,6 +64,7 @@ estype_species_group = {
                         "properties": {
                             "Species": {
                                 "properties": {
+                                    "Scientific_name" : estype_string_not_analyzed,
                                     "Family": estype_string_not_analyzed,
                                     "Family_ID": estype_long,
                                     "Genus": estype_string_not_analyzed,

@@ -68,7 +68,6 @@ window.app.searchManager = function (){
 	}
 
 	var search = function(params) {
-		
 		$.ajax({
 			type: "POST",
 			url: window.app.config.search_url + '/globallometree/allometricequation/_search',

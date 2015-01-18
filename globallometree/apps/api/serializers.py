@@ -290,18 +290,33 @@ class SimpleSpeciesSerializer(serializers.ModelSerializer):
     Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
     Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
 
+    Scientific_name = fields.SerializerMethodField()
+
+    def get_Scientific_name(self, obj):
+        try:
+           return ' '.join([obj.Genus.Family.Name,
+                            obj.Genus.Name,
+                            obj.Name])
+
+        except:
+            import pdb; pdb.set_trace()
+
     class Meta:
         model = Species
-        fields = ('Family_ID',
+        fields = (
+                  'Scientific_name',
                   'Family', 
-                  'Genus_ID',
                   'Genus',
-                  'Species_ID',
                   'Species',
-                  'Species_local_names')
+                  'Family_ID',
+                  'Genus_ID',
+                  'Species_ID',
+                  'Species_local_names'
+                  )
 
 
-class SimpleSubspeciesSerializer(serializers.ModelSerializer):
+class SimpleSubspeciesSerializer(SimpleSpeciesSerializer):
+    
     Family = fields.CharField(source="Species.Genus.Family.Name")
     Genus = fields.CharField(source="Species.Genus.Name")
     Species = fields.CharField(source="Species.Name")
@@ -309,18 +324,39 @@ class SimpleSubspeciesSerializer(serializers.ModelSerializer):
         many = True,
         source = 'Species.Local_names'
         )
+    Species_ID = fields.IntegerField(source="Species.Species_ID")
+    Family_ID = fields.IntegerField(source="Species.Genus.Family.Family_ID")
+    Genus_ID = fields.IntegerField(source="Species.Genus.Genus_ID")
+
     Subspecies = fields.CharField(source="Name")
     Subspecies_local_names = SimpleSubspeciesLocalNameSerializer(
         many=True,
         source='Local_names')
 
-    Species_local_names = SimpleSpeciesLocalNameSerializer(
-        many=True,
-        source='Species.Local_names')
+    def get_Scientific_name(self, obj):
+        try:
+           return ' '.join([obj.Species.Genus.Family.Name,
+                            obj.Species.Genus.Name,
+                            obj.Species.Name,
+                            obj.Name])
+        
+        except:
+            import pdb; pdb.set_trace()
 
     class Meta:
-        model = Species
-        fields = ('Subspecies', 'Genus', 'Family', 'Species', 'Species_local_names', 'Subspecies_local_names')
+        model = Subspecies
+        fields = (
+                  'Family', 
+                  'Genus',
+                  'Species',
+                  'Subspecies',
+                  'Family_ID',
+                  'Genus_ID',
+                  'Species_ID',
+                  'Subspecies_ID',
+                  'Species_local_names',
+                  'Subspecies_local_names',
+                  'Scientific_name')
 
 
 class SpeciesGroupMixin(object):
@@ -421,7 +457,32 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = Location
-        exclude = ('Created', 'Modified')
+        fields = (
+            "Location_ID",
+            "Name",
+            "Commune",
+            "Province",
+            "Region",
+            "Country",
+            "Country_3166_3", 
+            "Biome_FAO",
+            "Biome_HOLDRIDGE", 
+            "Biome_UDVARDY", 
+            "Biome_WWF",
+            "Division_BAILEY",
+            "Forest_type",
+            "Geohash", 
+            "Latitude",
+            "Longitude",
+            "LatLonString",
+            "Biome_FAO_ID",
+            "Biome_UDVARDY_ID",
+            "Biome_HOLDRIDGE_ID", 
+            "Biome_WWF_ID",
+            "Division_BAILEY_ID", 
+            "Country_ID",
+            "Forest_type_ID",
+            )
 
 
 class SimpleLocationGroupSerializer(serializers.ModelSerializer):
