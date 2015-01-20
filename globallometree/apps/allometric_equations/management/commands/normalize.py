@@ -27,7 +27,6 @@ class Command(BaseCommand):
 
 
     def load_csv(self, file_name):
-        #csv file with country lats/lons
         csv_file_path = os.path.join(settings.BASE_PATH, 'globallometree', 'apps', 'allometric_equations', 'resources', file_name)
         headers = []
         data = []
@@ -63,14 +62,16 @@ class Command(BaseCommand):
             limit = 0
 
         n = 0
-        equations_insterted = 0
+        equations_inserted = 0
+        equations_matched = 0
         species_inserted = 0
         original_species_groups_inserted = 0
         new_species_groups_inserted = 0
         locations_inserted = 0
         original_location_groups_inserted = 0
         new_location_groups_inserted = 0
-
+        missed_species = []
+        spl = []
         if limit:
             total = limit
         else:
@@ -87,7 +88,7 @@ class Command(BaseCommand):
             )[0]
 
         for orig_equation in TreeEquation.objects.all().iterator():
-            if limit and n > limit: break;
+            if limit and n == limit: break;
             n = n + 1; 
             
 ######################################## TAXONOMY ################################################
@@ -95,43 +96,123 @@ class Command(BaseCommand):
             print n, 'out of', total, '\r',
             sys.stdout.flush()
             
-            if orig_equation.Family is None:
-                family = None
-            else:
-                family = Family.objects.get_or_create(Name=orig_equation.Family)[0]
-            
-            if orig_equation.Genus is None:
-                genus = None
-            else:
-                genus = Genus.objects.get_or_create(Name=orig_equation.Genus, 
-                                                    Family=family)[0]
 
-            if orig_equation.ID_Species is None:
-                species = None
+            # globallometree=> SELECT DISTINCT "Family", "Genus", "Species" FROM data_treeequation WHERE "Species" IS NULL or "Genus" IS NULL or "Family" IS NULL ; 
+            #   Family   |        Genus        |   Species    
+            # -----------+---------------------+--------------
+            #            |                     | 
+            #            | Tieghemella         | heckelii
+            #            | Heritiera           | utilis
+            #            | Dialium             | aubrevilliei
+            #            | Unknown             | unknown
+            #            | softwoods (general) | 
+            #            | Ceiba               | pentandra
+            #            | Aubrevillea         | kerstingii
+            #            | All                 | All
+            #            | All                 | all
+            #            | Eucalyptus          | 
+            #            | Afzelia             | bella
+            #            | Strombosia          | glaucescens
+            #            | Guarea              | cedrata
+            #            | Drypetes            | chevalieri
+            #            | Cecropia            | peltata
+            #            | Daniellia           | thurifera
+            #            | Nauclea             | diderrichii
+            #            | Mangrove            | spp.
+            #            | Piptadeniastrum     | africanum
+            #            | conifers (general)  | 
+            #            | Nesogordonia        | papaverifera
+            #            | Cola                | nitida
+            #            | Garcinia            | epunctata
+            #  Myrtaceae | Eucalyptus          | 
+            # (25 rows)
+
+            #When we know the Genus, but the family is not specified
+            genus_to_family = {
+                'Tieghemella': 'Sapotaceae',
+                'Heritiera': 'Malvaceae',
+                'Dialium': 'Fabaceae',
+                'Unknown': 'Unknown',
+                'softwoods (general)': 'All',
+                'Ceiba': 'Malvaceae',
+                'Aubrevillea': 'Fabaceae',
+                'All': 'All',
+                'Afzelia': 'Fabaceae',
+                'Strombosia': 'Olacaceae',
+                'Guarea': 'Meliaceae',
+                'Drypetes': 'Putranjivaceae',
+                'Cecropia': 'Urticaceae',
+                'Daniellia': 'Fabaceae', 
+                'Nauclea': 'Rubiaceae',
+                'Mangrove': 'All',
+                'Piptadeniastrum': 'Fabaceae',
+                'conifers (general)': 'All',
+                'Nesogordonia': 'Malvaceae',
+                'Cola': 'Sterculiaceae',
+                'Garcinia': 'Clusiaceae',
+                'Eucalyptus': 'Myrtaceae',
+            }
+
+            if orig_equation.Genus is None:
+                genus_name = 'Unknown'
             else:
+                genus_name = orig_equation.Genus.strip()
+
+            if orig_equation.Family is None:
+                if genus_name in genus_to_family.keys():
+                    family_name = genus_to_family[genus_name]
+            else:
+                family_name = orig_equation.Family.strip()  
+
+            if orig_equation.Species in ['All', None]:
+                if genus_name == 'All':
+                    species_name = 'all'
+                elif genus_name == 'Unknown':
+                    species_name = 'unknown'
+                else:
+                    species_name = 'spp.'
+            else:
+
+                species_name = orig_equation.Species.strip()
+
+            scientific_name = family_name + ' ' + genus_name + ' ' + species_name
+            if scientific_name not in spl:
+                spl.append(scientific_name) 
+
+            if not len(scientific_name.split(' ')) == 3:
+                missed_species.append(scientific_name)
+            else:
+
+        # spl.sort()
+        # for name in spl:
+        #     print name
+
+                family = Family.objects.get_or_create(Name=family_name)[0]
+                genus = Genus.objects.get_or_create(Name=genus_name, Family=family)[0]
                 species, species_created = Species.objects.get_or_create(
-                    Name=orig_equation.Species, 
-                    Genus=genus,
-                )
+                             Name=species_name, 
+                             Genus=genus,
+                        )
                 if species_created:
                     species_inserted = species_inserted + 1
 
-            if species:
-                if orig_equation.Group_Species and orig_equation.ID_Group:
-                    species_group, species_group_created = SpeciesGroup.objects.get_or_create(
-                        Name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
-                    )
-                    if species_group_created:
-                        original_species_groups_inserted = original_species_groups_inserted + 1
-                else:
-                    species_group, species_group_created = SpeciesGroup.objects.get_or_create(
-                        Name="Auto Created Group for equation ID %s" % orig_equation.IDequation
-                    )
-                    if species_group_created:
-                        new_species_groups_inserted = new_species_groups_inserted + 1
-                
-                #It appears some species may contain 'None' species, which don't get explicitly added
-                species_group.Species.add(species)
+
+                if species:
+                    if orig_equation.Group_Species and orig_equation.ID_Group:
+                        species_group, species_group_created = SpeciesGroup.objects.get_or_create(
+                            Name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
+                        )
+                        if species_group_created:
+                            original_species_groups_inserted = original_species_groups_inserted + 1
+                    else:
+                        species_group, species_group_created = SpeciesGroup.objects.get_or_create(
+                            Name="Auto Created Group for equation ID %s" % orig_equation.IDequation
+                        )
+                        if species_group_created:
+                            new_species_groups_inserted = new_species_groups_inserted + 1
+                    
+                    #It appears some species may contain 'None' species, which don't get explicitly added
+                    species_group.Species.add(species)
 
 ######################################## LOCATIONS ################################################
 
@@ -304,72 +385,82 @@ class Command(BaseCommand):
             else:
                 population = Population.objects.get_or_create(Name=orig_equation.Population)[0]
 
-            new_equation = AllometricEquation(
-                Allometric_equation_ID=orig_equation.ID,
-                Allometric_equation_ID_original=orig_equation.ID,
-                Dataset = dataset,
-                X=orig_equation.X,
-                Unit_X=orig_equation.Unit_X, 
-                Z=orig_equation.Z,
-                Unit_Z=orig_equation.Unit_Z, 
-                W=orig_equation.W, 
-                Unit_W=orig_equation.Unit_W,
-                U=orig_equation.U,
-                Unit_U=orig_equation.Unit_U,
-                V=orig_equation.V,
-                Unit_V=orig_equation.Unit_V,
-                Min_X=orig_equation.Min_X,
-                Max_X=orig_equation.Max_X, 
-                Min_Z=orig_equation.Min_Z, 
-                Max_Z=orig_equation.Max_Z,
-                Output=orig_equation.Output,
-                Output_TR=orig_equation.Output_TR,
-                Unit_Y=orig_equation.Unit_Y,
-                Age=orig_equation.Age,
-                Veg_Component=orig_equation.Veg_Component,
-                B=orig_equation.B,
-                Bd=orig_equation.Bd,
-                Bg=orig_equation.Bg,
-                Bt=orig_equation.Bt,
-                L=orig_equation.L,
-                Rb=orig_equation.Rb,
-                Rf=orig_equation.Rf,
-                Rm=orig_equation.Rm,
-                S=orig_equation.S,
-                T=orig_equation.T,
-                F=orig_equation.F,
-                Equation=orig_equation.Equation,
-                Substitute_equation=orig_equation.Substitute_equation,
-                Top_dob=orig_equation.Top_dob,
-                Stump_height=orig_equation.Stump_height,
-                R2=orig_equation.R2,
-                R2_Adjusted=orig_equation.R2_Adjusted,
-                RMSE=orig_equation.RMSE,
-                SEE=orig_equation.SEE,
-                Corrected_for_bias=orig_equation.Corrected_for_bias,
-                Bias_correction=orig_equation.Bias_correction,
-                Ratio_equation=orig_equation.Ratio_equation,
-                Segmented_equation=orig_equation.Segmented_equation,
-                Sample_size=orig_equation.Sample_size,
-                Contributor=Contributor,
-                Reference=reference,
-                Species_group=species_group,
-                Location_group=location_group,
-                Population=population
-            )
-            new_equation.save()
-            equations_insterted = equations_insterted + 1
+            try:
+                matching_equation = AllometricEquation.objects.get(
+                    Equation=orig_equation.Equation,
+                    Reference=reference,
+                    Dataset=dataset,
+                    Species_group=species_group,
+                    Location_group=location_group
+                    )
+                equations_matched = equations_matched + 1
+            except AllometricEquation.DoesNotExist:
+                new_equation = AllometricEquation(
+                    Allometric_equation_ID=orig_equation.ID,
+                    Allometric_equation_ID_original=orig_equation.IDequation,
+                    Dataset = dataset,
+                    X=orig_equation.X,
+                    Unit_X=orig_equation.Unit_X, 
+                    Z=orig_equation.Z,
+                    Unit_Z=orig_equation.Unit_Z, 
+                    W=orig_equation.W, 
+                    Unit_W=orig_equation.Unit_W,
+                    U=orig_equation.U,
+                    Unit_U=orig_equation.Unit_U,
+                    V=orig_equation.V,
+                    Unit_V=orig_equation.Unit_V,
+                    Min_X=orig_equation.Min_X,
+                    Max_X=orig_equation.Max_X, 
+                    Min_Z=orig_equation.Min_Z, 
+                    Max_Z=orig_equation.Max_Z,
+                    Output=orig_equation.Output,
+                    Output_TR=orig_equation.Output_TR,
+                    Unit_Y=orig_equation.Unit_Y,
+                    Age=orig_equation.Age,
+                    Veg_Component=orig_equation.Veg_Component,
+                    B=orig_equation.B,
+                    Bd=orig_equation.Bd,
+                    Bg=orig_equation.Bg,
+                    Bt=orig_equation.Bt,
+                    L=orig_equation.L,
+                    Rb=orig_equation.Rb,
+                    Rf=orig_equation.Rf,
+                    Rm=orig_equation.Rm,
+                    S=orig_equation.S,
+                    T=orig_equation.T,
+                    F=orig_equation.F,
+                    Equation=orig_equation.Equation,
+                    Substitute_equation=orig_equation.Substitute_equation,
+                    Top_dob=orig_equation.Top_dob,
+                    Stump_height=orig_equation.Stump_height,
+                    R2=orig_equation.R2,
+                    R2_Adjusted=orig_equation.R2_Adjusted,
+                    RMSE=orig_equation.RMSE,
+                    SEE=orig_equation.SEE,
+                    Corrected_for_bias=orig_equation.Corrected_for_bias,
+                    Bias_correction=orig_equation.Bias_correction,
+                    Ratio_equation=orig_equation.Ratio_equation,
+                    Segmented_equation=orig_equation.Segmented_equation,
+                    Sample_size=orig_equation.Sample_size,
+                    Contributor=Contributor,
+                    Reference=reference,
+                    Species_group=species_group,
+                    Location_group=location_group,
+                    Population=population
+                )
+                new_equation.save()
+                equations_inserted = equations_inserted + 1
 
         print 
         self.stdout.write(
             'Inserted: {0} AllometricEquation, {1} Species, '
             '{2} original SpeciesGroup, {3} new SpeciesGroup, {4} Locations, '
-            '{5} original LocationGroup, {6} new LocationGroup\n' 
+            '{5} original LocationGroup, {6} new LocationGroup, {7} matched equations \n' 
             .format(
-                equations_insterted, species_inserted,
+                equations_inserted, species_inserted,
                 original_species_groups_inserted, new_species_groups_inserted,
                 locations_inserted, original_location_groups_inserted,
-                new_location_groups_inserted
+                new_location_groups_inserted, equations_matched
             )
         )
 
@@ -390,6 +481,11 @@ class Command(BaseCommand):
 
         for key in missed_fao.keys():
             print 'FAO: ' + key
+
+        for sp in missed_species:
+            print 'SPECIES: ' + sp
+
+
 
 
 

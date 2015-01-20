@@ -90,7 +90,7 @@
 				var speciesHTML = '<div style="display:none" id="family-' + family + '">';
 					 _.each(familyDetails['genus'], function(genus, genusIndex) {
 						_.each(genus['species'], function(species, speciesIndex) {
-					 		speciesHTML += '<h5 class="species" style="color:#888; cursor:pointer; padding-left:25px" data-species="' + species.aggDataIndex + '">' + species.scientificName + '</h5>';
+					 		speciesHTML += '<h5 class="species" style="color:#555; cursor:pointer; padding-left:25px" data-species="' + species.aggDataIndex + '">' + species.scientificName + '</h5>';
 					 		speciesHTML += '<div id="species-' + species.aggDataIndex + '" style="display:none;padding-left:50px;" ></div>';
 					 	});
 					 });
@@ -137,7 +137,90 @@
 				speciesDetail += '<dt><small>Types of data</small></dt><dd>' + types.join(', ') + '</dd>';
 
 				speciesDetail += '</dl>';
+
+				speciesDetail += '<div style="color:#777;padding-left:30px;" id="species-' + speciesIndex + '-wiki">Loading from wikipedia...</div>'
 				$('#species-' + speciesIndex).html(speciesDetail);
+				var $wiki = $('#species-' + speciesIndex + '-wiki');
+
+				$.ajax({
+			        type: "GET",
+			        url: "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + genus +" " + species + "&callback=?",
+			        contentType: "application/json; charset=utf-8",
+			        async: false,
+			        dataType: "json",
+			        success: function (data, textStatus, jqXHR) {
+			 			
+			 			try {
+			 				var errorCode = data.error.code;
+			 			} catch (e) {
+			 				var errorCode = false;
+			 			}
+
+			 			if (!errorCode) {
+			 				var markup = data.parse.text["*"];
+			 			} else {
+			 				$wiki.html('No wikipedia information available.');
+			 				return;
+			 			}
+
+			 			//Verify that this is the right family
+			 			if (markup.toLowerCase().indexOf(family.toLowerCase()) == -1){
+			 				$wiki.html('No wikipedia information available.');
+			 				return;
+			 			}
+
+			            var blurb = $('<div></div>').html(markup);
+			 
+			            // remove links as they will not work
+			            blurb.find('a').each(function() { $(this).replaceWith($(this).html()); });
+			 
+			            // remove any references
+			            blurb.find('sup').remove();
+			 
+			            // remove cite error
+			            blurb.find('.mw-ext-cite-error').remove();
+			            $wiki.html('');
+			            var paragraphs = $(blurb).find('p');
+			            var imgs = $(blurb).find('img');
+			            var image = false;
+			            _.each(imgs, function(img) {
+			            	if(!image && (img.src.indexOf('.jpg') != -1) && (img.src.indexOf('Status') == -1)) {
+			            		image = img;
+			            	} 
+			            });
+			            var pFound = false;
+			            if (image) {
+
+			            	var $div = $('<div style="float:left;padding:0px 10px 10px 0px;"></div>');
+			            	$div.append(image);
+			            	$wiki.append($div);
+			            	imgFound = true;
+			            }
+			            
+			            _.each(paragraphs, function(paragraph) {
+			            	var contents = $(paragraph).html().toLowerCase();
+			            	if ((contents.indexOf('<b>' + genus.toLowerCase()) != -1 ) && (contents.indexOf('may refer to:') == -1)){
+
+								var link = 'https://wikipedia.org/wiki/' + genus + '_' + species;
+			            		var linkText = ' <a target="_blank" href="' + link + '">wikipedia&nbsp;&gt;</a>';
+			            		paragraph.innerHTML += linkText;
+			            		$wiki.append(paragraph);
+			            		pFound = true;
+			    			}
+			            })
+			            $wiki.append('<div style="clear:both"></div>');
+
+			            if(!pFound) {
+			            	$wiki.html('No wikipedia information available.');
+			            }
+			            
+			        },
+			        error: function (errorMessage) {
+			        	$wiki.html('No wikipedia information available.');
+			        }
+			    });
+
+
 			};
 
 			$('.family').click(function() {

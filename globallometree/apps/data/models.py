@@ -37,7 +37,6 @@ class DataSubmission(models.Model):
 
 class TreeEquation(models.Model):
     
-  
     ID                              = models.IntegerField(primary_key=True)
     data_submission                 = models.ForeignKey(DataSubmission, blank=True, null=True)
     IDequation                      = models.IntegerField(null=True, blank=True)
