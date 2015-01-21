@@ -24,3 +24,21 @@ class SimpleSerializerMixin(object):
             self.paginate_by = 50
 
         return request
+
+
+class NameQueryMixin(object):
+    """
+        mixin that allows a simple query by name on the queryset
+    """
+
+    def get_queryset(self):
+        """
+        This view should return a list of
+            if q, all tags that contain q
+            else, all tags
+        """
+        queryset = self.queryset
+        query = self.request.QUERY_PARAMS.get('q', None)
+        if query is not None:
+            queryset = queryset.filter(Name__icontains=query)
+        return queryset

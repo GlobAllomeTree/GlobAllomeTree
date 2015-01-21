@@ -13,6 +13,7 @@
     <script src="{% static 'allometric_equations/js/search.js' %}"></script>
     <script src="{% static 'allometric_equations/js/list.js' %}"></script>
     <script src="{% static 'allometric_equations/js/map.js' %}"></script>
+    <script src="{% static 'js/typeahead.js' %}"></script>
 
     {% if form_is_valid %}
         <script type="text/javascript"> 
@@ -36,6 +37,34 @@
                     var query = app.searchManager.getQuery().from(0).size(1000);
                     query = JSON.stringify(query.toJSON());
                     $('#export-query').val(query);
+                });
+
+
+                var speciesLookup = new Bloodhound({
+                  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                  queryTokenizer: Bloodhound.tokenizers.whitespace,
+                  prefetch: {
+                    url: '/api/v1/species/?format=json',
+                    filter: function (data) {
+                        //return data.results
+                    }
+                  },
+                  remote: {
+                    url: '/api/v1/species/?format=json&q=%QUERY',
+                    filter: function (data) {
+                        //debugger;
+                        return data.results
+
+                    }
+                  }
+                });
+
+                speciesLookup.initialize();
+
+                $('#id_Species').addClass('typeahead').typeahead(null, {
+                  name: 'species',
+                  displayKey: 'Species',
+                  source: speciesLookup.ttAdapter()
                 });
 
             });
