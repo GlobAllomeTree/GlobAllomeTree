@@ -266,16 +266,18 @@ class SimpleSubspeciesLocalNameSerializer(serializers.ModelSerializer):
 
 
 class SimpleFamilySerializer(serializers.ModelSerializer):
+    Family = fields.CharField(source="Name")
     class Meta:
         model = Family
-        fields = ('Name',)
+        fields = ('Family',)
 
 
 class SimpleGenusSerializer(serializers.ModelSerializer):
+    Genus = fields.CharField(source="Name")
     Family = fields.CharField(source="Family.Name")
     class Meta:
         model = Genus
-        fields = ('Name', 'Family')
+        fields = ('Genus', 'Family')
 
 
 class SimpleSpeciesSerializer(serializers.ModelSerializer):

@@ -15,7 +15,6 @@ class Family(BaseModel):
         return self.Name
 
 
-
 class Genus(BaseModel):
     Genus_ID = models.AutoField(primary_key=True)
     Name  = models.CharField(max_length=80)
@@ -136,30 +135,15 @@ class SpeciesGroup(BaseModel):
         null=True,
     )
 
+    Genera = models.ManyToManyField(
+        Genus, 
+        verbose_name="List of Genus", 
+        blank=True, 
+        null=True,
+    )
+
     class Meta:
         db_table = "Species_group"
-
-    def species_set(self):
-        species_list = []
-        for species in self.Species.all():
-            #Allow for empty genus or family
-            names = []
-            
-            try:
-                names.append(species.Genus.Family.Name)
-            except:
-                pass
-
-            try:
-                names.append(species.Genus.Name)
-            except:
-                pass
-
-            names.append(species.Name)
-
-            species_list.append(' '.join(Names))
-
-        return list(set(species_list)) 
 
     def __unicode__(self):
         return self.Name

@@ -4,6 +4,7 @@
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
     <link rel="stylesheet" href="{% static 'allometric_equations/css/search.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/typeahead.css' %}" />
 
     <script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
@@ -39,34 +40,41 @@
                     $('#export-query').val(query);
                 });
 
-
-                var speciesLookup = new Bloodhound({
-                  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                  queryTokenizer: Bloodhound.tokenizers.whitespace,
-                  prefetch: {
-                    url: '/api/v1/species/?format=json',
-                    filter: function (data) {
-                        //return data.results
+                var typeaheads = [
+                    {
+                        id : '#id_Species',
+                        url : '/api/v1/species/?format=json&limit=10&unique_name=1&q=%QUERY',
+                        displayKey : 'Species'
+                    },
+                    {
+                        id : '#id_Genus',
+                        url : '/api/v1/genera/?format=json&limit=10&unique_name=1&q=%QUERY',
+                        displayKey : 'Genus'
                     }
-                  },
-                  remote: {
-                    url: '/api/v1/species/?format=json&q=%QUERY',
-                    filter: function (data) {
-                        //debugger;
-                        return data.results
+                ];
 
-                    }
-                  }
+                _.each(typeaheads, function(typeahead) {
+                     var source = new Bloodhound({
+                      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                      queryTokenizer: Bloodhound.tokenizers.whitespace,
+                      remote: {
+                        url: typeahead.url,
+                        filter: function (data) {
+                            return data.results
+                        }
+                      }
+                    });
+
+                    source.initialize();
+
+                    $(typeahead.id).addClass('typeahead').typeahead(null, {
+                      name: typeahead.displayKey,
+                      hint: true,
+                      displayKey: typeahead.displayKey,
+                      highlight: true,
+                      source: source.ttAdapter()
+                    });
                 });
-
-                speciesLookup.initialize();
-
-                $('#id_Species').addClass('typeahead').typeahead(null, {
-                  name: 'species',
-                  displayKey: 'Species',
-                  source: speciesLookup.ttAdapter()
-                });
-
             });
         </script>
     {% endif %}

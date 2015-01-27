@@ -225,7 +225,10 @@ REST_FRAMEWORK = {
         'globallometree.apps.api.renderers.FullBrowsableAPIRenderer',
         'globallometree.apps.api.renderers.FullJSONRenderer',
         'globallometree.apps.api.renderers.FullXMLRenderer',
-    )
+    ),
+    'PAGINATE_BY_PARAM' : 'limit',
+    'PAGINATE_BY': 50,
+    'MAX_PAGINATE_BY': 200
 }
 
  
