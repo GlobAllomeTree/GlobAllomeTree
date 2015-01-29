@@ -7,7 +7,7 @@ from django.db import transaction
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from globallometree.apps.data.models import TreeEquation, Country as OldCountry
-from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
+from globallometree.apps.taxonomy.models import Subspecies, Species, Family, Genus, SpeciesGroup
 from globallometree.apps.allometric_equations.models import AllometricEquation, Population, TreeType
 from globallometree.apps.locations.models import (BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge,
                                                   Location, Country, Continent, LocationGroup, ForestType)
@@ -65,6 +65,7 @@ class Command(BaseCommand):
         equations_inserted = 0
         equations_matched = 0
         species_inserted = 0
+        subspecies_inserted = 0
         original_species_groups_inserted = 0
         new_species_groups_inserted = 0
         locations_inserted = 0
@@ -153,6 +154,24 @@ class Command(BaseCommand):
                 'Eucalyptus': 'Myrtaceae',
             }
 
+            #These are species that we really don't want in the database
+            ignore_species = [
+                'sp',
+                'spp',
+                'sp.',
+                'spp.',
+                'sp. 1',
+                'sp. 2',
+                'sp. 3',
+                'sp. 4',
+                'sp. 5',
+                'sp. 6',
+                'sp. 7',
+                'sp. 8',
+                'sp. 9',
+                'sp. 10',
+            ]
+
             if orig_equation.Genus is None:
                 genus_name = 'Unknown'
             else:
@@ -169,8 +188,6 @@ class Command(BaseCommand):
                     species_name = 'all'
                 elif genus_name == 'Unknown':
                     species_name = 'unknown'
-                else:
-                    species_name = 'spp.'
             else:
 
                 species_name = orig_equation.Species.strip()
@@ -179,40 +196,74 @@ class Command(BaseCommand):
             if scientific_name not in spl:
                 spl.append(scientific_name) 
 
-            if not len(scientific_name.split(' ')) == 3:
-                missed_species.append(scientific_name)
-            else:
-
-        # spl.sort()
-        # for name in spl:
-        #     print name
-
+            
+            if family_name:
                 family = Family.objects.get_or_create(Name=family_name)[0]
+            else:
+                family = None
+
+            if family and genus_name:
                 genus = Genus.objects.get_or_create(Name=genus_name, Family=family)[0]
+            else:
+                genus = None
+
+            species = subspecies = None
+
+            if genus and species_name and species_name not in ignore_species:
+
+                if species_name.find('var.') != -1:
+                    species_name, subspecies_name = species_name.split('var.')
+                    species_name = species_name.strip()
+                    subspecies_name = subspecies_name.strip()
+                else:
+                    subspecies_name = None
+
                 species, species_created = Species.objects.get_or_create(
                              Name=species_name, 
                              Genus=genus,
                         )
+
                 if species_created:
                     species_inserted = species_inserted + 1
 
+                if subspecies_name:
+                    subspecies, subspecies_created = Subspecies.objects.get_or_create(
+                            Name=subspecies_name,
+                            Species=species
+                        )
 
-                if species:
-                    if orig_equation.Group_Species and orig_equation.ID_Group:
-                        species_group, species_group_created = SpeciesGroup.objects.get_or_create(
-                            Name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
-                        )
-                        if species_group_created:
-                            original_species_groups_inserted = original_species_groups_inserted + 1
-                    else:
-                        species_group, species_group_created = SpeciesGroup.objects.get_or_create(
-                            Name="Auto Created Group for equation ID %s" % orig_equation.IDequation
-                        )
-                        if species_group_created:
-                            new_species_groups_inserted = new_species_groups_inserted + 1
-                    
-                    #It appears some species may contain 'None' species, which don't get explicitly added
-                    species_group.Species.add(species)
+                    if subspecies_created:
+                        subspecies_inserted = subspecies_inserted + 1
+
+            else:
+                species = None
+            
+            if family:
+                # We need at least a family in order to create a species group
+                if orig_equation.Group_Species and orig_equation.ID_Group:
+                    species_group, species_group_created = SpeciesGroup.objects.get_or_create(
+                        Name="Auto Created Group for original ID_Group %s" % orig_equation.ID_Group
+                    )
+                    if species_group_created:
+                        original_species_groups_inserted = original_species_groups_inserted + 1
+                else:
+                    species_group, species_group_created = SpeciesGroup.objects.get_or_create(
+                        Name="Auto Created Group for equation ID %s" % orig_equation.IDequation
+                    )
+                    if species_group_created:
+                        new_species_groups_inserted = new_species_groups_inserted + 1
+
+            # only add the most specific relation possible
+            if subspecies:
+                species_group.Subspecies.add(subspecies)
+            elif species:
+                #It appears some species may contain 'None' species, which don't get explicitly added
+                species_group.Species.add(species)
+            elif genus:
+                species_group.Genera.add(genus)
+            elif family:
+                species_group.Families.add(family)
+
 
 ######################################## LOCATIONS ################################################
 
@@ -463,6 +514,8 @@ class Command(BaseCommand):
                 new_location_groups_inserted, equations_matched
             )
         )
+
+        print "Subspecies created %s" % subspecies_inserted 
 
         print "-------------- Errors ---------------"
         print 

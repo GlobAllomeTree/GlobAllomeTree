@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from globallometree.apps.taxonomy.models import Species, Family, Genus, SpeciesGroup
+from globallometree.apps.taxonomy.models import Subspecies, Species, Family, Genus, SpeciesGroup
 from globallometree.apps.allometric_equations.models import AllometricEquation, Population, TreeType
 from globallometree.apps.locations.models import BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge
 from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup, ForestType
@@ -17,6 +17,7 @@ class Command(BaseCommand):
             return
 
         AllometricEquation.objects.all().delete()
+        Subspecies.objects.all().delete()
         Species.objects.all().delete()
         Genus.objects.all().delete()
         Family.objects.all().delete()

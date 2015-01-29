@@ -267,17 +267,30 @@ class SimpleSubspeciesLocalNameSerializer(serializers.ModelSerializer):
 
 class SimpleFamilySerializer(serializers.ModelSerializer):
     Family = fields.CharField(source="Name")
+    Scientific_name = fields.CharField(source="Name")
+    
     class Meta:
         model = Family
-        fields = ('Family',)
+        fields = ('Family', 'Family_ID', 'Scientific_name')
 
 
 class SimpleGenusSerializer(serializers.ModelSerializer):
     Genus = fields.CharField(source="Name")
     Family = fields.CharField(source="Family.Name")
+
+    Genus_ID = fields.IntegerField()
+    Family_ID = fields.IntegerField(source="Family.Family_ID")
+    
+
+    Scientific_name = fields.SerializerMethodField()
+
     class Meta:
         model = Genus
-        fields = ('Genus', 'Family')
+        fields = ('Scientific_name', 'Genus', 'Family',  'Family_ID', 'Genus_ID')
+
+    def get_Scientific_name(self, obj):
+       return ' '.join([obj.Family.Name,
+                        obj.Name])
 
 
 class SimpleSpeciesSerializer(serializers.ModelSerializer):
@@ -289,8 +302,9 @@ class SimpleSpeciesSerializer(serializers.ModelSerializer):
         many = True,
         source = 'Local_names'
         )
-    Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
     Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
+    Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
+    
 
     Scientific_name = fields.SerializerMethodField()
 
@@ -335,6 +349,7 @@ class SimpleSubspeciesSerializer(SimpleSpeciesSerializer):
            return ' '.join([obj.Species.Genus.Family.Name,
                             obj.Species.Genus.Name,
                             obj.Species.Name,
+                            'var.',
                             obj.Name])
         
         except:
@@ -370,6 +385,13 @@ class SpeciesGroupMixin(object):
 
         for subspecies in group.Subspecies.all():
             data.append(SimpleSubspeciesSerializer(instance=subspecies, many=False).data)
+
+        for genus in group.Genera.all():
+            data.append(SimpleGenusSerializer(instance=genus, many=False).data)
+
+        for family in group.Families.all():
+            data.append(SimpleGenusSerializer(instance=family, many=False).data)
+
         return data
 
 

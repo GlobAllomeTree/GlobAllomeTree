@@ -2,7 +2,14 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from globallometree.apps.common.models import BaseModel
 
-class Family(BaseModel):
+class TaxonomyModel(BaseModel):
+    TPL_Status = models.CharField(max_length=80, blank=True, null=True)
+    TPL_Confidence_level = models.CharField(max_length=10, blank=True, null=True)
+    TPL_ID = models.CharField(max_length=40, blank=True, null=True)
+    class Meta:
+        abstract = True
+
+class Family(TaxonomyModel):
     Family_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=80, null=True, blank=True)
 
@@ -15,7 +22,7 @@ class Family(BaseModel):
         return self.Name
 
 
-class Genus(BaseModel):
+class Genus(TaxonomyModel):
     Genus_ID = models.AutoField(primary_key=True)
     Name  = models.CharField(max_length=80)
     Family = models.ForeignKey(Family, db_column="Family_ID")
@@ -29,7 +36,7 @@ class Genus(BaseModel):
         return self.Name
 
 
-class Species(BaseModel):
+class Species(TaxonomyModel):
     Species_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=80)
     Genus = models.ForeignKey(Genus, db_column="Genus_ID")
@@ -43,7 +50,7 @@ class Species(BaseModel):
         return self.Name
 
 
-class Subspecies(BaseModel):
+class Subspecies(TaxonomyModel):
     Subspecies_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=80)
     Species = models.ForeignKey(Species, db_column="Species_ID")
@@ -118,7 +125,10 @@ class SpeciesGroup(BaseModel):
     Species_group_ID = models.AutoField(primary_key=True)
 
     Name = models.CharField(
-        max_length=255, null=True, blank=True, verbose_name="Group Name"
+        max_length=255, 
+        null=True, 
+        blank=True, 
+        verbose_name="Group Name"
     )
 
     Subspecies = models.ManyToManyField(
@@ -142,8 +152,24 @@ class SpeciesGroup(BaseModel):
         null=True,
     )
 
+    Families = models.ManyToManyField(
+        Family, 
+        verbose_name="List of Families", 
+        blank=True, 
+        null=True,
+    )
+
     class Meta:
         db_table = "Species_group"
+
+    def save(self, *args, **kwargs):
+
+        super(SpeciesGroup, self).save(*args, **kwargs)
+
+        if not self.Name:
+            self.Name = 'Species Group %s' % self.pk
+            self.save()
+
 
     def __unicode__(self):
         return self.Name

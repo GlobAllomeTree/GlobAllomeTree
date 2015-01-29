@@ -182,14 +182,17 @@ class LocationGroup(BaseModel):
         null=True
         )
 
+    def save(self, *args, **kwargs):
+
+        super(LocationGroup, self).save(*args, **kwargs)
+
+        if not self.Name:
+            self.Name = 'Location Group %s' % self.pk
+            self.save()
+
+
     class Meta:
         db_table = 'Location_group'
-
-
-    def lat_lon_string(self):
-        return ', '.join([u'[%s, %s]'%(co['lat'], co['lon']) for co in self.get_precise_coordinates()])
-
-
 
     def __unicode__(self):
         return self.Name
