@@ -21,6 +21,9 @@ class Family(TaxonomyModel):
     def __unicode__(self):
         return self.Name
 
+    def get_scientific_name(self):
+       return self.Name
+
 
 class Genus(TaxonomyModel):
     Genus_ID = models.AutoField(primary_key=True)
@@ -35,6 +38,10 @@ class Genus(TaxonomyModel):
     def __unicode__(self):
         return self.Name
 
+    def get_scientific_name(self):
+       return ' '.join([self.Family.Name,
+                        self.Name])
+       
 
 class Species(TaxonomyModel):
     Species_ID = models.AutoField(primary_key=True)
@@ -48,6 +55,11 @@ class Species(TaxonomyModel):
 
     def __unicode__(self):
         return self.Name
+
+    def get_scientific_name(self):
+       return ' '.join([self.Genus.Family.Name,
+                        self.Genus.Name,
+                        self.Name])
 
 
 class Subspecies(TaxonomyModel):
@@ -63,6 +75,13 @@ class Subspecies(TaxonomyModel):
     def __unicode__(self):
         return self.Name
 
+    def get_scientific_name(self):
+
+       return ' '.join([self.Species.Genus.Family.Name,
+                        self.Species.Genus.Name,
+                        self.Species.Name,
+                        'var.',
+                        self.Name])
 
 
 class SpeciesLocalName(BaseModel):

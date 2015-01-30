@@ -267,8 +267,11 @@ class SimpleSubspeciesLocalNameSerializer(serializers.ModelSerializer):
 
 class SimpleFamilySerializer(serializers.ModelSerializer):
     Family = fields.CharField(source="Name")
-    Scientific_name = fields.CharField(source="Name")
-    
+    Scientific_name = fields.SerializerMethodField()
+
+    def get_Scientific_name(self, obj):
+        return obj.get_scientific_name()
+
     class Meta:
         model = Family
         fields = ('Family', 'Family_ID', 'Scientific_name')
@@ -281,16 +284,14 @@ class SimpleGenusSerializer(serializers.ModelSerializer):
     Genus_ID = fields.IntegerField()
     Family_ID = fields.IntegerField(source="Family.Family_ID")
     
-
     Scientific_name = fields.SerializerMethodField()
+
+    def get_Scientific_name(self, obj):
+        return obj.get_scientific_name()
 
     class Meta:
         model = Genus
         fields = ('Scientific_name', 'Genus', 'Family',  'Family_ID', 'Genus_ID')
-
-    def get_Scientific_name(self, obj):
-       return ' '.join([obj.Family.Name,
-                        obj.Name])
 
 
 class SimpleSpeciesSerializer(serializers.ModelSerializer):
@@ -305,13 +306,10 @@ class SimpleSpeciesSerializer(serializers.ModelSerializer):
     Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
     Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
     
-
     Scientific_name = fields.SerializerMethodField()
 
     def get_Scientific_name(self, obj):
-       return ' '.join([obj.Genus.Family.Name,
-                        obj.Genus.Name,
-                        obj.Name])
+        return obj.get_scientific_name()
 
     class Meta:
         model = Species
@@ -326,7 +324,7 @@ class SimpleSpeciesSerializer(serializers.ModelSerializer):
                   'Species_local_names'
                   )
 
-class SimpleSubspeciesSerializer(SimpleSpeciesSerializer):
+class SimpleSubspeciesSerializer(serializers.ModelSerializer):
     
     Family = fields.CharField(source="Species.Genus.Family.Name")
     Genus = fields.CharField(source="Species.Genus.Name")
@@ -344,16 +342,11 @@ class SimpleSubspeciesSerializer(SimpleSpeciesSerializer):
         many=True,
         source='Local_names')
 
+    Scientific_name = fields.SerializerMethodField()
+
     def get_Scientific_name(self, obj):
-        try:
-           return ' '.join([obj.Species.Genus.Family.Name,
-                            obj.Species.Genus.Name,
-                            obj.Species.Name,
-                            'var.',
-                            obj.Name])
-        
-        except:
-            import pdb; pdb.set_trace()
+        return obj.get_scientific_name()
+
 
     class Meta:
         model = Subspecies
