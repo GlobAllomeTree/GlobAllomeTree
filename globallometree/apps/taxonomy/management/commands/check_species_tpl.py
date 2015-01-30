@@ -1,3 +1,4 @@
+import time 
 import requests
 import urllib
 import unicodecsv as csv
@@ -28,7 +29,9 @@ class Command(BaseCommand):
             if not sp.TPL_ID:
                 print sp.Genus.Name, sp.Name, None 
 
-            sleep(2)
+            # Lets not overload the plant list site
+            # Add in a 2 second delay between requests
+            time.sleep(2)
 
     def search(self, query):
         params = urllib.urlencode({ 'q' : query, 'csv' : 1})
