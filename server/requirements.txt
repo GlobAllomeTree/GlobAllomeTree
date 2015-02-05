@@ -13,6 +13,7 @@ cmsplugin-filer==0.9.5
 djangocms-file==0.0.1
 djangocms-text-ckeditor==2.1.4
 djangocms-link==1.3.4
+Pillow==2.5.3
 
 ######################## Django Extras 
 django-crispy-forms==1.4.0
