@@ -33,8 +33,8 @@ celery==3.1.10
 redis==2.9.1
 
 ######################## Debugging Requirements #############
-ipdb==0.8 #Iron Python shell use: import ipdb; ipdb.set_trace() 
-pygraphviz==1.2 #for shell plus graph models
+# ipdb==0.8 #Iron Python shell use: import ipdb; ipdb.set_trace() 
+# pygraphviz==1.2 #for shell plus graph models
 
 
 ####################### Testing
