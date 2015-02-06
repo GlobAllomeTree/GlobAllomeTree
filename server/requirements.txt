@@ -27,7 +27,7 @@ xhtml2pdf==0.0.6
 reportlab==2.7
 
 ######################## ElasticUtils based search
--e git+git://github.com/tomgruner/elasticutils.git@patch-1#egg=elasticutils
+-e git+https://github.com/tomgruner/elasticutils.git@patch-1#egg=elasticutils
 elasticsearch==1.0.0
 celery==3.1.10
 redis==2.9.1
