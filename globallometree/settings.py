@@ -43,7 +43,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(BASE_PATH, 'media')
+MEDIA_ROOT = '/opt/globallometree_data/web/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -154,7 +154,7 @@ FORCE_SCRIPT_NAME = ''
 
 #Static files configuration
 #STATIC_ROOT This is where static files get collected for serving by nginx
-STATIC_ROOT = '/opt/data/web/static'
+STATIC_ROOT = '/opt/globallometree_data/web/static/'
 #STATIC_URL is the location the browser requests static media from
 STATIC_URL = '/static/'
 #STATICFILES_DIRS are static source directories
