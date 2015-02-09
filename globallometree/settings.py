@@ -178,16 +178,16 @@ ES_INDEXES = {'default': 'globallometree'}
 SEARCH_URL = 'http://127.0.0.1:9200'
 
 #Celery
-CELERY_ACCEPT_CONTENT = ['json',]
-BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['json',]
+# BROKER_URL = 'redis://localhost:6379/0'
 
-#Sessions are stored in redis so they can be shared
-#with askbot
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_HOST = 'localhost'
-SESSION_REDIS_PORT = 6379
-SESSION_REDIS_DB = 0
-SESSION_REDIS_PREFIX = 'session'
+# #Sessions are stored in redis so they can be shared
+# #with askbot
+# SESSION_ENGINE = 'redis_sessions.session'
+# SESSION_REDIS_HOST = 'localhost'
+# SESSION_REDIS_PORT = 6379
+# SESSION_REDIS_DB = 0
+# SESSION_REDIS_PREFIX = 'session'
 SESSION_COOKIE_NAME = 'globsessionid'
 
 DATABASES = {
