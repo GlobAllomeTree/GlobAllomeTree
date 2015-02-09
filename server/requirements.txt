@@ -48,7 +48,7 @@ geohash==1.0
 djangorestframework==3.0.0
 django-filter==0.9.0
 django-rest-swagger==0.2.6
-
+djangorestframework-csv==1.3.3
 
 ################# CSV
 unicodecsv==0.9.4

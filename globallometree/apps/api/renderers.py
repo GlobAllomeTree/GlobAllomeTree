@@ -18,16 +18,17 @@ class SimpleBrowsableAPIRenderer(BrowsableAPIRenderer):
 
 
 class SimpleCSVRenderer(CSVRenderer):
-    expand_lists = 'vertical'
-    sort_headers = False
+    format='csv'
+    # expand_lists = 'vertical'
+    # sort_headers = False
 
-    def get_data(self, data):
-        if type(data) == ReturnDict:
-            data = dict(data)
-            return data['results']
-        if type(data) == ReturnList:
-            data = [data]
-        return data
+    # def get_data(self, data):
+    #     if type(data) == ReturnDict:
+    #         data = dict(data)
+    #         return data['results']
+    #     if type(data) == ReturnList:
+    #         data = [data]
+    #     return data
 
 
 class FullJSONRenderer(JSONRenderer):
