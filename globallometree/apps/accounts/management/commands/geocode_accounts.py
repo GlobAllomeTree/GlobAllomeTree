@@ -34,7 +34,7 @@ class Command(BaseCommand):
         n = 0
        
 
-        for profile in UserProfile.objects.all().iterator():
+        for profile in UserProfile.objects.filter(location_latitude=None).iterator():
             if limit and n > limit: break;
             n = n + 1; 
 
