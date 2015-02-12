@@ -36,7 +36,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "Genus_exact",
+          "field": "Genus",
           "exclude": [
             "unknown"
           ],
@@ -160,11 +160,10 @@
           ],
           "overflow": "min-height",
           "fields": [
-            "Author",
-            "Country",
-            "Genus_auto",
-            "Species_exact",
-            "T"
+            "Reference.Reference",
+            "Reference.Year",
+            "Substitute_equation",
+            "Output"
           ],
           "highlight": [],
           "sortable": false,
