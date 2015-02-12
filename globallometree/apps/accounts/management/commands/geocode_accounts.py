@@ -81,8 +81,8 @@ class Command(BaseCommand):
             except Country.DoesNotExist:
                 print "Profile id %s - No results for country %s" % (profile.pk, country_code)
 
-            profile.location_latitude = latitude
-            profile.location_longitude = longitude
+            profile.location_latitude = str(latitude)
+            profile.location_longitude = str(longitude)
             
 
             profile.save()
