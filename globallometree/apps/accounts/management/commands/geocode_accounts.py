@@ -73,10 +73,10 @@ class Command(BaseCommand):
             longitude = geocodes.raw[0]['geometry']['location']['lng']
 
 
-            #print latitude, longitude, country_code
+            print latitude, longitude, country_code
 
             try: 
-                country = Country.objects.get(iso3166a2=country_code)
+                country = Country.objects.get(Iso3166a2=country_code)
                 profile.location_country = country
             except Country.DoesNotExist:
                 print "Profile id %s - No results for country %s" % (profile.pk, country_code)
