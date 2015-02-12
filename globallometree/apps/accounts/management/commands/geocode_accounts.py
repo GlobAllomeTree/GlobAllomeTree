@@ -3,7 +3,7 @@ import sys
 import csv
 import codecs
 
-
+from time import sleep
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -58,12 +58,15 @@ class Command(BaseCommand):
 
             try:
                 geocodes = Geocoder.geocode(geostring_1)
+                sleep(1)
             except GeocoderError:
                 try:
                     geocodes = Geocoder.geocode(geostring_2)
+                    sleep(1)
                 except GeocoderError:
                     try:
                         geocodes = Geocoder.geocode(geostring_3)
+                        sleep(1)
                     except GeocoderError:
                         print "Profile id %s - No results for '%s' or for '%s' " % (profile.pk, geostring_1, geostring_2)
                         continue

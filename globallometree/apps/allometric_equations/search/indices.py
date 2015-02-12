@@ -82,7 +82,6 @@ class AllometricEquationIndex(MappingType, Indexable):
                 }
             }
         
-
         return mapping
    
 

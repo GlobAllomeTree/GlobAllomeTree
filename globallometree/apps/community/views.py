@@ -18,14 +18,14 @@ class UserMapView(TemplateView):
     def get_country_centroids(self):
         countries = {}
         for country in Country.objects.all():
-            if country.iso3166a3:
-                countries[country.iso3166a3] = {
-                    'latitude' : str(country.centroid_latitude),
-                    'longitude' : str(country.centroid_longitude),
-                    'common_name' : str(country.common_name)
+            if country.Iso3166a3:
+                countries[country.Iso3166a3] = {
+                    'latitude' : str(country.Centroid_latitude),
+                    'longitude' : str(country.Centroid_longitude),
+                    'common_name' : str(country.Common_name)
                 }
             else:
-                print "MISSING COUNTRY 3166 3 for Country %s!" % country.common_name
+                print "MISSING COUNTRY 3166 3 for Country %s!" % country.Common_name
         return countries
 
     def create_response(self, *args, **kwargs):

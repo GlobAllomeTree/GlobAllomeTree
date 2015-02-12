@@ -37,8 +37,12 @@ class UserProfileIndex(MappingType, Indexable):
                 'Name' :  estype_string_not_analyzed,
                 'Institution_name' : estype_string_not_analyzed,
                 'Country' : estype_string_not_analyzed,
+                "Country_ID": estype_long,
                 'Country_3166_3' :  estype_string_not_analyzed,
-                'Locations' :  estype_geopoint_geohashed,
+                "Latitude": estype_float,
+                "Longitude": estype_float,
+                "LatLonString": estype_string_not_analyzed,
+                "Geohash": estype_geopoint_geohash,
 
                 #utility
                 'anonymous' : estype_boolean,
@@ -63,10 +67,14 @@ class UserProfileIndex(MappingType, Indexable):
         if obj.privacy == 'anonymous':
             #Use a more limited set of fields for the anonymous index
             for field in ['id', 
-                          'Locations', 
                           'Institution_name', 
                           'Country', 
-                          'Country_3166_3']:
+                          'Country_3166_3',
+                          "Latitude",
+                          "Longitude",
+                          "LatLonString",
+                          "Geohash"
+                          ]:
                 document[field] = cls.get_field_value(obj, field)
         else:
             #Create the document dynamically using the mapping, obj, and prepare methods
@@ -112,29 +120,45 @@ class UserProfileIndex(MappingType, Indexable):
     @classmethod
     def prepare_Country(cls, obj):
         if obj.location_country:
-            return obj.location_country.common_name
+            return obj.location_country.Common_name
         else:
             return None
-
 
     @classmethod
     def prepare_Country_3166_3(cls, obj):
         if obj.location_country:
-            return obj.location_country.iso3166a3
+            return obj.location_country.Iso3166a3
         else:
             return None
 
 
     @classmethod
-    def prepare_Locations(cls, obj):
+    def prepare_Geohash(cls, obj):
         if obj.location_latitude:
             return {
                         "lat" : obj.location_latitude,
                         "lon" : obj.location_longitude
                     }
-   
+
+    @classmethod
+    def prepare_Latitude(cls, obj):
+        return obj.location_latitude
+    
+    @classmethod
+    def prepare_Longitude(cls, obj):
+        return obj.location_longitude
+
+    @classmethod
+    def prepare_LatLonString(cls, obj):
+        if obj.location_latitude:
+            lat_lon_string = "%s,%s" % (obj.location_latitude,obj.location_longitude)
+        else:
+            lat_lon_string = None  
+        return lat_lon_string
+
     @classmethod
     def prepare_anonymous(cls, obj):
         return obj.privacy == 'anonymous'
+
 
  

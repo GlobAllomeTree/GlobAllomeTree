@@ -12,8 +12,10 @@ def rebuild(index_cls, limit):
         
         #Delete the index if it exists
         if es.indices.exists(index=index):
-            es.indices.delete_mapping(index=index, doc_type=type_name)
-        es.indices.create(index)
+            try:
+                es.indices.delete_mapping(index=index, doc_type=type_name)
+            except:
+                pass
             
         #Put the mapping
         #Comment this out for letting elasticsearch generate the mapping
