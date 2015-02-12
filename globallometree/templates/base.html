@@ -59,20 +59,26 @@
             <li {% if is_page_about or slug == 'about' %}class="active" {% endif %}><a href="/about/">About</a></li>
             <li {% if is_page_data or slug == 'database' %}class="active" {% endif %}><a href="/database" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Data <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/data/allometric-equations/">Allometric Equations</a></li>
-                <li><a href="/data/raw-data/">Raw Data</a></li>
-                <li><a href="#">Wood Density</a></li>
-                <li><a href="#">Biomass Expansion Factors</a></li>
+                <li><a href="/data/allometric-equations/">Allometric equations</a></li>
+                <li><a href="#">Raw data</a></li>
+                <li><a href="#">Wood density</a></li>
+                <li><a href="#">Biomass expansion factors</a></li>
                 <li><a href="/data/taxonomy/species/">Species List</a></li>
                 <li class="divider"></li>
                 <li><a href="/api/v1/">API</a></li>
+                <li><a href="/api/docs/">API documentaion</a></li>
                 <li><a href="/data/sharing/">Share data</a></li>
               </ul>
             </li>
             <li {% if is_page_software or slug == 'software' or slug == 'download-fantallometrik' %}class="active" {% endif %}><a href="/software">Software</a></li>
             <li {% if is_page_docs or slug == 'docs' or slug == 'faq' %}class="active" {% endif %}><a href="/docs">Documents</a></li>
             <li {% if is_page_contributors or slug == 'contributors' %}class="active" {% endif %}><a href="/contributors">Contributors</a></li>
-            <li {% if is_page_community or slug == 'community' %}class="active" {% endif %}><a href="/community">Community</a></li>
+            <li {% if is_page_community or slug == 'community' %}class="active" {% endif %}><a href="/community"  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Community <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/community/map/">Community Map</a></li>
+                <li><a href="#">Forum</a></li>
+              </ul>
+            </li>
           </ul>
                    
           <ul class="nav navbar-nav navbar-right">
