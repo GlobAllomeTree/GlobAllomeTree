@@ -146,7 +146,7 @@ class Dataset(BaseModel):
         blank=True,
         null=True,
         verbose_name='Dataset File',
-        help_text="In csv format"
+        help_text="In json format"
     )
 
     Description = models.TextField(
