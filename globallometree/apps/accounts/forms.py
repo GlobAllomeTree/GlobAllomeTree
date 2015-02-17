@@ -25,7 +25,7 @@ class RegistrationForm(forms.ModelForm):
     address     = forms.CharField(label='Address', max_length=200)
 
     country     = forms.ModelChoiceField(queryset=Country.objects.all(), 
-                                         to_field_name='common_name')
+                                         to_field_name='Common_name')
 
     subregion   = forms.CharField(label='Subregion', max_length=80, required=False)
     region      = forms.CharField(label='Region', max_length=80, required=False)

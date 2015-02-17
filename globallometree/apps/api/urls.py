@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from globallometree.apps.api.views import ( 
 	ReferenceViewSet, 
 	WoodDensityViewSet, 
+	RawDataViewSet,
 	FamilyViewSet, 
 	GenusViewSet, 
 	SpeciesViewSet, 
@@ -32,7 +33,8 @@ from globallometree.apps.api.views import (
 router = DefaultRouter()
 
 router.register(r'allometric-equations',AllometricEquationViewSet)
-router.register(r'wood-densities',WoodDensityViewSet)
+router.register(r'wood-densities', WoodDensityViewSet)
+router.register(r'raw-data', RawDataViewSet)
 
 router.register(r'references', ReferenceViewSet)
 router.register(r'institutions', InstitutionViewSet)

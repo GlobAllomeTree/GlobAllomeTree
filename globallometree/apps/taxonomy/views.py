@@ -1,7 +1,8 @@
 from django.views.generic.base import TemplateView
+from apps.accounts.mixins import RestrictedPageMixin
 
 
-class SpeciesListView(TemplateView):
+class SpeciesListView(RestrictedPageMixin, TemplateView):
     template_name = 'taxonomy/species_list.html'
 
     def get_context_data(self, **kwargs):

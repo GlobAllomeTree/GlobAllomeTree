@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import mail_managers
 
+
+
 def register(request):
     
     if request.method == 'POST':

@@ -15,32 +15,71 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-md-8">
-   	    <h3>Share Data</h3>
-		<h4>Step 2. Upload Data</h4>
-		<p>Fields marked with an asterisk(*) are required</p>
-	    <p>
-	    	<form method="post" enctype="multipart/form-data">
-	    		{% csrf_token %}
-	   	 		{{form|crispy}}
-	   	 		<button type="submit" class="btn btn-success pull-right">Validate and upload dataset</button>
-	   	 	</form>
-	    </p>
-	    
-    </div>
-    <div class="col-md-4 ">
-    	<div class="well">
-	    	<h4>Upload Instructions</h4>
-	    	<p>The following types of data are currently accepted:</p>
-	    	<ul>
-	    		<li>Allometric Equations</li>
-	    		<li>Wood Density</li>
-	    		<li>Biomass Expansion Factors</li>
-	    		<li>Raw Data</li>
-	    	</ul>
-	    	<p>In order to upload the data, please download a sample template that corresponds with the type of data.</p> 	
+	{% if not data_errors %}
+	    <div class="col-md-8">
+	   	    <h3>Share Data</h3>
+			<h4>Step 2. Upload Data</h4>
+			<p>Fields marked with an asterisk(*) are required</p>
+		    <p>
+		    	<form method="post" enctype="multipart/form-data">
+		    		{% csrf_token %}
+		   	 		{{form|crispy}}
+		   	 		<button type="submit" class="btn btn-success pull-right">Validate and upload dataset</button>
+		   	 	</form>
+		    </p>
+		    
 	    </div>
-    </div>
+	    <div class="col-md-4 ">
+	    	<div class="well">
+		    	<h4>Upload Instructions</h4>
+		    	<p>The following types of data are currently accepted:</p>
+		    	<ul>
+		    		<li>Allometric Equations</li>
+		    		<li>Wood Density</li>
+		    		<li>Biomass Expansion Factors</li>
+		    		<li>Raw Data</li>
+		    	</ul>
+		    	<p>In order to upload the data, please download a sample template that corresponds with the type of data.</p> 	
+		    </div>
+	    </div>
+
+    {% else %}
+
+	    <div class="col-md-8">
+	   	    <h3>Data Validation</h3>
+			<h4>Some errors were encountered while validating your upload.
+			Please correct these errors and resubmit the data.</h4>
+			<br>
+			{% for record_errors in data_errors %}
+				<h4>Record: {{ record_errors.record_number }}</h4>
+				<table class="table">		
+					{% for error in record_errors.errors %}		
+						{% if error.sub_errors %}
+							{% for sub_error in error.sub_errors %}
+								<tr>
+									<td style="width:300px">{{ error.field}} / {{ sub_error.field}}</td>
+									<td style="color:orange">{{ sub_error.error}}</td>
+								</tr>	
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td style="width:300px">{{ error.field}}</td>
+								<td style="color:orange">{{ error.error}}</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</table>	
+			{% endfor %}
+		    
+	    </div>
+	    <div class="col-md-4 ">
+	    	<!--<div class="well">
+		    	<h4></h4>
+		    </div>-->
+	    </div>
+
+    {% endif %}
+
 </div>
 
 	    

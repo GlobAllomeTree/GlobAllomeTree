@@ -74,7 +74,6 @@ class DatasetUploadForm(forms.ModelForm):
         model.User = self.user
         #Set is restricted
         if(commit):
-            #Validate the data! Party!!!
             model.save()
         return model
 

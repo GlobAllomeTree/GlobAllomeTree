@@ -131,7 +131,7 @@ class Dataset(BaseModel):
 
     DATA_TYPE_CHOICES = (
         ('raw_data' , 'Raw Data'),
-        ('biomass_expansion' , 'Biomass Expansion Factors'),
+#        ('biomass_expansion' , 'Biomass Expansion Factors'),
         ('wood_density' , 'Wood Density Data'),
         ('allometric_equations' , 'Allometric Equations'),
     )
@@ -171,6 +171,9 @@ class Dataset(BaseModel):
         default=False,
         help_text="If this file has been imported into the GlobAllomeTree database yet or not"
         )
+
+    def __unicode__(self):
+        return self.Title
 
     class Meta:
         db_table = "Dataset"

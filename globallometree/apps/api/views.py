@@ -33,6 +33,10 @@ from globallometree.apps.wood_densities.models import (
     WoodDensity
 	)
 
+from globallometree.apps.raw_data.models import (
+    RawData
+    )
+
 from globallometree.apps.locations.models import (
     Continent, 
     Country, 
@@ -68,7 +72,8 @@ from globallometree.apps.api.serializers import (
     DivisionBaileySerializer, 
     BiomeHoldridgeSerializer,
     AllometricEquationSerializer,
-    WoodDensitySerializer, 
+    WoodDensitySerializer,
+    RawDataSerializer, 
     LocationSerializer,
     LocationGroupSerializer,
     DataLicenseSerializer, 
@@ -97,6 +102,7 @@ from globallometree.apps.api.serializers import (
     SimpleCountrySerializer,
     SimpleReferenceSerializer,
     SimpleWoodDensitySerializer,
+    SimpleRawDataSerializer,
     SimpleInstitutionSerializer,
     SimpleDatasetSerializer,
     SimpleDataLicenseSerializer
@@ -277,6 +283,14 @@ class WoodDensityViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     queryset = WoodDensity.objects.all()
     serializer_class = WoodDensitySerializer
     simple_serializer_class = SimpleWoodDensitySerializer
+
+
+class RawDataViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    """
+    queryset = RawData.objects.all()
+    serializer_class = RawDataSerializer
+    simple_serializer_class = SimpleRawDataSerializer
 
 
 class DataLicenseViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):

@@ -1,4 +1,6 @@
+import os
 
+from django.contrib.auth.decorators import login_required
 from django.views.generic.base import TemplateView
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
@@ -8,7 +10,16 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
 
-from apps.api.serializers import SimpleDatasetSerializer
+from rest_framework.parsers import JSONParser, XMLParser
+
+from apps.api.serializers import SimpleDatasetSerializer # needed?
+from apps.api.serializers import (
+    SimpleAllometricEquationSerializer,
+    SimpleWoodDensitySerializer,
+    SimpleRawDataSerializer
+)
+
+from apps.accounts.mixins import RestrictedPageMixin
 
 from .models import Dataset
 from .forms import ( 
@@ -20,14 +31,17 @@ from .forms import (
     )
 
 
-class DataSharingOverview(TemplateView):
+class DataSharingOverview(RestrictedPageMixin, TemplateView):
     template_name = "data_sharing/overview.html"
+
+
     def get_context_data(self, **kwargs):
         context = super(DataSharingOverview, self).get_context_data(**kwargs)
         context['hello'] = "Hello World"
         return context
 
 
+@login_required(login_url='/accounts/login/')
 def choose_license(request, data_agreement=None):
 
     choose_license_form = LicenseChoiceForm()
@@ -73,26 +87,95 @@ def choose_license(request, data_agreement=None):
         context_instance=RequestContext(request)
     )
 
-
+@login_required(login_url='/accounts/login/')
 def upload_data(request):
+
+    data_errors = []
 
     if request.method == 'POST':
         form = DatasetUploadForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
-            form.save()
+            # Form is valid, now we actually try to parse and serialize the 
+            # real data 
+            # sumitted_file is the in memory copy of the file
+            submitted_file = form.cleaned_data['Uploaded_data_file']
+            
+            parsers = {
+                '.json': JSONParser,
+                '.xml': XMLParser,
+                '.csv': None
+            }
+
+            serializers = {
+                'raw_data': SimpleRawDataSerializer,
+                'biomass_expansion': None,
+                'wood_density': SimpleWoodDensitySerializer,
+                'allometric_equations': SimpleAllometricEquationSerializer
+            }
+
+            extension = os.path.splitext(submitted_file._name.lower())[1]
+            ParserClass = parsers[extension]
+            SerializerClass = serializers[form.cleaned_data['Data_type']]
+
+            parser = ParserClass()
+            data = parser.parse(submitted_file)
+
+            for en in enumerate(data):
+                record_number = en[0] + 1
+                record_serializer = SerializerClass(data=en[1])
+                record_errors = []
+                if not record_serializer.is_valid():
+                    
+                    error_dict = dict(record_serializer.errors)
+
+                    for key in error_dict.keys():
+
+                        if key == 'Location_group':
+                            for sub_error_dict in error_dict['Location_group']['Locations']:
+                                sub_errors = []
+                                for sub_key in sub_error_dict:
+                                    val = {
+                                        'field' : sub_key,
+                                        'error' : ', '.join(sub_error_dict[sub_key])
+                                        }
+                                    if val not in sub_errors:
+                                        sub_errors.append(val)
+                            
+                            record_errors.append({
+                                'field' : key,
+                                'sub_errors' : sub_errors
+                            })
+
+                        elif key == 'Species_group':
+                            pass
+                        else:    
+                            record_errors.append({
+                                'field' : key,
+                                'error' : ', '.join(error_dict[key])
+                                })
+
+                    data_errors.append({
+                        'record_number': record_number,
+                        'errors' : record_errors
+                        })
+
+            if not(data_errors):
+                form.save()
     else:
         license_id = request.GET.get('license_id', None)
         form = DatasetUploadForm(initial={'Data_license':license_id}, user=request.user)
+
 
     return render_to_response(
         "data_sharing/upload_data.html",
         {
          'form': form,
+         'data_errors': data_errors
          },
         context_instance=RequestContext(request)
     )
 
-
+@login_required(login_url='/accounts/login/')
 def dataset_detail(request, Dataset_ID):
     dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
     dataset_serialized = SimpleDatasetSerializer(dataset).data
@@ -105,7 +188,7 @@ def dataset_detail(request, Dataset_ID):
     )
 
 
-class DatasetListView(ListView):
+class DatasetListView(RestrictedPageMixin, ListView):
     model = Dataset
     template = 'data_sharing/dataset_list.html'
     paginate_by = 20

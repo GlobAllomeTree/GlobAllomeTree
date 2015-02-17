@@ -5,11 +5,12 @@ from decimal import Decimal
 from django.conf import settings
 from django.views.generic import TemplateView
 
-from globallometree.apps.locations.models import Country
+from apps.locations.models import Country
+from apps.accounts.mixins import RestrictedPageMixin
 
 from .forms import SearchForm
 
-class SearchView(TemplateView):
+class SearchView(RestrictedPageMixin, TemplateView):
     template_name = 'allometric_equations/template.search.html'
 
     def get_context_data(self, **kwargs):

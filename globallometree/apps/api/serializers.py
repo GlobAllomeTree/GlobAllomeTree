@@ -36,6 +36,10 @@ from globallometree.apps.wood_densities.models import (
     WoodDensity
 )
 
+from globallometree.apps.raw_data.models import (
+    RawData
+)
+
 from globallometree.apps.locations.models import (
     Continent, 
     Country, 
@@ -199,24 +203,30 @@ class TreeTypeSerializer(HyperLinkedWithIdSerializer):
         exclude = ('Created', 'Modified')
 
 
-class AllometricEquationSerializer(HyperLinkedWithIdSerializer):
+class LinkedModelSerializer(HyperLinkedWithIdSerializer):
     Species_group = SpeciesGroupSerializer(many=False)
     Location_group = LocationGroupSerializer(many=False)
+    Reference = ReferenceSerializer(many=False)
+
+
+class AllometricEquationSerializer(LinkedModelSerializer):
     Population = PopulationSerializer(many=False) 
     Tree_type = TreeTypeSerializer(many=False)
-    Reference = ReferenceSerializer(many=False)
+    
     class Meta:
         model = AllometricEquation
         exclude = ('Created', 'Modified',)
 
 
 class WoodDensitySerializer(HyperLinkedWithIdSerializer):
-    Species = SpeciesSerializer(many=False)
-    Subspecies = SubspeciesSerializer(many=False)
-    Population = PopulationSerializer(many=False) 
-    Reference = ReferenceSerializer(many=False)
     class Meta:
-        model = AllometricEquation
+        model = WoodDensity
+        exclude = ('Created', 'Modified',)
+
+
+class RawDataSerializer(HyperLinkedWithIdSerializer):
+    class Meta:
+        model = RawData
         exclude = ('Created', 'Modified',)
 
 
@@ -565,6 +575,8 @@ class SimpleReferenceSerializer(serializers.ModelSerializer):
             return obj.Year
 
 
+
+
 class SimpleLinkedModelSerializer(serializers.ModelSerializer):
     Species_group = SimpleSpeciesGroupSerializer(many=False)
     Location_group = SimpleLocationGroupSerializer(many=False)
@@ -581,6 +593,12 @@ class SimpleAllometricEquationSerializer(SimpleLinkedModelSerializer):
 class SimpleWoodDensitySerializer(SimpleLinkedModelSerializer):
     class Meta:
         model = WoodDensity
+        exclude = ('Created', 'Modified', )
+
+
+class SimpleRawDataSerializer(SimpleLinkedModelSerializer):
+    class Meta:
+        model = RawData
         exclude = ('Created', 'Modified', )
 
 

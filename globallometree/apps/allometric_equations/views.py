@@ -3,6 +3,7 @@ import json
 import cStringIO as StringIO
 import xhtml2pdf.pisa as pisa
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, Context
@@ -20,19 +21,16 @@ from elasticutils.contrib.django import get_es
 from .forms import SubmissionForm
 from .models import AllometricEquation
 
-from globallometree.apps.common.kill_gremlins import kill_gremlins
-from globallometree.apps.locations.models import Country
+from apps.common.kill_gremlins import kill_gremlins
+from apps.locations.models import Country
+
+from apps.accounts.mixins import RestrictedPageMixin
 
 
 class SubmissionView(FormView):
     template_name = 'allometric_equations/template.submit_data.html'
     form_class = SubmissionForm
     success_url = '/allometric-equations/submit/complete/'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return HttpResponseRedirect('/accounts/login/')
-        return super(SubmissionView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):      
         ds = AllometricEquationSubmission()
@@ -41,7 +39,6 @@ class SubmissionView(FormView):
         ds.user = self.request.user
         ds.imported = False
         ds.save()
-
         mail_managers('New GlobAllomeTree Allometric Equations Submission', """
 
 A new data file has been submitted to http://www.globallometree.org/ 
@@ -72,7 +69,7 @@ class SubmissionCompleteView(TemplateView):
         return context
 
 
-
+@login_required(login_url='/accounts/login/')
 def allometric_equation_id(request, id):
     allometric_equation = AllometricEquation.objects.get(pk=id)
     return render_to_response(
@@ -86,6 +83,7 @@ def allometric_equation_id(request, id):
     ) 
 
 
+@login_required(login_url='/accounts/login/')
 def allometric_equation_id_pdf(request, id):
     allometric_equation = AllometricEquation.objects.get(pk=id)
 
@@ -121,34 +119,7 @@ def allometric_equation_id_pdf(request, id):
     return response
 
 
-    
-def database(request):
-    return render_to_response('database.html',
-                              context_instance = RequestContext(request,
-                             {'is_page_data' : True}))
-
-
-def species(request, selected_Genus=None):
-    
-    #Call sorl for a faceted list of Genus
-    sqs = SearchQuerySet().facet('genus')
-    genus_list = []
-    for genus_count in sqs.facet_counts()['fields']['Genus']:
-        genus_list.append({
-            'name'  : genus_count[0],
-            'count' : genus_count[1]
-        
-        })
-    
-    #Sort the list alphabetically by name
-    genus_list.sort(key=lambda x : x['name'])
-    
-    return render_to_response('allometric_equations.species.html', 
-                               context_instance = RequestContext(request,
-                               {'genus_list': genus_list,
-                               'is_page_data' : True }))
-
-
+@login_required(login_url='/accounts/login/')
 def export(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
