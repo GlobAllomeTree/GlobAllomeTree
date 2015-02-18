@@ -143,8 +143,6 @@ class Dataset(BaseModel):
 
     Uploaded_data_file = models.FileField(
         upload_to = "data_sharing",
-        blank=True,
-        null=True,
         verbose_name='Dataset File',
         help_text="In json format"
     )

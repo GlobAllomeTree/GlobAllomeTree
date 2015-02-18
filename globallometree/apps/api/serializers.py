@@ -443,23 +443,23 @@ class SimpleDivisionBaileySerializer(serializers.ModelSerializer):
 
 class SimpleLocationSerializer(serializers.ModelSerializer):
    
-    Country = fields.CharField(source="Country.Formal_name")
-    Biome_FAO = fields.CharField(source="Biome_FAO.Name")
-    Biome_UDVARDY = fields.CharField(source="Biome_UDVARDY.Name")
-    Biome_WWF = fields.CharField(source="Biome_WWF.Name")
-    Division_BAILEY = fields.CharField(source="Division_BAILEY.Name")
-    Biome_HOLDRIDGE = fields.CharField(source="Biome_HOLDRIDGE.Name")
-    Forest_type = fields.CharField(source="Forest_type.Name")
+    Country = fields.CharField(source="Country.Formal_name", allow_null=True)
+    Biome_FAO = fields.CharField(source="Biome_FAO.Name", allow_null=True)
+    Biome_UDVARDY = fields.CharField(source="Biome_UDVARDY.Name", allow_null=True)
+    Biome_WWF = fields.CharField(source="Biome_WWF.Name", allow_null=True)
+    Division_BAILEY = fields.CharField(source="Division_BAILEY.Name", allow_null=True)
+    Biome_HOLDRIDGE = fields.CharField(source="Biome_HOLDRIDGE.Name", allow_null=True)
+    Forest_type = fields.CharField(source="Forest_type.Name", allow_null=True)
     
-    Country_ID = fields.IntegerField(source="Country.Country_ID")
-    Country_3166_3 = fields.CharField(source="Country.Iso3166a3")
+    Country_ID = fields.IntegerField(source="Country.Country_ID", allow_null=True)
+    Country_3166_3 = fields.CharField(source="Country.Iso3166a3", allow_null=True)
 
-    Biome_FAO_ID = fields.IntegerField(source="Biome_FAO.Biome_FAO_ID")
-    Biome_UDVARDY_ID = fields.IntegerField(source="Biome_UDVARDY.Biome_UDVARDY_ID")
-    Biome_WWF_ID = fields.IntegerField(source="Biome_WWF.Biome_WWF_ID")    
-    Division_BAILEY_ID = fields.IntegerField(source="Division_BAILEY.Division_BAILEY_ID") 
-    Biome_HOLDRIDGE_ID = fields.IntegerField(source="Biome_HOLDRIDGE.Biome_HOLDRIDGE_ID") 
-    Forest_type_ID = fields.IntegerField(source="Forest_type.Forest_type_ID") 
+    Biome_FAO_ID = fields.IntegerField(source="Biome_FAO.Biome_FAO_ID", allow_null=True)
+    Biome_UDVARDY_ID = fields.IntegerField(source="Biome_UDVARDY.Biome_UDVARDY_ID", allow_null=True)
+    Biome_WWF_ID = fields.IntegerField(source="Biome_WWF.Biome_WWF_ID", allow_null=True)    
+    Division_BAILEY_ID = fields.IntegerField(source="Division_BAILEY.Division_BAILEY_ID", allow_null=True) 
+    Biome_HOLDRIDGE_ID = fields.IntegerField(source="Biome_HOLDRIDGE.Biome_HOLDRIDGE_ID", allow_null=True) 
+    Forest_type_ID = fields.IntegerField(source="Forest_type.Forest_type_ID", allow_null=True) 
     Geohash = fields.SerializerMethodField()
     LatLonString = fields.SerializerMethodField()
 
@@ -479,6 +479,7 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = Location
+        
         fields = (
             "Location_ID",
             "Name",
@@ -585,6 +586,7 @@ class SimpleLinkedModelSerializer(serializers.ModelSerializer):
 
 
 class SimpleAllometricEquationSerializer(SimpleLinkedModelSerializer):
+    
     class Meta:
         model = AllometricEquation
         exclude = ('Created', 'Modified')

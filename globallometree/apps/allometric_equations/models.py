@@ -66,7 +66,7 @@ class AllometricEquation(LinkedBaseModel):
     Max_Z = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10
     )
-    Output = models.CharField(max_length=30, null=True, blank=True)
+    Output = models.CharField(max_length=30, null=True)
     Output_TR = models.CharField(max_length=30, null=True, blank=True)
     Unit_Y = models.CharField(max_length=50, null=True, blank=True)
     Age = models.CharField(max_length=50, null=True, blank=True)
@@ -82,7 +82,7 @@ class AllometricEquation(LinkedBaseModel):
     S = models.NullBooleanField()
     T = models.NullBooleanField()
     F = models.NullBooleanField()
-    Equation = models.CharField(max_length=500, null=True, blank=True) 
+    Equation = models.CharField(max_length=500) 
     Substitute_equation = models.CharField(
         max_length=500, null=True, blank=True
     ) 

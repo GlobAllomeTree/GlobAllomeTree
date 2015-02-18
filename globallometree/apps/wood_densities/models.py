@@ -69,7 +69,7 @@ class WoodDensity(LinkedBaseModel):
         help_text="is the bark included in the measure?")
 
     Density_g_cm3= models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, max_digits=16, decimal_places=10,
         help_text="density of the wood in g/cm3")
 
     MC_Density = models.CharField(

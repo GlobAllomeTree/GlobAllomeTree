@@ -51,7 +51,13 @@
 			Please correct these errors and resubmit the data.</h4>
 			<br>
 			{% for record_errors in data_errors %}
-				<h4>Record: {{ record_errors.record_number }}</h4>
+				<h4><span 
+				    onclick="$('#record-source-{{ record_errors.record_number }}').slideToggle('slow');"
+					style="float:right;font-weight:normal;font-size:small;cursor:pointer;"> Show / Hide Record Source
+					</span>
+				Record: {{ record_errors.record_number }}</h4>
+				<pre id="record-source-{{ record_errors.record_number }}"
+				     style="display:none;">{{ record_errors.source }}</pre>
 				<table class="table">		
 					{% for error in record_errors.errors %}		
 						{% if error.sub_errors %}
@@ -67,6 +73,7 @@
 								<td style="color:orange">{{ error.error}}</td>
 							</tr>
 						{% endif %}
+
 					{% endfor %}
 				</table>	
 			{% endfor %}
