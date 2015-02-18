@@ -168,8 +168,6 @@ def upload_data(request):
 
             if not(data_errors):
                 dataset = form.save()
-                dataset.Uploaded_data_json = json.dumps(data)
-                dataset.save()
                 return HttpResponseRedirect(
                     reverse("data-sharing-upload-confirm", kwargs={'Dataset_ID':dataset.pk}) 
                 )
