@@ -53,7 +53,7 @@
 			{% for record_errors in data_errors %}
 				<h4><span 
 				    onclick="$('#record-source-{{ record_errors.record_number }}').slideToggle('slow');"
-					style="float:right;font-weight:normal;font-size:small;cursor:pointer;"> Show / Hide Record Source
+					style="float:right;font-weight:normal;font-size:small;cursor:pointer;padding-top:5px;"> show / hide source
 					</span>
 				Record: {{ record_errors.record_number }}</h4>
 				<pre id="record-source-{{ record_errors.record_number }}"

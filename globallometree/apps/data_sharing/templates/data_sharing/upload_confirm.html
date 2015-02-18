@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+	
+    <div class="col-md-8">
+   	    <h3>Thank you for your submission! </h3>
+   	    <br>
+		<h4>Your data has been submitted to GlobAllomeTree. The team will review this submission for quality and if the standards are met, it will be imported into the GlobAllometree database.</h4>
+		<br>
+		<p>You may view your dataset here: <a href="{{ dataset_url }}">{{ dataset.Title }}</a> </p>
+    </div>
+</div>
+
+	    
+{% endblock %}
