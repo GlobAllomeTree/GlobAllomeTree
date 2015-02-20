@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib import messages
 
 from . import models
 
@@ -10,7 +11,9 @@ class DatasetAdmin(admin.ModelAdmin):
     readonly_fields = ('Imported',)
 
     def run_import(self, request, queryset):
-
+        # import pdb; pdb.set_trace()
+        # self.message_user(request, "Hello!")
+        messages.error(request,'Error message')
         #Make sure that there are some selected rows 
         n = queryset.count()
         if not n:
@@ -19,6 +22,7 @@ class DatasetAdmin(admin.ModelAdmin):
   
         #Make sure multiple objects were not selected
         if n > 1:
+
             self.message_user(request, "Please select only ONE file to import at a time")
             return None
 
@@ -29,7 +33,7 @@ class DatasetAdmin(admin.ModelAdmin):
             self.message_user(request, "That dataset selected has already been imported")
             return None
 
-        import pdb; pdb.set_trace()
+
 
 
 
