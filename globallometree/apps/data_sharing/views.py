@@ -121,21 +121,42 @@ def upload_data(request):
             parser = ParserClass()
             data = parser.parse(submitted_file)
 
-            def get_sub_errors(sub_error_list):
-                for sub_error_dict in sub_error_list:
-                    sub_errors = []
-                    for sub_key in sub_error_dict:
+
+
+            def get_sub_errors(sub_errors):
+                sub_error_list = []
+                if isinstance(sub_errors, dict):
+                    sub_errors = [sub_errors]
+
+                for sub_error_item in sub_errors:
+                    # if isinstance(sub_error_item, list):
+                    #     # possibly never a list?
+                    #      val = {
+                    #         'field' : None,
+                    #         'error' : ', '.sub_error_item
+                    #         } 
+                    # elif
+                    if isinstance(sub_error_item, dict):
+                        for sub_key in sub_error_item.keys():
+                            val = {
+                                'field' : sub_key,
+                                'error' : ', '.join(sub_error_item[sub_key])
+                                }
+                            if val not in sub_error_list:
+                                sub_error_list.append(val)
+                    elif isinstance(sub_error_item, unicode):
                         val = {
-                            'field' : sub_key,
-                            'error' : ', '.join(sub_error_dict[sub_key])
+                            'field' : None,
+                            'error' : sub_error_item
                             }
-                        if val not in sub_errors:
-                            sub_errors.append(val)
-                return sub_errors
+                    if val not in sub_error_list:
+                        sub_error_list.append(val)
+                return sub_error_list
 
             for en in enumerate(data):
                 record_number = en[0] + 1
-                record_serializer = SerializerClass(data=en[1])
+                record_data = en[1]
+                record_serializer = SerializerClass(data=record_data)
                 record_errors = []
                 if not record_serializer.is_valid():
                     
@@ -154,6 +175,11 @@ def upload_data(request):
                                 'field' : key,
                                 'sub_errors' : get_sub_errors(error_dict['Species_group']['Species'])
                             })
+                        elif key == 'Reference':
+                            record_errors.append({
+                                'field' : key,
+                                'sub_errors' : get_sub_errors(error_dict['Reference'])
+                            })
                         else:    
                             record_errors.append({
                                 'field' : key,
@@ -163,11 +189,17 @@ def upload_data(request):
                     data_errors.append({
                         'record_number': record_number,
                         'errors' : record_errors,
-                        'source' : json.dumps(data, indent=4)
+                        'source' : json.dumps(record_data, indent=4)
                         })
 
             if not(data_errors):
                 dataset = form.save()
+                # Keep the json for each dataset so it doesn't have to be
+                # parsed out every single time
+                dataset.Data_as_json = json.dumps(data)
+                dataset.Record_count = len(data)
+                dataset.save()
+                
                 return HttpResponseRedirect(
                     reverse("data-sharing-upload-confirm", kwargs={'Dataset_ID':dataset.pk}) 
                 )

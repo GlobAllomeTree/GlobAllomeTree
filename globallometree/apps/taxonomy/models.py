@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from globallometree.apps.common.models import BaseModel
+from globallometree.apps.data_sharing.models import Dataset
 
 class TaxonomyModel(BaseModel):
     TPL_Status = models.CharField(max_length=80, blank=True, null=True)
@@ -142,6 +143,19 @@ class SubspeciesLocalName(BaseModel):
 class SpeciesGroup(BaseModel):
 
     Species_group_ID = models.AutoField(primary_key=True)
+
+    Dataset = models.ForeignKey(
+        'data_sharing.Dataset',
+        blank = True,
+        null = True,
+        help_text = "If group was created from a dataset, the dataset id"
+        )
+
+    Dataset_Species_group_ID = models.IntegerField(
+        blank = True,
+        null = True,
+        help_text = "If group was created from a dataset, references the local group id in the source dataset"
+    )
 
     Name = models.CharField(
         max_length=255, 

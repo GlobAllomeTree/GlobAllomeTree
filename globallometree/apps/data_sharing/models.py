@@ -159,6 +159,16 @@ class Dataset(BaseModel):
         verbose_name = 'Type'
     )
 
+    Data_as_json = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    Record_count = models.IntegerField(
+        blank=True,
+        null=True
+        )
+
     Data_license = models.ForeignKey(
         DataLicense,
         db_column="Data_license_ID",

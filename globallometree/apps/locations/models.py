@@ -164,6 +164,20 @@ class Plot(BaseModel):
 
 class LocationGroup(BaseModel):
     Location_group_ID = models.AutoField(primary_key=True)
+
+    Dataset = models.ForeignKey(
+        'data_sharing.Dataset',
+        blank = True,
+        null = True,
+        help_text = "If group was created from a dataset, the dataset id"
+        )
+
+    Dataset_Location_group_ID = models.IntegerField(
+        blank = True,
+        null = True,
+        help_text = "If group was created from a dataset, references the local group id in the source dataset"
+    )
+
     Name = models.CharField(
         max_length=255,
         null=True,

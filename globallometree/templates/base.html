@@ -63,12 +63,15 @@
                 <li><a href="#">Raw data</a></li>
                 <li><a href="#">Wood density</a></li>
                 <li><a href="#">Biomass expansion factors</a></li>
-                <li><a href="/data/taxonomy/species/">Species List</a></li>
+                <li><a href="/data/taxonomy/species/">Species list</a></li>
+              </ul>
+            </li>
+            <li ><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/data/sharing/">Share data</a></li>
                 <li><a href="/static/kibana/index.html#/dashboard/file/default.json">Advanced Search</a></li>
-                <li class="divider"></li>
                 <li><a href="/api/v1/">API</a></li>
                 <li><a href="/api/docs/">API documentaion</a></li>
-                <li><a href="/data/sharing/">Share data</a></li>
               </ul>
             </li>
             <li {% if is_page_software or slug == 'software' or slug == 'download-fantallometrik' %}class="active" {% endif %}><a href="/software">Software</a></li>

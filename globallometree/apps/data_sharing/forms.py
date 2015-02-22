@@ -79,6 +79,12 @@ class DatasetUploadForm(forms.ModelForm):
 
     class Meta:
         model = Dataset
-        exclude = ('User', 'Imported')
+        fields = ('Title', 
+                  'Uploaded_data_file',   
+                  'Description', 
+                  'Data_type', 
+                  'Data_license',
+                  )
+
 
 

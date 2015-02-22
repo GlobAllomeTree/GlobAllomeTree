@@ -63,7 +63,13 @@
 						{% if error.sub_errors %}
 							{% for sub_error in error.sub_errors %}
 								<tr>
-									<td style="width:300px">{{ error.field}} / {{ sub_error.field}}</td>
+									<td style="width:300px">{{ error.field}}
+									{% if sub_error.field == 'non_field_errors' %}
+										/ general error
+									{% elif sub_error.field %}
+									 	/ {{ sub_error.field}}
+									{% endif %}
+									 </td>
 									<td style="color:orange">{{ sub_error.error}}</td>
 								</tr>	
 							{% endfor %}
