@@ -10,7 +10,7 @@ def list(request):
         'list.html',  
         context_instance = RequestContext(request,{
             'journals': journals,
-            'is_page_docs' : True
+            'is_page_community' : True
         })
     )
 
@@ -24,6 +24,6 @@ def detail(request, journal_id):
         'detail.html',
         context_instance = RequestContext(request,{
             'journal': journal,
-            'is_page_docs': True
+            'is_page_community': True
         })
     )
