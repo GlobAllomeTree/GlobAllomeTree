@@ -1,5 +1,71 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-    Hi Tom!
+
+    <div style="width:930px;margin:10px auto;padding:15px;background-color:#fff;border-radius:3px; border: 1px solid #ddd;">
+	    <form style="float:right;" method="post">
+	   	    <input type="hidden" name="action" value="run_import">
+	    	<input type="hidden" name="dataset_id" value="{{dataset.pk}}">
+	   	    <input type="hidden" name="_selected_action" value="{{dataset.pk}}">
+	    	<input type="hidden" name="run" value="1">
+	    	{% csrf_token %}
+	    	<input style="background-image: linear-gradient(#7cbe5a,#5bae31) !important;color:#fff !important;" type="submit" value="Confirm and run import">
+	    </form>
+	    <h1 style="margin-left:0px;margin-top:0px;">Import Summary</h1>
+	    <h2>Title: {{dataset.Title}}</h2>
+        <h3>Description: {{dataset.Description}}</h3>
+        <h3>Records: {{dataset.Record_count}} </h3>
+	    <br>
+	    <br>
+	    <div style="width:15%;float:left">
+	    	<h4>New Families</h4>
+	    	{% if summary.new_families %}
+		    	<ul>
+		    	{% for species_def in summary.new_families %}
+		    		<li><strong>{{ species_def.Family }}</strong></li>
+		    	{% endfor %}
+		    	</ul>
+		    {% else %}
+		    	<p>No new families</p>
+		    {% endif %}
+	    </div>
+	    <div style="width:25%;float:left">
+	    	<h4>New Genera</h4>
+	    	{% if summary.new_genera %}
+		    	<ul>
+		    	{% for species_def in summary.new_genera %}
+		    		<li>{{ species_def.Family }} <strong>{{ species_def.Genus }}</strong></li>
+		    	{% endfor %}
+		    	</ul>
+		    {% else %}
+		    	<p>No new genera</p>
+		    {% endif %}
+	    </div>
+	    <div style="width:25%;float:left">
+	    	<h4>New Species</h4>
+	    	{% if summary.new_species %}
+		    	<ul>
+		    	{% for species_def in summary.new_species %}
+		    		<li>{{ species_def.Genus}} <strong>{{ species_def.Species }}</strong></li>
+		    	{% endfor %}
+		    {% else %}
+		    	<p>No new species</p>
+		    {% endif %}
+	    	</ul>
+	    </div>
+	     <div style="width:24%;float:left">
+	    	<h4>New Subspecies</h4>
+	    	<ul>
+	    	{% if summary.new_subspecies %}
+		    	{% for species_def in summary.new_subspecies %}
+		    		<li>{{ species_def.Genus}} {{ species_def.Species }} <strong>{{ species_def.Subspecies }}</strong></li>
+		    	{% endfor %}
+		    {% else %}
+		    	<p>No new subspecies</p>
+		    {% endif %}
+	    	</ul>
+	    </div>
+	    <div style="clear:both"></div>
+	    
+	</div>
 {% endblock %}

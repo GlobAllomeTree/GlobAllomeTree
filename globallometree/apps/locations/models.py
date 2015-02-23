@@ -149,8 +149,10 @@ class Location(BaseModel):
 class Plot(BaseModel):
     Plot_ID = models.AutoField(primary_key=True)
     Location = models.ForeignKey(Location)
-    Plot_original_ID = models.IntegerField(
-        help_text="original id of the plot in the study, or data import")
+    Plot_name = models.CharField(
+        max_length=30,
+        help_text="name or id of the plot in the study, or data import"
+        )
     Plot_size_m2 = models.DecimalField(
         blank=True,
         null=True,

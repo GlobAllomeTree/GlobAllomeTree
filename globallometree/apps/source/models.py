@@ -39,3 +39,6 @@ class Operator(BaseModel):
     class Meta:
         ordering = ('Name',)
         db_table = "Operator"
+
+    def __unicode__(self):
+        return self.Name

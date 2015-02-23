@@ -617,6 +617,34 @@ class SimpleLinkedModelSerializer(serializers.ModelSerializer):
     Contributor = fields.CharField(source='Contributor.Name', allow_null=True)
     Operator = fields.CharField(source='Operator.Name', allow_null=True)
 
+    def create(self, validated_data):
+        species_data = validated_data.pop('Species_group')
+        location_data = validated_data.pop('Location_group')
+        reference_data = validated_data.pop('Reference')
+        contributor_data = validated_data.pop('Contributor')
+        operator_data = validated_data.pop('Operator')
+
+        ModelClass = self.Meta.model
+        instance = ModelClass.objects.create(**validated_data)
+
+        if contributor_data and contributor_data['Name']:
+            instance.Contributor = source_models.Institution.objects.get_or_create(Name=contributor_data['Name'])[0]
+        
+            if operator_data and operator_data['Name']:
+                instance.Operator = source_models.Operator.objects.get_or_create(Name=operator_data['Name'],
+                                                                                 Institution=instance.Contributor)[0]
+        if species_data:
+            pass
+
+        if location_data:
+            pass
+
+        instance.Reference = source_models.Reference.objects.get_or_create(**reference_data)[0]
+
+        instance.save()
+
+        return instance
+
 
 class SimpleAllometricEquationSerializer(SimpleLinkedModelSerializer):
     

@@ -7,6 +7,19 @@ from globallometree.apps.taxonomy.models import (
 	SubspeciesLocalName
 	)
 
+from apps.api.serializers import (
+    SimpleAllometricEquationSerializer,
+    SimpleWoodDensitySerializer,
+    SimpleRawDataSerializer
+)
+
+serializers = {
+                'raw_data': SimpleRawDataSerializer,
+                'biomass_expansion': None,
+                'wood_density': SimpleWoodDensitySerializer,
+                'allometric_equations': SimpleAllometricEquationSerializer
+            }
+
 def summarize_data(data):
 	"""
 		Summarizes the dataset as far as which countries there are,
@@ -14,14 +27,57 @@ def summarize_data(data):
 		there are
 	"""
 
+	new_families = []
+	new_genera = []
+	new_species = []
+	new_subspecies = []
+
 	# Find out which families and species exist, or are new
 	for r_i in range(0, len(data)):
 		record = data[r_i]
 		for sp_i in range(0, len(record['Species_group']['Species'])):
 			species_def = record['Species_group']['Species'][sp_i]
+			if species_def['Family'] and not species_def['Family_ID']:
+				new_record = {
+					"Family": species_def['Family']
+				}
+				if new_record not in new_families:
+					new_families.append(new_record)
 
+			if species_def['Genus'] and not species_def['Genus_ID']:
+				new_record = {
+					"Family": species_def['Family'],
+					"Genus": species_def['Genus']
+				}
+				if new_record not in new_genera:
+					new_genera.append(new_record)
 
-	return data
+			if species_def['Species'] and not species_def['Species_ID']: 
+				new_record= {
+					"Family": species_def['Family'],
+					"Genus": species_def['Genus'],
+					"Species": species_def['Species'],
+				}	
+				if new_record not in new_species:
+					new_species.append(new_record)
+
+			if species_def['Subspecies'] and not species_def['Subspecies_ID']: 
+				new_record = {
+					"Family": species_def['Family'],
+					"Genus": species_def['Genus'],
+					"Species": species_def['Species'],
+					"Subspecies": species_def['Subspecies']
+				}	
+				if new_record not in new_subspecies:
+					new_subspecies.append(new_record)
+
+	return {
+		'record_count' : len(data),
+		'new_species': new_species,
+		'new_genera': new_genera,
+		'new_families': new_families,
+		'new_subspecies': new_subspecies
+	}
 
 
 def match_data_to_database(data):
@@ -37,7 +93,6 @@ def match_data_to_database(data):
 	for r_i in range(0, len(data)):
 		record = data[r_i]
 		for sp_i in range(0, len(record['Species_group']['Species'])):
-
 			species_def = record['Species_group']['Species'][sp_i]
 			record['Species_group']['Species'][sp_i] = match_or_clean_species_ids(species_def)
 
@@ -55,7 +110,7 @@ def match_or_clean_species_ids(species_def):
 	species_def['Family_ID'] = None
 	species_def['Species_ID'] = None
 	species_def['Genus_ID'] = None
-	species_def['Subpecies_ID'] = None
+	species_def['Subspecies_ID'] = None
 
 	# Family and Genus are required by the parser
 	try:
@@ -88,8 +143,8 @@ def match_or_clean_species_ids(species_def):
 	# If we have the species in our db, we try to find the subspecies id
 	if db_species and 'Subspecies' in species_def.keys():
 		try:
-			db_subspecies = Subspecies.objects.get(Name=species_def['Subpecies'])
-			species_def['Subpecies_ID'] = db_species.pk
+			db_subspecies = Subspecies.objects.get(Name=species_def['Subspecies'])
+			species_def['Subpsecies_ID'] = db_species.pk
 		except Subspecies.DoesNotExist:
 			pass
 

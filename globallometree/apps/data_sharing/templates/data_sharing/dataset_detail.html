@@ -23,7 +23,7 @@
           {% if dataset.Data_license %}
             <table class="table">
               <tr><td colspan="2"><strong>{{ dataset.Data_license.Title }}</strong></td></tr>
-              {% if dataset.Data_license.Expires == 'on_date' %}
+              {% if dataset.Data_license.Expires == 'on_date' and dataset.Data_license.Expires_on_date %}
                <tr>
                   <td>Expires on date</td>
                   <td>{{ dataset.Data_license.Expires_on_date }}</td>

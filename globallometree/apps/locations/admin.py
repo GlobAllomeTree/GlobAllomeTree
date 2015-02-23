@@ -24,7 +24,7 @@ class LocationInline(admin.TabularInline):
 
 
 class PlotAdmin(admin.ModelAdmin):
-    list_display = ('Location', 'Plot_original_ID', 'Plot_size_m2',)
+    list_display = ('Location', 'Plot_name', 'Plot_size_m2',)
 
 
 class ForestTypeAdmin(admin.ModelAdmin):

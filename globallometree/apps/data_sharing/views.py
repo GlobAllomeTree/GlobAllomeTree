@@ -13,15 +13,12 @@ from django.db.models import Q
 
 from rest_framework.parsers import JSONParser, XMLParser
 
-from apps.api.serializers import SimpleDatasetSerializer # needed?
-from apps.api.serializers import (
-    SimpleAllometricEquationSerializer,
-    SimpleWoodDensitySerializer,
-    SimpleRawDataSerializer
-)
+from apps.api.serializers import SimpleDatasetSerializer
+
 
 from apps.accounts.mixins import RestrictedPageMixin
 
+from .data_tools import serializers
 from .models import Dataset
 from .forms import ( 
     DataLicenseForm, 
@@ -105,13 +102,6 @@ def upload_data(request):
                 '.json': JSONParser,
                 '.xml': XMLParser,
                 '.csv': None
-            }
-
-            serializers = {
-                'raw_data': SimpleRawDataSerializer,
-                'biomass_expansion': None,
-                'wood_density': SimpleWoodDensitySerializer,
-                'allometric_equations': SimpleAllometricEquationSerializer
             }
 
             extension = os.path.splitext(submitted_file._name.lower())[1]
