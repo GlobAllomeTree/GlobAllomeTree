@@ -14,7 +14,7 @@ class Journal(models.Model):
         return self.title
 
     def latest_articles(self):
-        return self.articles.order_by('-published')[:2]
+        return self.articles.order_by('-published')[:5]
 
     def recent_articles(self):
         return self.articles.order_by('-published')[:10]

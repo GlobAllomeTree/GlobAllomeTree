@@ -22,7 +22,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="/journals/{{ journal.id }}" class="btn-small btn-success pull-right clearfix" >Read more >></a>
+                <a href="/journals/{{ journal.id }}" class="btn btn-success pull-right" >View journal articles</a>
             </div>
             {% if forloop.counter == forloop.revcounter or forloop.counter|add:1 == forloop.revcounter %}
                 </div><div class="col-md-6" >
