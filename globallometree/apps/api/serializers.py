@@ -1,6 +1,7 @@
 ## api/views.py
 import Geohash
 
+from collections import OrderedDict
 from django.contrib.auth.models import User
 
 from rest_framework import serializers, fields
@@ -244,7 +245,7 @@ class SimpleFamilySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = taxonomy_models.Family
-        fields = ('Family', 'Family_ID', 'Scientific_name')
+        fields = ('Scientific_name', 'Family', 'Family_ID', )
 
 
 class SimpleGenusSerializer(serializers.ModelSerializer):
@@ -261,7 +262,7 @@ class SimpleGenusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = taxonomy_models.Genus
-        fields = ('Scientific_name', 'Genus', 'Family',  'Family_ID', 'Genus_ID')
+        fields = ('Scientific_name', 'Family', 'Genus', 'Family_ID', 'Genus_ID')
 
 
 class SimpleSpeciesSerializer(serializers.ModelSerializer):
@@ -288,11 +289,14 @@ class SimpleSpeciesSerializer(serializers.ModelSerializer):
                   'Family', 
                   'Genus',
                   'Species',
+                  'Species_local_names',
                   'Family_ID',
                   'Genus_ID',
                   'Species_ID',
-                  'Species_local_names'
                   )
+
+
+
 
 class SimpleSubspeciesSerializer(serializers.ModelSerializer):
     
@@ -317,24 +321,51 @@ class SimpleSubspeciesSerializer(serializers.ModelSerializer):
     def get_Scientific_name(self, obj):
         return obj.get_scientific_name()
 
-
     class Meta:
         model = taxonomy_models.Subspecies
-        fields = (
+        fields = ('Scientific_name',
                   'Family', 
                   'Genus',
                   'Species',
                   'Subspecies',
+                  'Species_local_names',
+                  'Subspecies_local_names',
                   'Family_ID',
                   'Genus_ID',
                   'Species_ID',
                   'Subspecies_ID',
-                  'Species_local_names',
-                  'Subspecies_local_names',
-                  'Scientific_name')
+                  )
+
+
+
 
 
 class SpeciesGroupMixin(object):
+
+    def ensure_all_keys(self, species_def):
+        """ This ensures that all records have the same format even 
+            if they come from different serializers
+        """
+        existing_keys = species_def.keys()
+        for key in ['Family', 'Family_ID',
+                    'Genus', 'Genus_ID',
+                    'Species', 'Species_ID',
+                    'Subspecies', 'Subspecies_ID']:
+            if key not in existing_keys:
+                species_def[key] = None   
+
+        for key in ['Species_local_names', 'Subspecies_local_names']:
+             if key not in existing_keys:
+                species_def[key] = []
+
+        species_def_ordered = OrderedDict()
+        for key in ['Scientific_name','Family', 'Genus', 'Species',
+                    'Subspecies', 'Species_local_names', 'Subspecies_local_names',
+                    'Family_ID', 'Genus_ID', 'Species_ID', 'Subspecies_ID', ]:
+
+            species_def_ordered[key] = species_def[key]
+        
+        return species_def_ordered
 
     def get_Species(self, obj):
 
@@ -343,19 +374,26 @@ class SpeciesGroupMixin(object):
         else:
             group = obj
         data = []
+
         for species in group.Species.all():
-            data.append(SimpleSpeciesSerializer(instance=species, many=False).data)
+            species_def = SimpleSpeciesSerializer(instance=species, many=False).data
+            data.append(self.ensure_all_keys(species_def))
 
         for subspecies in group.Subspecies.all():
-            data.append(SimpleSubspeciesSerializer(instance=subspecies, many=False).data)
+            species_def = SimpleSubspeciesSerializer(instance=subspecies, many=False).data
+            data.append(self.ensure_all_keys(species_def))
 
         for genus in group.Genera.all():
-            data.append(SimpleGenusSerializer(instance=genus, many=False).data)
+            species_def = SimpleGenusSerializer(instance=genus, many=False).data
+            data.append(self.ensure_all_keys(species_def))
 
         for family in group.Families.all():
-            data.append(SimpleGenusSerializer(instance=family, many=False).data)
+            species_def = SimpleGenusSerializer(instance=family, many=False).data
+            data.append(self.ensure_all_keys(species_def))
 
         return data
+
+
 
 
 class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerializer):
@@ -363,6 +401,119 @@ class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerialize
     class Meta: 
         model = taxonomy_models.SpeciesGroup
         fields = ('Species_group_ID', 'Species')
+
+    def create(self, data):
+        ModelClass = self.Meta.model
+        species_group = ModelClass()
+        for species_def in data['Species_group']:
+            # match the species def to our database
+            species_def_matched = SimpleSpeciesGroupSerializer.match_species_def_to_db(species_def)
+
+            # create any needed taxonomy models
+            # when there is not an id, but there is a name,
+            # it indicates we need to create the model
+            if species_def_matched['Family'] and not species_def_matched['Family_ID']:
+                family = taxonomy_models.Family.objects.get_or_create(
+                    Name=species_def_matched['Family'])[0]
+            else:
+                family = species_def_matched['db_family']
+
+            if species_def_matched['Genus'] and not species_def_matched['Genus_ID']:
+                genus = taxonomy_models.Genus.objects.get_or_create(
+                    Name=species_def_matched['Genus'], 
+                    Family=family)[0]
+            else:
+                genus = species_def_matched['db_genus']
+
+            if species_def_matched['Species'] and not species_def_matched['Species_ID']:
+                species = taxonomy_models.Species.objects.get_or_create(
+                    Name=species_def_matched['Species'], 
+                    Genus=genus)[0]
+            else:
+                species = species_def_matched['db_species']
+
+            if species_def_matched['Subspecies'] and not species_def_matched['Subspecies_ID']:
+                subspecies = taxonomy_models.Subspecies.objects.get_or_create(
+                    Name=species_def_matched['Subspecies'], 
+                    Species=species)[0]
+            else:
+                subspecies = species_def_matched['db_subpecies']
+
+            # link by the most specific record only
+            if subspecies:
+                species_group.Subspecies.add(subspecies)
+            elif species:
+                species_group.Species.add(species)
+            elif genus:
+                species_group.Genera.add(genus)
+            else:
+                species_group.Families.add(family)
+
+            species_group.save()
+
+            return species_group
+
+  
+    @staticmethod       
+    def match_species_def_to_db(species_def):
+        db_family = None
+        db_genus = None
+        db_species = None
+        db_subspecies = None
+
+        # Don't trust the ids we were given
+        species_def['Family_ID'] = None
+        species_def['Species_ID'] = None
+        species_def['Genus_ID'] = None
+        species_def['Subspecies_ID'] = None
+
+        # Family and Genus are required by the parser
+        try:
+            db_family = Family.objects.get(Name=species_def['Family'])
+            species_def['Family_ID'] = db_family.pk
+            species_def['db_family'] = db_family
+        except Family.DoesNotExist:
+            pass
+            
+        # If we have the family in our db, we try to find the genus id
+        if db_family:
+            try:
+                db_genus = Genus.objects.get(
+                    Family=db_family,
+                    Name=species_def['Genus']
+                    )
+                species_def['Genus_ID'] = db_genus.pk
+                species_def['db_genus'] = db_genus
+            except Genus.DoesNotExist:
+                pass
+                
+        # If we have the genus in our db, we try to find the species id
+        if db_genus and 'Species' in species_def.keys():
+            try:
+                db_species = Species.objects.get(
+                    Genus=db_genus,
+                    Name=species_def['Species'])
+                species_def['Species_ID'] = db_species.pk
+                species_def['db_species'] = db_species
+            except Species.DoesNotExist:
+                pass
+
+        # If we have the species in our db, we try to find the subspecies id
+        if db_species and 'Subspecies' in species_def.keys():
+            try:
+                db_subspecies = Subspecies.objects.get(Name=species_def['Subspecies'])
+                species_def['Subpsecies_ID'] = db_species.pk
+                specied_def['db_subspecies'] = db_subspecies
+            except Subspecies.DoesNotExist:
+                pass
+
+        return species_def
+
+
+
+
+
+
 
 
 class SimpleForestTypeSerializer(serializers.ModelSerializer):
@@ -632,9 +783,11 @@ class SimpleLinkedModelSerializer(serializers.ModelSerializer):
         
             if operator_data and operator_data['Name']:
                 instance.Operator = source_models.Operator.objects.get_or_create(Name=operator_data['Name'],
-                                                                                 Institution=instance.Contributor)[0]
+                                                                            Institution=instance.Contributor)[0]
         if species_data:
-            pass
+            species_group_serializer = SimpleSpeciesGroupSerializer(data=species_data)
+            if species_group_serializer.is_valid():
+                species_group_serializer.save()
 
         if location_data:
             pass
@@ -647,7 +800,6 @@ class SimpleLinkedModelSerializer(serializers.ModelSerializer):
 
 
 class SimpleAllometricEquationSerializer(SimpleLinkedModelSerializer):
-    
     class Meta:
         model = allometric_equation_models.AllometricEquation
         exclude = ('Created', 'Modified')

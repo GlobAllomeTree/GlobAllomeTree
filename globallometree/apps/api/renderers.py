@@ -1,7 +1,7 @@
 
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.renderers import JSONRenderer
-from rest_framework.renderers import XMLRenderer
+from rest_framework_xml.renderers import XMLRenderer
 from rest_framework_csv.renderers import CSVRenderer
 from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 

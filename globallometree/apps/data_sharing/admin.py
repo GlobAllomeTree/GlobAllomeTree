@@ -1,5 +1,7 @@
+import os
 import json
 
+from django import forms
 from django.contrib import admin
 from django.contrib import messages
 from django.shortcuts import render_to_response
@@ -15,8 +17,40 @@ from . import models
 from .data_tools import(
     match_data_to_database, 
     summarize_data,
-    serializers
+    Parsers,
+    validate_data_file,
+    import_dataset_to_db
 )
+
+class DatasetForm(forms.ModelForm):
+   
+   def clean_Uploaded_data_file(self):
+        extension = os.path.splitext(self.cleaned_data['Uploaded_data_file'].name.lower())[1]
+        if extension not in Parsers.keys():
+            valid_extensions = ", ".join(Parsers.keys())
+            raise forms.ValidationError("The uploaded file must end with one of the extensions:%s" % valid_extensions)
+
+        return self.cleaned_data['Uploaded_data_file']
+
+   def clean(self):
+        print "Clean"
+        if 'Uploaded_data_file' in self.cleaned_data.keys() and \
+        not hasattr(self.cleaned_data['Uploaded_data_file'], '_committed'):
+                data, data_errors = validate_data_file(
+                    self.cleaned_data['Uploaded_data_file'], 
+                    self.cleaned_data['Data_type']
+                    )
+
+                # processing the data is expensive so we store a copy
+                # for use in the admin
+                if data_errors:
+                    # self.instance refers to the dataset we our validating
+                    self.request._data = data
+                    self.request._data_errors = data_errors
+                    raise forms.ValidationError("The uploaded file has errors in the data")
+ 
+        return self.cleaned_data
+
 
 class DatasetAdmin(admin.ModelAdmin):
     actions = ['run_import']
@@ -25,9 +59,35 @@ class DatasetAdmin(admin.ModelAdmin):
     raw_id_fields = ('User',)
     readonly_fields = ('Imported',)
     exclude = ('Data_as_json',)
+    form = DatasetForm
 
-    def has_add_permission(self, request):
-        return False
+    # def changeform_view(self, request, object_id, form_url, extra_context):
+    #     import pdb; pdb.set_trace()
+    #     response = super(DatasetAdmin, self).changeform_view(request, object_id, form_url, extra_context)
+        
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(DatasetAdmin, self).get_form(request, obj, **kwargs)
+        # Keep a reference to the form so that we can use it later
+        form.request = request
+        return form
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        change_response = super(DatasetAdmin, self).change_view(request, object_id, form_url, extra_context)
+        
+        # File was uploaded without valid data - so we just output the template with the errors
+        if hasattr(request, '_data_errors'):
+            return render_to_response(
+                "data_sharing/upload_data.html",
+                {
+                 'form': self.form,
+                 'data_errors': request._data_errors,
+                 'extend_template': "admin/base_site.html",
+                 'include_jquery' : True
+                },
+                context_instance=RequestContext(request)
+            )
+        else:
+            return change_response
 
     def run_import(self, request, queryset):
         import_confirmed = request.POST.get('run', False)
@@ -56,14 +116,8 @@ class DatasetAdmin(admin.ModelAdmin):
         data = json.loads(dataset.Data_as_json)
 
         if import_confirmed:
-            SerializerClass = serializers[dataset.Data_type] 
-            serializer = SerializerClass(data=data, many=True)
-            if serializer.is_valid(): # Must call id valid
-                serializer.save()
-            else:
-                messages.error(request, "There was an error validating the data")
-            dataset.Imported = True
-            dataset.save()
+            import_dataset_to_db(dataset, data)
+
         else:
 
             data = match_data_to_database(data)
