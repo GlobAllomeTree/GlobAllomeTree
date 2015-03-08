@@ -4,11 +4,16 @@
 {% block content %}
 
 <dl class="dl-horizontal">
+    {{ requested_user.id}}
     <h1>Account Details</h1>
         <h3>General Information</h3>
         <div style="font-size: medium;">
         <dt>User name:</dt>
             <dd>{{requested_user.username}}</dd>
+        {% if token %}
+        <dt>API Token:</dt>
+            <dd>{{token}}</dd>
+        {% endif %}
         <dt>Name:</dt>
             <dd>{{requested_user.first_name}} {{requested_user.last_name}}</dd>
         <dt>Address:</dt>

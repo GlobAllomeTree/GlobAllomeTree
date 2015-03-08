@@ -143,7 +143,8 @@ INSTALLED_APPS = (
     'globallometree.apps.kibana_src',
     'globallometree.apps.api',
     'rest_framework',
-    'rest_framework_swagger'
+    'rest_framework_swagger',
+    'rest_framework.authtoken'
 )
 
 

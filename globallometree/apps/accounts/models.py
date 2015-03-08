@@ -1,5 +1,6 @@
 
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.conf import settings
@@ -115,3 +116,5 @@ http://www.globallometree.org/accounts/login/
                     'no-reply@globallometree.org',
                      [instance.email], 
                      fail_silently=False)
+
+
