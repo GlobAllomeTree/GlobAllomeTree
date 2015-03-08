@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends extend_template %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
@@ -12,7 +12,10 @@
 
 {% endblock %}
 
+
 {% block content %}
+
+
 
 <div class="row">
 	{% if not data_errors %}
@@ -89,6 +92,9 @@
     {% endif %}
 
 </div>
+{% if include_jquery %}
+	<script type="text/javascript" src="/static/cms/js/libs/jquery.min.js"></script>j
 
-	    
+{% endif %}
+
 {% endblock %}

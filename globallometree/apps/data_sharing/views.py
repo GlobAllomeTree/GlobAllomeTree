@@ -11,14 +11,11 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
 
-from rest_framework.parsers import JSONParser, XMLParser
-
 from apps.api.serializers import SimpleDatasetSerializer
-
 
 from apps.accounts.mixins import RestrictedPageMixin
 
-from .data_tools import serializers
+from .data_tools import validate_records, validate_data_file
 from .models import Dataset
 from .forms import ( 
     DataLicenseForm, 
@@ -87,100 +84,16 @@ def choose_license(request, data_agreement=None):
 
 @login_required(login_url='/accounts/login/')
 def upload_data(request):
-
-    data_errors = []
-
+    data_errors = None
     if request.method == 'POST':
         form = DatasetUploadForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             # Form is valid, now we actually try to parse and serialize the 
-            # real data 
-            # sumitted_file is the in memory copy of the file
-            submitted_file = form.cleaned_data['Uploaded_data_file']
-            
-            parsers = {
-                '.json': JSONParser,
-                '.xml': XMLParser,
-                '.csv': None
-            }
-
-            extension = os.path.splitext(submitted_file._name.lower())[1]
-            ParserClass = parsers[extension]
-            SerializerClass = serializers[form.cleaned_data['Data_type']]
-
-            parser = ParserClass()
-            data = parser.parse(submitted_file)
-
-
-
-            def get_sub_errors(sub_errors):
-                sub_error_list = []
-                if isinstance(sub_errors, dict):
-                    sub_errors = [sub_errors]
-
-                for sub_error_item in sub_errors:
-                    # if isinstance(sub_error_item, list):
-                    #     # possibly never a list?
-                    #      val = {
-                    #         'field' : None,
-                    #         'error' : ', '.sub_error_item
-                    #         } 
-                    # elif
-                    if isinstance(sub_error_item, dict):
-                        for sub_key in sub_error_item.keys():
-                            val = {
-                                'field' : sub_key,
-                                'error' : ', '.join(sub_error_item[sub_key])
-                                }
-                            if val not in sub_error_list:
-                                sub_error_list.append(val)
-                    elif isinstance(sub_error_item, unicode):
-                        val = {
-                            'field' : None,
-                            'error' : sub_error_item
-                            }
-                    if val not in sub_error_list:
-                        sub_error_list.append(val)
-                return sub_error_list
-
-            for en in enumerate(data):
-                record_number = en[0] + 1
-                record_data = en[1]
-                record_serializer = SerializerClass(data=record_data)
-                record_errors = []
-                if not record_serializer.is_valid():
-                    
-                    error_dict = dict(record_serializer.errors)
-
-                    for key in error_dict.keys():
-
-                        if key == 'Location_group':
-                            record_errors.append({
-                                'field' : key,
-                                'sub_errors' : get_sub_errors(error_dict['Location_group']['Locations'])
-                            })
-
-                        elif key == 'Species_group':
-                            record_errors.append({
-                                'field' : key,
-                                'sub_errors' : get_sub_errors(error_dict['Species_group']['Species'])
-                            })
-                        elif key == 'Reference':
-                            record_errors.append({
-                                'field' : key,
-                                'sub_errors' : get_sub_errors(error_dict['Reference'])
-                            })
-                        else:    
-                            record_errors.append({
-                                'field' : key,
-                                'error' : ', '.join(error_dict[key])
-                                })
-
-                    data_errors.append({
-                        'record_number': record_number,
-                        'errors' : record_errors,
-                        'source' : json.dumps(record_data, indent=4)
-                        })
+            # data, give errors as feedback if needed
+            data, data_errors = validate_data_file(
+                form.cleaned_data['Uploaded_data_file'],
+                form.cleaned_data['Data_type'] 
+            )
 
             if not(data_errors):
                 dataset = form.save()
@@ -202,7 +115,8 @@ def upload_data(request):
         "data_sharing/upload_data.html",
         {
          'form': form,
-         'data_errors': data_errors
+         'data_errors': data_errors,
+         'extend_template': "base.html"
          },
         context_instance=RequestContext(request)
     )
