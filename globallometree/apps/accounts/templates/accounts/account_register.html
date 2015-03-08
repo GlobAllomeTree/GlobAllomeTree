@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 {% block meta_title%}
 	Register
 {% endblock%}
@@ -33,7 +33,7 @@
 	    </ol>
 	    
 	    </p>
-	<form method="post" style="padding:0px 15px 0px 0px;">
+	<form method="post" style="padding:0px 0px 0px 0px;">
 		{% for error in form.non_field_errors  %} 
 		   <span class="error"> {{ error|escape }} </span> <br>
 		{% endfor %}
@@ -42,31 +42,31 @@
         
 		<fieldset>
 			<legend>Account Details</legend>
-			{% with form.username as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.password1 as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.password2 as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.username|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.password1|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.password2|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 		</fieldset>
 
 		<fieldset>
 			<legend>Your Information</legend>
-			{% with form.title as field %}  {% include "accounts/_inc.form_field.html" %} {% endwith %}
-			{% with form.first_name as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.last_name as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.email as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.address as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.country as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.education as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.field_subject as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.privacy as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.title|as_crispy_field as field %}  {% include "accounts/_inc.form_field.html" %} {% endwith %}
+			{% with form.first_name|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.last_name|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.email|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.address|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.country|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.education|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.field_subject|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.privacy|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 		</fieldset>
 		<br>
 		<fieldset>
 			<legend>Institution</legend>
-			{% with form.institution_name as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.institution_address as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.institution_phone as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.institution_fax as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
-			{% with form.data_may_provide as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.institution_name|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.institution_address|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.institution_phone|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.institution_fax|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
+			{% with form.data_may_provide|as_crispy_field as field %}{% include "accounts/_inc.form_field.html" %}{% endwith %}
 		</fieldset>
 		<br>
 

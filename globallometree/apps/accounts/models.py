@@ -1,6 +1,6 @@
 
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.mail import mail_managers, send_mail
@@ -12,7 +12,7 @@ from globallometree.apps.locations.models import Country
 def get_profile(self):
     if not hasattr(self, 'profile'):
         try:
-            self.profile = self.profile_set.all()[0]
+            self.profile = self.userprofile_set.all()[0]
         except AttributeError:
             self.profile = UserProfile(user=self)
     return self.profile
@@ -115,7 +115,3 @@ http://www.globallometree.org/accounts/login/
                     'no-reply@globallometree.org',
                      [instance.email], 
                      fail_silently=False)
-            
-   
-    
-    

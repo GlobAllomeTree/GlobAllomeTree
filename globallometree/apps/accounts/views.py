@@ -13,6 +13,7 @@ from django.core.mail import mail_managers
 
 
 
+
 def register(request):
     
     if request.method == 'POST':
@@ -86,3 +87,18 @@ def approval_pending(request):
     
     return render_to_response('accounts/account_approval_pending.html',
                                context_instance=RequestContext(request))
+
+def my_profile(request, user_id=0):
+    if (user_id == 0):
+        get_user = request.user
+        return render_to_response('accounts/my_profile.html',
+                                  context_instance=RequestContext(request,
+                                  {"requested_user": get_user,
+                                  "profile": request.user.get_profile()}))
+    else:
+        get_user = get_object_or_404(User, id=user_id)
+        get_user_profile = User.objects.get(id=user_id).get_profile()
+        return render_to_response('accounts/my_profile.html',
+                                  context_instance=RequestContext(request,
+                                  {"requested_user": get_user,
+                                  "profile": get_user_profile}))

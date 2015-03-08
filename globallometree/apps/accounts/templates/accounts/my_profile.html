@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<dl class="dl-horizontal">
+    <h1>Account Details</h1>
+        <h3>General Information</h3>
+        <div style="font-size: medium;">
+        <dt>User name:</dt>
+            <dd>{{requested_user.username}}</dd>
+        <dt>Name:</dt>
+            <dd>{{requested_user.first_name}} {{requested_user.last_name}}</dd>
+        <dt>Address:</dt>
+            <dd>{{profile.address}}</dd>
+    <br>
+        <h3>Institutional Details</h3>
+        <dt>Institution:</dt>
+            <dd>{{profile.institution_name}}</dd>
+        <dt>Field:</dt>
+            <dd>{{profile.field_subject}}</dd>
+    <br>
+        <h3>Data Details</h3>
+        <dt>You may provide:</dt>
+            <dd>{{profile.data_may_provide}}</dd>
+        </div>
+</dl>
+
+{% endblock %}
