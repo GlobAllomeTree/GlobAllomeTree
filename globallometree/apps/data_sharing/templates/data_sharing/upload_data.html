@@ -15,8 +15,6 @@
 
 {% block content %}
 
-
-
 <div class="row">
 	{% if not data_errors %}
 	    <div class="col-md-8">
@@ -68,7 +66,7 @@
 								<tr>
 									<td style="width:300px">{{ error.field}}
 									{% if sub_error.field == 'non_field_errors' %}
-										/ general error
+										/ error
 									{% elif sub_error.field %}
 									 	/ {{ sub_error.field}}
 									{% endif %}
@@ -93,7 +91,7 @@
 
 </div>
 {% if include_jquery %}
-	<script type="text/javascript" src="/static/cms/js/libs/jquery.min.js"></script>j
+	<script type="text/javascript" src="/static/cms/js/libs/jquery.min.js"></script>
 
 {% endif %}
 

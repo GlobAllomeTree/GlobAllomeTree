@@ -1,6 +1,8 @@
 import os
 import json
 
+from django.contrib import messages
+
 from globallometree.apps.taxonomy.models import (
     Family,
     Genus,
@@ -48,8 +50,8 @@ def summarize_data(data):
     # Find out which families and species exist, or are new
     for r_i in range(0, len(data)):
         record = data[r_i]
-        for sp_i in range(0, len(record['Species_group']['Species'])):
-            species_def = record['Species_group']['Species'][sp_i]
+        for sp_i in range(0, len(record['Species_group']['Group'])):
+            species_def = record['Species_group']['Group'][sp_i]
             if species_def['Family'] and not species_def['Family_ID']:
                 new_record = {
                     "Family": species_def['Family']
@@ -143,23 +145,18 @@ def validate_records(data, SerializerClass):
 
             for key in error_dict.keys():
 
+                # Nested objects
                 if key == 'Location_group':
                     record_errors.append({
                         'field' : key,
-                        'sub_errors' : get_sub_errors(error_dict['Location_group']['Locations'])
+                        'sub_errors' : get_sub_errors(error_dict['Location_group']['Group'])
                     })
 
                 elif key == 'Species_group':
-                    if isinstance(error_dict['Species_group'], dict):
-                        record_errors.append({
-                            'field' : 'Species_group error',
-                            'error' : ', '.join(error_dict['Species_group']['non_field_errors'])
-                        })
-                    else:
-                        record_errors.append({
-                            'field' : key,
-                            'sub_errors' : get_sub_errors(error_dict['Species_group']['Species'])
-                        })
+                    record_errors.append({
+                        'field' : 'Species_group / Group',
+                        'sub_errors' : get_sub_errors(error_dict['Species_group']['Group'])
+                    })
                 elif key == 'Reference':
                     record_errors.append({
                         'field' : key,
@@ -209,10 +206,9 @@ def match_data_to_database(data):
 
     for r_i in range(0, len(data)):
         record = data[r_i]
-        for sp_i in range(0, len(record['Species_group']['Species'])):
-            species_def = record['Species_group']['Species'][sp_i]
-            record['Species_group']['Species'][sp_i] = match_or_clean_species_ids(species_def)
-
+        for sp_i in range(0, len(record['Species_group']['Group'])):
+            species_def = record['Species_group']['Group'][sp_i]
+            record['Species_group']['Group'][sp_i] = match_or_clean_species_ids(species_def)
         data[r_i] = record
         
     return data
@@ -267,6 +263,7 @@ def match_or_clean_species_ids(species_def):
 
     return species_def
 
+
 def import_dataset_to_db(dataset, data):
     SerializerClass = Serializers[dataset.Data_type] 
     serializer = SerializerClass(data=data, many=True)
@@ -274,7 +271,5 @@ def import_dataset_to_db(dataset, data):
         serializer.save()
         dataset.Imported = True
         dataset.save()
-        messages.info(request, "The dataset '%s' was import correctly" % dataset.title)
     else:
-        messages.error(request, "There was an error validating the data from dataset %s" % dataset.title)
-    
+        raise Exception("The dataset could not be validated and was not imported.") 

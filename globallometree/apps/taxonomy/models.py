@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from globallometree.apps.common.models import BaseModel
 from globallometree.apps.data_sharing.models import Dataset
 
+
 class TaxonomyModel(BaseModel):
     TPL_Status = models.CharField(max_length=80, blank=True, null=True)
     TPL_Confidence_level = models.CharField(max_length=10, blank=True, null=True)
@@ -195,6 +196,37 @@ class SpeciesGroup(BaseModel):
     class Meta:
         db_table = "Species_group"
 
+    def Group(self):
+        """
+            Returns a flat list of species, subspecies, etc for the SimpleSpeciesGroupSerializer,
+            Ideally this would be in the api, but the syntax for that was not working
+        """
+        data = []
+        from globallometree.apps.api.serializers import (
+            SimpleSpeciesSerializer,
+            SimpleSubspeciesSerializer,
+            SimpleGenusSerializer,
+            SimpleFamilySerializer
+            )
+
+        for species in self.Species.all():
+            species_def = SimpleSpeciesSerializer(instance=species, many=False).data
+            data.append(species_def)
+
+        for subspecies in self.Subspecies.all():
+            species_def = SimpleSubspeciesSerializer(instance=subspecies, many=False).data
+            data.append(species_def)
+
+        for genus in self.Genera.all():
+            species_def = SimpleGenusSerializer(instance=genus, many=False).data
+            data.append(species_def)
+
+        for family in self.Families.all():
+            species_def = SimpleGenusSerializer(instance=family, many=False).data
+            data.append(species_def)
+
+        return data
+
     def save(self, *args, **kwargs):
 
         super(SpeciesGroup, self).save(*args, **kwargs)
@@ -205,4 +237,4 @@ class SpeciesGroup(BaseModel):
 
 
     def __unicode__(self):
-        return self.Name
+        return self.Name if self.Name else 'Species Group'

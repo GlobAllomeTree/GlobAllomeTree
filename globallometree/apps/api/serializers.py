@@ -295,9 +295,6 @@ class SimpleSpeciesSerializer(serializers.ModelSerializer):
                   'Species_ID',
                   )
 
-
-
-
 class SimpleSubspeciesSerializer(serializers.ModelSerializer):
     
     Family = fields.CharField(source="Species.Genus.Family.Name")
@@ -337,75 +334,46 @@ class SimpleSubspeciesSerializer(serializers.ModelSerializer):
                   )
 
 
+class SimpleSpeciesDefinition(serializers.Serializer):
+    """
+    This is basically trying to flatten out all of the species, families, local names,
+    etc into a simple single record
+    """
+   
+    Family = fields.CharField(required=False, allow_null=True)
+    Genus = fields.CharField(required=False,allow_null=True)
+    Species = fields.CharField(required=False,allow_null=True)
+    Species_local_names = SimpleSpeciesLocalNameSerializer(
+        many = True,
+        required=False
+        )
+    Species_ID = fields.IntegerField(required=False,allow_null=True)
+    Family_ID = fields.IntegerField(required=False,allow_null=True)
+    Genus_ID = fields.IntegerField(required=False,allow_null=True)
+
+    Subspecies = fields.CharField(required=False,allow_null=True)
+    Subspecies_local_names = SimpleSubspeciesLocalNameSerializer(
+        many=True,
+        required=False)
+
+    Scientific_name = fields.CharField(read_only=True,allow_null=True)
 
 
-
-class SpeciesGroupMixin(object):
-
-    def ensure_all_keys(self, species_def):
-        """ This ensures that all records have the same format even 
-            if they come from different serializers
-        """
-        existing_keys = species_def.keys()
-        for key in ['Family', 'Family_ID',
-                    'Genus', 'Genus_ID',
-                    'Species', 'Species_ID',
-                    'Subspecies', 'Subspecies_ID']:
-            if key not in existing_keys:
-                species_def[key] = None   
-
-        for key in ['Species_local_names', 'Subspecies_local_names']:
-             if key not in existing_keys:
-                species_def[key] = []
-
-        species_def_ordered = OrderedDict()
-        for key in ['Scientific_name','Family', 'Genus', 'Species',
-                    'Subspecies', 'Species_local_names', 'Subspecies_local_names',
-                    'Family_ID', 'Genus_ID', 'Species_ID', 'Subspecies_ID', ]:
-
-            species_def_ordered[key] = species_def[key]
-        
-        return species_def_ordered
-
-    def get_Species(self, obj):
-
-        if(hasattr(obj, 'Species_group')):
-            group = obj.Species_group
-        else:
-            group = obj
-        data = []
-
-        for species in group.Species.all():
-            species_def = SimpleSpeciesSerializer(instance=species, many=False).data
-            data.append(self.ensure_all_keys(species_def))
-
-        for subspecies in group.Subspecies.all():
-            species_def = SimpleSubspeciesSerializer(instance=subspecies, many=False).data
-            data.append(self.ensure_all_keys(species_def))
-
-        for genus in group.Genera.all():
-            species_def = SimpleGenusSerializer(instance=genus, many=False).data
-            data.append(self.ensure_all_keys(species_def))
-
-        for family in group.Families.all():
-            species_def = SimpleGenusSerializer(instance=family, many=False).data
-            data.append(self.ensure_all_keys(species_def))
-
-        return data
-
-
-
-
-class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerializer):
-    Species = fields.SerializerMethodField()
+class SimpleSpeciesGroupSerializer(serializers.ModelSerializer):
+    Group = SimpleSpeciesDefinition(many=True)
+    
     class Meta: 
         model = taxonomy_models.SpeciesGroup
-        fields = ('Species_group_ID', 'Species')
+        fields = ('Species_group_ID', 'Group')
 
     def create(self, data):
         ModelClass = self.Meta.model
         species_group = ModelClass()
-        for species_def in data['Species_group']:
+        # Since the species group is m2m, we need to save a copy of it
+        # before adding any species
+        species_group.save()
+        for species_def in data['Group']:
+
             # match the species def to our database
             species_def_matched = SimpleSpeciesGroupSerializer.match_species_def_to_db(species_def)
 
@@ -437,7 +405,7 @@ class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerialize
                     Name=species_def_matched['Subspecies'], 
                     Species=species)[0]
             else:
-                subspecies = species_def_matched['db_subpecies']
+                subspecies = species_def_matched['db_subspecies']
 
             # link by the most specific record only
             if subspecies:
@@ -446,73 +414,66 @@ class SimpleSpeciesGroupSerializer(SpeciesGroupMixin, serializers.ModelSerialize
                 species_group.Species.add(species)
             elif genus:
                 species_group.Genera.add(genus)
-            else:
-                species_group.Families.add(family)
+            elif family:
+                species_group.Families.add(family)            
 
-            species_group.save()
-
-            return species_group
+        return species_group
 
   
     @staticmethod       
     def match_species_def_to_db(species_def):
-        db_family = None
-        db_genus = None
-        db_species = None
-        db_subspecies = None
-
+     
         # Don't trust the ids we were given
         species_def['Family_ID'] = None
         species_def['Species_ID'] = None
         species_def['Genus_ID'] = None
         species_def['Subspecies_ID'] = None
 
+        species_def['db_family'] = None
+        species_def['db_genus'] = None
+        species_def['db_species'] = None
+        species_def['db_subspecies'] = None
+
         # Family and Genus are required by the parser
         try:
-            db_family = Family.objects.get(Name=species_def['Family'])
-            species_def['Family_ID'] = db_family.pk
-            species_def['db_family'] = db_family
-        except Family.DoesNotExist:
+            species_def['db_family'] = taxonomy_models.Family.objects.get(Name=species_def['Family'])
+            species_def['Family_ID'] = species_def['db_family'].pk
+        except taxonomy_models.Family.DoesNotExist:
             pass
             
         # If we have the family in our db, we try to find the genus id
-        if db_family:
+        if species_def['db_family']:
             try:
-                db_genus = Genus.objects.get(
-                    Family=db_family,
+                species_def['db_genus'] = taxonomy_models.Genus.objects.get(
+                    Family=species_def['db_family'],
                     Name=species_def['Genus']
                     )
-                species_def['Genus_ID'] = db_genus.pk
-                species_def['db_genus'] = db_genus
-            except Genus.DoesNotExist:
+                species_def['Genus_ID'] = species_def['db_genus'].pk
+            except taxonomy_models.Genus.DoesNotExist:
                 pass
                 
         # If we have the genus in our db, we try to find the species id
-        if db_genus and 'Species' in species_def.keys():
+        if species_def['db_genus'] and 'Species' in species_def.keys():
             try:
-                db_species = Species.objects.get(
-                    Genus=db_genus,
+                species_def['db_species'] = taxonomy_models.Species.objects.get(
+                    Genus=species_def['db_genus'],
                     Name=species_def['Species'])
-                species_def['Species_ID'] = db_species.pk
-                species_def['db_species'] = db_species
-            except Species.DoesNotExist:
+                species_def['Species_ID'] = species_def['db_species'].pk
+            except taxonomy_models.Species.DoesNotExist:
                 pass
 
         # If we have the species in our db, we try to find the subspecies id
-        if db_species and 'Subspecies' in species_def.keys():
+        if species_def['db_species'] and 'Subspecies' in species_def.keys():
             try:
-                db_subspecies = Subspecies.objects.get(Name=species_def['Subspecies'])
-                species_def['Subpsecies_ID'] = db_species.pk
-                specied_def['db_subspecies'] = db_subspecies
-            except Subspecies.DoesNotExist:
+                specied_def['db_subspecies'] = taxonomy_models.Subspecies.objects.get(
+                    Species=species_def['db_species'], 
+                    Name=species_def['Subspecies']
+                    )
+                species_def['Subpsecies_ID'] = specied_def['db_subspecies'].pk
+            except taxonomy_models.Subspecies.DoesNotExist:
                 pass
 
         return species_def
-
-
-
-
-
 
 
 
@@ -554,10 +515,6 @@ class SimpleDivisionBaileySerializer(serializers.ModelSerializer):
 
 class SimpleLocationSerializer(serializers.ModelSerializer):
    
-    # def __init__(self, *args, **kwargs):
-    #     super(SimpleLocationSerializer, self).__init__( *args, **kwargs)
-    #     import pdb; pdb.set_trace()
-
     Country = fields.ChoiceField(
         source="Country.Formal_name", 
         allow_null=True,
@@ -661,6 +618,25 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
             lat_lon_string = None  
         return lat_lon_string
 
+
+    def create(self, data):
+        ModelClass = self.Meta.model
+        location_group = ModelClass()
+        # Since the species group is m2m, we need to save a copy of it
+        # before adding any species
+        location_group.save()
+        for location in data['Group']:
+
+            # match the location def to our database
+            location_matched = SimpleLocationGroupSerializer.match_location_to_db(location)
+
+                       
+
+        return location_group
+
+  
+   
+
     class Meta: 
         model = location_models.Location
         
@@ -693,11 +669,11 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
 
 
 class SimpleLocationGroupSerializer(serializers.ModelSerializer):
-    Locations = SimpleLocationSerializer(many=True)
+    Group = SimpleLocationSerializer(many=True)
 
     class Meta:
         model = location_models.LocationGroup
-        fields = ('Location_group_ID', 'Locations',)
+        fields = ('Location_group_ID', 'Group',)
 
 
 class SimplePopulationSerializer(serializers.ModelSerializer):
@@ -787,10 +763,12 @@ class SimpleLinkedModelSerializer(serializers.ModelSerializer):
         if species_data:
             species_group_serializer = SimpleSpeciesGroupSerializer(data=species_data)
             if species_group_serializer.is_valid():
-                species_group_serializer.save()
+                instance.Species_group = species_group_serializer.save()
 
         if location_data:
-            pass
+            location_group_serializer = SimpleLocationGroupSerializer(data=location_data)
+            if location_group_serializer.is_valid():
+                instance.Location_group = location_group_serializer.save()
 
         instance.Reference = source_models.Reference.objects.get_or_create(**reference_data)[0]
 

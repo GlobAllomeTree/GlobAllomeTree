@@ -189,7 +189,8 @@ class LocationGroup(BaseModel):
     Locations = models.ManyToManyField(Location,
         verbose_name="List of Locations",
         blank=True,
-        null=True
+        null=True,
+        help_text="Only add in locations here when the Plot Id is unknown"
         )
 
     Plots = models.ManyToManyField(Plot,
@@ -197,6 +198,27 @@ class LocationGroup(BaseModel):
         blank=True,
         null=True
         )
+
+    def Group(self):
+        """
+            Returns a flat list of plots and locations, etc for the SimpleLocationGroupSerializer,
+            Ideally this would be in the api, but the syntax for that was not working
+        """
+        data = []
+        from globallometree.apps.api.serializers import (
+            SimpleLocationSerializer,
+            SimplePlotSerializer
+            )
+
+        for plot in self.Plots.all():
+            location_data = SimplePlotSerializer(instance=plot, many=False).data
+            data.append(location_data)
+
+        for location in self.Locations.all():
+            location_data = SimpleLocationSerializer(instance=location, many=False).data
+            data.append(location_data)
+
+        return data
 
     def save(self, *args, **kwargs):
 

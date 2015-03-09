@@ -40,12 +40,9 @@ class DatasetForm(forms.ModelForm):
                     self.cleaned_data['Uploaded_data_file'], 
                     self.cleaned_data['Data_type']
                     )
-
-                # processing the data is expensive so we store a copy
-                # for use in the admin
+                # Since the file is ok, we keep a copy as json
+                self.cleaned_data['Data_as_json'] = json.dumps(data)
                 if data_errors:
-                    # self.instance refers to the dataset we our validating
-                    self.request._data = data
                     self.request._data_errors = data_errors
                     raise forms.ValidationError("The uploaded file has errors in the data")
  
@@ -58,17 +55,13 @@ class DatasetAdmin(admin.ModelAdmin):
     search_fields  = ['Title', 'Description']
     raw_id_fields = ('User',)
     readonly_fields = ('Imported',)
-    exclude = ('Data_as_json',)
     form = DatasetForm
-
-    # def changeform_view(self, request, object_id, form_url, extra_context):
-    #     import pdb; pdb.set_trace()
-    #     response = super(DatasetAdmin, self).changeform_view(request, object_id, form_url, extra_context)
         
     def get_form(self, request, obj=None, **kwargs):
         form = super(DatasetAdmin, self).get_form(request, obj, **kwargs)
         # Keep a reference to the form so that we can use it later
         form.request = request
+        #self.form = form
         return form
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -116,8 +109,12 @@ class DatasetAdmin(admin.ModelAdmin):
         data = json.loads(dataset.Data_as_json)
 
         if import_confirmed:
-            import_dataset_to_db(dataset, data)
-
+            try:
+                import_dataset_to_db(dataset, data)
+                messages.info(request, "The dataset '%s' was import correctly" % dataset.Title)
+            except:
+                messages.error(request, "There was an error validating the data from dataset %s" % dataset.Title)
+   
         else:
 
             data = match_data_to_database(data)
