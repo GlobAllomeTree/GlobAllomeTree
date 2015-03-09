@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.conf import settings
 from django.core.mail import mail_managers, send_mail
 from django.db import models
+from rest_framework.authtoken.models import Token
 
 from globallometree.apps.locations.models import Country
 
@@ -117,4 +118,8 @@ http://www.globallometree.org/accounts/login/
                      [instance.email], 
                      fail_silently=False)
 
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
