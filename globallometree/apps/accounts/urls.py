@@ -42,7 +42,8 @@ urlpatterns = patterns('django.contrib.auth.views',
      url(r'^change-password/done/$', 
           'password_change_done',
           {'template_name': 'accounts/account_password_change_done.html'},
-          name='password_change_done'),
+          name='password_change_done')
+
     ) 
 
 
@@ -50,5 +51,7 @@ urlpatterns = patterns('django.contrib.auth.views',
 #Site views
 urlpatterns += patterns('apps.accounts.views',
      (r'^register/$', 'register'),
-     (r'^approval-pending/$', 'approval_pending')
+     (r'^approval-pending/$', 'approval_pending'),
+     url(r'^profile/$', 'my_profile'),
+     url(r'^profile/(?P<user_id>\d+)/$', 'my_profile')
 )

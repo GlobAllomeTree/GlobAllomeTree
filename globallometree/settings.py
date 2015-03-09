@@ -35,6 +35,7 @@ LANGUAGES = [
     ('en', 'English'),
 ]
 
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -143,7 +144,8 @@ INSTALLED_APPS = (
     'globallometree.apps.kibana_src',
     'globallometree.apps.api',
     'rest_framework',
-    'rest_framework_swagger'
+    'rest_framework_swagger',
+    'rest_framework.authtoken'
 )
 
 
@@ -226,6 +228,10 @@ REST_FRAMEWORK = {
         'globallometree.apps.api.renderers.FullBrowsableAPIRenderer',
         'globallometree.apps.api.renderers.FullJSONRenderer',
         'globallometree.apps.api.renderers.FullXMLRenderer',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'PAGINATE_BY_PARAM' : 'limit',
     'PAGINATE_BY': 50,
