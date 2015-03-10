@@ -47,6 +47,7 @@ from globallometree.apps.locations.models import (
     BiomeHoldridge, 
     LocationGroup, 
     Location, 
+    Plot,
     ForestType,
 	)
 
@@ -73,7 +74,8 @@ from globallometree.apps.api.serializers import (
     BiomeHoldridgeSerializer,
     AllometricEquationSerializer,
     WoodDensitySerializer,
-    RawDataSerializer, 
+    RawDataSerializer,
+    PlotSerializer, 
     LocationSerializer,
     LocationGroupSerializer,
     DataLicenseSerializer, 
@@ -96,6 +98,7 @@ from globallometree.apps.api.serializers import (
     SimpleDivisionBaileySerializer, 
     SimpleBiomeHoldridgeSerializer,
     SimplePopulationSerializer,
+    SimplePlotSerializer, 
     SimpleLocationSerializer,
     SimpleLocationGroupSerializer,
     SimpleContinentSerializer,
@@ -259,6 +262,14 @@ class LocationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
     simple_serializer_class = SimpleLocationSerializer
+
+
+class PlotViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    """
+    queryset = Plot.objects.all()
+    serializer_class = PlotSerializer
+    simple_serializer_class = SimplePlotSerializer
 
 
 class LocationGroupViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):

@@ -22,6 +22,7 @@ from globallometree.apps.api.views import (
 	BiomeWWFViewSet, 
 	DivisionBaileyViewSet, 
 	BiomeHoldridgeViewSet, 
+	PlotViewSet,
 	LocationViewSet,
 	LocationGroupViewSet,
 	DataLicenseViewSet, 
@@ -51,6 +52,7 @@ router.register(r'subspecies-local-names', SubspeciesLocalNameViewSet)
 
 router.register(r'continents', ContinentViewSet)
 router.register(r'countries', CountryViewSet)
+router.register(r'plots', PlotViewSet)
 router.register(r'locations', LocationViewSet)
 router.register(r'location-groups', LocationGroupViewSet)
 

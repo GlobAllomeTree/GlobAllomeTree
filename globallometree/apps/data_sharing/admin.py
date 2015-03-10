@@ -113,7 +113,8 @@ class DatasetAdmin(admin.ModelAdmin):
                 import_dataset_to_db(dataset, data)
                 messages.info(request, "The dataset '%s' was import correctly" % dataset.Title)
             except:
-                messages.error(request, "There was an error validating the data from dataset %s" % dataset.Title)
+                messages.error(request, "There was an error validating the data from dataset %s. \
+                    Please upload the dataset file again to run the validation process." % dataset.Title)
    
         else:
 
