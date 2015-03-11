@@ -9,6 +9,9 @@ estype_long = { 'type' : 'long'}
 
 estype_double = { 'type' : 'double' }
 
+estype_date = { 'type' : 'date',
+                'format' : "YYYY-MM-dd" }
+
 estype_string_analyzed = {'type': 'string',
                           'index': 'analyzed'}
 
