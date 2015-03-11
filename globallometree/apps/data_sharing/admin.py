@@ -69,7 +69,22 @@ class DatasetAdmin(admin.ModelAdmin):
         
         # File was uploaded without valid data - so we just output the template with the errors
         if hasattr(request, '_data_errors'):
-            return render_to_response(
+            return self.error_view(request)
+        else:
+            return change_response
+    
+    def add_view(self, request, form_url='', extra_context=None):
+        add_response = super(DatasetAdmin, self).add_view(request, form_url, extra_context)
+        
+        # File was uploaded without valid data - so we just output the template with the errors
+        if hasattr(request, '_data_errors'):
+            return self.error_view(request)
+        else:
+            return add_response
+
+    def error_view(self, request):
+
+        return render_to_response(
                 "data_sharing/upload_data.html",
                 {
                  'form': self.form,
@@ -79,8 +94,6 @@ class DatasetAdmin(admin.ModelAdmin):
                 },
                 context_instance=RequestContext(request)
             )
-        else:
-            return change_response
 
     def run_import(self, request, queryset):
         import_confirmed = request.POST.get('run', False)
@@ -109,12 +122,8 @@ class DatasetAdmin(admin.ModelAdmin):
         data = json.loads(dataset.Data_as_json)
 
         if import_confirmed:
-            try:
-                import_dataset_to_db(dataset, data)
-                messages.info(request, "The dataset '%s' was import correctly" % dataset.Title)
-            except:
-                messages.error(request, "There was an error validating the data from dataset %s. \
-                    Please upload the dataset file again to run the validation process." % dataset.Title)
+            import_dataset_to_db(dataset, data)
+            messages.info(request, "The dataset '%s' was import correctly" % dataset.Title)
    
         else:
 

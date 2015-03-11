@@ -454,7 +454,6 @@ class SimpleSpeciesGroupSerializer(serializers.ModelSerializer):
   
     @staticmethod       
     def match_species_def_to_db(species_def):
-     
         # Don't trust the ids we were given
         species_def['Family_ID'] = None
         species_def['Species_ID'] = None
@@ -497,11 +496,11 @@ class SimpleSpeciesGroupSerializer(serializers.ModelSerializer):
         # If we have the species in our db, we try to find the subspecies id
         if species_def['db_species'] and 'Subspecies' in species_def.keys():
             try:
-                specied_def['db_subspecies'] = taxonomy_models.Subspecies.objects.get(
+                species_def['db_subspecies'] = taxonomy_models.Subspecies.objects.get(
                     Species=species_def['db_species'], 
                     Name=species_def['Subspecies']
                     )
-                species_def['Subpsecies_ID'] = specied_def['db_subspecies'].pk
+                species_def['Subpsecies_ID'] = species_def['db_subspecies'].pk
             except taxonomy_models.Subspecies.DoesNotExist:
                 pass
 
@@ -650,20 +649,6 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
             lat_lon_string = None  
         return lat_lon_string
 
-
-    def create(self, data):
-        ModelClass = self.Meta.model
-        location_group = ModelClass()
-        # Since the species group is m2m, we need to save a copy of it
-        # before adding any species
-        location_group.save()
-        for location in data['Group']:
-
-            # match the location def to our database
-            location_matched = SimpleLocationGroupSerializer.match_location_to_db(location)
-         
-        return location_group
-
     class Meta: 
         model = location_models.Location
         
@@ -766,6 +751,7 @@ class SimpleLocationDefinitionSerializer(serializers.Serializer):
             obj['Plot_size_m2'] = None
         return obj
 
+     
    
 class SimplePlotSerializer(serializers.ModelSerializer):
     Plot_name = fields.CharField(required=False, allow_null=True)
@@ -951,6 +937,86 @@ class SimpleLocationGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = location_models.LocationGroup
         fields = ('Location_group_ID', 'Group',)
+
+    def create(self, data):
+        ModelClass = self.Meta.model
+        location_group = ModelClass()
+        # Since the species group is m2m, we need to save a copy of it
+        # before adding any biomes, country, etc...
+        location_group.save()
+        for location_def in data['Group']:
+
+            # match the species def to our database
+            location_def_matched = SimpleLocationGroupSerializer.match_location_def_to_db(location_def)
+
+            location = location_models.Location.objects.create(
+                Biome_FAO = location_def['db_biome_fao'],
+                Biome_WWF = location_def['db_biome_wwf'],
+                Biome_HOLDRIDGE = location_def['db_biome_holdridge'],
+                Biome_UDVARDY = location_def['db_biome_udvardy'],
+                Division_BAILEY = location_def['db_division_bailey'],
+                Country = location_def['db_country'],
+                Forest_type = location_def['db_forest_type']
+                )
+
+            plot = None
+            # create any needed location models
+            # when there is not an id, but there is a name,
+            # it indicates we need to create the model
+
+            # link by plot if plot, else location
+            if plot:
+                location_group.Plots.add(plot)
+            else:
+                location_group.Locations.add(location)
+             
+        return location_group
+  
+    @staticmethod       
+    def match_location_def_to_db(location_def):
+        # Don't trust the ids that we were given for Biomes
+        location_def['Biome_FAO_ID'] = None
+        location_def['Biome_WWF_ID'] = None
+        location_def['Biome_UDVARDY_ID'] = None
+        location_def['Biome_HOLDRIDGE_ID'] = None
+        location_def['Division_BAILEY_ID'] = None
+
+        if 'Biome_FAO' in location_def.keys() and location_def['Biome_FAO']:
+            location_def['db_biome_fao'] = location_models.BiomeFAO.objects.get(Name=location_def['Biome_FAO'])
+        else:
+            location_def['db_biome_fao'] = None
+
+        if 'Biome_WWF' in location_def.keys() and location_def['Biome_WWF']:
+            location_def['db_biome_wwf'] = location_models.BiomeWWF.objects.get(Name=location_def['Biome_WWF'])
+        else:
+            location_def['db_biome_wwf'] = None
+        
+        if 'Biome_UDVARDY' in location_def.keys() and location_def['Biome_UDVARDY']:
+            location_def['db_biome_udvardy'] = location_models.BiomeUdvardy.objects.get(Name=location_def['Biome_UDVARDY'])
+        else:
+            location_def['db_biome_udvardy'] = None
+
+        if 'Biome_HOLDRIDGE' in location_def.keys() and location_def['Biome_HOLDRIDGE']:
+            location_def['db_biome_holdridge'] = location_models.BiomeHoldridge.objects.get(Name=location_def['Biome_HOLDRIDGE'])
+        else:
+            location_def['db_biome_holdridge'] = None
+
+        if 'Division_BAILEY' in location_def.keys() and location_def['Division_BAILEY']:
+            location_def['db_division_bailey'] = location_models.DivisionBailey.objects.get(Name=location_def['Biome_HOLDRIDGE'])
+        else:
+            location_def['db_division_bailey'] = None
+
+        if 'Country_3166_3' in location_def.keys() and location_def['Country_3166_3']:
+            location_def['db_country'] = location_models.Country.objects.get(Iso3166a3=location_def['Country_3166_3'])
+        elif 'Country' in location_def.keys() and location_def['Country']:
+            location_def['db_country'] = location_models.Country.objects.get(Formal_name=location_def['Country'])
+        else:
+            location_def['db_country'] = None
+
+        if 'Forest_type' in location_def.keys() and location_def['Forest_type']:
+            location_def['db_forest_type'] = location_models.ForestType.objects.get(Name=location_def['Forest_type'])
+
+        return location_def
 
 
 class SimplePopulationSerializer(serializers.ModelSerializer):
