@@ -139,7 +139,10 @@ class Location(BaseModel):
     Forest_type =  models.ForeignKey(ForestType, blank=True, null=True, db_column="Forest_type_ID")
 
     def __unicode__(self):
-        return self.Name
+        if self.Name:
+            return self.Name 
+        else:
+            return 'Location %s' % self.pk
 
     class Meta:
         ordering = ('Name',)

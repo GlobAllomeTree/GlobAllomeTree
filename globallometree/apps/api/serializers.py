@@ -392,6 +392,8 @@ class SimpleSpeciesDefinition(serializers.Serializer):
 
 
 class SimpleSpeciesGroupSerializer(serializers.ModelSerializer):
+    # Note that the Group is returned from a method on 
+    # the SpeciesGroup model
     Group = SimpleSpeciesDefinition(many=True)
     
     class Meta: 
@@ -754,6 +756,7 @@ class SimpleLocationDefinitionSerializer(serializers.Serializer):
      
    
 class SimplePlotSerializer(serializers.ModelSerializer):
+    """ Maybe not that simple... """
     Plot_name = fields.CharField(required=False, allow_null=True)
     Plot_size_m2 = fields.IntegerField(required=False, allow_null=True)
 
@@ -932,6 +935,8 @@ class SimplePlotSerializer(serializers.ModelSerializer):
 
 
 class SimpleLocationGroupSerializer(serializers.ModelSerializer):
+    # Note that the Group is returned from a method on 
+    # the LocationGroup model
     Group = SimpleLocationDefinitionSerializer(many=True)
 
     class Meta:
@@ -946,7 +951,7 @@ class SimpleLocationGroupSerializer(serializers.ModelSerializer):
         location_group.save()
         for location_def in data['Group']:
 
-            # match the species def to our database
+            # match the location def to our database
             location_def_matched = SimpleLocationGroupSerializer.match_location_def_to_db(location_def)
 
             location = location_models.Location.objects.create(
@@ -959,10 +964,16 @@ class SimpleLocationGroupSerializer(serializers.ModelSerializer):
                 Forest_type = location_def['db_forest_type']
                 )
 
-            plot = None
-            # create any needed location models
-            # when there is not an id, but there is a name,
-            # it indicates we need to create the model
+            if 'Plot_name' in location_def.keys() and location_def['Plot_name']:
+                plot = location_models.Plot.objects.create(
+                    Plot_name = location_def['Plot_name'],
+                    Location = location
+                    )
+
+                if 'Plot_size_m2' in location_def.keys() and location_def['Plot_size_m2']:
+                    plot.Plot_size_m2 = location_def['Plot_size_m2']
+
+                plot.save()
 
             # link by plot if plot, else location
             if plot:
