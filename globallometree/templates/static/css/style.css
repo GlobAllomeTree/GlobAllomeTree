@@ -110,23 +110,27 @@ header h1 {
     color:red;
 }
 
-.field_wrapper {
+/*.field_wrapper {
     padding:6px 0px 4px 0px;
     clear:left;
-}
+}*/
 
-.field_wrapper label {
+/*.field_wrapper label {
     width:140px;
     float:left;
-}
-
+}*/
+/*
 .field_input_block {
     width:180px;
     float:left;
-}
+}*/
 
 .field_input_block input {
-    width:180px;
+    max-width:420px;
+}
+
+.field_input_block select {
+    max-width:420px;
 }
 
 .submit_block {
