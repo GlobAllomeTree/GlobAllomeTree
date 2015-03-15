@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.core.urlresolvers import reverse
 
 from . import forms
 from . import models
@@ -11,6 +12,10 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import mail_managers
 from rest_framework.authtoken.models import Token
+from django.views.generic import DetailView, UpdateView
+from .models import UserProfile
+from .forms import UserProfileForm
+
 
 
 
@@ -89,19 +94,66 @@ def approval_pending(request):
     return render_to_response('accounts/account_approval_pending.html',
                                context_instance=RequestContext(request))
 
-def my_profile(request, user_id=0):
-    if (user_id == 0):
-        get_user = request.user
-        user_token = Token.objects.get_or_create(user=request.user)
-        return render_to_response('accounts/my_profile.html',
-                                  context_instance=RequestContext(request,
-                                  {"requested_user": get_user,
-                                  "token": user_token[0],
-                                  "profile": request.user.get_profile()}))
-    else:
-        get_user = get_object_or_404(User, id=user_id)
-        get_user_profile = User.objects.get(id=user_id).get_profile()
-        return render_to_response('accounts/my_profile.html',
-                                  context_instance=RequestContext(request,
-                                  {"requested_user": get_user,
-                                  "profile": get_user_profile}))
+
+class UserProfileDetailView(DetailView):
+    model = UserProfile
+    template_name = 'accounts/user_profile.html'
+    contect_object_name = 'userprofile'
+
+    def get_absolute_url(self):
+        return reverse('userprofile_detail', kwargs={'pk': self.pk})
+
+    def dispatch(self, request, *args, **kwargs):
+        """Overriding to ensure PK is present"""
+        if 'pk' not in kwargs:
+            self.kwargs['pk'] = self.request.user.get_profile().pk
+        return super(UserProfileDetailView, self).dispatch(
+            request, *args, **kwargs
+        )
+
+
+
+
+class UserProfileUpdateView(UpdateView):
+    form_class = UserProfileForm
+    model = UserProfile
+    template_name = 'accounts/user_profile_update.html'
+    context_object_name = 'userprofile'
+
+
+    def dispatch(self, request, *args, **kwargs):
+        """Overriding to ensure PK is present"""
+        if 'pk' not in kwargs:
+            self.kwargs['pk'] = self.request.user.get_profile().pk
+        return super(UserProfileUpdateView, self).dispatch(
+            request, *args, **kwargs
+        )
+
+    def get_success_url(self):
+        if self.request.user != self.object.user:
+            url = reverse(
+                'userprofile_update_admin',
+                kwargs={'pk':self.object.pk}
+            )
+        else:
+            url = reverse('userprofile_detail')
+
+        return url
+
+# def my_profile(request, user_id=0):
+#     if (user_id == 0):
+#         get_user = request.user
+#         user_token = Token.objects.get_or_create(user=request.user)
+#         return render_to_response('accounts/my_profile.html',
+#                                   context_instance=RequestContext(request,
+#                                   {"requested_user": get_user,
+#                                   "token": user_token[0],
+#                                   "profile": request.user.get_profile()}))
+#     else:
+#         get_user = get_object_or_404(User, id=user_id)
+#         get_user_profile = User.objects.get(id=user_id).get_profile()
+#         return render_to_response('accounts/my_profile.html',
+#                                   context_instance=RequestContext(request,
+#                                   {"requested_user": get_user,
+#                                   "profile": get_user_profile}))
+

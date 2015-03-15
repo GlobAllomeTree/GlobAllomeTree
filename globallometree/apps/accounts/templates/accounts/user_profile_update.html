@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<dl class="dl-horizontal">
+    <div style="font-size: medium;">
+        <h1>Update User Information</h1>
+            <h3>User: {{userprofile.user.username}}</h3>
+    </div>
+</dl>
+
+<form action="" method="post">{% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Update" />
+</form>
+
+{% endblock %}
