@@ -1,6 +1,8 @@
 {% extends "rest_framework/base.html" %}
 
-{% block branding %}<a class="navbar-brand" href ="/api/v1">GlobAllomeTree API</a>{% endblock %}
+{% block title %}GlobAllomeTree API{% endblock %}
+
+{% block branding %}<a class="navbar-brand" style="color:#eee;" href ="/">GlobAllomeTree</a> <div style="float:left;padding-top:15px;color:#888;width:20px;" >&gt; </div> <a class="navbar-brand"  href ="/api/v1/">API v1.0</a> {% endblock %}
 
 {% block footer %} 
 	<footer>

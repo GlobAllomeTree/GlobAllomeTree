@@ -144,14 +144,12 @@ def validate_records(data, SerializerClass):
             error_dict = dict(record_serializer.errors)
 
             for key in error_dict.keys():
-
                 # Nested objects
                 if key == 'Location_group':
                     record_errors.append({
-                        'field' : key,
+                        'field' : 'Location_group / Group',
                         'sub_errors' : get_sub_errors(error_dict['Location_group']['Group'])
                     })
-
                 elif key == 'Species_group':
                     record_errors.append({
                         'field' : 'Species_group / Group',
