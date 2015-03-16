@@ -9,8 +9,7 @@ window.app.mapController = function() {
 	var dragTimer;
 	var initialized = false;
 	var initialMapBoundsFit = false;
-	
-	
+		
 	// These are the default map bounds for the world
 	// coordinates will fit the whole globe when accounting for the padding of 50
 	var mapBounds = [
@@ -18,7 +17,12 @@ window.app.mapController = function() {
 		[40,130] //Northeast
 	];
 	
-	
+	var config = {
+		renderCustomAggHTML : function(aggregation) { return ''; },
+		recordReadableTypePlural : 'Records',
+		customGeohashAggs : []
+	}
+
 	//Lookup object for determining the Elastic Search GeoHash precision to use
 	//at each map zoom level
 	//Zoom level references can be found at http://wiki.openstreetmap.org/wiki/Zoom_levels
@@ -43,7 +47,6 @@ window.app.mapController = function() {
 		15 : 9 //4.773m/pixel : 38.2m x 19m
 	};
 	
-
 
 	var initOrShowMap = function (params) {
 
@@ -302,7 +305,6 @@ window.app.mapController = function() {
 		}
 	}
 
-
 	/**
 	* Generates an elastic search query and retrieves the results from the server
 	* drawing them on the map.  Query is limited to the extent of the map view (plus buffer)
@@ -331,8 +333,7 @@ window.app.mapController = function() {
 
 			var aggregations = [];
 		
-			aggregations.push(
-				ejs.GeoHashGridAggregation('Geohash-Grid')
+			var geohashAggregation = ejs.GeoHashGridAggregation('Geohash-Grid')
 					.field('Geohash')
 					.precision(precision)
 					.aggregation(
@@ -344,10 +345,12 @@ window.app.mapController = function() {
 					.aggregation(
 						ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
 					)
-					.aggregation(
-						ejs.TermsAggregation('Output').field('Output')
-					)
-			);
+
+			_.each(config.customGeohashAggs, function (agg) {
+				geohashAggregation.aggregation(agg)
+			});
+
+			aggregations.push(geohashAggregation);
 			
 
 			var geohash_query = window.app.searchManager.getQuery({
@@ -469,7 +472,7 @@ window.app.mapController = function() {
 
 	function getMarkerSummaryHTML(aggregation) {
 		var html = "";
-		html += '<h4>Equations: ' + aggregation.doc_count + '</h4>';
+		html += '<h4>' + config.recordReadableTypePlural + ': ' + aggregation.doc_count + '</h4>';
 		if(aggregation['Species'].buckets.length) {
 			html += '<h5>Species Represented</h5>'  
 			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Species'].buckets, ', ') + '</p>';
@@ -480,18 +483,16 @@ window.app.mapController = function() {
 			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Biome_FAO'].buckets, ', ') + '</p>';
 		}
 
-		if(aggregation['Output'].buckets.length){
-			html += '<h5>Output</h5>'  
-			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Output'].buckets, ', ') + '</p>';
-		}
+		html += config.renderCustomAggHTML(aggregation);
 		
 		return html;
 	}
 
-
 	//Public objects
 	return {
 		initOrShowMap : initOrShowMap,
-		map : map
+		map : map,
+		config : config,
+		getBucketsAsList : getBucketsAsList
 	}
 }();

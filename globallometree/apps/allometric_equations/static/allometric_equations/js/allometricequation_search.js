@@ -1,5 +1,5 @@
 
-// Add in keys unique to the allometric equation search form
+// Add in keys and config unique to the allometric equation search 
 window.app.searchManager.config.termFilterKeys = [
 		'Ecosystem', 
 		'Population',
@@ -41,9 +41,9 @@ window.app.searchManager.config.rangeFilterKeys = [
 window.app.listController.config.recordLinkPrefix = 'allometric-equations';
 window.app.listController.config.recordReadableType = 'Allometric Equation';
 window.app.listController.config.customListTemplate = '\
-  <dt><small>Equation</small></dt>					\
-  <dd><code>{{Equation}}</code></dd>				\
-  <dt><small>Output</small></dt>					\
+  <dt><small>Equation</small></dt>					   \
+  <dd><code>{{Equation}}</code></dd>				   \
+  <dt><small>Output</small></dt>					   \
   <dd><small>{{Output}}&nbsp;</small></dd>';
 
 window.app.listController.config.getRecordContext = function (data) {
@@ -58,3 +58,16 @@ window.app.listController.config.getRecordContext = function (data) {
 	return context;
 }
 
+window.app.mapController.config.renderCustomAggHTML = function (aggregation) {
+	var html = '';
+	if(aggregation['Output'].buckets.length){
+		html += '<h5>Output</h5>'  
+		html += '<p style="margin-top:0px;">' + window.app.mapController.getBucketsAsList(aggregation['Output'].buckets, ', ') + '</p>';
+	}
+	return html;
+}
+
+window.app.mapController.config.recordReadableTypePlural = 'Allometric Equations';
+window.app.mapController.config.customGeohashAggs = [
+	ejs.TermsAggregation('Output').field('Output')
+];

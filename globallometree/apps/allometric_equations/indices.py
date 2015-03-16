@@ -5,7 +5,7 @@ from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
-from ..models import AllometricEquation
+from globallometree.apps.allometric_equations.models import AllometricEquation
 from globallometree.apps.search_helpers.estypes import *
 from globallometree.apps.api.serializers import SimpleAllometricEquationSerializer
 from globallometree.apps.api.renderers import SimpleJSONRenderer
