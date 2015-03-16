@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import UserProfile
 from globallometree.apps.locations.models import Country
+from rest_framework.authtoken.models import Token
 
 
 class AccountForm(forms.ModelForm):
@@ -105,21 +106,18 @@ class RegistrationForm(AccountForm):
         return user
 
 class UserProfileForm(forms.ModelForm):
+
+    email = forms.EmailField(label="Email")
+
     class Meta:
         model = UserProfile
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         del self.fields['user']
-        # instance = getattr(self, 'instance', None)
-        # if instance and instance.pk:
-        #     self.fields['user'].widget.attrs['readonly'] = True
 
-    def clean_user(self):
-        user = self.cleaned_data['user']
-        return user
-        # instance = getattr(self, 'instance', None)
-        # if instance and instance.pk:
-        #     return instance.user
-        # else:
-        #     return self.cleaned_data['user']
+    def save(self):
+        user_profile = super(UserProfileForm, self).save()
+        user_profile.user.email = self.cleaned_data['email']
+        user_profile.user.save()
+        return user_profile
