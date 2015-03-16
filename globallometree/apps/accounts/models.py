@@ -7,10 +7,12 @@ from django.conf import settings
 from django.core.mail import mail_managers, send_mail
 from django.db import models
 from rest_framework.authtoken.models import Token
+from django.views.generic.edit import UpdateView
 
 from globallometree.apps.locations.models import Country
 
-#Monkey patch the User class for django 1.6
+
+# Monkey patch the User class for django 1.6
 def get_profile(self):
     if not hasattr(self, 'profile'):
         try:
@@ -19,6 +21,8 @@ def get_profile(self):
             self.profile = UserProfile(user=self)
     return self.profile
 User.get_profile = get_profile
+
+
 class UserProfile(models.Model):
     DATA_MAY_PROVIDE_CHOICES = (('no_data',             'No data available'),
                                 ('Species_data',        'Species data'),
@@ -122,4 +126,3 @@ http://www.globallometree.org/accounts/login/
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
-

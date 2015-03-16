@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<dl class="dl-horizontal">
+    <div style="font-size: medium;">
+        <h1>User Information</h1>
+            <h3>Account</h3>
+            <hr />
+                <div style="font-size: medium;">
+                <dt>User name:</dt>
+                    <dd>{{userprofile.user.username}}</dd>
+                <dt>Email:</dt>
+                    <dd>{{userprofile.user.email}}</dd>
+                {% if token %}
+                    <dt>API Token:</dt>
+                        <dd>{{token}}</dd>
+                {% endif %}
+                <dt>Privacy Setting:</dt>
+                    <dd>{{userprofile.privacy}}</dd>
+            <br />
+            <h3>User</h3>
+            <hr />
+                <dt>Name:</dt>
+                    <dd>{{userprofile.user.first_name}} {{userprofile.user.last_name}}</dd>
+                <dt>Address:</dt>
+                    <dd>{{userprofile.user.address}}</dd>
+                <dt>Country:</dt>
+                    <dd>{{userprofile.country}}</dd>
+                <dt>Region:</dt>
+                    <dd>{{userprofile.region}}</dd>
+                <dt>Subregion:</dt>
+                    <dd>{{userprofile.subregion}}</dd>
+                <dt>Education:</dt>
+                    <dd>{{userprofile.education}}</dd>
+                 <dt>Field:</dt>
+                    <dd>{{userprofile.field_subject}}</dd>
+            <br />
+            <h3>Institution</h3>
+            <hr />
+                <dt>Institution:</dt>
+                    <dd>{{userprofile.institution_name}}</dd>
+                <dt>Address:</dt>
+                    <dd>{{userprofile.institution_address}}</dd>
+                <dt>Phone:</dt>
+                    <dd>{{userprofile.institution_phone}}</dd>
+                <dt>Fax:</dt>
+                    <dd>{{userprofile.institution_fax}}</dd>
+            <br />
+            <h3>Data</h3>
+            <hr />
+                <dt>Data you may provide:</dt>
+                    <dd>{{userprofile.get_data_may_provide_display}}</dd>
+            <br />
+            <h3>Location</h3>
+            <hr />
+                <dt>Latitude:</dt>
+                    <dd>{{userprofile.location_latitude}}</dd>
+                <dt>Longitude:</dt>
+                    <dd>{{userprofile.location_longitude}}</dd>
+                <dt>Country:</dt>
+                    <dd>{{userprofile.location_country}}</dd>
+    </div>
+</dl>
+
+<br><br>
+<form action="update">
+    <input type="submit" value="Edit Profile">
+</form>
+
+{% endblock %}
