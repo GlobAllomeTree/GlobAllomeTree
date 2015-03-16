@@ -1,0 +1,23 @@
+ {% load crispy_forms_tags %}
+ 
+ <div class="tab-pane" id="reference">
+    <p class="search-help-text">
+        Search allometric equations by author, year, and reference. <br>
+        Example searches: 
+           <a href="?Author=Henry+M.">Author: Henry M.</a>,
+           <a href="?Reference=Pieper,+Y.+%26+Laumans">Reference: Pieper, Y. &amp; Laumans,</a>
+           <a href="?Year=2004">Year: 2004</a>
+    </p>
+
+    <div class="row">
+        <div class="col-lg-4">
+            {{ form.Author|as_crispy_field }}
+        </div>
+        <div class="col-lg-4">
+            {{ form.Reference|as_crispy_field }}
+        </div>        
+        <div class="col-lg-4">
+            {{ form.Year|as_crispy_field }}
+        </div>
+    </div>
+</div>

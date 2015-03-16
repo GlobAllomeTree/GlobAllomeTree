@@ -18,55 +18,16 @@ from django.views.generic.edit import FormView
 #Get the elasticutils objects configured from settings.py
 from elasticutils.contrib.django import get_es
 
-from .forms import SubmissionForm
 from .models import AllometricEquation
+from .forms import AllometricEquationSearchForm
 
-from apps.common.kill_gremlins import kill_gremlins
-from apps.locations.models import Country
+from globallometree.apps.search_helpers.views import LinkedModelSearchView
 
-from apps.accounts.mixins import RestrictedPageMixin
-
-
-class SubmissionView(FormView):
-    template_name = 'allometric_equations/template.submit_data.html'
-    form_class = SubmissionForm
-    success_url = '/allometric-equations/submit/complete/'
-
-    def form_valid(self, form):      
-        ds = AllometricEquationSubmission()
-        ds.submitted_file = form.cleaned_data['file']
-        ds.submitted_notes = form.cleaned_data['notes']
-        ds.user = self.request.user
-        ds.imported = False
-        ds.save()
-        mail_managers('New GlobAllomeTree Allometric Equations Submission', """
-
-A new data file has been submitted to http://www.globallometree.org/ 
-
-It was submitted by the user %s
-
-To review this file and import it, please go to:
-
-http://www.globallometree.org/admin/allometric_equations/submission/%s/
-            """ % (ds.user, ds.id)) 
-
-        return super(SubmissionView, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(SubmissionView, self).get_context_data(**kwargs)
-        context['is_page_data'] = True
-        context['export_encoding'] = settings.DATA_EXPORT_ENCODING_NAME
-        return context
-
-
-class SubmissionCompleteView(TemplateView):
-    template_name = 'allometric_equations/template.submit_data_complete.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(SubmissionCompleteView, self).get_context_data(**kwargs)
-        context['is_page_data'] = True
-
-        return context
+class AllometricEquationSearchView(LinkedModelSearchView):
+    form_class = AllometricEquationSearchForm
+    form_template = 'allometric_equations/template.search.form.html'
+    search_title = "Allometric Equation Search"
+    configuration_js_file = 'allometric_equations/js/allometricequation_search.js'
 
 
 @login_required(login_url='/accounts/login/')
@@ -76,12 +37,11 @@ def allometric_equation_id(request, id):
         'allometric_equations/template.allometric_equation.html', 
         context_instance = RequestContext(
             request, {
-                'allometric_equation': allometric_equation, 
+                'record': allometric_equation, 
                 'is_page_data' : True
             }
         )
     ) 
-
 
 @login_required(login_url='/accounts/login/')
 def allometric_equation_id_pdf(request, id):

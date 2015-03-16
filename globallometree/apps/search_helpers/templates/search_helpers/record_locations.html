@@ -1,0 +1,25 @@
+<div class="row">     
+    <div class="col-md-12">    
+        <br>
+        <h3>Location</h3>
+        
+        <table class="table">  
+            
+            <tr><th style="width:210px"> Location Names: </th><td> {{ record.location_group.locations_string }} </td></tr>  
+            <tr><th> Country: </th><td> {{ record.location_group.countries_string }} </td></tr>
+            <tr><th> Continent: </th><td> {{ record.location_group.continents_string }} </td></tr>
+            <tr><th > Ecosystem: </th><td> {{ record.ecosystem }} </td></tr>
+            <tr><th> Biome FAO: </th><td> {{ record.location_group.biomes_fao_string }} </td></tr>
+            <tr><th> Biome UDVARDY: </th><td> {{ record.location_group.biomes_udvardy_string }} </td></tr>
+            <tr><th> Biome WWF: </th><td> {{ record.location_group.biomes_wwf_string }} </td></tr>
+            <tr><th> Biome HOLDRIDGE: </th><td> {{ record.location_group.biomes_holdridge_string }} </td></tr>
+            <tr> <th> Division BAILEY: </th><td> {{ record.location_group.divisions_bailey_string }} </td></tr>
+             <tr> <th> Precise Locations [Lat Lon]: </th><td> {{ record.location_group.lat_lon_string }}
+
+           </td></tr>
+
+        </table>
+        <h5>Map</h5>
+        <div id="point_map_canvas"></div>
+  </div>
+</div>

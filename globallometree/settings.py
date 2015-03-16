@@ -8,6 +8,7 @@ PROJECT_PATH = os.path.join(os.path.dirname(__file__))
 BASE_PATH = os.path.abspath(os.path.join(PROJECT_PATH, '../'))
 
 DEBUG = True
+TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ('globallometree.org',
                  'www.globallometree.org',
@@ -53,10 +54,8 @@ MEDIA_URL = '/media/'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-#    ('django.template.loaders.cached.Loader', (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
-#    )),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -90,9 +89,6 @@ ROOT_URLCONF = 'globallometree.urls'
 WSGI_APPLICATION = 'globallometree.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_PATH, 'templates'),
 )
 
@@ -108,6 +104,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
+
     # djangocms_admin_style must go before django.contrib.admin
     'djangocms_admin_style',  # cms
     'django.contrib.admin',

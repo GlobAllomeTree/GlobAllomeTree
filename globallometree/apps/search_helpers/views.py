@@ -8,20 +8,22 @@ from django.views.generic import TemplateView
 from apps.locations.models import Country
 from apps.accounts.mixins import RestrictedPageMixin
 
-from .forms import SearchForm
 
-class SearchView(RestrictedPageMixin, TemplateView):
-    template_name = 'allometric_equations/template.search.html'
+class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
+    template_name = 'search_helpers/template.search.html'
 
     def get_context_data(self, **kwargs):
-        context = super(SearchView, self).get_context_data(**kwargs)
+        context = super(LinkedModelSearchView, self).get_context_data(**kwargs)
 
-        self.form = SearchForm(self.request.GET)
+        self.form = self.form_class(self.request.GET)
     	
         context['form'] = self.form
 
         #This is for the menu
         context['is_page_data'] =  True
+        context['search_title'] = self.search_title
+        context['form_template'] = self.form_template
+        context['configuration_js_file'] = self.configuration_js_file
 
         if self.form.is_valid():
             context['form_is_valid'] = True

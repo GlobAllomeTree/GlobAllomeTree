@@ -3,7 +3,7 @@
 {% block script %}
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
-    <link rel="stylesheet" href="{% static 'allometric_equations/css/search.css' %}" />
+    <link rel="stylesheet" href="{% static 'search_helpers/css/search.css' %}" />
     <link rel="stylesheet" href="{% static 'css/typeahead.css' %}" />
 
     <script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
@@ -11,10 +11,14 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
 
     <script src="{% static 'search_helpers/js/geohash.js' %}"></script>
-    <script src="{% static 'allometric_equations/js/search.js' %}"></script>
-    <script src="{% static 'allometric_equations/js/list.js' %}"></script>
-    <script src="{% static 'allometric_equations/js/map.js' %}"></script>
-    <script src="{% static 'js/typeahead.js' %}"></script>
+    <script src="{% static 'search_helpers/js/typeahead.js' %}"></script>
+
+    <script src="{% static 'search_helpers/js/search.js' %}"></script>
+    <script src="{% static 'search_helpers/js/list.js' %}"></script>
+    <script src="{% static 'search_helpers/js/map.js' %}"></script>
+
+    <script src="{% static configuration_js_file %}"></script>
+
 
     {% if form_is_valid %}
         <script type="text/javascript"> 
@@ -86,13 +90,13 @@
 	<div id="equations_page">
 	    
 
-        <h3>Allometric Equation Search</h3>
+        <h3>{{ search_title }}</h3>
 	    
 
         <div class="clearfix"></div>
 
         <!-- Search Form -->
-        {% include 'allometric_equations/template.search.form.html'%}
+        {% include form_template %}
 		
     	{% if form_is_valid %}
             <div id="search-results">
@@ -128,7 +132,7 @@
         				<div id="map"></div>
         			</div>
                     <div class="tab-pane" id="search-summary">
-                        {% include 'allometric_equations/template.search.summary.html'%}
+                        {% include 'search_helpers/search_summary.html'%}
                     </div>
                 </div>
         	</div>	

@@ -4,4 +4,4 @@ class Command(BaseCommand):
 
     def handle(self,*args, **options):
 
-        from globallometree.apps.allometric_equations.search import example_queries
+        from globallometree.apps.allometric_equations import example_queries

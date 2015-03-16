@@ -1,0 +1,10 @@
+<div class="row">     
+    <div class="col-md-12">
+        <br>
+        <h3>Taxonomy</h3>
+        <table class="table">
+          
+            <tr><th> Species:</th><td> {% for species in record.species_group.species_set %} {{species}} <br> {% endfor %}</td></tr>
+        </table>
+  </div>
+</div>

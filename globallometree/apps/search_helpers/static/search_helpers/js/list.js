@@ -10,43 +10,13 @@ window.app.listController = function () {
 	var totalResults;
 	var showingUntil = 0;
 
-	var resultTemplate  = '<div class="panel panel-default"">						\
-							<div class="panel-heading">								\
-								<a href="/data/allometric-equations/{{ID}}/"				\
-								   class="btn btn-default pull-right btn-xs"> 		\
-									Detailed information 							\
-									<span class="glyphicon glyphicon-chevron-right"></span> \
-								</a>												\
-								<h3 class="panel-title">							\
-									<a href="/data/allometric-equations/{{ID}}/">		\
-										Equation {{ID}}								\
-									</a>											\
-								</h3>												\
-							</div>													\
-							<div class="panel-body">								\
-								<dl class="dl-horizontal">							\
-								  <dt><small>Equation</small></dt>					\
-								  <dd><code>{{Equation}}</code></dd>				\
-								 													\
-								  <dt><small>Reference</small></dt>						\
-								  <dd><small>{{{Reference}}}&nbsp;</small></dd>			\
-										  								 			\
-								  <dt><small>FAO Biomes</small></dt>				\
-								  <dd><small>{{{Biome_FAO}}}&nbsp;</small></dd>   	\
-								 													\
-								  <dt><small>Species</small></dt>					\
-								  <dd><small>{{{Species}}}&nbsp;</small></dd>			\
-								  								 					\
-								  <dt><small>Output</small></dt>					\
-								  <dd><small>{{Output}}&nbsp;</small></dd>			\
-								  													\
-								  <dt><small>Locations</small></dt>		\
-								  <dd><small>{{{Locations}}}&nbsp;</small></dd>		\
-								  													\
-								</dl>												\
-							</div>													\
-					   </div>';
-
+	var config = {
+			recordLinkPrefix : '',
+			recordReadableType : '',
+			customListTemplate : '',
+			getRecordContext : function (data) { return {}}
+		}
+	
 	var init = function (params) {
 		//Get the element where we will render the list results
 		$el = $('#' + params['el']);	
@@ -56,6 +26,41 @@ window.app.listController = function () {
 		$resultsInfo = $('.results-info', $el);
 		$resultsList = $('#results-list', $el);
 		loadPage();
+	}
+
+	var getResultTemplate = function () {
+		return  '<div class="panel panel-default"">						\
+							<div class="panel-heading">								\
+								<a href="/data/{{ recordLinkPrefix }}/{{ID}}/"		\
+								   class="btn btn-default pull-right btn-xs"> 		\
+									Detailed information 							\
+									<span class="glyphicon glyphicon-chevron-right"></span> \
+								</a>												\
+								<h3 class="panel-title">							\
+									<a href="/data/{{ recordLinkPrefix }}/{{ID}}/">	\
+										{{recordReadableType }} {{ID}}				\
+									</a>											\
+								</h3>												\
+							</div>													\
+							<div class="panel-body">								\
+								<dl class="dl-horizontal">' + config['customListTemplate'] + '\
+								  													\
+								  <dt><small>Reference</small></dt>					\
+								  <dd><small>{{{Reference}}}&nbsp;</small></dd>	    \
+										  								 			\
+								  <dt><small>FAO Biomes</small></dt>				\
+								  <dd><small>{{{Biome_FAO}}}&nbsp;</small></dd>   	\
+								 													\
+								  <dt><small>Species</small></dt>					\
+								  <dd><small>{{{Species}}}&nbsp;</small></dd>		\
+																					\
+								  <dt><small>Locations</small></dt>					\
+								  <dd><small>{{{Locations}}}&nbsp;</small></dd>		\
+								  													\
+								</dl>												\
+							</div>													\
+					   </div>';
+
 	}
 
 	var loadPage = function() {
@@ -121,10 +126,8 @@ window.app.listController = function () {
 		for (var i = 0; i < hits.length; i++) {
 			//Use the elasticsearch document source
 			var data = hits[i]['_source'];
-			var context = {};
+			var context = config.getRecordContext(data);
 
-			context['ID'] = data['Allometric_equation_ID'];
-			context['Equation'] = data['Substitute_equation'];
 			try {
 				var speciesList = [];
 				for (var j=0; j < data['Species_group']['Species'].length; j++ ) {
@@ -200,18 +203,17 @@ window.app.listController = function () {
 				context['Reference'] = '';
 			}
 
-			if(data['Output']) {
-				context['Output'] = data['Output'];
-			}
+			context['recordLinkPrefix'] = config['recordLinkPrefix'];
+			context['recordReadableType'] = config['recordReadableType'];
 
-			$resultsList.append(Mustache.render(resultTemplate, context));	
+			$resultsList.append(Mustache.render(getResultTemplate(), context));	
 		}
 	}
 
-	
 	//Public functions
 	return {
-		init : init
+		init : init,
+		config : config
 	}
 
 }();

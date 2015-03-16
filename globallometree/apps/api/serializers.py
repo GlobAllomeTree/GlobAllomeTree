@@ -340,7 +340,7 @@ class SimpleSubspeciesSerializer(serializers.ModelSerializer):
                   )
 
 
-class SimpleSpeciesDefinition(serializers.Serializer):
+class SimpleSpeciesDefinitionSerializer(serializers.Serializer):
     """
     This is basically trying to flatten out all of the species, families, local names,
     etc into a simple single record
@@ -394,7 +394,7 @@ class SimpleSpeciesDefinition(serializers.Serializer):
 class SimpleSpeciesGroupSerializer(serializers.ModelSerializer):
     # Note that the Group is returned from a method on 
     # the SpeciesGroup model
-    Group = SimpleSpeciesDefinition(many=True)
+    Group = SimpleSpeciesDefinitionSerializer(many=True)
     
     class Meta: 
         model = taxonomy_models.SpeciesGroup
