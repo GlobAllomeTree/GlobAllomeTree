@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from .views import UserProfileDetailView, UserProfileUpdateView
+from .views import UserProfileDetailView, UserProfileUpdateView, MyProfileDetailView
 
 
 urlpatterns = patterns('django.contrib.auth.views',
@@ -57,8 +57,8 @@ urlpatterns += patterns('apps.accounts.views',
          UserProfileDetailView.as_view(),
          name='userprofile_detail_generic'),
      url(r'^profile/$',
-         UserProfileDetailView.as_view(),
-         name='userprofile_detail'),
+         MyProfileDetailView.as_view(),
+         name='myprofile_detail'),
      url(r'^profile/update/(?P<pk>\d+)/$',
          UserProfileUpdateView.as_view(),
          name='userprofile_update_admin'),

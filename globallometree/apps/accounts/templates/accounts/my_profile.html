@@ -13,6 +13,10 @@
                     <dd>{{userprofile.user.username}}</dd>
                 <dt>Email:</dt>
                     <dd>{{userprofile.user.email}}</dd>
+                {% if token %}
+                    <dt>API Token:</dt>
+                        <dd>{{token}}</dd>
+                {% endif %}
                 <dt>Privacy Setting:</dt>
                     <dd>{{userprofile.privacy}}</dd>
             <br />
@@ -59,5 +63,10 @@
                     <dd>{{userprofile.location_country}}</dd>
     </div>
 </dl>
+
+<br><br>
+<form action="update">
+    <input type="submit" value="Edit Profile">
+</form>
 
 {% endblock %}

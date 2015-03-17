@@ -98,7 +98,7 @@ def approval_pending(request):
 class UserProfileDetailView(DetailView):
     model = UserProfile
     template_name = 'accounts/user_profile.html'
-    contect_object_name = 'userprofile'
+    context_object_name = 'userprofile'
 
     def get_absolute_url(self):
         return reverse('userprofile_detail', kwargs={'pk': self.pk})
@@ -111,7 +111,28 @@ class UserProfileDetailView(DetailView):
             request, *args, **kwargs
         )
 
+class MyProfileDetailView(DetailView):
+    model = UserProfile
+    template_name = 'accounts/my_profile.html'
+    context_object_name = 'userprofile'
 
+    def get_absolute_url(self):
+        return reverse('myprofile_detail', kwargs={'pk': self.pk})
+
+    def dispatch(self, request, *args, **kwargs):
+        """Overriding to ensure PK is present"""
+        if 'pk' not in kwargs:
+            self.kwargs['pk'] = self.request.user.get_profile().pk
+        return super(MyProfileDetailView, self).dispatch(
+            request, *args, **kwargs
+        )
+
+    def get_context_data(self, **kwargs):
+        import pdb; pdb.set_trace()
+        context = super(MyProfileDetailView, self).get_context_data(**kwargs)
+        context['token'] = Token.objects.get_or_create(
+            user=context['userprofile'].user)[0]
+        return context
 
 
 class UserProfileUpdateView(UpdateView):
@@ -139,6 +160,12 @@ class UserProfileUpdateView(UpdateView):
             url = reverse('userprofile_detail')
 
         return url
+
+    def get_initial(self):
+        # Get the initial dictionary from the superclass method
+        initial = super(UserProfileUpdateView, self).get_initial()
+        initial['email'] = self.request.user.email
+        return initial
 
 # def my_profile(request, user_id=0):
 #     if (user_id == 0):
