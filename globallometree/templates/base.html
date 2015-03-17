@@ -14,16 +14,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
   {% endaddtoblock %}
 
-  <script type="text/javascript" src="{% static 'js/underscore-min.js' %}"></script>
-  <script type="text/javascript">
-    //Declare a global namespace for our app
-    window.app = {};
-    //Add in some config to the app
-    window.app.config = {
-      //address of elastic search
-      search_url : '{{search_url}}',
-    }
-  </script>
+  {% block add_to_header %}
+  {% endblock %}
+
+ 
 </head>
 <body>
   {% cms_toolbar %}
@@ -113,6 +107,7 @@
     </div>
   </footer>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/underscore-min.js' %}"></script>
   <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
   {% render_block "js" %}
   {% addtoblock "js" %}

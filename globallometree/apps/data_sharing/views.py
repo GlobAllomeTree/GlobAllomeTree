@@ -32,8 +32,8 @@ class DataSharingOverview(RestrictedPageMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DataSharingOverview, self).get_context_data(**kwargs)
-        context['hello'] = "Hello World"
         return context
+
 
 
 @login_required(login_url='/accounts/login/')
@@ -135,6 +135,21 @@ def dataset_detail(request, Dataset_ID):
         },
         context_instance=RequestContext(request)
     )
+
+
+@login_required(login_url='/accounts/login/')
+def dataset_edit(request, Dataset_ID):
+    dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
+    assert (dataset.User.pk == request.user.pk) \
+        or request.user.is_staff
+    return render_to_response(
+        "data_sharing/dataset_edit.html",
+        {
+          'Dataset_ID': Dataset_ID,
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 @login_required(login_url='/accounts/login/')
 def upload_confirm(request, Dataset_ID):

@@ -207,7 +207,7 @@ class DatasetSerializer(HyperLinkedWithIdSerializer):
 
     class Meta:
         model = data_sharing_models.Dataset
-        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file', 'Data_as_json')
+        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file')
 
 
 class DataRequestSerializer(HyperLinkedWithIdSerializer):
@@ -1072,7 +1072,7 @@ class SimpleDatasetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = data_sharing_models.Dataset
-        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file', 'Imported', 'Data_as_json')
+        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file', 'Imported')
 
 
 class SimpleReferenceSerializer(serializers.ModelSerializer):

@@ -1,10 +1,25 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block script %}
+
+{% block add_to_header %}
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
     <link rel="stylesheet" href="{% static 'search_helpers/css/search.css' %}" />
     <link rel="stylesheet" href="{% static 'css/typeahead.css' %}" />
+
+{% endblock %}
+
+{% block script %}
+     <script type="text/javascript">
+        //Declare a global namespace for our app
+        window.app = {};
+        //Add in some config to the app
+        window.app.config = {
+          //address of elastic search
+          search_url : '{{search_url}}'
+        }
+    </script>
+
 
     <script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
