@@ -94,7 +94,7 @@ class AllometricEquationIndex(MappingType, Indexable):
             obj = cls.get_model().objects.get(pk=obj_id)
 
         obj_serialized = SimpleAllometricEquationSerializer(obj).data
-        obj_serialized.Dataset = 0
+        obj_serialized['Dataset'] = 0
         return obj_serialized
 
     
