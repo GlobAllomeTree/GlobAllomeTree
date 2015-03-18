@@ -93,9 +93,9 @@ class AllometricEquationIndex(MappingType, Indexable):
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
-        obj_serialized = SimpleAllometricEquationSerializer(obj)
-        json_string = SimpleJSONRenderer().render(obj_serialized.data)
-        return json.loads(json_string)
+        obj_serialized = SimpleAllometricEquationSerializer(obj).data
+        obj_serialized.Dataset = 0
+        return obj_serialized
 
     
 
