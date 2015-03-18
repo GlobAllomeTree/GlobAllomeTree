@@ -10,15 +10,7 @@
 {% endblock %}
 
 {% block script %}
-     <script type="text/javascript">
-        //Declare a global namespace for our app
-        window.app = {};
-        //Add in some config to the app
-        window.app.config = {
-          //address of elastic search
-          search_url : '{{search_url}}'
-        }
-    </script>
+    {% include 'search_helpers/search_app_config.html' %}
 
 
     <script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
@@ -134,7 +126,7 @@
             <div id="search-results">
         		<!-- Result Tabs -->
                 <div style="float:right;"> 
-                    <form action='{% url 'equations_export' %}' id="export-form" method="POST">
+                    <form action='export/' id="export-form" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="query" id="export-query" />
                         <input type="hidden" name="extension" id="export-extension" />

@@ -29,7 +29,7 @@ window.app.listController = function () {
 	}
 
 	var getResultTemplate = function () {
-		return  '<div class="panel panel-default"">						\
+		var template =   '<div class="panel panel-default"">						\
 							<div class="panel-heading">								\
 								<a href="/data/{{ recordLinkPrefix }}/{{ID}}/"		\
 								   class="btn btn-default pull-right btn-xs"> 		\
@@ -60,7 +60,7 @@ window.app.listController = function () {
 								</dl>												\
 							</div>													\
 					   </div>';
-
+		return template;
 	}
 
 	var loadPage = function() {

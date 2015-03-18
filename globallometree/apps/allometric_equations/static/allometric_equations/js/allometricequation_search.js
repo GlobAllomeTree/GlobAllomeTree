@@ -38,6 +38,9 @@ window.app.searchManager.config.rangeFilterKeys = [
 		'Max_Z__lte'
 	];
 
+window.app.searchManager.config.indexName = 'allometricequation';
+
+
 window.app.listController.config.recordLinkPrefix = 'allometric-equations';
 window.app.listController.config.recordReadableType = 'Allometric Equation';
 window.app.listController.config.customListTemplate = '\
@@ -47,15 +50,14 @@ window.app.listController.config.customListTemplate = '\
   <dd><small>{{Output}}&nbsp;</small></dd>';
 
 window.app.listController.config.getRecordContext = function (data) {
-	var context = {};
-	context['ID'] = data['Allometric_equation_ID'];
-	context['Equation'] = data['Substitute_equation'];
+	data['ID'] = data['Allometric_equation_ID'];
+	data['Equation'] = data['Substitute_equation'];
 	if(data['Output']) {
-		context['Output'] = data['Output'];
+		data['Output'] = data['Output'];
 	} else {
-		context['Output'] = '';
+		data['Output'] = '';
 	}
-	return context;
+	return data;
 }
 
 window.app.mapController.config.renderCustomAggHTML = function (aggregation) {

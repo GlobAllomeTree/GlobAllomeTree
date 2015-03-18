@@ -8,8 +8,6 @@ window.app.searchManager = function (){
 
 	var searchDict;
 
-	var indexName = 'allometricequation';
-
 	var baseTermFilterKeys = [
 			'Genus',
 			'Species',
@@ -38,7 +36,7 @@ window.app.searchManager = function (){
 	var search = function(params) {
 		$.ajax({
 			type: "POST",
-			url: window.app.config.search_url + '/globallometree/' + indexName + '/_search',
+			url: window.app.config.search_url + '/globallometree/' + config.indexName + '/_search',
 			data: JSON.stringify(params['query'].toJSON()),
 			success: params['success']
 		});
@@ -262,7 +260,6 @@ window.app.searchManager = function (){
 		search : search,
 		getLink : getLink,
 		getCurrentSearchDict : getCurrentSearchDict,
-		indexName : indexName,
 		config : config
 	}
 

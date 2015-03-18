@@ -68,7 +68,7 @@ class WoodDensity(LinkedBaseModel):
         blank=True, null=True,
         help_text="is the bark included in the measure?")
 
-    Density_g_cm3= models.DecimalField(
+    Density_g_cm3 = models.DecimalField(
         null=True, max_digits=16, decimal_places=10,
         help_text="density of the wood in g/cm3")
 
@@ -119,7 +119,7 @@ class WoodDensity(LinkedBaseModel):
 
 
     def get_absolute_url(self):
-        return '/data/wood_density/%s' % self.ID
+        return '/data/wood_densities/%s' % self.ID
 
     def unicode(self):
         return 'Wood Density %s' % self.ID

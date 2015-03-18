@@ -8,6 +8,9 @@ from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 class SimpleJSONRenderer(JSONRenderer):
     format='json'
 
+    def get_indent(self, accepted_media_type, renderer_context):
+        return 4
+
 
 class SimpleXMLRenderer(XMLRenderer):
     format='xml'

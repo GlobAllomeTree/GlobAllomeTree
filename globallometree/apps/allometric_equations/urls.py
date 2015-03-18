@@ -6,9 +6,10 @@ urlpatterns = patterns('apps.allometric_equations.views',
     url(r'^export/$', 'export', name='equations_export'),
             
     #Single equation
-    (r'^(\d+)/$', 'record_id'),
+    url(r'^(\d+)/$', 'record_id', name='equations_record'),
+    
     #Single equation PDF
-    (r'^(\d+)/pdf/$', 'record_id_pdf'),
+    url(r'^(\d+)/pdf/$', 'record_id_pdf', name='equations_record_pdf'),
     
     url(r'^$', AllometricEquationSearchView.as_view(), name='equation_search'),  
 )
