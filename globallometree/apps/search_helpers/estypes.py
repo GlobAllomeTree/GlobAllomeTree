@@ -36,7 +36,7 @@ estype_reference = {
 estype_location_group = {
                             "properties": {
                                 "Location_group_ID": estype_long,
-                                "Locations": {
+                                "Group": {
                                     "properties": {
                                         "Biome_FAO": estype_string_not_analyzed,
                                         "Biome_FAO_ID": estype_string_not_analyzed,
@@ -65,7 +65,7 @@ estype_location_group = {
 
 estype_species_group = {
                         "properties": {
-                            "Species": {
+                            "Group": {
                                 "properties": {
                                     "Scientific_name" : estype_string_not_analyzed,
                                     "Family": estype_string_not_analyzed,
