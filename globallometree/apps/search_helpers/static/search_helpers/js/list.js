@@ -130,8 +130,8 @@ window.app.listController = function () {
 
 			try {
 				var speciesList = [];
-				for (var j=0; j < data['Species_group']['Species'].length; j++ ) {
-					var species_record = data['Species_group']['Species'][j];
+				for (var j=0; j < data['Species_group']['Group'].length; j++ ) {
+					var species_record = data['Species_group']['Group'][j];
 					var speciesHTML = species_record['Family'];
 					speciesHTML += ' ' + species_record['Genus'];
 					speciesHTML += ' ' + species_record['Species'];
@@ -148,8 +148,8 @@ window.app.listController = function () {
 				var biomeFAOList = [];
 				var countryList = [];
 				var locationList = [];
-				for (var j=0; j < data['Location_group']['Locations'].length; j++ ) {
-					var location_record = data['Location_group']['Locations'][j];
+				for (var j=0; j < data['Location_group']['Group'].length; j++ ) {
+					var location_record = data['Location_group']['Group'][j];
 					if (!_.contains(biomeFAOList,location_record['Biome_FAO'])) {
 						biomeFAOList.push(location_record['Biome_FAO'])
 					}
