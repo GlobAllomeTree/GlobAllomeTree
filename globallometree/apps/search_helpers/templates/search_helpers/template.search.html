@@ -53,10 +53,27 @@
                     });
                 });    
 
-                $('#export-form').submit(function(event) {
-                    var query = app.searchManager.getQuery().from(0).size(1000);
+
+                var submitExportForm = function() {
+                    var query = app.searchManager.getQuery().from(0);
                     query = JSON.stringify(query.toJSON());
                     $('#export-query').val(query);
+                    $('#export-form').submit();
+                }
+
+                $('#export-csv').click(function() {
+                    $('#export-extension').val('.csv');
+                    submitExportForm();
+                });
+
+                $('#export-json').click(function() {
+                    $('#export-extension').val('.json');
+                    submitExportForm();
+                });
+
+                $('#export-xml').click(function() {
+                    $('#export-extension').val('.xml');
+                    submitExportForm();
                 });
 
                 var typeaheads = [
@@ -116,14 +133,21 @@
     	{% if form_is_valid %}
             <div id="search-results">
         		<!-- Result Tabs -->
-                <div style="float:right"> 
+                <div style="float:right;"> 
                     <form action='{% url 'equations_export' %}' id="export-form" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="query" id="export-query" />
-                        <button type="submit" class="btn btn-default">
-                            Export
-                            <span class="glyphicon glyphicon-download"></span> 
-                        </button>
+                        <input type="hidden" name="extension" id="export-extension" />
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+                            <span class="glyphicon glyphicon-download"></span> Export Results <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" id="export-csv">Download CSV</a></li>
+                            <li><a href="#" id="export-json">Download JSON</a></li>
+                            <li><a href="#" id="export-xml">Download XML</a></li>
+                          </ul>
+                        </div>
                     <form>
                 </div>
         		<ul id="results-tab" class="nav nav-tabs">

@@ -83,7 +83,6 @@ class AllometricEquationIndex(MappingType, Indexable):
             }
         
         return mapping
-   
 
     @classmethod
     def extract_document(cls, obj_id=None, obj=None):

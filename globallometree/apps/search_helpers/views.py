@@ -4,6 +4,8 @@ from decimal import Decimal
 import cStringIO as StringIO
 import xhtml2pdf.pisa as pisa
 
+from elasticutils.contrib.django import get_es
+
 from django.conf import settings
 from django.views.generic import TemplateView
 
@@ -21,6 +23,7 @@ from django.views.generic.edit import FormView
 from apps.locations.models import Country
 from apps.accounts.mixins import RestrictedPageMixin
 
+from globallometree.apps.api import Renderers
 
 class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
     template_name = 'search_helpers/template.search.html'
@@ -145,26 +148,33 @@ class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
         return query_string
 
 
-def record_by_id_view(request, id, model_class, template_path):
+def record_by_id_view(request, id, model_class, 
+        record_content_template, record_title):
     record = model_class.objects.get(pk=id)
     return render_to_response(
-        '%s/template.record.html' % template_path, 
+        'search_helpers/template.record.html', 
         context_instance = RequestContext(
             request, {
                 'record': record, 
+                'record_content_template': record_content_template,
+                'record_title': record_title,
                 'is_page_data' : True
             }
         )
     ) 
 
-def record_by_id_pdf_view(request, id, model_class, template_path):
+
+def record_by_id_pdf_view(request, id, model_class, 
+        record_content_template, record_title, record_url):
     record = model_class.objects.get(pk=id)
 
-    template = get_template('%s/template.record.pdf.html' % template_path)
-
+    template = get_template('search_helpers/template.record.pdf.html')
    
     html = template.render(Context({
-        'record': record
+        'record': record,
+        'record_content_template': record_content_template,
+        'record_title': record_title,
+        'record_url': record_url
     }))
 
     def fetch_resources(uri, rel):
@@ -186,29 +196,27 @@ def record_by_id_pdf_view(request, id, model_class, template_path):
     
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=AllometricEquation_%s.pdf' % allometric_equation.ID
-
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % record_title.lower().replace(' ', '_')
     response.write(pdf)
     return response
 
-
-def export_view(request, filename):
+def export_view(request, doc_type, filename, serializer):
     # Here we take the query that was generated client side and
     # pass it to elasicsearch on the server to facilitate an easy
     # way for the browser to download
     # We also strip it down to make the json more useful for researchers
     query = json.loads(request.POST.get('query'))
+    extension = request.POST.get('extension')
     #Try to prevent any obvious hacking attempts
-    assert query.keys() == [u'query', u'from', u'size']
-    assert query['size'] <= 1000
-    assert query['from'] == 0
+    assert query.keys() == [u'query', u'from']
     es = get_es(urls=settings.ES_URLS)
-    result = es.search(body=query)
-    cleaned = []
+    result = es.search(doc_type=doc_type, body=query)
+    data = []
     for hit in result['hits']['hits']:
-        del hit['_source']['has_precise_location']
-        cleaned.append(hit['_source'])
-    json_dump = json.dumps(cleaned, indent=4)
-    response = HttpResponse(json_dump)
-    response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
+        #del hit['_source']['key that isn't wanted]
+        data.append(hit['_source'])
+    rendered_data = Renderers[extension]().render(data)
+
+    response = HttpResponse(rendered_data)
+    response['Content-Disposition'] = 'attachment; filename=%s%s' % (filename, extension)
     return response

@@ -1,20 +1,4 @@
-{% extends "base.html" %}
 {% load staticfiles %}
-
-{% block script %}	
-    {% include 'search_helpers/record_map_script.html' %}
-{% endblock %}
-
-{% block content %}
-
-<div class="row">     
-    <div class="col-md-12">
-        <div style="float:right;"><a href="pdf"><img src="{% static 'images/pdficon.png' %}" /> Download equation as PDF</a></div>
-        <div class="page-header">
-            <h2>Allometric Equation {{ record.Allometric_equation_ID }}</h2>
-        </div>
-    </div>
-</div>        
 
 <div class="row">     
     <div class="col-md-12">
@@ -73,10 +57,3 @@
         </table>
     </div>
 </div>
-
-
-{% include 'search_helpers/record_taxonomy.html' %}
-{% include 'search_helpers/record_locations.html' %}
-{% include 'search_helpers/record_reference.html' %}
-
-{% endblock %}

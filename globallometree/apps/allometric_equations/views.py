@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import AllometricEquation
 from .forms import AllometricEquationSearchForm
 
+from globallometree.apps.api.serializers import SimpleAllometricEquationSerializer
 from globallometree.apps.search_helpers.views import LinkedModelSearchView
 from globallometree.apps.search_helpers.views import (
     record_by_id_view, 
@@ -20,16 +21,28 @@ class AllometricEquationSearchView(LinkedModelSearchView):
 @login_required(login_url='/accounts/login/')
 def record_id(request, id):
     return record_by_id_view(
-        request, id, model_class=AllometricEquation, template_path='allometric_equations')
+        request, 
+        id, 
+        model_class=AllometricEquation, 
+        record_content_template='allometric_equations/record_content.html',
+        record_title='Allometric Equation'
+        )
    
-
 @login_required(login_url='/accounts/login/')
 def record_id_pdf(request, id):
     return record_by_id_pdf_view(
-        request, id, model_class=AllometricEquation, template_path='allometric_equations')
+        request, 
+        id, 
+        model_class=AllometricEquation, 
+        record_content_template='allometric_equations/record_content.html',
+        record_title='Allometric Equation',
+        record_url= 'http://globallometree.org/data/allometric-equations/%s/' % id)
    
 
 @login_required(login_url='/accounts/login/')
 def export(request):
-    return export_view(request, filename='allometric_equations')
+    return export_view(request, 
+                       doc_type="allometricequation", 
+                       filename='allometric_equations',
+                       serializer=SimpleAllometricEquationSerializer)
     
