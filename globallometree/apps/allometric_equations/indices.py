@@ -43,7 +43,7 @@ class AllometricEquationIndex(MappingType, Indexable):
                     "Bg": estype_boolean,
                     "Bias_correction": estype_float,
                     "Bt": estype_boolean,
-                    "Contributor": estype_string,
+                    "Contributor": estype_string_not_analyzed,
                     "Corrected_for_bias": estype_boolean,
                     "Dataset": estype_long,
                     "Equation": estype_string_not_analyzed,
