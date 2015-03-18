@@ -17,9 +17,6 @@ from .models import UserProfile
 from .forms import UserProfileForm
 
 
-
-
-
 def register(request):
     
     if request.method == 'POST':

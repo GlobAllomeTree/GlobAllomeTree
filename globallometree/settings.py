@@ -170,12 +170,12 @@ DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
 
 
 #elasticutils django contrib settings
-ES_URLS = ['http://127.0.01:9200',]
+ES_URLS = ['http://localhost:9200',]
 ES_INDEXES = {'default': 'globallometree'}
 
 #Search url is the url that the browser sends requests to
 #It should be the public url of the proxy server
-SEARCH_URL = 'http://127.0.0.1:9200'
+SEARCH_URL = 'http://localhost:9200'
 
 #Celery
 # CELERY_ACCEPT_CONTENT = ['json',]
