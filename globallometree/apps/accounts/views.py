@@ -128,7 +128,6 @@ class MyProfileDetailView(DetailView):
         )
 
     def get_context_data(self, **kwargs):
-        import pdb; pdb.set_trace()
         context = super(MyProfileDetailView, self).get_context_data(**kwargs)
         context['token'] = Token.objects.get_or_create(
             user=context['userprofile'].user)[0]

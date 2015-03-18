@@ -2,17 +2,21 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<div class="row">
+  <div class="col-lg-6">
 
-<dl class="dl-horizontal">
-    <div style="font-size: medium;">
-        <h1>Update User Information</h1>
-            <h3>User: {{userprofile.user.username}}</h3>
-    </div>
-</dl>
+		<dl class="dl-horizontal">
+		    <div style="font-size: medium;">
+		        <h1>Update User Information</h1>
+		            <h3>User: {{userprofile.user.username}}</h3>
+		    </div>
+		</dl>
 
-<form action="" method="post">{% csrf_token %}
-    {{ form|crispy }}
-    <input type="submit" value="Update" />
-</form>
+		<form action="" method="post">{% csrf_token %}
+		    {{ form|crispy }}
+		    <input type="submit" value="Update" class="btn btn-success"/>
+		</form>
+	</div>
+</div>
 
 {% endblock %}

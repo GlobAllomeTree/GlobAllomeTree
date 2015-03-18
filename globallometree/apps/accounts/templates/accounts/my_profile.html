@@ -5,8 +5,8 @@
 
 <dl class="dl-horizontal">
     <div style="font-size: medium;">
-        <h1>User Information</h1>
-            <h3>Account</h3>
+        <h3>Your Profile</h3>
+            <h4>Account</h4>
             <hr />
                 <div style="font-size: medium;">
                 <dt>User name:</dt>
@@ -20,7 +20,7 @@
                 <dt>Privacy Setting:</dt>
                     <dd>{{userprofile.privacy}}</dd>
             <br />
-            <h3>User</h3>
+            <h4>User</h4>
             <hr />
                 <dt>Name:</dt>
                     <dd>{{userprofile.user.first_name}} {{userprofile.user.last_name}}</dd>
@@ -37,7 +37,7 @@
                  <dt>Field:</dt>
                     <dd>{{userprofile.field_subject}}</dd>
             <br />
-            <h3>Institution</h3>
+            <h4>Institution</h4>
             <hr />
                 <dt>Institution:</dt>
                     <dd>{{userprofile.institution_name}}</dd>
@@ -48,12 +48,12 @@
                 <dt>Fax:</dt>
                     <dd>{{userprofile.institution_fax}}</dd>
             <br />
-            <h3>Data</h3>
+            <h4>Data</h4>
             <hr />
                 <dt>Data you may provide:</dt>
                     <dd>{{userprofile.get_data_may_provide_display}}</dd>
             <br />
-            <h3>Location</h3>
+            <h4>Location</h4>
             <hr />
                 <dt>Latitude:</dt>
                     <dd>{{userprofile.location_latitude}}</dd>
@@ -66,7 +66,7 @@
 
 <br><br>
 <form action="update">
-    <input type="submit" value="Edit Profile">
+    <input type="submit" value="Edit Profile" class="btn btn-success">
 </form>
 
 {% endblock %}
