@@ -17,6 +17,7 @@ urlpatterns = patterns(
     url(r'^api/', include('apps.api.urls')),
     url(r'^data/allometric-equations/', include('apps.allometric_equations.urls')),
     url(r'^data/wood-densities/', include('apps.wood_densities.urls')),
+    url(r'^data/raw-data/', include('apps.raw_data.urls')),
     url(r'^data/taxonomy/', include('apps.taxonomy.urls')),
     url(r'^data/sharing/', include('apps.data_sharing.urls')),
     
