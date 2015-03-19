@@ -2,9 +2,10 @@
 {% load staticfiles %}
 
 <form method="get" action="." id="searchForm" autocomplete="off">
-    <div id="search-box" style="clear:both;">    
-        <ul class="nav nav-tabs">                   
+    <div id="search-box" style="clear:both;">
+        <ul class="nav nav-tabs">
             <li><a href="#keyword" data-toggle="tab" class="active">Keyword</a></li>
+            <li><a href="#wooddensity" data-toggle="tab">Wood Density</a></li>
             <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
             <li><a href="#location" data-toggle="tab">Location</a></li>
             <li><a href="#reference" data-toggle="tab">Reference</a></li>
@@ -12,11 +13,11 @@
         <div class="tab-content">
             <div class="tab-pane active" id="keyword">
                 <p class="search-help-text">
-                    Search wood densities by keyword. 
+                    Search wood densities by keyword.
                     This searches accross several text fields. <br>
                     Example searches: <a href="?q=Acacia">Acacia</a>,
                        <a href="?q=Zambia">Zambia</a>,
-                       <a href="?q=Bellefontaine">Bellefontaine</a>, 
+                       <a href="?q=Bellefontaine">Bellefontaine</a>,
                        <a href="?q=Glutinosum">Glutinosum</a>,
                        <a href="?q=rainforest">rainforest</a>
                 </p>
@@ -27,19 +28,154 @@
                 </div>
             </div>
 
+            <div class="tab-pane" id="wooddensity">
+                <p class="search-help-text">
+                    Search wood densities by tree specification.
+                    This searches accross several fields. <br>
+                </p>
+                <h2>Height</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Average Height</h4>
+                        {{ form.H_tree_avg__gte|as_crispy_field }}
+                        {{ form.H_tree_avg__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Minimum Height</h4>
+                        {{ form.H_tree_min__gte|as_crispy_field }}
+                        {{ form.H_tree_min__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Maximum Height</h4>
+                        {{ form.H_tree_max__gte|as_crispy_field }}
+                        {{ form.H_tree_max__lte|as_crispy_field }}
+                    </div>
+                </div>
+                <br />
+                <h2>DBH</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Average DBH</h4>
+                        {{ form.DBH_tree_avg__gte|as_crispy_field }}
+                        {{ form.DBH_tree_avg__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Minimum DBH</h4>
+                        {{ form.DBH_tree_min__gte|as_crispy_field }}
+                        {{ form.DBH_tree_min__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Maximum DBH</h4>
+                        {{ form.DBH_tree_max__gte|as_crispy_field }}
+                        {{ form.DBH_tree_max__lte|as_crispy_field }}
+                    </div>
+                </div>
+                <br />
+                <h2>Wood Mass Measured</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Wood Mass</h4>
+                        {{ form.m_WD_max__gte|as_crispy_field }}
+                        {{ form.m_WD_min__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Moisture Content</h4>
+                        {{ form.MC_m_max__gte|as_crispy_field }}
+                        {{ form.MC_m_min__lte|as_crispy_field }}
+                    </div>
+                </div>
+              <br />
+              <h2>Wood Volume Measured</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Wood Volume</h4>
+                        {{ form.V_WD_max__gte|as_crispy_field }}
+                        {{ form.V_WD_min__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Moisture Content</h4>
+                        {{ form.MC_V_max__gte|as_crispy_field }}
+                        {{ form.MC_V_min__lte|as_crispy_field }}
+                    </div>
+                </div>
+              <br />
+              <h2>Wood Density</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Density</h4>
+                        {{ form.Density_g_cm3_max__gte|as_crispy_field }}
+                        {{ form.Density_g_cm3_min__lte|as_crispy_field }}
+                        {{ form.SD_max__gte|as_crispy_field }}
+                        {{ form.SD_min__lte|as_crispy_field }}
+                        {{ form.MC_Density|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Minimum Density</h4>
+                        {{ form.Min_max__gte|as_crispy_field }}
+                        {{ form.Min_min__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Maximum Density</h4>
+                        {{ form.Max_max__gte|as_crispy_field }}
+                        {{ form.Max_min__lte|as_crispy_field }}
+                    </div>
+                    <br />
+                </div>
+              <br />
+              <h2>Other Measurements</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Coefficient of Retraction</h4>
+                        {{ form.CR_max__gte|as_crispy_field }}
+                        {{ form.CR_min__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Fiber Saturation Point</h4>
+                        {{ form.FSP_max__gte|as_crispy_field }}
+                        {{ form.FSP_min__lte|as_crispy_field }}
+                    </div>
+                </div>
+              <br />
+              <h2>Study Characteristics</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Methodology</h4>
+                        {{ form.Methodology|as_crispy_field }}
+                        {{ form.Bark|as_crispy_field }}
+
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Data</h4>
+                        {{ form.Data_origin|as_crispy_field }}
+                        {{ form.Data_type|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Other</h4>
+                        {{ form.Samples_per_tree_max__gte|as_crispy_field }}
+                        {{ form.Samples_per_tree_min__lte|as_crispy_field }}
+                        {{ form.Number_of_trees_max__gte|as_crispy_field }}
+                        {{ form.Number_of_trees_min__lte|as_crispy_field }}
+                        {{ form.H_measure_max__gte|as_crispy_field }}
+                        {{ form.H_measure_min__lte|as_crispy_field }}
+                        {{ form.Bark_distance_max__gte|as_crispy_field }}
+                        {{ form.Bark_distance_min__lte|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+
            {% include 'search_helpers/search_tab_taxonomy.html' %}
            {% include 'search_helpers/search_tab_location.html' %}
            {% include 'search_helpers/search_tab_reference.html' %}
 
         </div>
-      
+
         {{ form.order_by }} 
-        
+
         <input type="hidden" name="page" value="1">
         <div id="search-submit-holder">
             <input id="searchButton" style="float:right" class="btn btn-success" type="submit" value="Search">
         </div>
-        
+
     </div>
-            
+
 </form>

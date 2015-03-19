@@ -162,21 +162,3 @@ class UserProfileUpdateView(UpdateView):
         initial = super(UserProfileUpdateView, self).get_initial()
         initial['email'] = self.request.user.email
         return initial
-
-# def my_profile(request, user_id=0):
-#     if (user_id == 0):
-#         get_user = request.user
-#         user_token = Token.objects.get_or_create(user=request.user)
-#         return render_to_response('accounts/my_profile.html',
-#                                   context_instance=RequestContext(request,
-#                                   {"requested_user": get_user,
-#                                   "token": user_token[0],
-#                                   "profile": request.user.get_profile()}))
-#     else:
-#         get_user = get_object_or_404(User, id=user_id)
-#         get_user_profile = User.objects.get(id=user_id).get_profile()
-#         return render_to_response('accounts/my_profile.html',
-#                                   context_instance=RequestContext(request,
-#                                   {"requested_user": get_user,
-#                                   "profile": get_user_profile}))
-
