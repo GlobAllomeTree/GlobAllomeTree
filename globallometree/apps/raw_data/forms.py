@@ -16,107 +16,159 @@ class RawDataSearchForm(LinkedModelSearchForm):
     H_tree_avg__lte = forms.DecimalField(required=False,
         label='H tree avg To')
 
-    H_tree_min__gte = forms.DecimalField(required=False,
-        label='H tree min From')
-    H_tree_min__lte = forms.DecimalField(required=False,
-        label='H tree min To')
+    Plot_ID__gte = forms.IntegerField(required=False,
+        label='Plot ID From')
+    Plot_ID__lte = forms.IntegerField(required=False,
+        label='Plot ID To')
 
-    H_tree_max__gte = forms.DecimalField(required=False,
-        label='H tree max From')
-    H_tree_max__lte = forms.DecimalField(required=False,
-        label='H tree max To')
+    Forest_type = forms.CharField(required=False, label='Forest type')
 
-    DBH_tree_avg__gte = forms.DecimalField(required=False,
-        label='DBH tree avg From')
-    DBH_tree_avg__lte = forms.DecimalField(required=False,
-        label='DBHH tree avg To')
+    Tree_ID__gte = forms.IntegerField(required=False,
+        label='Tree ID From')
+    Tree_ID__lte = forms.DecimalField(required=False,
+        label='Tree ID To')
 
-    DBH_tree_min__gte = forms.DecimalField(required=False,
-        label='DBH tree min From')
-    DBH_tree_min__lte = forms.DecimalField(required=False,
-        label='DBHH tree min To')
+    Date_collection__gte = forms.DateField(required=False,
+        label='Collection date From')
+    Date_collection__lte = forms.DateField(required=False,
+        label='Collection date To')
 
-    DBH_tree_max__gte = forms.DecimalField(required=False,
-        label='DBH tree max From')
-    DBH_tree_max__lte = forms.DecimalField(required=False,
-        label='DBHH tree max To')
+    DBH_cm__gte = forms.DecimalField(required=False,
+        label='DBH tree in cm From')
+    DBH_cm__lte = forms.DecimalField(required=False,
+        label='DBHH tree in cm To')
 
-    m_WD_max__gte = forms.DecimalField(required=False,
-        label='Wood mass measured From')
-    m_WD_min__lte = forms.DecimalField(required=False,
-        label='Wood mass measured to')
+    H_m__gte = forms.DecimalField(required=False,
+        label='Tree height in m From')
+    H_m__lte = forms.DecimalField(required=False,
+        label='Tree height in m To')
 
-    MC_m_max__gte = forms.DecimalField(required=False,
-        label='Moisture content while measuring From')
-    MC_m_min__lte = forms.DecimalField(required=False,
-        label='Moisture content while measuring to')
+    CD_m__gte = forms.DecimalField(required=False,
+        label='Crown diameter in m From')
+    CD_m__lte = forms.DecimalField(required=False,
+        label='Crown diameter in m To')
 
-    V_WD_max__gte = forms.DecimalField(required=False,
-        label='Wood volume measured From')
-    V_WD_min__lte = forms.DecimalField(required=False,
-        label='Wood volume measured to')
+    F_Bole_kg__gte = forms.DecimalField(required=False,
+        label='Fresh bole weight in kg From')
+    F_Bole_kg__lte = forms.DecimalField(required=False,
+        label='Fresh bole weight in kg To')
 
-    MC_V_max__gte = forms.DecimalField(required=False,
-        label='Moisture content while measuring From')
-    MC_V_min__lte = forms.DecimalField(required=False,
-        label='Moisture content while measuring To')
+    F_Branch_kg__gte = forms.DecimalField(required=False,
+        label='Fresh branches weight in kg From')
+    F_Branch_kg__lte = forms.DecimalField(required=False,
+        label='Fresh branches weight in kg To')
 
-    CR_max__gte = forms.DecimalField(required=False,
-        label='Coefficient of retraction From')
-    CR_min__lte = forms.DecimalField(required=False,
-        label='Coefficient of retraction To')
+    F_Foliage_kg__gte = forms.DecimalField(required=False,
+        label='Fresh foliage weight in kg From')
+    F_Foliage_kg__lte = forms.DecimalField(required=False,
+        label='Fresh foliage weight in kg To')
 
-    FSP_max__gte = forms.DecimalField(required=False,
-        label='Fiber saturation point From')
-    FSP_min__lte = forms.DecimalField(required=False,
-        label='Fiber saturation point To')
+    F_Stump_kg__gte = forms.DecimalField(required=False,
+        label='Fresh stump weight in kg From')
+    F_Stump_kg__lte = forms.DecimalField(required=False,
+        label='Fresh stump weight in kg To')
 
-    Methodology = forms.CharField(required=False, label='Methodology')
+    F_Buttress_kg__gte = forms.DecimalField(required=False,
+        label='Fresh buttress weight in kg From')
+    F_Buttress_kg__lte = forms.DecimalField(required=False,
+        label='Fresh buttress weight in kg To')
 
-    Bark = forms.NullBooleanField(required=False, label='Bark included')
+    F_Roots_kg__gte = forms.DecimalField(required=False,
+        label='Fresh roots weight in kg From')
+    F_Roots_kg__lte = forms.DecimalField(required=False,
+        label='Fresh roots weight in kg To')
 
-    Density_g_cm3_max__gte = forms.DecimalField(required=False,
-        label='Wood density From')
-    Density_g_cm3_min__lte = forms.DecimalField(required=False,
-        label='Wood density To')
+    Volume_m3__gte = forms.DecimalField(required=False,
+        label='Total volume of tree in m3 From')
+    Volume_m3__lte = forms.DecimalField(required=False,
+        label='Total volume of tree in m3 To')
 
-    MC_Density = forms.CharField(required=False, label='Moisture Content Code')
+    Volume_bole_m3__gte = forms.DecimalField(required=False,
+        label='Volume of bole in m3 From')
+    Volume_bole_m3__lte = forms.DecimalField(required=False,
+        label='Volumn of bole in m3 To')
 
-    Data_origin = forms.CharField(required=False, label='Data origin')
+    WD_AVG_gcm3__gte = forms.DecimalField(required=False,
+        label='Avg WD for tree in g/cm3 From')
+    WD_AVG_gcm3__lte = forms.DecimalField(required=False,
+        label='Avg WD for tree in g/cm3 To')
 
-    Data_type = forms.CharField(required=False, label='Data type')
+    DF_Bole_AVG__gte = forms.DecimalField(required=False,
+        label='Avg bole weight ratio dry/fresh From')
+    DF_Bole_AVG__lte = forms.DecimalField(required=False,
+        label='Avg bole weight ratio dry/fresh To')
 
-    Samples_per_tree_max__gte = forms.DecimalField(required=False,
-        label='Samples per tree From')
-    Samples_per_tree_min__lte = forms.DecimalField(required=False,
-        label='Samples per tree To')
+    DF_Branch_AVG__gte = forms.DecimalField(required=False,
+        label='Avg branch weight ratio dry/fresh From')
+    DF_Branch_AVG__lte = forms.DecimalField(required=False,
+        label='Avg branch weight ratio dry/fresh To')
 
-    Number_of_trees_max__gte = forms.DecimalField(required=False,
-        label='Number of trees From')
-    Number_of_trees_min__lte = forms.DecimalField(required=False,
-        label='Number of trees To')
+    DF_Foliage_AVG__gte = forms.DecimalField(required=False,
+        label='Avg foliage weight ratio dry/fresh From')
+    DF_Foliage_AVG__lte = forms.DecimalField(required=False,
+        label='Avg foliage weight ratio dry/fresh To')
 
-    SD_max__gte = forms.DecimalField(required=False,
-        label='Standard deviation From')
-    SD_min__lte = forms.DecimalField(required=False,
-        label='Standard deviation To')
+    DF_Stump_AVG__gte = forms.DecimalField(required=False,
+        label='Avg stump weight ratio dry/fresh From')
+    DF_Stump_AVG__lte = forms.DecimalField(required=False,
+        label='Avg stump weight ratio dry/fresh To')
 
-    Min_max__gte = forms.DecimalField(required=False,
-        label='Min of WD From')
-    Min_min__lte = forms.DecimalField(required=False,
-        label='Min of WD To')
+    DF_Buttress_AVG__gte = forms.DecimalField(required=False,
+        label='Avg buttress weight ratio dry/fresh From')
+    DF_Buttress_AVG__lte = forms.DecimalField(required=False,
+        label='Avg buttress weight ratio dry/fresh To')
 
-    Max_max__gte = forms.DecimalField(required=False,
-        label='Max of WD From')
-    Max_min__lte = forms.DecimalField(required=False,
-        label='Max of WD To')
+    DF_Roots_AVG__gte = forms.DecimalField(required=False,
+        label='Avg roots weight ratio dry/fresh From')
+    DF_Roots_AVG__lte = forms.DecimalField(required=False,
+        label='Avg roots weight ratio dry/fresh To')
 
-    H_measure_max__gte = forms.DecimalField(required=False,
-        label='Height of sample From')
-    H_measure_min__lte = forms.DecimalField(required=False,
-        label='Height of sample To')
+    D_Bole_kg__gte = forms.DecimalField(required=False,
+        label='Dry bole weight in kg From')
+    D_Bole_kg__lte = forms.DecimalField(required=False,
+        label='Dry bole weight in kg To')
 
-    Bark_distance_max__gte = forms.DecimalField(required=False,
-        label='Distance where WD collected From')
-    Bark_distance_min__lte = forms.DecimalField(required=False,
-        label='Distance where WD collected To')
+    D_Branch_kg__gte = forms.DecimalField(required=False,
+        label='Dry branches weight in kg From')
+    D_Branch_kg__lte = forms.DecimalField(required=False,
+        label='Dry branches weight in kg To')
+
+    D_Foliage_kg__gte = forms.DecimalField(required=False,
+        label='Dry foliage weight in kg From')
+    D_Foliage_kg__lte = forms.DecimalField(required=False,
+        label='Dry foliage weight in kg To')
+
+    D_Stump_kg__gte = forms.DecimalField(required=False,
+        label='Dry stump weight in kg From')
+    D_Stump_kg__lte = forms.DecimalField(required=False,
+        label='Dry stump weight in kg To')
+
+    D_Buttress_kg__gte = forms.DecimalField(required=False,
+        label='Dry buttress weight in kg From')
+    D_Buttress_kg__lte = forms.DecimalField(required=False,
+        label='Dry buttress weight in kg To')
+
+    D_Roots_kg__gte = forms.DecimalField(required=False,
+        label='Dry roots weight in kg From')
+    D_Roots_kg__lte = forms.DecimalField(required=False,
+        label='Dry roots weight in kg To')
+
+    ABG_kg__gte = forms.DecimalField(required=False,
+        label='Total above ground biomass in kg From')
+    ABG_kg__lte = forms.DecimalField(required=False,
+        label='Total above ground biomass  in kg To')
+
+    BGB_kg__gte = forms.DecimalField(required=False,
+        label='Total below ground biomass in kg From')
+    BGB_kg__lte = forms.DecimalField(required=False,
+        label='Total below ground biomass in kg To')
+
+    Tot_Biomass_kg__gte = forms.DecimalField(required=False,
+        label='Total tree biomass in kg From')
+    Tot_Biomass_kg__lte = forms.DecimalField(required=False,
+        label='Total tree biomass in kg To')
+
+    BEF__gte = forms.DecimalField(required=False,
+        label='Biomass expansion factor From')
+    BEF__lte = forms.DecimalField(required=False,
+        label='Biomass expansion factor To')

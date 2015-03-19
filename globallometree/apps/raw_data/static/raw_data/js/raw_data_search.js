@@ -11,9 +11,9 @@ window.app.searchManager.config.indexName = 'rawdata';
 
 window.app.listController.config.recordLinkPrefix = 'raw-data';
 window.app.listController.config.recordReadableType = 'Raw Data';
-// window.app.listController.config.customListTemplate = '\
-//   <dt><small>Density g/cm3 </small></dt>					   \
-//   <dd>{{ Density_g_cm3 }}</dd>';
+window.app.listController.config.customListTemplate = '\
+  <dt><small>Forest Type </small></dt>					   \
+  <dd>{{ Forest_type }}</dd>';
 
 window.app.listController.config.getRecordContext = function (data) {
 	data['ID'] = data['Raw_data_ID'];

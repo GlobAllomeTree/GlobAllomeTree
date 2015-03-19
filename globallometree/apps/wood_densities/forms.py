@@ -44,17 +44,17 @@ class WoodDensitySearchForm(LinkedModelSearchForm):
     m_WD_max__gte = forms.DecimalField(required=False,
         label='Wood mass measured From')
     m_WD_min__lte = forms.DecimalField(required=False,
-        label='Wood mass measured to')
+        label='Wood mass measured To')
 
     MC_m_max__gte = forms.DecimalField(required=False,
         label='Moisture content while measuring From')
     MC_m_min__lte = forms.DecimalField(required=False,
-        label='Moisture content while measuring to')
+        label='Moisture content while measuring To')
 
     V_WD_max__gte = forms.DecimalField(required=False,
         label='Wood volume measured From')
     V_WD_min__lte = forms.DecimalField(required=False,
-        label='Wood volume measured to')
+        label='Wood volume measured To')
 
     MC_V_max__gte = forms.DecimalField(required=False,
         label='Moisture content while measuring From')
@@ -86,14 +86,14 @@ class WoodDensitySearchForm(LinkedModelSearchForm):
 
     Data_type = forms.CharField(required=False, label='Data type')
 
-    Samples_per_tree_max__gte = forms.DecimalField(required=False,
+    Samples_per_tree_max__gte = forms.IntegerField(required=False,
         label='Samples per tree From')
-    Samples_per_tree_min__lte = forms.DecimalField(required=False,
+    Samples_per_tree_min__lte = forms.IntegerField(required=False,
         label='Samples per tree To')
 
-    Number_of_trees_max__gte = forms.DecimalField(required=False,
+    Number_of_trees_max__gte = forms.IntegerField(required=False,
         label='Number of trees From')
-    Number_of_trees_min__lte = forms.DecimalField(required=False,
+    Number_of_trees_min__lte = forms.IntegerField(required=False,
         label='Number of trees To')
 
     SD_max__gte = forms.DecimalField(required=False,
