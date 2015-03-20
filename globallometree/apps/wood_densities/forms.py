@@ -29,7 +29,7 @@ class WoodDensitySearchForm(LinkedModelSearchForm):
     DBH_tree_avg__gte = forms.DecimalField(required=False,
         label='DBH tree avg From')
     DBH_tree_avg__lte = forms.DecimalField(required=False,
-        label='DBHH tree avg To')
+        label='DBH tree avg To')
 
     DBH_tree_min__gte = forms.DecimalField(required=False,
         label='DBH tree min From')

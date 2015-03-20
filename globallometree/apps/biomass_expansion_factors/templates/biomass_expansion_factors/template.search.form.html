@@ -1,0 +1,103 @@
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<form method="get" action="." id="searchForm" autocomplete="off">
+    <div id="search-box" style="clear:both;">
+        <ul class="nav nav-tabs">
+            <li><a href="#keyword" data-toggle="tab" class="active">Keyword</a></li>
+            <li><a href="#biomassexpansionfactors" data-toggle="tab">Biomass Expansion Factors</a></li>
+            <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
+            <li><a href="#location" data-toggle="tab">Location</a></li>
+            <li><a href="#reference" data-toggle="tab">Reference</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="keyword">
+                <p class="search-help-text">
+                    Search wood densities by keyword.
+                    This searches accross several text fields. <br>
+                    Example searches: <a href="?q=Acacia">Acacia</a>,
+                       <a href="?q=Zambia">Zambia</a>,
+                       <a href="?q=Bellefontaine">Bellefontaine</a>,
+                       <a href="?q=Glutinosum">Glutinosum</a>,
+                       <a href="?q=rainforest">rainforest</a>
+                </p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form.q|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="biomassexpansionfactors">
+                <p class="search-help-text">
+                    Search biomass expansion factors.<br>
+                </p>
+                <h2>General Information</h2>
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Growing Stock</h4>
+                        {{ form.Growing_stock__gte|as_crispy_field }}
+                        {{ form.Growing_stock__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Aboveground Biomass</h4>
+                        {{ form.Aboveground_biomass__gte|as_crispy_field }}
+                        {{ form.Aboveground_biomass__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Net Annual Increment</h4>
+                        {{ form.Net_annual_increment__gte|as_crispy_field }}
+                        {{ form.Net_annual_increment__lte|as_crispy_field }}
+                    </div>
+                </div>
+                <br />
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Stand Density</h4>
+                        {{ form.Stand_density__gte|as_crispy_field }}
+                        {{ form.Stand_density__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Age</h4>
+                        {{ form.Age__gte|as_crispy_field }}
+                        {{ form.Age__lte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Biomass Expansion Factor</h4>
+                        {{ form.BEF__gte|as_crispy_field }}
+                        {{ form.BEF__lte|as_crispy_field }}
+                    </div>
+                </div>
+                <br />
+                <div class="row smallInputs">
+                    <div class="col-lg-4">
+                        <h4>Input</h4>
+                        {{ form.Input|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Output</h4>
+                        {{ form.Output|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Interval Validity</h4>
+                        {{ form.Interval_validity|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+
+           {% include 'search_helpers/search_tab_taxonomy.html' %}
+           {% include 'search_helpers/search_tab_location.html' %}
+           {% include 'search_helpers/search_tab_reference.html' %}
+
+        </div>
+
+        {{ form.order_by }} 
+
+        <input type="hidden" name="page" value="1">
+        <div id="search-submit-holder">
+            <input id="searchButton" style="float:right" class="btn btn-success" type="submit" value="Search">
+        </div>
+
+    </div>
+
+</form>

@@ -10,5 +10,5 @@ urlpatterns = patterns('apps.wood_densities.views',
     #Single equation PDF
     url(r'^(\d+)/pdf/$', 'record_id_pdf', name='wood_densities_record_pdf'),
     
-    url(r'^$', WoodDensitySearchView.as_view(), name='wood_densities_search'),  
+    url(r'^$', WoodDensitySearchView.as_view(), name='wood_densities_search'),
 )

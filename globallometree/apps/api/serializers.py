@@ -13,6 +13,7 @@ from globallometree.apps.taxonomy import models as taxonomy_models
 from globallometree.apps.wood_densities import models as wood_density_models 
 from globallometree.apps.raw_data import models as raw_data_models
 from globallometree.apps.locations import models as location_models 
+from globallometree.apps.biomass_expansion_factors import models as biomass_expansion_factor_models
 
 
 class HyperLinkedWithIdSerializer(serializers.HyperlinkedModelSerializer):
@@ -194,6 +195,11 @@ class WoodDensitySerializer(HyperLinkedWithIdSerializer):
 class RawDataSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = raw_data_models.RawData
+        exclude = ('Created', 'Modified',)
+
+class BiomassExpansionFactorSerializer(HyperLinkedWithIdSerializer):
+    class Meta:
+        model = biomass_expansion_factor_models.BiomassExpansionFactor
         exclude = ('Created', 'Modified',)
 
 
@@ -1146,6 +1152,11 @@ class SimpleWoodDensitySerializer(SimpleLinkedModelSerializer):
 class SimpleRawDataSerializer(SimpleLinkedModelSerializer):
     class Meta:
         model = raw_data_models.RawData
+        exclude = ('Created', 'Modified', )
+
+class SimpleBiomassExpansionFactorSerializer(SimpleLinkedModelSerializer):
+    class Meta:
+        model = biomass_expansion_factor_models.BiomassExpansionFactor
         exclude = ('Created', 'Modified', )
 
 

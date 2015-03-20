@@ -40,13 +40,13 @@ class BiomassExpansionFactor(LinkedBaseModel):
         null=True, blank=True, max_length="255",
         help_text="Input" )
 
-    Output = models.IntegerField(
-        null=True, blank=True,
+    Output = models.CharField(
+        null=True, blank=True, max_length="255",
         help_text="Output"
         )
 
-    Interval_validity = models.IntegerField(
-        null=True, blank=True,
+    Interval_validity = models.CharField(
+        null=True, blank=True, max_length="255",
         help_text="Interval validity"
         )
 

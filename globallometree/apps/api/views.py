@@ -37,6 +37,10 @@ from globallometree.apps.raw_data.models import (
     RawData
     )
 
+from globallometree.apps.biomass_expansion_factors.models import (
+    BiomassExpansionFactor
+    )
+
 from globallometree.apps.locations.models import (
     Continent, 
     Country, 
@@ -81,6 +85,7 @@ from globallometree.apps.api.serializers import (
     DataLicenseSerializer, 
     DatasetSerializer, 
     DataRequestSerializer,
+    BiomassExpansionFactorSerializer,
 
     ############# Simple Serializers ################
     SimpleGenusSerializer,
@@ -108,7 +113,8 @@ from globallometree.apps.api.serializers import (
     SimpleRawDataSerializer,
     SimpleInstitutionSerializer,
     SimpleDatasetSerializer,
-    SimpleDataLicenseSerializer
+    SimpleDataLicenseSerializer,
+    SimpleBiomassExpansionFactorSerializer
 	)
 
 
@@ -326,3 +332,10 @@ class DataRequestViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = DataRequest.objects.all()
     serializer_class = DataRequestSerializer
 
+
+class BiomassExpansionFactorViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    """
+    queryset = BiomassExpansionFactor.objects.all()
+    serializer_class = BiomassExpansionFactorSerializer
+    simple_serializer_class = SimpleBiomassExpansionFactorSerializer
