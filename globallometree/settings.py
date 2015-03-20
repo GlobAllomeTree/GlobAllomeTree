@@ -142,7 +142,8 @@ INSTALLED_APPS = (
     'globallometree.apps.api',
     'rest_framework',
     'rest_framework_swagger',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'globallometree.apps.biomass_expansion_factors'
 )
 
 
