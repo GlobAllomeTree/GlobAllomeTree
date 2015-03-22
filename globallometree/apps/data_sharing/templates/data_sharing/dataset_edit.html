@@ -9,54 +9,45 @@
 {% block script %}
 	<script src="{% static 'js/backbone.js' %}"></script>
 	<script src="{% static 'js/backbone.marionette.js' %}"></script>
-	<script src="{% static 'data_sharing/js/hello.js' %}"></script>
-	<script type="text/javascript">
-	
+	<script src="{% static 'data_sharing/js/dataset_edit.js' %}"></script>
 
-		var SingleLink = Marionette.ItemView.extend({
-		  tagName: "li",
-		  template: _.template("<a href='#'><%-Substitute_equation%></a>")
-		});
-
-		var ListView = Marionette.CollectionView.extend({
-		  tagName: 'ul',
-		  childView: SingleLink
-		});
-
-		var list = new Backbone.Collection();
-
-		var listView = new ListView({
-		  collection: list,
-		  el: '.link-area'
-		});
-
-		listView.render();
-
-		$.ajax({
-			url :'/api/v1/datasets/' + '{{ Dataset_ID }}' + '/',
-			data : {
-				format : 'json'
-			},
-			success : function (data, textStatus) {
-						Data_as_json = JSON.parse(data.Data_as_json);
-			   			list.add(Data_as_json);
-			   			debugger;
-			   			},
-			dataType : 'json'
-			});
-
+	<script type="text/template" id="templateDatasetCollection">
+		<form action="/" method="post">
+			<div class="panel-group" id="datasetCollection" role="tablist" aria-multiselectable="true">
+			</div>
+		</form>
+		<div class="text-right">
+			<button id="equationAdd">Add Equation</button>
+		</div>
 	</script>
+
+	<script type="text/template" id="templateFieldCollection">
+		<div class="panel-heading" role="tab" id="heading<%= index %>">
+			<h3 class="panel-title">
+				<a href="#collapse<%= index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<%= isExpanded %>" aria-controls="collapse<%= index %>">Equation <%= index + 1%></a>
+			</h3>
+		</div>
+		<div id="collapse<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= index %>">
+			<div class="panel-body">
+				<ul class="list-unstyled">
+				</ul>
+			</div>
+		</div>
+	</script>
+
+  <script type="text/template" id="templateInput">
+    <label for="<%= id %>"><%= label %></label>
+    <input type="<%= type %>" name="<%= key %>" id="<%= id %>" value="<%= value %>" class="form-control">
+  </script>
+
+  <script type="text/template" id="templateTextarea">
+    <label for="<%= id %>"><%= label %></label>
+    <textarea name="<%= key %>" id="<%= id %>"><%= value %></textarea>
+  </script>
 
 {% endblock %}
 
 {% block content %}
- 	<div class="row">
-        <div class="col-md-12">
-			<h2>Edit Dataset</h2>
-			<p id="hello"></p>
-			<div class="link-area"></div>
-		</div>
-	</div>	
-
-	
+	<h2>Edit Dataset</h2>
+	<div id="equationEditPage"></div>
 {% endblock %}
