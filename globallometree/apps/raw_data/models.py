@@ -79,7 +79,7 @@ class RawData(LinkedBaseModel):
 
     WD_AVG_gcm3 = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average wood density value for the hole tree in grams/cubic centimeters")
+        help_text="Average wood density value for the whole tree in grams/cubic centimeters")
 
     DF_Bole_AVG = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
