@@ -3,10 +3,33 @@
 <div class="row">     
     <div class="col-md-12">
          <br>
-        <h3>Record Details</h3> {{record.ID}}
+        <h3>Record Details</h3>
         <table class="table">
-            <tr><th style="width:210px"> Density_g_cm3: </th><td>{{ record.Density_g_cm3 }}</td></tr> 
-            <tr><th style="width:210px"> H_tree_avg: </th><td>{{ record.H_tree_avg }}</td></tr>
+            <tr><th style="width:210px"> Density (g/cm3): </th><td>{{ record.Density_g_cm3 }}</td></tr>
+            <tr><th style="width:210px"> Tree height avg: </th><td>{{ record.H_tree_avg }}</td></tr>
+            <tr><th style="width:210px"> Tree height min: </th><td>{{ record.H_tree_min }}</td></tr>
+            <tr><th style="width:210px"> Tree height max: </th><td>{{ record.H_tree_max }}</td></tr>
+            <tr><th style="width:210px"> Tree DBH avg: </th><td>{{ record.DBH_tree_avg }}</td></tr>
+            <tr><th style="width:210px"> Tree DBH min: </th><td>{{ record.DBH_tree_min }}</td></tr>
+            <tr><th style="width:210px"> Tree DBH max: </th><td>{{ record.DBH_tree_max }}</td></tr>
+            <tr><th style="width:210px"> Wood mass: </th><td>{{ record.m_WD }}</td></tr>
+            <tr><th style="width:210px"> Mass Moisture Content: </th><td>{{ record.MC_m }}</td></tr>
+            <tr><th style="width:210px"> Wood volume: </th><td>{{ record.V_WD }}</td></tr>
+            <tr><th style="width:210px"> Volume Moisture Content: </th><td>{{ record.MC_V }}</td></tr>
+            <tr><th style="width:210px"> Coefficient of Retraction: </th><td>{{ record.CR }}</td></tr>
+            <tr><th style="width:210px"> Fiber Saturation Point (%): </th><td>{{ record.FSP }}</td></tr>
+            <tr><th style="width:210px"> Methodology: </th><td>{{ record.Methodology }}</td></tr>
+            <tr><th style="width:210px"> Bark: </th><td>{{ record.Bark }}</td></tr>
+            <tr><th style="width:210px"> Moisture Content Density: </th><td>{{ record.MC_Density }}</td></tr>
+            <tr><th style="width:210px"> Data origin: </th><td>{{ record.Data_origin }}</td></tr>
+            <tr><th style="width:210px"> Data type: </th><td>{{ record.Data_type }}</td></tr>
+            <tr><th style="width:210px"> Samples per tree: </th><td>{{ record.Samples_per_tree }}</td></tr>
+            <tr><th style="width:210px"> Number of trees: </th><td>{{ record.Number_of_trees }}</td></tr>
+            <tr><th style="width:210px"> Standard Deviation: </th><td>{{ record.SD }}</td></tr>
+            <tr><th style="width:210px"> Min of Wood Density: </th><td>{{ record.Min }}</td></tr>
+            <tr><th style="width:210px"> Max of Wood Density: </th><td>{{ record.Max }}</td></tr>
+            <tr><th style="width:210px"> Height sample collected: </th><td>{{ record.H_measure }}</td></tr>
+            <tr><th style="width:210px"> Bark distance: </th><td>{{ record.Bark_distance }}</td></tr>
         </table>
     </div>
 </div>
