@@ -131,7 +131,7 @@ class Dataset(BaseModel):
 
     DATA_TYPE_CHOICES = (
         ('raw_data' , 'Raw Data'),
-#        ('biomass_expansion' , 'Biomass Expansion Factors'),
+        ('biomass_expansion' , 'Biomass Expansion Factors'),
         ('wood_density' , 'Wood Density Data'),
         ('allometric_equations' , 'Allometric Equations'),
     )

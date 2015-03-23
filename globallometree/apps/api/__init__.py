@@ -2,7 +2,8 @@
 from .serializers import (
     SimpleAllometricEquationSerializer,
     SimpleWoodDensitySerializer,
-    SimpleRawDataSerializer
+    SimpleRawDataSerializer,
+    SimpleBiomassExpansionFactorSerializer
 )
 
 from .renderers import (
@@ -16,7 +17,7 @@ from rest_framework_xml.parsers import XMLParser
 
 Serializers = {
                 'raw_data': SimpleRawDataSerializer,
-                'biomass_expansion': None,
+                'biomass_expansion': SimpleBiomassExpansionFactorSerializer,
                 'wood_density': SimpleWoodDensitySerializer,
                 'allometric_equations': SimpleAllometricEquationSerializer
             }

@@ -9,7 +9,7 @@ window.app.searchManager.config.rangeFilterKeys = [
 
 window.app.searchManager.config.indexName = 'biomassexpansionfactor';
 
-window.app.listController.config.recordLinkPrefix = 'biomass_expansion_factor';
+window.app.listController.config.recordLinkPrefix = 'biomass-expansion-factors';
 window.app.listController.config.recordReadableType = 'Biomass Expansion Factor';
 window.app.listController.config.customListTemplate = '\
   <dt><small>Biomass Expansion Factor </small></dt>					   \

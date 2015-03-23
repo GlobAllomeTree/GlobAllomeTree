@@ -2,14 +2,24 @@
     <div class="col-md-12">    
         <br>
         <h3>Locations</h3>
-        {% for location in record.Location_group.Group %}
-        <table class="table">  
-            <tr><th style="width:210px"> Location Name: </th><td> {{ location.Location_name }} </td></tr>  
-            <tr><th> Country: </th><td> {{ location.Country }} </td></tr>
-            <tr><th> Continent: </th><td> {{ location.Continent }} </td></tr>
-        </table>
-        <br>
-        {% endfor %}
+        {% if record.Locations_group %}
+            {% for location in record.Location_group.Group %}
+            <table class="table">
+                <tr><th style="width:210px"> Location Name: </th><td> {{ location.Location_name }} </td></tr>
+                <tr><th> Country: </th><td> {{ location.Country }} </td></tr>
+                <tr><th> Continent: </th><td> {{ location.Continent }} </td></tr>
+                <tr><th> Biome FAO: </th><td> {{ location.BiomeFAO }} </td></tr>
+                <tr><th> Biome Udvardy: </th><td> {{ location.BiomeUdvardy }} </td></tr>
+                <tr><th> Biome WWF: </th><td> {{ location.BiomeWWF }} </td></tr>
+                <tr><th> Division Bailey: </th><td> {{ location.DivisionBailey }} </td></tr>
+                <tr><th> Biome Holdridge: </th><td> {{ location.BiomeHoldridge }} </td></tr>
+                <tr><th> Forest Type: </th><td> {{ location.ForestType }} </td></tr>
+            </table>
+            <br>
+            {% endfor %}
+        {% else %}
+            There are no location data for this record. <br>
+        {% endif %}
         {% if not is_pdf %}
             <h5>Map</h5>
             <div id="point_map_canvas"></div>

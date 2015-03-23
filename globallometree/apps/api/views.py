@@ -114,7 +114,7 @@ from globallometree.apps.api.serializers import (
     SimpleInstitutionSerializer,
     SimpleDatasetSerializer,
     SimpleDataLicenseSerializer,
-    SimpleBiomassExpansionFactorSerializer
+    SimpleBiomassExpansionFactorSerializer,
 	)
 
 
