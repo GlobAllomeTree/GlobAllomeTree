@@ -14,7 +14,7 @@ from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, BiomeFAO, BiomeUdvardy, 
     BiomeWWF, DivisionBailey, BiomeHoldridge
 )
-from globallometree.apps.common.models import BaseModel, LinkedBaseModel
+from globallometree.apps.search_helpers.models import BaseModel, LinkedBaseModel
 
 
 class Population(BaseModel):
@@ -44,16 +44,18 @@ class TreeType(BaseModel):
 class AllometricEquation(LinkedBaseModel):
     Allometric_equation_ID = models.AutoField(primary_key=True)
     Allometric_equation_ID_original = models.IntegerField(blank=True, null=True)
-    X = models.CharField(max_length=20, null=True, blank=True)
-    Unit_X = models.CharField(max_length=20, null=True, blank=True)
-    Z = models.CharField(max_length=20, null=True, blank=True)
-    Unit_Z = models.CharField(max_length=20, null=True, blank=True)
-    W = models.CharField(max_length=20, null=True, blank=True)
-    Unit_W = models.CharField(max_length=20, null=True, blank=True)
+   
     U = models.CharField(max_length=20, null=True, blank=True)
     Unit_U = models.CharField(max_length=20, null=True, blank=True)
     V = models.CharField(max_length=20, null=True, blank=True)
     Unit_V = models.CharField(max_length=20, blank=True)
+    W = models.CharField(max_length=20, null=True, blank=True)
+    Unit_W = models.CharField(max_length=20, null=True, blank=True)
+    X = models.CharField(max_length=20, null=True, blank=True)
+    Unit_X = models.CharField(max_length=20, null=True, blank=True)
+    Z = models.CharField(max_length=20, null=True, blank=True)
+    Unit_Z = models.CharField(max_length=20, null=True, blank=True)
+
     Min_X = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10
     )
@@ -123,12 +125,29 @@ class AllometricEquation(LinkedBaseModel):
         return c_string
 
     def get_absolute_url(self):
-        return '/allometric-equations/%s' % self.ID
+        return '/data/allometric-equations/%s' % self.ID
+
+    def get_serializer_class(self):
+        from globallometree.apps.api import SimpleAllometricEquationSerializer
+        return SimpleAllometricEquationSerializer
+
+    def get_index_class(self):
+        from globallometree.apps.allometric_equations.indices import AllometricEquationIndex
+        return AllometricEquationIndex
 
     def __unicode__(self):
         return u"Equation %s: %s" % (self.Allometric_equation_ID, self.Equation)
+
+    def save(self, *args, **kwargs):
+        if not self.Substitute_equation and self.Equation:
+            self.Substitute_equation = self.Equation
+        return super(AllometricEquation, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name ='Allometric Equation'
         verbose_name_plural = 'Allometric Equations'
         db_table = "Allometric_equation"
+
+
+
+

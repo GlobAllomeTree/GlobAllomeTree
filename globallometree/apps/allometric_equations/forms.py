@@ -13,6 +13,8 @@ COMPONENT_CHOICES = (
             ('1', 'Yes')
         )
 
+
+
 class AllometricEquationSearchForm(LinkedModelSearchForm):
 
     def __init__(self, *args, **kwargs):
@@ -26,7 +28,6 @@ class AllometricEquationSearchForm(LinkedModelSearchForm):
             ('Unit_V','Unit V'),
             ('Unit_W','Unit W'),
             ('Unit_X','Unit X'),
-            ('Unit_Y','Unit Y'),
             ('Unit_Z','Unit Z'),
         ):
 
@@ -41,18 +42,13 @@ class AllometricEquationSearchForm(LinkedModelSearchForm):
             self.fields[select_name] = forms.ChoiceField(
                 choices=choices, required=False, label=select_label
             )
-     
-    X = forms.CharField(required=False, label='X')
-    Unit_X = forms.CharField(required=False, label='Unit X')
-    Z = forms.CharField(required=False, label='Z')
-    Unit_Z = forms.CharField(required=False, label='Unit Z') 
-    W = forms.CharField(required=False, label='W')
-    Unit_W = forms.CharField(required=False, label='Unit W')
-    U = forms.CharField(required=False, label='U')
-    Unit_U = forms.CharField(required=False, label='Unit U') 
-    V = forms.CharField(required=False, label='V')
-    Unit_V = forms.CharField(required=False, label='Unit V')
     
+    X = forms.CharField(required=False, label='X')
+    Z = forms.CharField(required=False, label='Z')
+    W = forms.CharField(required=False, label='W')
+    U = forms.CharField(required=False, label='U')
+    V = forms.CharField(required=False, label='V')
+
     Min_X__gte = forms.DecimalField(required=False, label='Min X From')
     Min_X__lte = forms.DecimalField(required=False, label='Min X To')
  
@@ -81,4 +77,7 @@ class AllometricEquationSearchForm(LinkedModelSearchForm):
     F = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='F - Fruit')
 
     Equation = forms.CharField(required=False, label='Equation')
+
+
+
 

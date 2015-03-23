@@ -67,7 +67,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'cms.context_processors.cms_settings',
     'sekizai.context_processors.sekizai',
-    'globallometree.apps.common.context_processors.template_settings'
+    'globallometree.apps.search_helpers.context_processors.template_settings'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -124,7 +124,7 @@ INSTALLED_APPS = (
     'djangocms_file',
     'globallometree.plugins.linkbox',
     # project apps
-    'globallometree.apps.common',
+    'globallometree.apps.search_helpers',
     'globallometree.apps.source',
     'globallometree.apps.data_sharing',
     'globallometree.apps.community',

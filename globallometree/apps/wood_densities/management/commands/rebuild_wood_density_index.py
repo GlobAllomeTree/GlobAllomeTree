@@ -1,5 +1,5 @@
 
-from globallometree.apps.wood_densities.search.indices import WoodDensityIndex
+from globallometree.apps.wood_densities.indices import WoodDensityIndex
 from globallometree.apps.search_helpers.index_utils import RebuildIndexCommand
 
 class Command(RebuildIndexCommand):

@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.urlresolvers import reverse
-from globallometree.apps.common.models import BaseModel
+from globallometree.apps.search_helpers.models import BaseModel
 from globallometree.apps.data_sharing.models import Dataset
 
 

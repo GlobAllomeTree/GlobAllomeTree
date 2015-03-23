@@ -151,11 +151,12 @@ class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
 def record_by_id_view(request, id, model_class, 
         record_content_template, record_title):
     record = model_class.objects.get(pk=id)
+
     return render_to_response(
         'search_helpers/template.record.html', 
         context_instance = RequestContext(
             request, {
-                'record': record, 
+                'record': record.serialize(), 
                 'record_content_template': record_content_template,
                 'record_title': record_title,
                 'is_page_data' : True

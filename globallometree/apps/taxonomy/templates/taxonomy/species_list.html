@@ -27,7 +27,7 @@
 	var search = function(params) {
 		$.ajax({
 			type: "POST",
-			url: window.app.config.search_url + '/globallometree/allometricequation/_search',
+			url: window.app.config.search_url + '/globallometree/_search',
 			data: JSON.stringify(params['request'].toJSON()),
 			success: params['success']
 		});
@@ -132,6 +132,12 @@
 					var params = '?Family=' +  family + '&Species=' + species + '&Genus=' + genus
 					if (bucket.key == 'allometricequation') {
 						var link = '<a href="/data/allometric-equations/' + params + '">Allometric Equations</a>';
+					} else if (bucket.key == 'wooddensity') {
+						var link = '<a href="/data/wood-densities/' + params + '">Wood Densities</a>';
+					} else if (bucket.key == 'rawdata') {
+						var link = '<a href="/data/raw-data/' + params + '">Raw Data</a>';
+					} else if (bucket.key == 'biomassexpansionfactor') {
+						var link = '<a href="/data/biomass-expansion-factors/' + params + '">Biomass Expansion Factors</a>';
 					}
 					types.push(link  + ' (' + bucket.doc_count +')');
 				});

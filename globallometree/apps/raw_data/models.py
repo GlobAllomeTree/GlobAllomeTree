@@ -4,7 +4,7 @@ getcontext().prec = 10
 from django.db import models
 from django.contrib.auth.models import User
 
-from globallometree.apps.common.models import LinkedBaseModel
+from globallometree.apps.search_helpers.models import LinkedBaseModel
 
 
 class RawData(LinkedBaseModel):
@@ -144,6 +144,14 @@ class RawData(LinkedBaseModel):
     BEF = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
         help_text="Biomass expansion factor")
+
+    def get_serializer_class(self):
+        from globallometree.apps.api import SimpleRawDataSerializer
+        return SimpleRawDataSerializer
+
+    def get_index_class(self):
+        from globallometree.apps.raw_data.indices import RawDataIndex
+        return RawDataIndex
 
     def get_absolute_url(self):
         return '/data/raw_data/%s' % self.ID

@@ -1,5 +1,5 @@
 from django.db import models
-from globallometree.apps.common.models import BaseModel
+from globallometree.apps.search_helpers.models import BaseModel
 
 class Continent(BaseModel):
     Continent_ID = models.AutoField(primary_key=True)

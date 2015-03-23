@@ -1,5 +1,5 @@
 
-// Add in keys and config unique to the allometric equation search 
+// Add in keys and config unique to the wood density search 
 window.app.searchManager.config.termFilterKeys = [
 		];
 

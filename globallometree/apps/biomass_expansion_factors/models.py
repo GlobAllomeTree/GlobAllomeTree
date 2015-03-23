@@ -4,7 +4,7 @@ getcontext().prec = 10
 from django.db import models
 from django.contrib.auth.models import User
 
-from globallometree.apps.common.models import LinkedBaseModel
+from globallometree.apps.search_helpers.models import LinkedBaseModel
 
 
 class BiomassExpansionFactor(LinkedBaseModel):
@@ -49,6 +49,14 @@ class BiomassExpansionFactor(LinkedBaseModel):
         null=True, blank=True, max_length="255",
         help_text="Interval validity"
         )
+
+    def get_serializer_class(self):
+        from globallometree.apps.api import SimpleBiomassExpansionFactorSerializer
+        return SimpleBiomassExpansionFactorSerializer
+
+    def get_index_class(self):
+        from globallometree.apps.biomass_expansion_factors.indices import BiomassExpansionFactorIndex
+        return BiomassExpansionFactorIndex
 
     def get_absolute_url(self):
         return '/data/biomass_expansion_factors/%s' % self.ID

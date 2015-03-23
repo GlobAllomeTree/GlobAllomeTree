@@ -5,7 +5,7 @@ getcontext().prec = 10
 from django.db import models
 from django.contrib.auth.models import User
 
-from globallometree.apps.common.models import LinkedBaseModel
+from globallometree.apps.search_helpers.models import LinkedBaseModel
 
 
 class WoodDensity(LinkedBaseModel):
@@ -117,6 +117,13 @@ class WoodDensity(LinkedBaseModel):
     #Convert BD  Formula decimal 0.861*Density if density is at 10 to 18%  IF(BB2="BD",ROUND(BA2,3),IF(0.1<=BB2,IF(BB2<=0.18,ROUND(BA2*0.861,3),"NA"),"NA"))
     #CV Formula SD/Density if Density is an average Formula: IF(BH2="NA","NA",BH2/BA2)
 
+    def get_serializer_class(self):
+        from globallometree.apps.api import SimpleWoodDensitySerializer
+        return SimpleWoodDensitySerializer
+
+    def get_index_class(self):
+        from globallometree.apps.wood_densities.indices import WoodDensityIndex
+        return WoodDensityIndex
 
     def get_absolute_url(self):
         return '/data/wood_densities/%s' % self.ID
