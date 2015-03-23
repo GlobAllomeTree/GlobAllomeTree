@@ -10,7 +10,9 @@
         </table>
         <br>
         {% endfor %}
-        <h5>Map</h5>
-        <div id="point_map_canvas"></div>
+        {% if not is_pdf %}
+            <h5>Map</h5>
+            <div id="point_map_canvas"></div>
+        {% endif %}
   </div>
 </div>

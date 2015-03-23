@@ -159,7 +159,8 @@ def record_by_id_view(request, id, model_class,
                 'record': record.serialize(), 
                 'record_content_template': record_content_template,
                 'record_title': record_title,
-                'is_page_data' : True
+                'is_page_data' : True,
+                'is_pdf': False
             }
         )
     ) 
@@ -175,7 +176,8 @@ def record_by_id_pdf_view(request, id, model_class,
         'record': record,
         'record_content_template': record_content_template,
         'record_title': record_title,
-        'record_url': record_url
+        'record_url': record_url,
+        'is_pdf': True
     }))
 
     def fetch_resources(uri, rel):
