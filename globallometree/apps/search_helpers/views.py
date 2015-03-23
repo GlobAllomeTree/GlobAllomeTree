@@ -185,7 +185,6 @@ def record_by_id_pdf_view(request, id, model_class,
         path = 'ERROR'
         if uri[0:7] == '/static':
             path = os.path.join(settings.PROJECT_PATH, 'templates', 'static') +  uri[7:]
-        import pdb; pdb.set_trace()        
         return path
 
     buffer = StringIO.StringIO()
