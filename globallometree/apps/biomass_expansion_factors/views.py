@@ -26,7 +26,7 @@ def record_id(request, id):
         id, 
         model_class=BiomassExpansionFactor,
         record_content_template='biomass_expansion_factors/record_content.html',
-        record_title='Biomass Expansion Factor'
+        record_title='Biomass Expansion Factor %s' %  id
         )
 
 
@@ -37,7 +37,7 @@ def record_id_pdf(request, id):
         id, 
         model_class=BiomassExpansionFactor,
         record_content_template='biomass_expansion_factors/record_content.html',
-        record_title='Biomass Expansion Factor',
+        record_title='Biomass Expansion Factor %s' %  id,
         record_url= 'http://globallometree.org/data/biomass-expansion-factor/%s/' % id)
    
 
