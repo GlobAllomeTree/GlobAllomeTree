@@ -1,5 +1,6 @@
 import json
 import re
+import os
 from decimal import Decimal
 import cStringIO as StringIO
 import xhtml2pdf.pisa as pisa
@@ -173,7 +174,7 @@ def record_by_id_pdf_view(request, id, model_class,
     template = get_template('search_helpers/template.record.pdf.html')
    
     html = template.render(Context({
-        'record': record,
+        'record': record.serialize(),
         'record_content_template': record_content_template,
         'record_title': record_title,
         'record_url': record_url,
@@ -182,11 +183,9 @@ def record_by_id_pdf_view(request, id, model_class,
 
     def fetch_resources(uri, rel):
         path = 'ERROR'
-        if uri[0:6] == 'static':
-            path = settings.STATIC_ROOT + uri[6:]
-        elif uri[0:5] == 'media':
-            path = settings.MEDIA_ROOT + uri[5:]
-        print uri, path
+        if uri[0:7] == '/static':
+            path = os.path.join(settings.PROJECT_PATH, 'templates', 'static') +  uri[7:]
+        import pdb; pdb.set_trace()        
         return path
 
     buffer = StringIO.StringIO()

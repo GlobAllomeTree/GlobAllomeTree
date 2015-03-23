@@ -25,7 +25,7 @@ def record_id(request, id):
         id, 
         model_class=RawData,
         record_content_template='raw_data/record_content.html',
-        record_title='Raw Data'
+        record_title='Raw Data %s' %  id
         )
 
 
@@ -36,7 +36,7 @@ def record_id_pdf(request, id):
         id, 
         model_class=RawData,
         record_content_template='raw_data/record_content.html',
-        record_title='Raw Data',
+        record_title='Raw Data %s' %  id,
         record_url= 'http://globallometree.org/data/raw-data/%s/' % id)
    
 

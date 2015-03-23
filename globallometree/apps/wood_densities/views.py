@@ -25,7 +25,7 @@ def record_id(request, id):
         id, 
         model_class=WoodDensity, 
         record_content_template='wood_densities/record_content.html',
-        record_title='Wood Density'
+        record_title='Wood Density %s' %  id
         )
 
 
@@ -36,7 +36,7 @@ def record_id_pdf(request, id):
         id, 
         model_class=WoodDensity, 
         record_content_template='wood_densities/record_content.html',
-        record_title='Wood Density',
+        record_title='Wood Density %s' %  id,
         record_url= 'http://globallometree.org/data/wood-densities/%s/' % id)
    
 
