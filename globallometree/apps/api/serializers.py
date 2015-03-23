@@ -554,6 +554,10 @@ class SimpleDivisionBaileySerializer(serializers.ModelSerializer):
 
 class SimpleLocationSerializer(serializers.ModelSerializer):
  
+    Location_name = fields.CharField(
+        source="Name", 
+        )
+
     Country = fields.ChoiceField(
         source="Country.Formal_name", 
         allow_null=True,
@@ -662,7 +666,7 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
         
         fields = (
             "Location_ID",
-            "Name",
+            "Location_name",
             "Commune",
             "Province",
             "Region",
@@ -693,7 +697,7 @@ class SimpleLocationDefinitionSerializer(serializers.Serializer):
     """
     Plot_name = fields.CharField(required=False, allow_null=True)
     Plot_size_m2 = fields.IntegerField(required=False, allow_null=True)
-    Name = fields.CharField(required=False, allow_null=True)
+    Location_name = fields.CharField(required=False, allow_null=True)
     Geohash = fields.CharField(required=False, allow_null=True)
     LatLonString = fields.CharField(required=False, allow_null=True)
     Latitude = serializers.DecimalField(max_digits=9, decimal_places=5,required=False, allow_null=True)
@@ -782,7 +786,7 @@ class SimplePlotSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True)
 
-    Name = fields.CharField(
+    Location_name = fields.CharField(
         required=False,
         allow_null=True,
         source='Location.Name'
@@ -912,7 +916,7 @@ class SimplePlotSerializer(serializers.ModelSerializer):
         fields = (
             "Plot_name",
             "Plot_size_m2",
-            "Name",
+            "Location_name",
             "Commune",
             "Province",
             "Region",

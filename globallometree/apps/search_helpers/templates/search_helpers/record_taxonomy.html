@@ -2,9 +2,12 @@
     <div class="col-md-12">
         <br>
         <h3>Taxonomy</h3>
-        <table class="table">
-          
-            <tr><th> Species:</th><td> {% for species in record.species_group.species_set %} {{species}} <br> {% endfor %}</td></tr>
-        </table>
+        {% for species_def in record.Species_group.Group %} {{species}} 
+	        <table class="table">
+	        	<tr><th>Scientific name:</th><td>{{ species_def.Scientific_name }}</td></tr>
+	            <tr><th>Family:</th><td>{{ species_def.Family }}</td></tr>
+	            <tr><th>Species:</th><td>{{ species_def.Species }}</td></tr>
+	        </table>
+        {% endfor %}
   </div>
 </div>
