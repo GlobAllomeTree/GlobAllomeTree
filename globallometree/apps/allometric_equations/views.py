@@ -15,7 +15,7 @@ class AllometricEquationSearchView(LinkedModelSearchView):
     form_class = AllometricEquationSearchForm
     form_template = 'allometric_equations/template.search.form.html'
     search_title = "Allometric Equation Search"
-    configuration_js_file = 'allometric_equations/js/allometricequation_search.js'
+    configuration_js_file = 'allometric_equations/js/allometric_equation_search.js'
 
 
 @login_required(login_url='/accounts/login/')
