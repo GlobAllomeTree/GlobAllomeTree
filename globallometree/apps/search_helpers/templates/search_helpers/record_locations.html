@@ -1,24 +1,44 @@
 <div class="row">     
     <div class="col-md-12">    
         <br>
-        <h3>Locations</h3>
-        {% if record.Locations_group %}
+        <h3>{% if record.Location_group %} 
+            <p style="float:right; font-weight:normal;font-size:11px;padding-top:14px;color:#999;">
+                Location Group {{record.Location_group.Location_group_ID }}
+            </p>
+            {% endif %}
+            Locations</h3>
+            {% if record.Location_group %}
             {% for location in record.Location_group.Group %}
             <table class="table">
-                <tr><th style="width:210px"> Location Name: </th><td> {{ location.Location_name }} </td></tr>
-                <tr><th> Country: </th><td> {{ location.Country }} </td></tr>
-                <tr><th> Continent: </th><td> {{ location.Continent }} </td></tr>
-                <tr><th> Biome FAO: </th><td> {{ location.BiomeFAO }} </td></tr>
-                <tr><th> Biome Udvardy: </th><td> {{ location.BiomeUdvardy }} </td></tr>
-                <tr><th> Biome WWF: </th><td> {{ location.BiomeWWF }} </td></tr>
-                <tr><th> Division Bailey: </th><td> {{ location.DivisionBailey }} </td></tr>
-                <tr><th> Biome Holdridge: </th><td> {{ location.BiomeHoldridge }} </td></tr>
-                <tr><th> Forest Type: </th><td> {{ location.ForestType }} </td></tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr><th style="padding:2px 10px 2px 2px"> Plot name: </th><td> {{ location.Plot_name }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Plot size m2: </th><td> {{ location.Plot_size_m2 }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Location Name: </th><td> {{ location.Location_name }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Commune: </th><td> {{ location.Commune }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Province: </th><td> {{ location.Province }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Region: </th><td> {{ location.Region }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Country: </th><td> {{ location.Country }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Continent: </th><td> {{ location.Continent }} </td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr><th style="padding:2px 10px 2px 2px"> Biome FAO: </th><td> {{ location.BiomeFAO }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Biome Udvardy: </th><td> {{ location.BiomeUdvardy }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Biome WWF: </th><td> {{ location.BiomeWWF }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Division Bailey: </th><td> {{ location.DivisionBailey }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Biome Holdridge: </th><td> {{ location.BiomeHoldridge }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px"> Forest Type: </th><td> {{ location.ForestType }} </td></tr>
+                        </table>
+                    </td>
+                </tr>
             </table>
             <br>
             {% endfor %}
         {% else %}
-            There are no location data for this record. <br>
+            <p>There is no location information for this record. </p>
         {% endif %}
         {% if not is_pdf %}
             <h5>Map</h5>

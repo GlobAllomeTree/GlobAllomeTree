@@ -56,7 +56,7 @@ class AllometricEquationIndex(MappingType, Indexable):
                     "Min_Z": estype_float,
                     "Output": estype_string_not_analyzed,
                     "Output_TR": estype_string_not_analyzed,
-                    "Population": estype_long,
+                    "Population": estype_string_not_analyzed,
                     "R2": estype_float,
                     "R2_Adjusted": estype_float,
                     "RMSE": estype_float,
