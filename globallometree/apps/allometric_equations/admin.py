@@ -40,6 +40,7 @@ class AllometricEquationAdmin(admin.ModelAdmin):
             'Age', 'Equation','Substitute_equation', 'Ratio_equation', 'Segmented_equation'
         ]}),
         ('Reference', {'fields': ['Reference']}),
+        ('Dataset', {'fields': ['Dataset']}),
     ]
 
 
