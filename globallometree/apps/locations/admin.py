@@ -22,6 +22,10 @@ class LocationInline(admin.TabularInline):
     model = LocationGroup.Locations.through
     raw_id_fields = ('location',)
 
+class PlotInline(admin.TabularInline):
+    model = LocationGroup.Plots.through
+    raw_id_fields = ('plot',)
+
 
 class PlotAdmin(admin.ModelAdmin):
     list_display = ('Plot_name', 'Plot_size_m2','Location', )
@@ -37,7 +41,8 @@ class LocationGroupAdmin(admin.ModelAdmin):
     exclude = ('Locations',)
     fields = ('Name', )
     inlines = [
-    	 LocationInline
+    	 LocationInline,
+         PlotInline
     	]
 
 class BiomeFAOAdmin(admin.ModelAdmin):

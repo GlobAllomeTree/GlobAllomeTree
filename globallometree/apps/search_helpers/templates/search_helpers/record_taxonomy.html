@@ -1,19 +1,32 @@
 <div class="row">     
     <div class="col-md-12">
         <br>
-        <h3>Taxonomy</h3>
+        <h3>{% if record.Species_group %} 
+            <p style="float:right; font-weight:normal;font-size:11px;padding-top:14px;color:#999;">
+                Species Group {{record.Species_group.Species_group_ID }}
+            </p>
+            {% endif %}
+        Taxonomy</h3>
         {% if record.Species_group %}
-            {% for species_def in record.Species_group.Group %} {{species}}
+            
     	        <table class="table">
-    	        	<tr><th>Scientific name:</th><td>{{ species_def.Scientific_name }}</td></tr>
-    	            <tr><th>Family:</th><td>{{ species_def.Family }}</td></tr>
-                    <tr><th>Genus:</th><td>{{ species_def.Genus }}</td></tr>
-    	            <tr><th>Species:</th><td>{{ species_def.Species }}</td></tr>
-                    <tr><th>Subspecies:</th><td>{{ species_def.Subspecies }}</td></tr>
+    	        	<tr><th>Scientific name:</th>
+    	            <th>Family:</th>
+                    <th>Genus:</th>
+    	            <th>Species:</th>
+                    <th>Subspecies:</th></tr>
+
+            {% for species_def in record.Species_group.Group %} {{species}}
+                    <tr><td>{{ species_def.Scientific_name }}</td>
+                    <td>{{ species_def.Family }}</td>
+                    <td>{{ species_def.Genus }}</td>
+                    <td>{{ species_def.Species }}</td>
+                    <td>{{ species_def.Subspecies }}</td></tr>
+
     	        </table>
             {% endfor %}
         {% else %}
-            There are no taxonomy data for this record
+            <p>There is no taxonomy information for this record.</p>
         {% endif %}
   </div>
 </div>

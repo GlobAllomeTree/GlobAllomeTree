@@ -54,7 +54,7 @@ window.app.searchManager = function (){
 	
 	var getQuery = function (params) {
 
-		var termFilterKeys = _.extend(baseTermFilterKeys, config.termFilterKeys);
+		var termFilterKeys = _.union(baseTermFilterKeys, config.termFilterKeys);
 
 		//This base getQuery function is called by both the map and 
 		//list views

@@ -2,52 +2,91 @@
 {% load staticfiles %}
 
 {% block add_to_header %}
-	<link rel="stylesheet" type="text/css" href="{% static 'data_sharing/css/dataset_edit.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'data_sharing/css/dataset_edit.css' %}" />
 
 {% endblock %}
 
 {% block script %}
-	<script src="{% static 'js/backbone.js' %}"></script>
-	<script src="{% static 'js/backbone.marionette.js' %}"></script>
-	<script src="{% static 'data_sharing/js/dataset_edit.js' %}"></script>
+  <script src="{% static 'js/backbone.js' %}"></script>
+  <script src="{% static 'js/backbone.marionette.js' %}"></script>
+  <script src="{% static 'data_sharing/js/dataset_edit.js' %}"></script>
 
-	<script type="text/template" id="templateDatasetCollection">
-		<form action="/" method="post">
-			<div class="panel-group" id="datasetCollection" role="tablist" aria-multiselectable="true">
-			</div>
-		</form>
-		<div class="text-right">
-			<button id="equationAdd">Add Equation</button>
-		</div>
-	</script>
+  <script type="text/template" id="templateLayout">
+    <div id="equationModal">
+    </div>
 
-	<script type="text/template" id="templateFieldCollection">
-		<div class="panel-heading" role="tab" id="heading<%= index %>">
-			<h3 class="panel-title">
-				<a href="#collapse<%= index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<%= isExpanded %>" aria-controls="collapse<%= index %>">Equation <%= index + 1%></a>
-			</h3>
-		</div>
-		<div id="collapse<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= index %>">
-			<div class="panel-body">
-				<ul class="list-unstyled">
-				</ul>
-			</div>
-		</div>
-	</script>
-
-  <script type="text/template" id="templateInput">
-    <label for="<%= id %>"><%= label %></label>
-    <input type="<%= type %>" name="<%= key %>" id="<%= id %>" value="<%= value %>" class="form-control">
+    <div id="equationPage">
+    </div>
   </script>
 
-  <script type="text/template" id="templateTextarea">
-    <label for="<%= id %>"><%= label %></label>
-    <textarea name="<%= key %>" id="<%= id %>"><%= value %></textarea>
+  <script type="text/template" id="templateModal">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labeledby="modalWindow">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+            </button>
+            <h4 class="modal-title"><%= title %></h4>
+          </div>
+          <div class="modal-body">
+            <%= body %>
+          </div>
+          <div class="modal-footer">
+            <%= footer %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="templateDataset">
+    <h3 id="datasetTitle"><%- Title %> &mdash; <a href="#" class="edit"><span class="glyphicon glyphicon-edit"></span></a></h3>
+    <p id="datasetDescription"><%- Description %> &mdash; <a href="#" class="edit"><span class="glyphicon glyphicon-edit"></span></a></p>
+    <form action="#" method="post">
+      <div class="panel-group" id="equations" role="tablist" aria-multiselectable="true">
+      </div>
+    </form>
+    <div class="text-right">
+      <button id="equationAdd">Add Equation</button>
+    </div>
+  </script>
+
+  <script type="text/template" id="templateEquation">
+    <div class="panel-heading" role="tab" id="heading<%= index %>">
+      <h3 class="panel-title">
+        <a href="#collapse<%= index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<% if(isExpanded) print("in") %>" aria-controls="collapse<%= index %>" class="pull-left">Equation <%= index + 1%></a>
+      </h3>
+      <a href="#" class="remove" class="text-right"><span class="glyphicon glyphicon-remove"></span></a>
+    </div>
+    <div id="collapse<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= index %>">
+      <div class="panel-body">
+        <ul class="list-unstyled form-horizontal">
+        </ul>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="templateInput">
+    <label for="<%= id %>" class="control-label col-sm-2"><%= label %></label>
+    <div class="col-sm-6">
+      <input type="text" name="<%= name %>" id="<%= id %>" value="<%= value %>" class="form-control">
+    </div>
+  </script>
+
+  <script type="text/template" id="templateNullBoolean">
+    <label for="<%= id %>" class="control-label col-sm-2"><%= label %></label>
+    <div class="col-sm-2">
+      <select name="<%= name %>" id="<%= id %>" class="form-control">
+        <option></option>
+        <option>No</option>
+        <option>Yes</option>
+      </select>
+    </div>
   </script>
 
 {% endblock %}
 
 {% block content %}
-	<h2>Edit Dataset</h2>
-	<div id="equationEditPage"></div>
+  <div id="equationEdit">Loading dataset...</div>
 {% endblock %}
