@@ -7,7 +7,7 @@ window.app.searchManager.config.termFilterKeys = [
 		];
 
 window.app.searchManager.config.rangeFilterKeys = [
-		'Growint_stock__gte',
+		'Growing_stock__gte',
         'Growing_stock__lte',
         'Aboveground_biomass__gte',
         'Aboveground_biomass__lte',
