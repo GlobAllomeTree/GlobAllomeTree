@@ -1,10 +1,24 @@
 
 // Add in keys and config unique to the allometric equation search 
 window.app.searchManager.config.termFilterKeys = [
+        'Input',
+        'Output',
+        'Interval_validity'
 		];
 
 window.app.searchManager.config.rangeFilterKeys = [
-		
+		'Growint_stock__gte',
+        'Growing_stock__lte',
+        'Aboveground_biomass__gte',
+        'Aboveground_biomass__lte',
+        'Net_annual_increment__gte',
+        'Net_annual_increment__lte',
+        'Stand_density__gte',
+        'Stand_density__lte',
+        'Age__gte',
+        'Age__lte',
+        'BEF__gte',
+        'BEF__lte'
 	];
 
 window.app.searchManager.config.indexName = 'biomassexpansionfactor';
