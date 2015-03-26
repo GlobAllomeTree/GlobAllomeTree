@@ -23,6 +23,11 @@ def get_profile(self):
 User.get_profile = get_profile
 
 
+class UserChanged(models.Model):
+    ## used to sync changes to askbot
+    user = models.ForeignKey(User)
+
+
 class UserProfile(models.Model):
     DATA_MAY_PROVIDE_CHOICES = (('no_data',             'No data available'),
                                 ('Species_data',        'Species data'),
@@ -77,9 +82,11 @@ class UserProfile(models.Model):
         return u"User profile for %s" % self.user
 
 
+
 # Notify a user their status has changed to active
 @receiver(pre_save, sender=User)
 def user_pre_save(sender, instance, signal, *args, **kwargs):
+
 
     try:
         #instance is the record about to be saved
@@ -125,4 +132,5 @@ http://www.globallometree.org/accounts/login/
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
-        Token.objects.create(user=instance)
+        Token.objects.get_or_create(user=instance)
+    UserChanged.objects.create(user=instance)
