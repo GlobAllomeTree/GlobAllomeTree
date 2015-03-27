@@ -15,16 +15,15 @@
                     <th>Genus:</th>
     	            <th>Species:</th>
                     <th>Subspecies:</th></tr>
-
-            {% for species_def in record.Species_group.Group %} 
-                    <tr><td>{{ species_def.Scientific_name }}</td>
-                    <td>{{ species_def.Family }}</td>
-                    <td>{{ species_def.Genus }}</td>
-                    <td>{{ species_def.Species }}</td>
-                    <td>{{ species_def.Subspecies }}</td></tr>
-
+                    {% for species_def in record.Species_group.Group %} 
+                        <tr><td>{{ species_def.Scientific_name }}</td>
+                        <td>{{ species_def.Family }}</td>
+                        <td>{{ species_def.Genus }}</td>
+                        <td>{{ species_def.Species }}</td>
+                        <td>{{ species_def.Subspecies }}</td></tr>
+                    {% endfor %}
     	        </table>
-            {% endfor %}
+            
         {% else %}
             <p>There is no taxonomy information for this record.</p>
         {% endif %}
