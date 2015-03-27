@@ -1080,7 +1080,7 @@ class SimpleDatasetSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         try:
-            if self.context['request'].user != obj.User:
+            if (not self.context['request'].user.is_superuser) or (self.context['request'].user != obj.User):
                 obj.Data_as_json = None
         except:
             obj.Data_as_json = None
