@@ -18,6 +18,12 @@ class SimpleXMLRenderer(XMLRenderer):
 
 class SimpleBrowsableAPIRenderer(BrowsableAPIRenderer):
     format='api'
+    
+    def get_context(self, *args, **kwargs):
+        context = super(SimpleBrowsableAPIRenderer, self).get_context(*args, **kwargs)
+        context["display_edit_forms"] = False  
+        return context
+
 
 
 class SimpleCSVRenderer(CSVRenderer):
@@ -44,5 +50,10 @@ class FullXMLRenderer(XMLRenderer):
 
 class FullBrowsableAPIRenderer(BrowsableAPIRenderer):
     format='api-full'
+    display_edit_forms=False
 
+    def get_context(self, *args, **kwargs):
+        context = super(FullBrowsableAPIRenderer, self).get_context(*args, **kwargs)
+        context["display_edit_forms"] = False  
+        return context
 

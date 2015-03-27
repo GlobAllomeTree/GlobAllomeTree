@@ -210,17 +210,15 @@ class DataLicenseSerializer(HyperLinkedWithIdSerializer):
 
 
 class DatasetSerializer(HyperLinkedWithIdSerializer):
-
     class Meta:
         model = data_sharing_models.Dataset
-        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file')
+        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file',)
 
 
 class DataRequestSerializer(HyperLinkedWithIdSerializer):
     class Meta:
         model = data_sharing_models.DataRequest
         exclude = ('Created', 'Modified',)
-
 
 
 ########################################################################
@@ -1069,7 +1067,7 @@ class SimpleDataLicenseSerializer(serializers.ModelSerializer):
         else:
             return obj.get_Permitted_use_display()
     class Meta:
-        model = data_sharing_models.DataLicense
+        model = data_sharing_models.DataLicense        
         exclude = ('Created', 'Modified', 'User','Public_choice')
 
 
@@ -1079,6 +1077,15 @@ class SimpleDatasetSerializer(serializers.ModelSerializer):
         source="get_Data_type_display",
         read_only=True
         )
+
+    def to_representation(self, obj):
+        try:
+            if self.context['request'].user != obj.User:
+                obj.Data_as_json = None
+        except:
+            obj.Data_as_json = None
+
+        return super(SimpleDatasetSerializer, self).to_representation(obj)
     
     class Meta:
         model = data_sharing_models.Dataset

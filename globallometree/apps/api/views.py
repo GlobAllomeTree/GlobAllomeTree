@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from globallometree.apps.api.permissions import IsOwnerOrReadOnly
 
 from globallometree.apps.api.mixins import SimpleSerializerMixin, NameQueryMixin
 
@@ -318,12 +320,14 @@ class DataLicenseViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     simple_serializer_class = SimpleDataLicenseSerializer
 
 
-class DatasetViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class DatasetViewSet(SimpleSerializerMixin, viewsets.ModelViewSet):
     """
+        Users are able to create or edit their own datasets through the API
     """
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
     simple_serializer_class = SimpleDatasetSerializer
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
 
 
 class DataRequestViewSet(viewsets.ReadOnlyModelViewSet):
