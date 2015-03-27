@@ -11,28 +11,28 @@
             {% for location in record.Location_group.Group %}
             <table class="table">
                 <tr>
-                    <td>
+                    <td style="width:50%">
                         <table>
-                            <tr><th style="padding:2px 10px 2px 2px"> Plot name: </th><td> {{ location.Plot_name }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Plot size m2: </th><td> {{ location.Plot_size_m2 }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Location Name: </th><td> {{ location.Location_name }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Commune: </th><td> {{ location.Commune }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Province: </th><td> {{ location.Province }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Region: </th><td> {{ location.Region }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Country: </th><td> {{ location.Country }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Continent: </th><td> {{ location.Continent }} </td></tr>
-                             <tr><th style="padding:2px 10px 2px 2px"> Latitude: </th><td> {{ location.Latitude }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Longitude: </th><td> {{ location.Longitude }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Plot name: </th><td  class="pdf-record-td"> {{ location.Plot_name }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Plot size m2: </th><td  class="pdf-record-td"> {{ location.Plot_size_m2 }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Location Name: </th><td  class="pdf-record-td"> {{ location.Location_name }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Commune: </th><td  class="pdf-record-td"> {{ location.Commune }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Province: </th><td  class="pdf-record-td"> {{ location.Province }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Region: </th><td  class="pdf-record-td"> {{ location.Region }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Country: </th><td  class="pdf-record-td"> {{ location.Country }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Continent: </th><td  class="pdf-record-td"> {{ location.Continent }} </td></tr>
+                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Latitude: </th><td  class="pdf-record-td"> {{ location.Latitude }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Longitude: </th><td  class="pdf-record-td"> {{ location.Longitude }} </td></tr>
                         </table>
                     </td>
-                    <td>
+                    <td style="width:50%">
                         <table>
-                            <tr><th style="padding:2px 10px 2px 2px"> Biome FAO: </th><td> {{ location.BiomeFAO }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Biome Udvardy: </th><td> {{ location.BiomeUdvardy }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Biome WWF: </th><td> {{ location.BiomeWWF }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Division Bailey: </th><td> {{ location.DivisionBailey }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Biome Holdridge: </th><td> {{ location.BiomeHoldridge }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px"> Forest Type: </th><td> {{ location.ForestType }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Biome FAO: </th><td class="pdf-record-td"> {{ location.BiomeFAO }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Biome Udvardy: </th><td  class="pdf-record-td"> {{ location.BiomeUdvardy }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Biome WWF: </th><td class="pdf-record-td"> {{ location.BiomeWWF }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Division Bailey: </th><td class="pdf-record-td"> {{ location.DivisionBailey }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Biome Holdridge: </th><td  class="pdf-record-td"> {{ location.BiomeHoldridge }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Forest Type: </th><td  class="pdf-record-td"> {{ location.ForestType }} </td></tr>
                         </table>
                     </td>
                 </tr>

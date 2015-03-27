@@ -24,6 +24,7 @@ def record_id(request, id):
     return record_by_id_view(
         request, 
         id, 
+        api_path="biomass-expansion-factors",  
         model_class=BiomassExpansionFactor,
         record_content_template='biomass_expansion_factors/record_content.html',
         record_title='Biomass Expansion Factor %s' %  id

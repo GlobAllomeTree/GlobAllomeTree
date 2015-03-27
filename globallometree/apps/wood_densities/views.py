@@ -22,7 +22,8 @@ class WoodDensitySearchView(LinkedModelSearchView):
 def record_id(request, id):
     return record_by_id_view(
         request, 
-        id, 
+        id,
+        api_path="wood-densities", 
         model_class=WoodDensity, 
         record_content_template='wood_densities/record_content.html',
         record_title='Wood Density %s' %  id

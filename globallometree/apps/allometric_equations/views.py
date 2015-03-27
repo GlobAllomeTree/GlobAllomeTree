@@ -22,7 +22,8 @@ class AllometricEquationSearchView(LinkedModelSearchView):
 def record_id(request, id):
     return record_by_id_view(
         request, 
-        id, 
+        id,
+        api_path="allometric-equations",  
         model_class=AllometricEquation, 
         record_content_template='allometric_equations/record_content.html',
         record_title='Allometric Equation %s' %  id

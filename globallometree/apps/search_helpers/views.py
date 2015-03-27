@@ -149,7 +149,7 @@ class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
         return query_string
 
 
-def record_by_id_view(request, id, model_class, 
+def record_by_id_view(request, id, api_path, model_class, 
         record_content_template, record_title):
     record = model_class.objects.get(pk=id)
 
@@ -157,7 +157,9 @@ def record_by_id_view(request, id, model_class,
         'search_helpers/template.record.html', 
         context_instance = RequestContext(
             request, {
-                'record': record.serialize(), 
+                'record': record.serialize(),
+                'record_id' : id,
+                'api_path': api_path, 
                 'record_content_template': record_content_template,
                 'record_title': record_title,
                 'is_page_data' : True,

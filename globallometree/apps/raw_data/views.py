@@ -34,6 +34,7 @@ def record_id_pdf(request, id):
     return record_by_id_pdf_view(
         request, 
         id, 
+        api_path="raw-data",  
         model_class=RawData,
         record_content_template='raw_data/record_content.html',
         record_title='Raw Data %s' %  id,
