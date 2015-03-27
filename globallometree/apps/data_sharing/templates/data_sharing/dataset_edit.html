@@ -41,15 +41,42 @@
   </script>
 
   <script type="text/template" id="templateDataset">
-    <h3 id="datasetTitle"><%- Title %> &mdash; <a href="#" class="edit"><span class="glyphicon glyphicon-edit"></span></a></h3>
-    <p id="datasetDescription"><%- Description %> &mdash; <a href="#" class="edit"><span class="glyphicon glyphicon-edit"></span></a></p>
-    <form action="#" method="post">
+    <form role="form" class="form-horizontal">
+      <div class="editField" data-field="Title">
+        <div class="read">
+          <span class="h3 field"><%- Title %></span>
+          &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+        </div>
+        <div class="edit form-group" style="display: none">
+          <div class="col-sm-6">
+            <input class="form-control" value="<%- Title %>">
+          </div>
+          <div class="form-control-static">
+            &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
+          </div>
+        </div>
+      </div>
+      <div class="editField" data-field="Description">
+        <div class="read">
+          <span class="field"><%- Description %></span>
+          &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+        </div>
+        <div class="edit form-group" style="display: none">
+          <div class="col-sm-6">
+            <input class="form-control input-sm" value="<%- Description %>">
+          </div>
+          <div class="form-control-static">
+            &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
+          </div>
+        </div>
+      </div>
       <div class="panel-group" id="equations" role="tablist" aria-multiselectable="true">
       </div>
+      <div class="text-right">
+        <button id="equationAdd" type="button">Add Equation</button>
+        <button id="submitDataset" type="submit">Submit</button>
+      </div>
     </form>
-    <div class="text-right">
-      <button id="equationAdd">Add Equation</button>
-    </div>
   </script>
 
   <script type="text/template" id="templateEquation">
@@ -61,7 +88,7 @@
     </div>
     <div id="collapse<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= index %>">
       <div class="panel-body">
-        <ul class="list-unstyled form-horizontal">
+        <ul class="list-unstyled">
         </ul>
       </div>
     </div>
@@ -72,17 +99,19 @@
     <div class="col-sm-6">
       <input type="text" name="<%= name %>" id="<%= id %>" value="<%= value %>" class="form-control">
     </div>
+    <div class="col-sm-4 help-block"></div>
   </script>
 
-  <script type="text/template" id="templateNullBoolean">
-    <label for="<%= id %>" class="control-label col-sm-2"><%= label %></label>
+  <script type="text/template" id="templateOptions">
+    <label for="<%- id %>" class="control-label col-sm-2"><%- label %></label>
     <div class="col-sm-2">
-      <select name="<%= name %>" id="<%= id %>" class="form-control">
-        <option></option>
-        <option>No</option>
-        <option>Yes</option>
+      <select name="<%- name %>" id="<%- id %>" class="form-control">
+      <% _.each(options, function (option) { %>
+        <option value="<%- String(option.value) %>" <% if(value === option.value) print("selected") %>><%- option.label %></option>
+      <% }); %>
       </select>
     </div>
+    <div class="col-sm-8 help-block"></div>
   </script>
 
 {% endblock %}

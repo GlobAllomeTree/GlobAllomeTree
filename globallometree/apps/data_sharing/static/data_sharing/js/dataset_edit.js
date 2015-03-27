@@ -1,7 +1,6 @@
 // NOTE: This closure serves to keep the _window_ object tidy.
-(function () {
+(function (_) {
   // # Application
-  //
   // ---------------------------------------------------------------------------
 
   // Application
@@ -13,13 +12,15 @@
     //
     // 1. `options` - object
     initialize: function (options) {
+      // Initialize the router.
       new Application.routers.main();
 
+      // Push the current page state onto the routers stack.
       Backbone.history.start({pushState: true});
     }
 
   });
-
+  
   // Application.models
   // ==================
   Application.models = {};
@@ -47,6 +48,11 @@
       "data/sharing/datasets/:id/*params": "loadDataset"
     },
 
+    // Description:
+    // ------------
+    //
+    // Called from _AppRouter_ with string arguments corresponding to the named
+    // route above.
     loadDataset: function (id, params) {
       var dataset = new Application.models.dataset({id: id});
 
@@ -66,28 +72,22 @@
   // # Models
   // ---------------------------------------------------------------------------
 
-  Application.models.base = Backbone.Model.extend({
-    nest: function (key, value) {
-      var self = this;
-
-      this.listenToOnce(value, "change", function () {
-        var clone = value.clone();
-        self.set(key, clone);
-        self.listenToOnce(clone, "change", arguments.callee);
-      });
-    }
-  });
-
   // Dataset Model
   // =============
-  Application.models.dataset = Application.models.base.extend({
+  Application.models.dataset = Backbone.Model.extend({
+
     initialize: function () {
-      this.on("change", function () {
-        console.log(this.toJSON());
-      })
       window.dataset = this;
+
+      this.on("change", function () {
+        console.log("Dataset Changed!", this.toJSON())
+      });
+
+
     },
+      
     "urlRoot": "/api/v1/datasets/",
+      
     // Description:
     // ------------
     //
@@ -96,6 +96,7 @@
     url: function () {
       return this.urlRoot + this.get("id") + "/";
     },
+      
     // Description:
     // ------------
     //
@@ -107,16 +108,14 @@
     // 1. `response` - object
     // 2. `options` - object
     parse: function (response, options) {
-      var dataAsJson = JSON.parse(response.Data_as_json)
-        , self = this;
-
-      // Turn the _dataAsJson_ object into a collection.
-      response.Data_as_json = new Application.collections.equation(dataAsJson);
-
-      this.nest("Data_as_json", response.Data_as_json);
+      response.Data_as_json = new Application.collections.equation(
+        response.Data_as_json,
+        {parse: true}
+      );
 
       return response;
     },
+      
     // Description:
     // ------------
     //
@@ -130,58 +129,177 @@
 
       return json;
     }
+      
   });
 
   // Equation Model
   // ==============
-  Application.models.equation = Application.models.base.extend({
+  Application.models.equation = Backbone.Model.extend({
   });
 
   // Field Model
   // ===========
-  Application.models.field = Application.models.base.extend({
+  //
+  // Description:
+  // ------------
+  //
+  // This model acts as a base class for other field types it introduces
+  // pre-validation and several validation routines.
+  Application.models.field = Backbone.Model.extend({
+
+    validations: [
+      "nullable",
+      "blank",
+      "maxLength"
+    ],
+
+    // Description:
+    // ------------
+    //
+    // Attaches `options` as a member of the instanced object.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `attrs` - object
+    // 2. `options` - object
     initialize: function (attrs, options) {
-      this.parentModel = options.parentModel;
-      window.test = this
+      this.options = options;
     },
-    set: function (key, value, options) {
-      if (key === "value") {
-        this.parentModel.set(this.get("name"), value, options);
+
+    // Description:
+    // ------------
+    //
+    // Validates if a field can be null.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `value` - [any type]
+    validateNullable: function (value) {
+      if (! this.options.nullable && value === null) {
+        return "Field cannot be null.";
       }
-      else {
-        Backbone.Model.prototype.set.call(this, key, value, options);
+    },
+
+    // Description:
+    // ------------
+    //
+    // Validates if a field can be blank.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `value` - [any type]
+    validateBlank: function (value) {
+      if (! this.options.blank && value === "") {
+        return "Field cannot be blank.";
       }
+    },
+
+    // Description:
+    // ------------
+    //
+    // Validates if a field meets its maxLength requirement.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `value` - [any type]
+    validateMaxLength: function (value) {
+      if (value.length > this.options.maxLength) {
+        return "Field cannot exceed maximum length of "+this.options.maxLength+".";
+      }
+    },
+
+    // Description:
+    // ------------
+    //
+    // Validates `value` against the choices list.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `value` - [any type]
+    validateChoices: function (value) {
+      if (this.options.choices && ! _.contains(this.options.choices, value)) {
+        return "Invalid option."
+      }
+    },
+
+    // Description:
+    // ------------
+    //
+    // Calls the validate methods indexed in _validations_.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `attrs` - object
+    // 2. `options` - object
+    validate: function (attrs, options) {
+      var value = attrs.value
+        , i
+        , methodName
+        , out;
+
+      for (i = 0; i < this.validations.length; i += 1) {
+        methodName = "validate"
+                   + this.validations[i].charAt(0).toUpperCase()
+                   + this.validations[i].substring(1);
+
+        out = this[methodName](value, options);
+        if (out) break;
+      }
+
+      return out;
     }
+    
   });
 
   // Char Field Model
   // ================
-  Application.models.field.txt = Application.models.field.extend({
+  //
+  // NOTE: The word "char" has special meaning in Javascript which is why object
+  //       literal syntax is not used here.
+  Application.models.field["char"] = Application.models.field.extend({
 
   });
 
   // Decimal Field Model
   // ===================
-  Application.models.field.decimal = Application.models.field.extend({
+  Application.models.field["decimal"] = Application.models.field.extend({
 
   });
 
   // Integer Field Model
   // ===================
-  Application.models.field.integer = Application.models.field.extend({
+  Application.models.field["integer"] = Application.models.field.extend({
 
   });
 
   // Null/Boolean Field Model
   // ========================
-  Application.models.field.nullBoo = Application.models.field.extend({
+  Application.models.field["nullBoolean"] = Application.models.field.extend({
+    
+    validations: [
+      "nullable",
+      "blank",
+      "choices"
+    ],
 
+    initialize: function (attrs, options) {
+      this.options = options;
+      this.options.choices = [null, true, false];
+      this.options.nullable = true;
+      this.options.blank = false;
+    }
+    
   });
 
   // Lookup Field Model
   // ==================
   Application.models.field.lookup = Application.models.field.extend({
-
   });
 
 
@@ -191,31 +309,39 @@
   // Equation Collection
   // ===================
   Application.collections.equation = Backbone.Collection.extend({
+    
     model: Application.models.equation,
+    
     toJSON: function () {
       return this.models.map(function (model) {
         return model.toJSON();
       });
+    },
+
+    parse: function (models, options) {
+      this.add(JSON.parse(models));
     }
+    
   });
 
   // Fields Collection
   // =================
   Application.collections.field = Backbone.Collection.extend({
+    
+    // Description:
+    // ------------
+    //
+    // Sets the _model_ for the collection entry to the _type_
     model: function (attrs, options) {
-      return new Application.models.field[attrs.type](attrs, options);
+      return new Application.models.field[options.type](attrs, options);
     },
-    validate: function () {
-      var value = this.options.parentModel.get(this.get("name"));
-      if (this.options.blank) {
-
-      }
-    },
+    
     toJSON: function () {
       return this.models.map(function (model) {
         return model.toJSON();
       });
     }
+    
   });
 
   // # Application Views
@@ -232,9 +358,41 @@
     }
   });
 
+  // Field View
+  // ==========
   Application.views.field = Backbone.Marionette.ItemView.extend({
+
     className: "form-group",
     tagName: "li",
+
+    ui: {
+      "valueField": "input"
+    },
+
+    events: {
+      "change @ui.valueField": "valueChange"
+    },
+
+    modelEvents: {
+      "change:value": "hideHelp",
+      "invalid": "showHelp"
+    },
+
+    hideHelp: function () {
+      this.$el.removeClass("has-error");
+      this.$el.find(".help-block").text("");
+    },
+
+    showHelp: function (event) {
+      this.$el.addClass("has-error");
+      this.$el.find(".help-block").text(this.model.validationError);
+    },
+
+    valueChange: function (event) {
+      this.hideHelp();
+      this.model.set("value", this.ui.valueField.val(), {validate: true});
+    },
+
     templateHelpers: function () {
       var name = this.model.get("name");
 
@@ -244,113 +402,233 @@
         //
         // By default return the value of _name_ with underscores replaced by
         // whitespace
-        label: this.model.get("label") || name.replace(/_/g, " "),
+        label: this.model.options.label || name.replace(/_/g, " "),
         // Description:
         // ------------
         //
         // By default return the value of _name_
-        id: this.model.get("id") || name,
-        // Description:
-        // ------------
-        //
-        // By default return an empty string
-        value: this.options.parentModel.get(name) || ""
+        id: this.model.options.id || name
       }
     }
   });
 
-  Application.views.field.txt = Application.views.field.extend({
-    initialize: function (configuration, options) {
+  // Char Field View
+  // ===============
+  Application.views.field["char"] = Application.views.field.extend({
+    
+    template: "#templateInput",
+
+    events: {
+      "change @ui.valueField": "valueChange",
+      "keyup @ui.valueField": "valueChange"
     },
-    template: "#templateInput"
-  });
 
-  Application.views.field.integer = Application.views.field.extend({
-    template: "#templateInput"
-  });
-
-  Application.views.field.decimal = Application.views.field.extend({
-    template: "#templateInput"
-  });
-
-  Application.views.field.nullBoo = Application.views.field.extend({
-    template: "#templateNullBoolean"
-  });
-
-  Application.views.field.lookup = Application.views.field.extend({
-    template: "#templateInput"
-  });
-
-  Application.views.field.group = Backbone.Marionette.CompositeView.extend({
-    initialize: function (options) {
-      this.collection = new Application.collections.field(
-        this.fields,
-        this.childViewOptions()
-      );
-    },
-    getChildView: function (child) {
-      return Application.views.field[child.get("type")];
-    },
-    childViewOptions: function () {
-      return {
-        parentModel: this.model
-      };
+    ui: {
+      "valueField": "input"
     }
-  })
+  });
+
+  // Char Field View
+  // ===============
+  Application.views.field["text"] = Application.views.field.extend({
+    
+    template: "#templateInput",
+
+    ui: {
+      "valueField": "input"
+    }
+  });
+
+  // Integer Field View
+  // ==================
+  Application.views.field["integer"] = Application.views.field.extend({
+    
+    template: "#templateInput",
+
+    ui: {
+      "valueField": "input"
+    }
+
+  });
+
+  // Decimal Field View
+  // ==================
+  Application.views.field["decimal"] = Application.views.field.extend({
+    
+    template: "#templateInput",
+
+    ui: {
+      "valueField": "input"
+    }
+
+  });
+
+  // NullBoolean Field View
+  // ======================
+  Application.views.field["nullBoolean"] = Application.views.field.extend({
+    
+    template: "#templateOptions",
+    
+    ui: {
+      "valueField": "select"
+    },
+
+    valueChange: function (event) {
+      var value = this.ui.valueField.val();
+
+      this.hideHelp();
+
+      // Attempt to produce a Javascript primitive from the select box value.
+      try {
+        value = JSON.parse(value);
+      }
+      catch (err) {
+        value = "";
+      }
+
+      this.model.set("value", value, {validate: true});
+    },
+
+    templateHelpers: function () {
+      var helpers = Application.views.field.prototype.templateHelpers.call(this);
+
+      helpers.options = [
+        {label: "", value: null},
+        {label: "No", value: false},
+        {label: "Yes", value: true}
+      ]
+
+      return helpers;
+    }
+
+  });
+
+  // Lookup Field View
+  // =================
+  Application.views.field.lookup = Application.views.field.extend({
+
+    template: "#templateInput",
+
+    ui: {
+      "valueField": "input"
+    }
+
+  });
+
+  // Field Group View
+  // ================
+  Application.views.field.group = Backbone.Marionette.CompositeView.extend({
+
+    collectionEvents: {
+      "change": "changeField"
+    },
+    
+    initialize: function (options) {
+      var i
+        , field;
+
+      this.collection = new Application.collections.field();
+
+      for (i = 0; i < this.fields.length; i += 1) {
+        field = this.fields[i];
+
+        this.collection.add(
+          { name: field.name, value: options.model.get(field.name)},
+          field.options
+        )
+      }
+    },
+    
+    // Parameters:
+    // -----------
+    //
+    // 1. `child` - Backbone.Model
+    getChildView: function (child) {
+      if (typeof child.options.type === "string") {
+        return Application.views.field[child.options.type];
+      }
+      else if (child.options.type instanceof Backbone.View) {
+
+      }
+    },
+
+    changeField: function (model, options) {
+      this.model.set(model.get("name"), model.get("value"));
+    }
+    
+  });
+
+  // Reference View
+  // ==============
+  Application.views.reference = Application.views.field.group.extend({
+
+    template: "#templateModal",
+    childViewContainer: "#equationModal",
+
+    fields: [
+      {name: "Label", options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "Author", options: {type: "char", maxLength: 200, nullable: true, blank: true}},
+      {name: "Year", options: {type: "char", maxLength: 12, nullable: true, blank: true}},
+      {name: "Reference", options: {type: "text", nullable: true, blank: true}}
+    ]
+  });
 
   // Equation View
   // =============
   Application.views.equation = Application.views.field.group.extend({
+
     template: "#templateEquation",
     className: "panel panel-default",
     childViewContainer: "ul",
+    
     fields: [
-      {name: "X",                   type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "Unit_X",              type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "Z",                   type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "Unit_Z",              type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "W",                   type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "Unit_W",              type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "U",                   type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "Unit_U",              type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "V",                   type: "txt",     options: {maxLength: 20, nullable: true, blank: true}},
-      {name: "Unit_V",              type: "txt",     options: {maxLength: 20, blank: true}},
-      {name: "Min_X",               type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "Max_X",               type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "Min_Z",               type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "Max_Z",               type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "Output",              type: "txt",     options: {maxLength: 30, nullable: true}},
-      {name: "Output_TR",           type: "txt",     options: {maxLength: 30, nullable: true, blank: true}},
-      {name: "Unit_Y",              type: "txt",     options: {maxLength: 50, nullable: true, blank: true}},
-      {name: "Age",                 type: "txt",     options: {maxLength: 50, nullable: true, blank: true}},
-      {name: "Veg_Component",       type: "txt",     options: {maxLength: 150, nullable: true, blank: true}},
-      {name: "B",                   type: "nullBoo", options: {}},
-      {name: "Bd",                  type: "nullBoo", options: {}},
-      {name: "Bg",                  type: "nullBoo", options: {}},
-      {name: "Bt",                  type: "nullBoo", options: {}},
-      {name: "L",                   type: "nullBoo", options: {}},
-      {name: "Rb",                  type: "nullBoo", options: {}},
-      {name: "Rf",                  type: "nullBoo", options: {}},
-      {name: "Rm",                  type: "nullBoo", options: {}},
-      {name: "S",                   type: "nullBoo", options: {}},
-      {name: "T",                   type: "nullBoo", options: {}},
-      {name: "F",                   type: "nullBoo", options: {}},
-      {name: "Equation",            type: "txt",     options: {maxlength: 500}},
-      {name: "Substitute_equation", type: "txt",     options: {maxLength: 500, nullable: true, blank: true}},
-      {name: "Top_dob",             type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "Stump_height",        type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "R2",                  type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "R2_Adjusted",         type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "RMSE",                type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "SEE",                 type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "Corrected_for_bias",  type: "nullBoo", options: {}},
-      {name: "Bias_correction",     type: "decimal", options: {nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "Ratio_equation",      type: "nullBoo", options: {}},
-      {name: "Segmented_equation",  type: "nullBoo", options: {}},
-      {name: "Sample_size",         type: "txt",     options: {maxLength: 150, nullable: true, blank: true}},
-      {name: "Population",          type: "lookup",  options: {}},
-      {name: "Tree_type",           type: "lookup",  options: {}}
+      {name: "X",                   options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "Unit_X",              options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "Z",                   options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "Unit_Z",              options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "W",                   options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "Unit_W",              options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "U",                   options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "Unit_U",              options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "V",                   options: {type: "char", maxLength: 20, nullable: true, blank: true}},
+      {name: "Unit_V",              options: {type: "char", maxLength: 20, blank: true}},
+      {name: "Min_X",               options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "Max_X",               options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "Min_Z",               options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "Max_Z",               options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "Output",              options: {type: "char", maxLength: 30, nullable: true}},
+      {name: "Output_TR",           options: {type: "char", maxLength: 30, nullable: true, blank: true}},
+      {name: "Unit_Y",              options: {type: "char", maxLength: 50, nullable: true, blank: true}},
+      {name: "Age",                 options: {type: "char", maxLength: 50, nullable: true, blank: true}},
+      {name: "Veg_Component",       options: {type: "char", maxLength: 150, nullable: true, blank: true}},
+      {name: "B",                   options: {type: "nullBoolean", label: "B - Bark"}},
+      {name: "Bd",                  options: {type: "nullBoolean", label: "Bd - Dead branches"}},
+      {name: "Bg",                  options: {type: "nullBoolean", label: "Bg - Big branches"}},
+      {name: "Bt",                  options: {type: "nullBoolean", label: "Bt - Thin branches"}},
+      {name: "L",                   options: {type: "nullBoolean", label: "L - Leaves"}},
+      {name: "Rb",                  options: {type: "nullBoolean", label: "Rb - Large roots"}},
+      {name: "Rf",                  options: {type: "nullBoolean", label: "Rf - Fine roots"}},
+      {name: "Rm",                  options: {type: "nullBoolean", label: "Rm - Medium roots"}},
+      {name: "S",                   options: {type: "nullBoolean", label: "S - Stump"}},
+      {name: "T",                   options: {type: "nullBoolean", label: "T - Trunks"}},
+      {name: "F",                   options: {type: "nullBoolean", label: "F - Fruit"}},
+      {name: "Equation",            options: {type: "char", maxlength: 500}},
+      {name: "Substitute_equation", options: {type: "char", maxLength: 500, nullable: true, blank: true}},
+      {name: "Top_dob",             options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "Stump_height",        options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "R2",                  options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "R2_Adjusted",         options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "RMSE",                options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "SEE",                 options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "Corrected_for_bias",  options: {type: "nullBoolean"}},
+      {name: "Bias_correction",     options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "Ratio_equation",      options: {type: "nullBoolean"}},
+      {name: "Segmented_equation",  options: {type: "nullBoolean"}},
+      {name: "Sample_size",         options: {type: "char", maxLength: 150, nullable: true, blank: true}},
+      {name: "Population",          options: {type: "lookup"}},
+      {name: "Tree_type",           options: {type: "lookup"}}
     ],
+    
     // Description:
     // ------------
     //
@@ -361,20 +639,41 @@
         isExpanded: this.options.index === 0 ? "true" : "false"
       }
     }
+    
   });
 
   // Dataset View
   // ============
   Application.views.dataset = Backbone.Marionette.CompositeView.extend({
+    
     template: "#templateDataset",
     childView: Application.views.equation,
     childViewContainer: "#equations",
+    
+    // User Interface Elements
+    // -----------------------
     ui: {
-      "equationAdd": "#equationAdd"
+      "equationAdd": "#equationAdd",
+      "form": "form",
+      "editField": ".editField"
     },
+    
+    // User Interface Events
+    // ---------------------
     events: {
-      "click @ui.equationAdd": "equationAdd"
+      "click @ui.equationAdd": "equationAdd",
+      "submit @ui.form": "formSubmit",
+      "click @ui.editField .read a": "fieldEdit",
+      "click @ui.editField .edit a": "fieldSubmit"
     },
+
+
+    // Collection Events
+    // -----------------
+    collectionEvents: {
+      "change": "changeCollection"
+    },
+    
     // Description:
     // ------------
     //
@@ -388,6 +687,24 @@
       this.model = options.model;
       this.collection = this.model.get("Data_as_json");
     },
+
+    // Description:
+    // ------------
+    //
+    // Clones the _Data\_as\_json_ collection and binds a change event listener
+    // to the parent model.
+    changeCollection: function (model, options) {
+      var clone = model.collection.clone()
+        , self = this;
+
+      this.stopListening(model.collection);
+      this.model.set("Data_as_json", clone);
+      this.model.listenToOnce(clone, "change", function () {
+        // NOTE: Subsequent change events will call this function recursively.
+        self.changeCollection.apply(self, arguments)
+      });
+    },
+    
     // Description:
     //
     // This function is called when the "Add Equation" button element is
@@ -395,12 +712,44 @@
     equationAdd: function () {
       this.collection.add({});
     },
+
+    formSubmit: function () {
+      this.model.save();
+      return false;
+    },
+
+    fieldEdit: function (event) {
+      var parent = $(event.target).closest(".editField")
+        , input = parent.find("input")
+        , length = input.val().length * 2;
+
+      parent.find(".read").hide();
+      parent.find(".edit").show();
+      
+      input.focus();
+      input[0].setSelectionRange(length, length);
+    },
+
+    fieldSubmit: function (event) {
+      var parent = $(event.target).closest(".editField")
+        , input = parent.find("input")
+        , field = parent.find(".field")
+        , value = input.val();
+
+      this.model.set(parent.data("field"), value);
+      field.text(value);
+
+      parent.find(".read").show();
+      parent.find(".edit").hide();
+    },
+    
     childViewOptions: function (model, index) {
       return {
         index: index,
         isExpanded: index === 0 ? "true" : "false"
       }
     }
+    
   });
 
   // # Application Initialization
@@ -409,6 +758,36 @@
 
   // Set a jQuery domReady listener which initializes the application.
   $(function () {
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = $.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+      var token;
+      options.xhrFields = {
+        withCredentials: true
+      };
+      token = getCookie('csrftoken');
+      if (token) {
+        return jqXHR.setRequestHeader('X-CSRFToken', token);
+      }
+    });
+
     new Application();
   });
-}());
+
+// Pass in Underscore to the closure.
+}(_));
