@@ -1,5 +1,5 @@
 // NOTE: This closure serves to keep the _window_ object tidy.
-(function (_) {
+(function () {
   // # Application
   // ---------------------------------------------------------------------------
 
@@ -80,10 +80,8 @@
       window.dataset = this;
 
       this.on("change", function () {
-        console.log("Dataset Changed!", this.toJSON())
-      });
-
-
+        console.log(this.toJSON());
+      })
     },
       
     "urlRoot": "/api/v1/datasets/",
@@ -145,6 +143,8 @@
   //
   // This model acts as a base class for other field types it introduces
   // pre-validation and several validation routines.
+  //
+  // Each field has two attributes recorded the _name_ of the field and _value_.
   Application.models.field = Backbone.Model.extend({
 
     validations: [
@@ -270,6 +270,71 @@
   // ===================
   Application.models.field["decimal"] = Application.models.field.extend({
 
+    validations: [
+      "nullable",
+      "blank",
+      "numeric",
+      "decimalPlaces",
+      "maxDigits"
+    ],
+
+    // Parameters:
+    // -----------
+    //
+    // 1. `value` - [any type]
+    validateNumeric: function (value) {
+      if (isNaN(value)) {
+        return "Field must be a number."
+      }
+    },
+
+    // Parameters:
+    // -----------
+    //
+    // 1. `value` - [any type]
+    validateDecimalPlaces: function (value) {
+      var description = new RegExp("^([0-9]*\.)?[0-9]{0,"+this.options.decimalPlaces+"}$")
+
+      if (
+        this.options.decimalPlaces &&
+        ! description.test(value)
+      ) {
+        return "Field can have a maximum of "
+        + this.options.decimalPlaces
+        + " decimal places."
+      }
+    },
+
+    // Parameters:
+    // -----------
+    //
+    // 1. `value` - [any type]
+    validateMaxDigits: function (value) {
+      var description = new RegExp("[^0-9]", "g")
+        , max =  Number("1e"+(this.options.maxDigits - this.options.decimalPlaces || 0));
+
+      if (this.options.maxDigits) {
+        if(value.replace(description, "").length > this.options.maxDigits) {
+          return "Field can have a maximum of "
+          + this.options.maxDigits
+          + " digits."
+        }
+        else if (Number(value) >= max) {
+          return "Field must be less than "+max+".";
+        }
+      }
+    },
+
+    // Description:
+    // ------------
+    //
+    // Convert the field _value_ to a number.
+    get: function (key, options) {
+      var value = Backbone.Model.prototype.get.call(this, key, options);
+
+      return key === "value" ? Number(value): value;
+    }
+
   });
 
   // Integer Field Model
@@ -290,9 +355,19 @@
 
     initialize: function (attrs, options) {
       this.options = options;
-      this.options.choices = [null, true, false];
+      this.options.choices = ["null", "false", "true"];
       this.options.nullable = true;
       this.options.blank = false;
+    },
+
+    // Description:
+    // ------------
+    //
+    // Convert the field _value_ to a Javascript primitive (null, false, true).
+    get: function (key, options) {
+      var value = Backbone.Model.prototype.get.call(this, key, options);
+
+      return key === "value" ? JSON.parse(value) : value;
     }
     
   });
@@ -311,13 +386,17 @@
   Application.collections.equation = Backbone.Collection.extend({
     
     model: Application.models.equation,
-    
-    toJSON: function () {
-      return this.models.map(function (model) {
-        return model.toJSON();
-      });
-    },
 
+    // Description:
+    // ------------
+    //
+    // Parse the _Data_as_json_ string from the dataset.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `models` - array
+    // 2. `options` - object
     parse: function (models, options) {
       this.add(JSON.parse(models));
     }
@@ -334,14 +413,8 @@
     // Sets the _model_ for the collection entry to the _type_
     model: function (attrs, options) {
       return new Application.models.field[options.type](attrs, options);
-    },
-    
-    toJSON: function () {
-      return this.models.map(function (model) {
-        return model.toJSON();
-      });
     }
-    
+
   });
 
   // # Application Views
@@ -370,26 +443,38 @@
     },
 
     events: {
-      "change @ui.valueField": "valueChange"
+      "change @ui.valueField": "valueFieldChange"
     },
 
     modelEvents: {
-      "change:value": "hideHelp",
       "invalid": "showHelp"
     },
 
-    hideHelp: function () {
+    // Description:
+    // ------------
+    //
+    // Hides the field's help block.
+    hideHelp: function (event) {
       this.$el.removeClass("has-error");
       this.$el.find(".help-block").text("");
     },
 
+    // Description:
+    // ------------
+    //
+    // Shows the field's help block with the current _validationError_.
     showHelp: function (event) {
       this.$el.addClass("has-error");
       this.$el.find(".help-block").text(this.model.validationError);
     },
 
-    valueChange: function (event) {
+    // Description:
+    // ------------
+    //
+    // Updates the model with the value of the field from the user interface.
+    valueFieldChange: function (event) {
       this.hideHelp();
+
       this.model.set("value", this.ui.valueField.val(), {validate: true});
     },
 
@@ -407,7 +492,7 @@
         // ------------
         //
         // By default return the value of _name_
-        id: this.model.options.id || name
+        id: this.model.options.id || _.uniqueId("field_")
       }
     }
   });
@@ -419,8 +504,8 @@
     template: "#templateInput",
 
     events: {
-      "change @ui.valueField": "valueChange",
-      "keyup @ui.valueField": "valueChange"
+      "change @ui.valueField": "valueFieldChange",
+      "keyup @ui.valueField": "valueFieldChange"
     },
 
     ui: {
@@ -432,7 +517,7 @@
   // ===============
   Application.views.field["text"] = Application.views.field.extend({
     
-    template: "#templateInput",
+    template: "#templateTextarea",
 
     ui: {
       "valueField": "input"
@@ -443,7 +528,12 @@
   // ==================
   Application.views.field["integer"] = Application.views.field.extend({
     
-    template: "#templateInput",
+    template: "#templateNumber",
+
+    events: {
+      "change @ui.valueField": "valueFieldChange",
+      "keyup @ui.valueField": "valueFieldChange"
+    },
 
     ui: {
       "valueField": "input"
@@ -457,6 +547,11 @@
     
     template: "#templateInput",
 
+    events: {
+      "change @ui.valueField": "valueFieldChange",
+      "keyup @ui.valueField": "valueFieldChange",
+    },
+
     ui: {
       "valueField": "input"
     }
@@ -467,28 +562,16 @@
   // ======================
   Application.views.field["nullBoolean"] = Application.views.field.extend({
     
-    template: "#templateOptions",
+    template: "#templateOption",
     
     ui: {
       "valueField": "select"
     },
 
-    valueChange: function (event) {
-      var value = this.ui.valueField.val();
-
-      this.hideHelp();
-
-      // Attempt to produce a Javascript primitive from the select box value.
-      try {
-        value = JSON.parse(value);
-      }
-      catch (err) {
-        value = "";
-      }
-
-      this.model.set("value", value, {validate: true});
-    },
-
+    // Description:
+    // ------------
+    //
+    // Assigns template variables on render.
     templateHelpers: function () {
       var helpers = Application.views.field.prototype.templateHelpers.call(this);
 
@@ -600,7 +683,7 @@
       {name: "Output_TR",           options: {type: "char", maxLength: 30, nullable: true, blank: true}},
       {name: "Unit_Y",              options: {type: "char", maxLength: 50, nullable: true, blank: true}},
       {name: "Age",                 options: {type: "char", maxLength: 50, nullable: true, blank: true}},
-      {name: "Veg_Component",       options: {type: "char", maxLength: 150, nullable: true, blank: true}},
+      {name: "Veg_Component",       options: {type: "char", maxLength: 150, nullable: true, blank: true, label: "Vegetation Component"}},
       {name: "B",                   options: {type: "nullBoolean", label: "B - Bark"}},
       {name: "Bd",                  options: {type: "nullBoolean", label: "Bd - Dead branches"}},
       {name: "Bg",                  options: {type: "nullBoolean", label: "Bg - Big branches"}},
@@ -616,9 +699,9 @@
       {name: "Substitute_equation", options: {type: "char", maxLength: 500, nullable: true, blank: true}},
       {name: "Top_dob",             options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
       {name: "Stump_height",        options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "R2",                  options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "R2_Adjusted",         options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
-      {name: "RMSE",                options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
+      {name: "R2",                  options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10, label: "R&sup2;"}},
+      {name: "R2_Adjusted",         options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10, label: "R&sup2; Adjusted"}},
+      {name: "RMSE",                options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10, label: "Root mean-square error"}},
       {name: "SEE",                 options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
       {name: "Corrected_for_bias",  options: {type: "nullBoolean"}},
       {name: "Bias_correction",     options: {type: "decimal", nullable: true, blank: true, maxDigits: 16, decimalPlaces: 10}},
@@ -697,8 +780,8 @@
       var clone = model.collection.clone()
         , self = this;
 
-      this.stopListening(model.collection);
       this.model.set("Data_as_json", clone);
+      // NOTE: Neccesary call after changing the collection.
       this.model.listenToOnce(clone, "change", function () {
         // NOTE: Subsequent change events will call this function recursively.
         self.changeCollection.apply(self, arguments)
@@ -789,5 +872,4 @@
     new Application();
   });
 
-// Pass in Underscore to the closure.
-}(_));
+}());

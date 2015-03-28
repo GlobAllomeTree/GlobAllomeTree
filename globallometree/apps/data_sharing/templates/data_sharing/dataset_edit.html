@@ -102,7 +102,15 @@
     <div class="col-sm-4 help-block"></div>
   </script>
 
-  <script type="text/template" id="templateOptions">
+  <script type="text/template" id="templateNumber">
+    <label for="<%= id %>" class="control-label col-sm-2"><%= label %></label>
+    <div class="col-sm-2">
+      <input type="number" name="<%= name %>" id="<%= id %>" value="<%= value %>" class="form-control">
+    </div>
+    <div class="col-sm-4 help-block"></div>
+  </script>
+
+  <script type="text/template" id="templateOption">
     <label for="<%- id %>" class="control-label col-sm-2"><%- label %></label>
     <div class="col-sm-2">
       <select name="<%- name %>" id="<%- id %>" class="form-control">
