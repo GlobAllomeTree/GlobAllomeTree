@@ -7,8 +7,8 @@ from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 from globallometree.apps.raw_data.models import RawData
 from globallometree.apps.search_helpers.estypes import *
-from globallometree.apps.api.serializers import SimpleRawDataSerializer
-from globallometree.apps.api.renderers import SimpleJSONRenderer
+from globallometree.apps.api.serializers import RawDataSerializer
+from globallometree.apps.api.renderers import JSONRenderer
 
 class RawDataIndex(MappingType, Indexable):
 
@@ -85,8 +85,8 @@ class RawDataIndex(MappingType, Indexable):
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
-        obj_serialized = SimpleRawDataSerializer(obj)
-        json_string = SimpleJSONRenderer().render(obj_serialized.data)
+        obj_serialized = RawDataSerializer(obj)
+        json_string = JSONRenderer().render(obj_serialized.data)
         return json.loads(json_string)
 
 

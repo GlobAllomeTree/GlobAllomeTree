@@ -7,8 +7,8 @@ from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 from globallometree.apps.allometric_equations.models import AllometricEquation
 from globallometree.apps.search_helpers.estypes import *
-from globallometree.apps.api.serializers import SimpleAllometricEquationSerializer
-from globallometree.apps.api.renderers import SimpleJSONRenderer
+from globallometree.apps.api.serializers import AllometricEquationSerializer
+from globallometree.apps.api.renderers import JSONRenderer
 
 class AllometricEquationIndex(MappingType, Indexable):
 
@@ -93,7 +93,7 @@ class AllometricEquationIndex(MappingType, Indexable):
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
-        obj_serialized = SimpleAllometricEquationSerializer(obj).data
+        obj_serialized = AllometricEquationSerializer(obj).data
         obj_serialized['Dataset'] = 0
         return obj_serialized
 

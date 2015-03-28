@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import RawData
 from .forms import RawDataSearchForm
 
-from globallometree.apps.api.serializers import SimpleRawDataSerializer
+from globallometree.apps.api.serializers import RawDataSerializer
 from globallometree.apps.search_helpers.views import LinkedModelSearchView
 from globallometree.apps.search_helpers.views import (
     record_by_id_view, 
@@ -46,5 +46,5 @@ def export(request):
     return export_view(request, 
                        doc_type="rawdata",
                        filename='raw_data',
-                       serializer=SimpleRawDataSerializer)
+                       serializer=RawDataSerializer)
     

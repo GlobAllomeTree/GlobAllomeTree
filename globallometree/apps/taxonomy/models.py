@@ -198,31 +198,31 @@ class SpeciesGroup(BaseModel):
 
     def Group(self):
         """
-            Returns a flat list of species, subspecies, etc for the SimpleSpeciesGroupSerializer,
+            Returns a flat list of species, subspecies, etc for the SpeciesGroupSerializer,
             Ideally this would be in the api, but the syntax for that was not working
         """
         data = []
         from globallometree.apps.api.serializers import (
-            SimpleSpeciesSerializer,
-            SimpleSubspeciesSerializer,
-            SimpleGenusSerializer,
-            SimpleFamilySerializer
+            SpeciesSerializer,
+            SubspeciesSerializer,
+            GenusSerializer,
+            FamilySerializer
             )
 
         for species in self.Species.all():
-            species_def = SimpleSpeciesSerializer(instance=species, many=False).data
+            species_def = SpeciesSerializer(instance=species, many=False).data
             data.append(species_def)
 
         for subspecies in self.Subspecies.all():
-            species_def = SimpleSubspeciesSerializer(instance=subspecies, many=False).data
+            species_def = SubspeciesSerializer(instance=subspecies, many=False).data
             data.append(species_def)
 
         for genus in self.Genera.all():
-            species_def = SimpleGenusSerializer(instance=genus, many=False).data
+            species_def = GenusSerializer(instance=genus, many=False).data
             data.append(species_def)
 
         for family in self.Families.all():
-            species_def = SimpleGenusSerializer(instance=family, many=False).data
+            species_def = GenusSerializer(instance=family, many=False).data
             data.append(species_def)
 
         return data

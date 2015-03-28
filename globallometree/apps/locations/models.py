@@ -204,21 +204,21 @@ class LocationGroup(BaseModel):
 
     def Group(self):
         """
-            Returns a flat list of plots and locations, etc for the SimpleLocationGroupSerializer,
+            Returns a flat list of plots and locations, etc for the LocationGroupSerializer,
             Ideally this would be in the api, but the syntax for that was not working
         """
         data = []
         from globallometree.apps.api.serializers import (
-            SimpleLocationSerializer,
-            SimplePlotSerializer
+            LocationSerializer,
+            PlotSerializer
             )
 
         for plot in self.Plots.all():
-            location_data = SimplePlotSerializer(instance=plot, many=False).data
+            location_data = PlotSerializer(instance=plot, many=False).data
             data.append(location_data)
 
         for location in self.Locations.all():
-            location_data = SimpleLocationSerializer(instance=location, many=False).data
+            location_data = LocationSerializer(instance=location, many=False).data
             data.append(location_data)
 
         return data

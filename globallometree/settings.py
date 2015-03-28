@@ -219,13 +219,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_RENDERER_CLASSES': (
-        'globallometree.apps.api.renderers.SimpleBrowsableAPIRenderer',
-        'globallometree.apps.api.renderers.SimpleJSONRenderer',
-        'globallometree.apps.api.renderers.SimpleXMLRenderer',
-        'globallometree.apps.api.renderers.SimpleCSVRenderer',
-        'globallometree.apps.api.renderers.FullBrowsableAPIRenderer',
-        'globallometree.apps.api.renderers.FullJSONRenderer',
-        'globallometree.apps.api.renderers.FullXMLRenderer',
+        'globallometree.apps.api.renderers.BrowsableAPIRenderer',
+        'globallometree.apps.api.renderers.JSONRenderer',
+        'globallometree.apps.api.renderers.XMLRenderer',
+        'globallometree.apps.api.renderers.CSVRenderer',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',

@@ -11,7 +11,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
 
-from apps.api.serializers import SimpleDatasetSerializer
+from apps.api.serializers import DatasetSerializer
 
 from apps.accounts.mixins import RestrictedPageMixin
 
@@ -127,7 +127,7 @@ def dataset_detail(request, Dataset_ID):
     assert (dataset.User.pk == request.user.pk) \
         or dataset.Imported \
         or request.user.is_staff
-    dataset_serialized = SimpleDatasetSerializer(dataset).data
+    dataset_serialized = DatasetSerializer(dataset).data
     return render_to_response(
         "data_sharing/dataset_detail.html",
         {
@@ -155,7 +155,7 @@ def dataset_edit(request, Dataset_ID):
 def upload_confirm(request, Dataset_ID):
     dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
     assert dataset.User.pk == request.user.pk
-    dataset_serialized = SimpleDatasetSerializer(dataset).data
+    dataset_serialized = DatasetSerializer(dataset).data
     return render_to_response(
         "data_sharing/upload_confirm.html",
         {
@@ -177,7 +177,7 @@ class DatasetListView(RestrictedPageMixin, ListView):
         context = super(DatasetListView, self).get_context_data(**kwargs)
         context['datasets'] = []
         for dataset in self.object_list:
-            obj_serialized = SimpleDatasetSerializer(dataset).data
+            obj_serialized = DatasetSerializer(dataset).data
             context['datasets'].append(obj_serialized)
         return context
 

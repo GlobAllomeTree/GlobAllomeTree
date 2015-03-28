@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from globallometree.apps.api.permissions import IsOwnerOrReadOnly
 
-from globallometree.apps.api.mixins import SimpleSerializerMixin, NameQueryMixin
+from globallometree.apps.api.mixins import NameQueryMixin
 
 from globallometree.apps.source.models import (
     Reference, 
@@ -59,287 +59,229 @@ from globallometree.apps.locations.models import (
 
 from globallometree.apps.api.serializers import (
     
-	############## Full Serializers ##############
-    ReferenceSerializer,
-    InstitutionSerializer,
-	FamilySerializer,
-	GenusSerializer,
-	SpeciesSerializer,
+    GenusSerializer,
+    FamilySerializer,
+    SpeciesSerializer,
+    SubspeciesSerializer,
     SpeciesLocalNameSerializer,
-	SubspeciesSerializer,
-    SubspeciesLocalNameSerializer,
+    SubspeciesLocalNameSerializer,  
+    AllometricEquationSerializer,
     SpeciesGroupSerializer,
-	PopulationSerializer,
-	ContinentSerializer,
-	CountrySerializer,
     ForestTypeSerializer,
-	BiomeFAOSerializer, 
+    BiomeFAOSerializer, 
     BiomeUdvardySerializer, 
     BiomeWWFSerializer, 
     DivisionBaileySerializer, 
     BiomeHoldridgeSerializer,
-    AllometricEquationSerializer,
-    WoodDensitySerializer,
-    RawDataSerializer,
+    PopulationSerializer,
     PlotSerializer, 
     LocationSerializer,
     LocationGroupSerializer,
-    DataLicenseSerializer, 
-    DatasetSerializer, 
-    DataRequestSerializer,
+    ContinentSerializer,
+    CountrySerializer,
+    ReferenceSerializer,
+    WoodDensitySerializer,
+    RawDataSerializer,
+    InstitutionSerializer,
+    DatasetSerializer,
+    DataLicenseSerializer,
     BiomassExpansionFactorSerializer,
-
-    ############# Simple Serializers ################
-    SimpleGenusSerializer,
-    SimpleFamilySerializer,
-    SimpleSpeciesSerializer,
-    SimpleSubspeciesSerializer,
-    SimpleSpeciesLocalNameSerializer,
-    SimpleSubspeciesLocalNameSerializer,   
-    SimpleAllometricEquationSerializer,
-    SimpleSpeciesGroupSerializer,
-    SimpleForestTypeSerializer,
-    SimpleBiomeFAOSerializer, 
-    SimpleBiomeUdvardySerializer, 
-    SimpleBiomeWWFSerializer, 
-    SimpleDivisionBaileySerializer, 
-    SimpleBiomeHoldridgeSerializer,
-    SimplePopulationSerializer,
-    SimplePlotSerializer, 
-    SimpleLocationSerializer,
-    SimpleLocationGroupSerializer,
-    SimpleContinentSerializer,
-    SimpleCountrySerializer,
-    SimpleReferenceSerializer,
-    SimpleWoodDensitySerializer,
-    SimpleRawDataSerializer,
-    SimpleInstitutionSerializer,
-    SimpleDatasetSerializer,
-    SimpleDataLicenseSerializer,
-    SimpleBiomassExpansionFactorSerializer,
 	)
 
 
-class ReferenceViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Reference.objects.all()
     serializer_class = ReferenceSerializer
-    simple_serializer_class = SimpleReferenceSerializer
 
 
-class InstitutionViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class InstitutionViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
-    simple_serializer_class = SimpleInstitutionSerializer
 
 
-class FamilyViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class FamilyViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
-    simple_serializer_class = SimpleFamilySerializer
 
 
-class GenusViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class GenusViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Genus.objects.all()
     serializer_class = GenusSerializer
-    simple_serializer_class = SimpleGenusSerializer
 
 
-class SpeciesViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class SpeciesViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
-    simple_serializer_class = SimpleSpeciesSerializer
 
 
-class SubspeciesViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class SubspeciesViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Subspecies.objects.all()
     serializer_class = SubspeciesSerializer
-    simple_serializer_class = SimpleSubspeciesSerializer
 
 
-class SpeciesGroupViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class SpeciesGroupViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = SpeciesGroup.objects.all()
     serializer_class = SpeciesGroupSerializer
-    simple_serializer_class = SimpleSpeciesGroupSerializer
 
 
-class SpeciesLocalNameViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class SpeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = SpeciesLocalName.objects.all()
     serializer_class = SpeciesLocalNameSerializer
-    simple_serializer_class = SimpleSpeciesLocalNameSerializer
 
 
-class SubspeciesLocalNameViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class SubspeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = SubspeciesLocalName.objects.all()
     serializer_class = SubspeciesLocalNameSerializer
-    simple_serializer_class = SimpleSubspeciesLocalNameSerializer
 
 
-class PopulationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class PopulationViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Population.objects.all()
     serializer_class = PopulationSerializer
-    simple_serializer_class = SimplePopulationSerializer
 
 
-class ContinentViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class ContinentViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Continent.objects.all()
     serializer_class = ContinentSerializer
-    simple_serializer_class = SimpleContinentSerializer
 
 
-class CountryViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class CountryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
-    simple_serializer_class = SimpleCountrySerializer
 
 
-class ForestTypeViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class ForestTypeViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = ForestType.objects.all()
     serializer_class = ForestTypeSerializer
-    simple_serializer_class = SimpleForestTypeSerializer
 
 
-class BiomeFAOViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class BiomeFAOViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeFAO.objects.all()
     serializer_class = BiomeFAOSerializer
-    simple_serializer_class = SimpleBiomeFAOSerializer
 
 
-class BiomeUdvardyViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class BiomeUdvardyViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeUdvardy.objects.all()
     serializer_class = BiomeUdvardySerializer
-    simple_serializer_class = SimpleBiomeUdvardySerializer
 
 
-class BiomeWWFViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class BiomeWWFViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeWWF.objects.all()
     serializer_class = BiomeWWFSerializer
-    simple_serializer_class = SimpleBiomeWWFSerializer
 
 
-class DivisionBaileyViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class DivisionBaileyViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = DivisionBailey.objects.all()
     serializer_class = DivisionBaileySerializer
-    simple_serializer_class = SimpleDivisionBaileySerializer
 
 
-class BiomeHoldridgeViewSet(NameQueryMixin, SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class BiomeHoldridgeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomeHoldridge.objects.all()
     serializer_class = BiomeHoldridgeSerializer
-    simple_serializer_class = SimpleBiomeHoldridgeSerializer
 
 
-class LocationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class LocationViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
-    simple_serializer_class = SimpleLocationSerializer
 
 
-class PlotViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class PlotViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Plot.objects.all()
     serializer_class = PlotSerializer
-    simple_serializer_class = SimplePlotSerializer
 
 
-class LocationGroupViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class LocationGroupViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = LocationGroup.objects.all()
     serializer_class = LocationGroupSerializer
-    simple_serializer_class = SimpleLocationGroupSerializer
 
 
-class AllometricEquationViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class AllometricEquationViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = AllometricEquation.objects.all()
     serializer_class = AllometricEquationSerializer
-    simple_serializer_class = SimpleAllometricEquationSerializer
 
    
-class WoodDensityViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class WoodDensityViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = WoodDensity.objects.all()
     serializer_class = WoodDensitySerializer
-    simple_serializer_class = SimpleWoodDensitySerializer
 
 
-class RawDataViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class RawDataViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = RawData.objects.all()
     serializer_class = RawDataSerializer
-    simple_serializer_class = SimpleRawDataSerializer
 
 
-class DataLicenseViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class DataLicenseViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = DataLicense.objects.all()
     serializer_class = DataLicenseSerializer
-    simple_serializer_class = SimpleDataLicenseSerializer
 
 
-class DatasetViewSet(SimpleSerializerMixin, viewsets.ModelViewSet):
+class DatasetViewSet(viewsets.ModelViewSet):
     """
         Users are able to create or edit their own datasets through the API
     """
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
-    simple_serializer_class = SimpleDatasetSerializer
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
 
 
-class DataRequestViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    """
-    queryset = DataRequest.objects.all()
-    serializer_class = DataRequestSerializer
+# class DataRequestViewSet(viewsets.ReadOnlyModelViewSet):
+#     """
+#     """
+#     queryset = DataRequest.objects.all()
+#     serializer_class = DataRequestSerializer
 
 
-class BiomassExpansionFactorViewSet(SimpleSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class BiomassExpansionFactorViewSet(viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = BiomassExpansionFactor.objects.all()
     serializer_class = BiomassExpansionFactorSerializer
-    simple_serializer_class = SimpleBiomassExpansionFactorSerializer

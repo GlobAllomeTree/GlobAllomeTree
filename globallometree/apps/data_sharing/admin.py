@@ -8,9 +8,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from apps.api.serializers import (
-    SimpleAllometricEquationSerializer,
-    SimpleWoodDensitySerializer,
-    SimpleRawDataSerializer
+    AllometricEquationSerializer,
+    WoodDensitySerializer,
+    RawDataSerializer
 )
 
 from . import models

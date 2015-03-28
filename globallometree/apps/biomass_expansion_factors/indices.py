@@ -7,8 +7,8 @@ from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 from globallometree.apps.biomass_expansion_factors.models import BiomassExpansionFactor
 from globallometree.apps.search_helpers.estypes import *
-from globallometree.apps.api.serializers import SimpleBiomassExpansionFactorSerializer
-from globallometree.apps.api.renderers import SimpleJSONRenderer
+from globallometree.apps.api.serializers import BiomassExpansionFactorSerializer
+from globallometree.apps.api.renderers import JSONRenderer
 
 class BiomassExpansionFactorIndex(MappingType, Indexable):
 
@@ -61,8 +61,8 @@ class BiomassExpansionFactorIndex(MappingType, Indexable):
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
-        obj_serialized = SimpleBiomassExpansionFactorSerializer(obj)
-        json_string = SimpleJSONRenderer().render(obj_serialized.data)
+        obj_serialized = BiomassExpansionFactorSerializer(obj)
+        json_string = JSONRenderer().render(obj_serialized.data)
         return json.loads(json_string)
 
 

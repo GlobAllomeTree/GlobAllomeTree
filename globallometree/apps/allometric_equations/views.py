@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import AllometricEquation
 from .forms import AllometricEquationSearchForm
 
-from globallometree.apps.api.serializers import SimpleAllometricEquationSerializer
+from globallometree.apps.api.serializers import AllometricEquationSerializer
 from globallometree.apps.search_helpers.views import LinkedModelSearchView
 from globallometree.apps.search_helpers.views import (
     record_by_id_view, 
@@ -45,5 +45,5 @@ def export(request):
     return export_view(request, 
                        doc_type="allometricequation", 
                        filename='allometric_equations',
-                       serializer=SimpleAllometricEquationSerializer)
+                       serializer=AllometricEquationSerializer)
     
