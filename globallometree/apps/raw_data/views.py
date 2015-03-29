@@ -23,6 +23,7 @@ def record_id(request, id):
     return record_by_id_view(
         request, 
         id, 
+        api_path="raw_data",
         model_class=RawData,
         record_content_template='raw_data/record_content.html',
         record_title='Raw Data %s' %  id

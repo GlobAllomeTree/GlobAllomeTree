@@ -852,10 +852,8 @@ class CountrySerializer(serializers.ModelSerializer):
 class DataLicenseSerializer(serializers.ModelSerializer):
     Permitted_use_text = fields.SerializerMethodField()
     def get_Permitted_use_text(self, obj):
-        if obj.Permitted_use == 'other':
-            return obj.Permitted_use_other_value
-        else:
-            return obj.get_Permitted_use_display()
+        return obj.get_Permitted_use_text()
+        
     class Meta:
         model = data_sharing_models.DataLicense        
         exclude = ('Created', 'Modified', 'User','Public_choice')
@@ -885,7 +883,7 @@ class DatasetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = data_sharing_models.Dataset
-        exclude = ('Created', 'Modified', 'User', 'Uploaded_data_file', 'Imported')
+        exclude = ('Created', 'Modified', 'User', 'Uploaded_dataset_file', 'Imported')
         read_only_fields = ('Data_license', 'Data_type_text', 'Record_count', 'Imported')
 
 class ReferenceSerializer(serializers.ModelSerializer):

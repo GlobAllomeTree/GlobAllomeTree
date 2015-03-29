@@ -23,7 +23,6 @@ class DataLicense(BaseModel):
         ('none', 'No expiry'),
         )
 
-
     Data_license_ID = models.AutoField(primary_key=True)
 
     Title = models.CharField(
@@ -31,9 +30,18 @@ class DataLicense(BaseModel):
         max_length=200,
         )
 
-    Restrictive = models.BooleanField(
-        default=True,
-        help_text="Normally True for custom licenses, but set to false for creative commons"
+    Requires_provider_approval = models.BooleanField(
+        verbose_name='Require my approval of each license grant',
+        help_text="Do you as the data provider wish to individually review and approve each license grant? \
+                   If you check the box, an email will be sent each time a user requests access to your data. \
+                   If the box is not checked, then users will be able to agree to the license themselves online before \
+                   bieing granted access to the data.",
+        default=True
+        )
+
+    Available_to_registered_users = models.BooleanField(
+        help_text="Is this license granted to all registered globallometree users?",
+        default=False
         )
 
     Public_choice = models.BooleanField(
@@ -113,6 +121,12 @@ class DataLicense(BaseModel):
         verbose_name="Expiry Date"
     )
 
+    def get_Permitted_use_text(self):
+        if self.Permitted_use == 'other':
+            return self.Permitted_use_other_value
+        else:
+            return self.get_Permitted_use_display()
+
     class Meta:
         db_table = "Data_license"
 
@@ -135,16 +149,26 @@ class Dataset(BaseModel):
         ('wood_density' , 'Wood Density Data'),
         ('allometric_equations' , 'Allometric Equations'),
     )
-  
+
     Title = models.CharField(
         max_length = 100,
         verbose_name = 'Dataset Title'
     )
 
-    Uploaded_data_file = models.FileField(
+    Uploaded_dataset_file = models.FileField(
         upload_to = "data_sharing",
-        verbose_name='Dataset File',
-        help_text="In json format"
+        verbose_name='Structured dataset file (csv, json, xml)',
+        blank=True,
+        null=True,
+        help_text="The structure must match the GlobAllomeTree API structure. Samples may be found on the right."
+    )
+
+    Uploaded_source_document = models.FileField(
+        upload_to = "data_sharing",
+        verbose_name='Source document with data in any format',
+        blank=True,
+        null=True,
+        help_text="The source document can be a pdf, excel file, word document or other with data in any format."
     )
 
     Description = models.TextField(
@@ -180,6 +204,14 @@ class Dataset(BaseModel):
         help_text="If this file has been imported into the GlobAllomeTree database yet or not"
         )
 
+    def is_editable(self):
+        if self.Data_type == 'allometric_equations' and not self.Imported:
+            return True
+        return False
+
+    def get_absolute_url(self):
+        return '/data/sharing/datasets/%s/' % self.pk
+
     def __unicode__(self):
         return self.Title
 
@@ -187,9 +219,15 @@ class Dataset(BaseModel):
         db_table = "Dataset"
 
 
-class DataRequest(BaseModel):
+class DataSharingAgreement(BaseModel):
 
-    Data_request_ID = models.AutoField(primary_key=True)
+    AGREEMENT_STATUS_CHOICES = (
+        ('requested', "Data license has been requested, but the provider has not responded."),
+        ('granted', "The data provider has granted a license for the data to the user."),
+        ('denied', "The data provider has denied the request to share data.")
+        )
+
+    Data_sharing_agreement_ID = models.AutoField(primary_key=True)
 
     User = models.ForeignKey(
         User,
@@ -200,13 +238,10 @@ class DataRequest(BaseModel):
     Dataset = models.ForeignKey(
         Dataset, db_column="Dataset_ID")
 
-    Granted = models.NullBooleanField(
-        help_text="If the owner of the data has granted access or not"
-        )
-
-    Responded = models.BooleanField(
-        help_text="If the owner of the data has responded"
+    Agreement_status = models.CharField(
+        max_length=15,
+        choices = AGREEMENT_STATUS_CHOICES
         )
 
     class Meta:
-        db_table = "Data_request"
+        db_table = "Data_sharing_agreement"

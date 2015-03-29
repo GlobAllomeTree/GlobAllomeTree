@@ -29,7 +29,6 @@ from .forms import (
 class DataSharingOverview(RestrictedPageMixin, TemplateView):
     template_name = "data_sharing/overview.html"
 
-
     def get_context_data(self, **kwargs):
         context = super(DataSharingOverview, self).get_context_data(**kwargs)
         return context
@@ -88,24 +87,42 @@ def upload_data(request):
     if request.method == 'POST':
         form = DatasetUploadForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
-            # Form is valid, now we actually try to parse and serialize the 
-            # data, give errors as feedback if needed
-            data, data_errors = validate_data_file(
-                form.cleaned_data['Uploaded_data_file'],
-                form.cleaned_data['Data_type'] 
-            )
 
-            if not(data_errors):
+            submission_method = request.POST.get('Submission_method')
+
+            if(submission_method == 'dataset'):
+
+                # Form is valid, now we actually try to parse and serialize the 
+                # data, give errors as feedback if needed
+                data, data_errors = validate_data_file(
+                    form.cleaned_data['Uploaded_dataset_file'],
+                    form.cleaned_data['Data_type'] 
+                )
+
+                if not(data_errors):
+                    dataset = form.save()
+                    # Keep the json for each dataset so it doesn't have to be
+                    # parsed out every single time
+                    dataset.Data_as_json = json.dumps(data)
+                    dataset.Record_count = len(data)
+                    dataset.save()
+
+                    return HttpResponseRedirect(
+                        reverse("data-sharing-upload-confirm", kwargs={'Dataset_ID':dataset.pk}) 
+                    )
+
+            elif(submission_method == 'document'):
                 dataset = form.save()
-                # Keep the json for each dataset so it doesn't have to be
-                # parsed out every single time
-                dataset.Data_as_json = json.dumps(data)
-                dataset.Record_count = len(data)
-                dataset.save()
-                
                 return HttpResponseRedirect(
                     reverse("data-sharing-upload-confirm", kwargs={'Dataset_ID':dataset.pk}) 
                 )
+
+            elif(submission_method == 'editor'):
+                dataset = form.save()
+                return HttpResponseRedirect(
+                    reverse("dataset-edit", kwargs={'Dataset_ID':dataset.pk}) 
+                )
+
     else:
         license_id = request.GET.get('license_id', None)
         form = DatasetUploadForm(initial={'Data_license':license_id}, user=request.user)
@@ -127,11 +144,10 @@ def dataset_detail(request, Dataset_ID):
     assert (dataset.User.pk == request.user.pk) \
         or dataset.Imported \
         or request.user.is_staff
-    dataset_serialized = DatasetSerializer(dataset).data
     return render_to_response(
         "data_sharing/dataset_detail.html",
         {
-          'dataset': dataset_serialized,
+          'dataset': dataset,
         },
         context_instance=RequestContext(request)
     )
@@ -175,16 +191,24 @@ class DatasetListView(RestrictedPageMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DatasetListView, self).get_context_data(**kwargs)
-        context['datasets'] = []
-        for dataset in self.object_list:
-            obj_serialized = DatasetSerializer(dataset).data
-            context['datasets'].append(obj_serialized)
+        context['datasets'] = self.get_queryset()
         return context
 
     def get_queryset(self, *args, **kwargs):
-       return Dataset.objects.filter(Imported=1)
+        if self.request.user.is_staff:
+            return Dataset.objects.all()
+        else:
+            return Dataset.objects.filter(Imported=1)
 
 
-
-
+@login_required(login_url='/accounts/login/')
+def my_data(request):
+    datasets = Dataset.objects.filter(User=request.user)
+    return render_to_response(
+        "data_sharing/my_data.html",
+        {
+          'datasets': datasets,
+        },
+        context_instance=RequestContext(request)
+    )
 

@@ -24,20 +24,21 @@ from .data_tools import(
 
 class DatasetForm(forms.ModelForm):
    
-   def clean_Uploaded_data_file(self):
-        extension = os.path.splitext(self.cleaned_data['Uploaded_data_file'].name.lower())[1]
-        if extension not in Parsers.keys():
-            valid_extensions = ", ".join(Parsers.keys())
-            raise forms.ValidationError("The uploaded file must end with one of the extensions:%s" % valid_extensions)
+   def clean_Uploaded_dataset_file(self):
+        if self.cleaned_data['Uploaded_dataset_file']:
+            extension = os.path.splitext(self.cleaned_data['Uploaded_dataset_file'].name.lower())[1]
+            if extension not in Parsers.keys():
+                valid_extensions = ", ".join(Parsers.keys())
+                raise forms.ValidationError("The uploaded file must end with one of the extensions:%s" % valid_extensions)
 
-        return self.cleaned_data['Uploaded_data_file']
+        return self.cleaned_data['Uploaded_dataset_file']
 
    def clean(self):
-        print "Clean"
-        if 'Uploaded_data_file' in self.cleaned_data.keys() and \
-        not hasattr(self.cleaned_data['Uploaded_data_file'], '_committed'):
+        if 'Uploaded_dataset_file' in self.cleaned_data.keys() and \
+        self.cleaned_data['Uploaded_dataset_file'] is not None and \
+        not hasattr(self.cleaned_data['Uploaded_dataset_file'], '_committed'):
                 data, data_errors = validate_data_file(
-                    self.cleaned_data['Uploaded_data_file'], 
+                    self.cleaned_data['Uploaded_dataset_file'], 
                     self.cleaned_data['Data_type']
                     )
                 # Since the file is ok, we keep a copy as json

@@ -11,12 +11,40 @@
         </div>
         <div class="panel-body">
           <div class="col-md-6">
-            <h4>Dataset details</h4>
+          <h4>Dataset details</h4>
           <table class="table">
-            <tr><td>Type</td><td>{{ dataset.Data_type_text }}</td></tr>
-            <tr><td>Description</td><td>{{ dataset.Description }}</td></tr>
+            <tr><td>Type</td><td>{{ dataset.get_Data_type_display }}</td></tr>
+            <tr><td colspan="2" >Description: <br>
+               <p style="whitespace:pre;color:#888;">{{ dataset.Description }}</p></td></tr>
             <tr><td>Record count</td><td>{{ dataset.Record_count }}</td></tr>
+            <tr><td>Imported</td><td>{% if dataset.Imported %} Yes {% else %} No {% endif %} </td></tr>
           </table>
+
+            {% if dataset.User != request.user %}
+              <h4>Your license to this Dataset</h4>
+              {% if dataset.Imported %}
+                {% if dataset.user_data_sharing_agreement %}
+                {% else %}
+                  <p> Request access to this dataset </p>
+                {% endif %}
+              {% else %}
+                  <p>This Dataset has not yet been imported. Please check back later to request access after the Dataset has been imported. </p>
+              {% endif %}
+            {% else %}
+              <h4>Dataset Access</h4>
+              <p>This is your dataset. For any modification to the Dataset, please contact the GlobAllomeTree administrator using the email globallometree@fao.org.</p>
+              {% if not dataset.Imported %}
+                <p>This dataset has not yet been imported. Users will be able to request access to this data after it has been imported into the GlobAllomeTree database.</p>
+              {% endif%}
+              <h4>License Grant Process</h4>
+              {% if dataset.Requires_provider_approval %}
+                <p>When a user would like to access this dataset, you will be sent an email requesting your approval before the license is granted.</p>
+              {% else %}
+                <p>Users will be able to agree online to the license themselves and you will not need to grant individual approvals.</p>
+              {% endif %}
+             
+            {% endif %}
+
         </div>
         <div class="col-md-6">
           <h4>License</h4>
@@ -102,7 +130,7 @@
               {% if dataset.Data_license.Permitted_use != 'unrestricted' %}
                 <tr>
                   <td colspan="2"><strong>Permitted Use</strong><br>
-                        {{ dataset.Data_license.Permitted_use_text }}
+                        {{ dataset.Data_license.get_Permitted_use_text }}
                   </td>
                 </tr>
               {% endif %}

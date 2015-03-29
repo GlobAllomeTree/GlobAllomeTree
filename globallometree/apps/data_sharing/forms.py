@@ -36,7 +36,7 @@ class DataLicenseForm(forms.ModelForm):
 
     class Meta:
         model = DataLicense
-        exclude = ('User', 'Restrictive', 'Public_choice', 'License_url')
+        exclude = ('User', 'Restrictive', 'Public_choice', 'License_url', 'Available_to_registered_users')
 
 
 class ExistingForm(forms.Form):
@@ -63,6 +63,17 @@ class CreativeForm(forms.Form):
 
 class DatasetUploadForm(forms.ModelForm):
 
+    SUBMISSION_CHOICES = (
+        ('', '--------'),
+        ('dataset', 'Upload a structured dataset in csv, json, or xml'),
+        ('document', 'Upload a source document such as excel or pdf that contains the data in any format'),
+        ('editor', 'Use the allometric equation editor to create the dataset'),
+        )
+
+    Submission_method = forms.ChoiceField(
+        choices=SUBMISSION_CHOICES
+        )
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(DatasetUploadForm, self).__init__(*args, **kwargs)
@@ -80,10 +91,12 @@ class DatasetUploadForm(forms.ModelForm):
     class Meta:
         model = Dataset
         fields = ('Title', 
-                  'Uploaded_data_file',   
                   'Description', 
-                  'Data_type', 
                   'Data_license',
+                  'Data_type', 
+                  'Submission_method',
+                  'Uploaded_dataset_file', 
+                  'Uploaded_source_document', 
                   )
 
 

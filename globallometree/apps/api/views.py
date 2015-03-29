@@ -12,7 +12,7 @@ from globallometree.apps.source.models import (
 from globallometree.apps.data_sharing.models import (
     DataLicense, 
     Dataset, 
-    DataRequest
+#    DataRequest
 )
 
 from globallometree.apps.taxonomy.models import (
