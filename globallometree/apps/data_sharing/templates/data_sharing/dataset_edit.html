@@ -80,13 +80,15 @@
   </script>
 
   <script type="text/template" id="templateEquation">
-    <div class="panel-heading" role="tab" id="heading<%- index %>">
-      <h3 class="panel-title">
-        <a href="#collapse<%- index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<% if(isExpanded) print("in") %>" aria-controls="collapse<%- index %>" class="pull-left">Equation <%- index + 1%></a>
+    <div class="panel-heading nav" role="tab" id="heading<%- index %>">
+      <h3 class="panel-title col-sm-11">
+        <a href="#collapse<%- index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<% if(isExpanded) print("in") %>" aria-controls="collapse<%- index %>" class=""><%- heading %></a>
       </h3>
-      <a href="#" class="remove" class="text-right" data-index="<%- index %>">
-        <span class="glyphicon glyphicon-remove"></span>
-      </a>
+      <div class="col-sm-1 text-right">
+        <a href="#" class="remove" class="pull-right" data-index="<%- index %>">
+          <span class="glyphicon glyphicon-remove"></span>
+        </a>
+      </div>
     </div>
     <div id="collapse<%- index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%- index %>">
       <div class="panel-body">
@@ -96,8 +98,14 @@
     </div>
   </script>
 
+  <script type="text/template" id="templateWell">
+    <div class="well">
+      <ul class="list-unstyled"></ul>
+    </div>
+  </script>
+
   <script type="text/template" id="templateInput">
-    <label for="<%- id %>" class="control-label col-sm-2"><%- label %></label>
+    <label for="<%- id %>" class="control-label col-sm-2"><%= label %></label>
     <div class="col-sm-6">
       <input type="text" name="<%- name %>" id="<%- id %>" value="<%- value %>" class="form-control">
     </div>
@@ -105,7 +113,7 @@
   </script>
 
   <script type="text/template" id="templateNumber">
-    <label for="<%- id %>" class="control-label col-sm-2"><%- label %></label>
+    <label for="<%- id %>" class="control-label col-sm-2"><%= label %></label>
     <div class="col-sm-2">
       <input type="number" name="<%- name %>" id="<%- id %>" value="<%- value %>" class="form-control">
     </div>
@@ -113,7 +121,7 @@
   </script>
 
   <script type="text/template" id="templateOption">
-    <label for="<%- id %>" class="control-label col-sm-2"><%- label %></label>
+    <label for="<%- id %>" class="control-label col-sm-2"><%= label %></label>
     <div class="col-sm-2">
       <select name="<%- name %>" id="<%- id %>" class="form-control">
       <% _.each(options, function (option) { %>

@@ -130,11 +130,6 @@
       
   });
 
-  // Equation Model
-  // ==============
-  Application.models.equation = Backbone.Model.extend({
-  });
-
   // Field Model
   // ===========
   //
@@ -377,6 +372,24 @@
   Application.models.field.lookup = Application.models.field.extend({
   });
 
+  Application.models.field.referenceWell = Backbone.Model.extend({
+
+    // Description:
+    // ------------
+    //
+    // Attaches `options` as a member of the instanced object.
+    //
+    // Parameters:
+    // -----------
+    //
+    // 1. `attrs` - object
+    // 2. `options` - object
+    initialize: function (attrs, options) {
+      this.options = options;
+    }
+
+  });
+
 
   // # Application Collections
   // ---------------------------------------------------------------------------
@@ -384,8 +397,6 @@
   // Equation Collection
   // ===================
   Application.collections.equation = Backbone.Collection.extend({
-    
-    model: Application.models.equation,
 
     // Description:
     // ------------
@@ -622,17 +633,17 @@
       }
     },
     
+    // Description:
+    //
+    // Return the corresponding entry from
+    // _Application.views.field[child.options.type]_.
+    //
     // Parameters:
     // -----------
     //
     // 1. `child` - Backbone.Model
     getChildView: function (child) {
-      if (typeof child.options.type === "string") {
-        return Application.views.field[child.options.type];
-      }
-      else if (child.options.type instanceof Backbone.View) {
-
-      }
+      return Application.views.field[child.options.type];
     },
 
     changeField: function (model, options) {
@@ -641,19 +652,26 @@
     
   });
 
+  // Nested Form Group View
+  // ======================
+  Application.views.field.group.well = Application.views.field.group.extend({
+
+    template: "#templateWell",
+    childViewContainer: "ul"
+
+  });
+
   // Reference View
   // ==============
-  Application.views.reference = Application.views.field.group.extend({
-
-    template: "#templateModal",
-    childViewContainer: "#equationModal",
+  Application.views.field.referenceWell = Application.views.field.group.well.extend({
 
     fields: [
       {name: "Label", options: {type: "char", maxLength: 20, nullable: true, blank: true}},
       {name: "Author", options: {type: "char", maxLength: 200, nullable: true, blank: true}},
       {name: "Year", options: {type: "char", maxLength: 12, nullable: true, blank: true}},
-      {name: "Reference", options: {type: "text", nullable: true, blank: true}}
+      {name: "Reference", options: {type: "char", nullable: true, blank: true}}
     ]
+
   });
 
   // Equation View
@@ -663,7 +681,36 @@
     template: "#templateEquation",
     className: "panel panel-default",
     childViewContainer: "ul",
-    
+
+    ui: {
+      "equationRemove": ".remove",
+      "heading": ".panel-heading h3 a"
+    },
+
+    modelEvents: {
+      "change:Equation": "changeEquation"
+    },
+
+    // Parameters:
+    // -----------
+    //
+    // 1. `model` - Backbone.Model
+    // 2. `options` - object
+    changeField: function (model, options) {
+      var name = model.get("name")
+        , value = model.get("value");
+
+      if (name === "Reference") {
+        value = model.clone();
+      }
+
+      this.model.set(name, value);
+    },
+
+    changeEquation: function(model, options) {
+      this.ui.heading.text(model.get("Equation"));
+    },
+
     fields: [
       {name: "X",                   options: {type: "char", maxLength: 20, nullable: true, blank: true}},
       {name: "Unit_X",              options: {type: "char", maxLength: 20, nullable: true, blank: true}},
@@ -709,25 +756,22 @@
       {name: "Segmented_equation",  options: {type: "nullBoolean"}},
       {name: "Sample_size",         options: {type: "char", maxLength: 150, nullable: true, blank: true}},
       {name: "Population",          options: {type: "lookup"}},
-      {name: "Tree_type",           options: {type: "lookup"}}
+      {name: "Tree_type",           options: {type: "lookup"}},
+      {name: "Reference",           options: {type: "referenceWell"}}
     ],
-
-    ui: {
-      "equationRemove": ".remove"
-    },
-
-    events: {
-      "click:equationRemove": "equationRemove"
-    },
     
     // Description:
     // ------------
     //
     // Sets some additional view variables.
     templateHelpers: function () {
+      var equation = this.model.get("Equation")
+        , heading = equation || "Equation "+(this.options.index + 1);
+
       return {
+        heading: heading,
         index: this.options.index,
-        isExpanded: this.options.index === 0 ? "true" : "false"
+        isExpanded: this.options.index === 0 ? true : false
       }
     }
     
@@ -791,6 +835,7 @@
       var clone = model.collection.clone()
         , self = this;
 
+      this.stopListening(model.collection);
       this.model.set("Data_as_json", clone);
       // NOTE: Neccesary call after changing the collection.
       this.model.listenToOnce(clone, "change", function () {
