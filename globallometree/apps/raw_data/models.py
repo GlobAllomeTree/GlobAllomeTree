@@ -146,8 +146,8 @@ class RawData(LinkedBaseModel):
         help_text="Biomass expansion factor")
 
     def get_serializer_class(self):
-        from globallometree.apps.api import SimpleRawDataSerializer
-        return SimpleRawDataSerializer
+        from globallometree.apps.api import RawDataSerializer
+        return RawDataSerializer
 
     def get_index_class(self):
         from globallometree.apps.raw_data.indices import RawDataIndex

@@ -6,7 +6,54 @@
 
 <script type="text/javascript">
 	$(function() {
-		
+
+		var $editorInfo = $('<p id="div_id_editor_info">On the next screen you will be able to create the dataset using the allometric equation editor.</p>');
+
+		$('#div_id_Uploaded_dataset_file').after($editorInfo);
+
+		var showSubmissionChoice = function () {			
+			var val = $('#id_Submission_method').val();
+
+			if(val == 'dataset') {
+				$('#div_id_Uploaded_dataset_file').slideDown()
+			} else {
+				$('#div_id_Uploaded_dataset_file').slideUp();	
+			}
+			if(val == 'document') {
+				$('#div_id_Uploaded_source_document').slideDown();
+			} else {
+				$('#div_id_Uploaded_source_document').slideUp();	
+			}
+			if(val == 'editor' ) {
+				$('#div_id_editor_info').slideDown();
+			} else {
+				$('#div_id_editor_info').slideUp();
+			}
+		};
+
+		var modifySubmisisonChoices = function () {
+			var val = $('#id_Data_type').val();
+
+			if(val == '') {
+				$('#div_id_Submission_method').slideUp();
+			} else {
+				$('#div_id_Submission_method').slideDown();
+			}
+
+			if(val == 'allometric_equations') {
+				$('option[value="editor"]').removeAttr('disabled').removeAttr('hidden');
+			} else {
+				$('option[value="editor"]').attr('disabled',true).attr('hidden', true).attr('selected', false);
+				showSubmissionChoice();
+			}
+		}
+
+		$('#id_Submission_method').change(showSubmissionChoice);
+		$('#id_Data_type').change(modifySubmisisonChoices);
+
+		showSubmissionChoice();
+		modifySubmisisonChoices();
+
 	});
 </script>
 
@@ -25,7 +72,7 @@
 		    	<form method="post" enctype="multipart/form-data">
 		    		{% csrf_token %}
 		   	 		{{form|crispy}}
-		   	 		<button type="submit" class="btn btn-success pull-right">Validate and upload dataset</button>
+		   	 		<button type="submit" class="btn btn-success pull-right">Submit</button>
 		   	 	</form>
 		    </p>
 		    
@@ -90,9 +137,5 @@
     {% endif %}
 
 </div>
-{% if include_jquery %}
-	<script type="text/javascript" src="/static/cms/js/libs/jquery.min.js"></script>
-
-{% endif %}
 
 {% endblock %}

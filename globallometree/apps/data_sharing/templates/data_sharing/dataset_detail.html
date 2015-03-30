@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
+
+{% block script %}
+
+<script type="text/javascript">
+  $(function() {
+    $('#request-access-button').click(function(event) {
+      if (! $("#terms-checkbox").is( ":checked" )) {
+        event.preventDefault();
+        $("#terms-checkbox-wrapper").addClass('has-error');
+        $("#terms-notification").slideDown();
+      } 
+    });
+  });
+</script>
+
+{% endblock %}
+
 {% block content %}
 
 <div class="row">
@@ -11,14 +28,16 @@
         </div>
         <div class="panel-body">
           <div class="col-md-6">
-            <h4>Dataset details</h4>
+          <h4>Dataset details</h4>
           <table class="table">
-            <tr><td>Type</td><td>{{ dataset.Data_type_text }}</td></tr>
-            <tr><td>Description</td><td>{{ dataset.Description }}</td></tr>
+            <tr><td>Type</td><td>{{ dataset.get_Data_type_display }}</td></tr>
+            <tr><td colspan="2" >Description: <br>
+               <p style="whitespace:pre;color:#888;">{{ dataset.Description }}</p></td></tr>
             <tr><td>Record count</td><td>{{ dataset.Record_count }}</td></tr>
+            <tr><td>Imported</td><td>{% if dataset.Imported %} Yes {% else %} No {% endif %} </td></tr>
           </table>
-        </div>
-        <div class="col-md-6">
+
+
           <h4>License</h4>
           {% if dataset.Data_license %}
             <table class="table">
@@ -102,7 +121,7 @@
               {% if dataset.Data_license.Permitted_use != 'unrestricted' %}
                 <tr>
                   <td colspan="2"><strong>Permitted Use</strong><br>
-                        {{ dataset.Data_license.Permitted_use_text }}
+                        {{ dataset.Data_license.get_Permitted_use_text }}
                   </td>
                 </tr>
               {% endif %}
@@ -111,6 +130,75 @@
           {% else %}
             <h5>License not specified</h5>
           {% endif %}
+
+        </div>
+        <div class="col-md-6">
+          <h4>Dataset Access</h4>
+            {% if dataset.User != request.user %}
+              {% if dataset.Imported %}
+                {% if data_sharing_agreement %}
+                    {% if data_sharing_agreement.Agreement_status == 'granted' %}
+                       <h5 style="color:green">Granted</h5>
+                       <p> You have agreed to the license, terms of use, and conditions for this dataset and have a data sharing agreement with the provider for this dataset.</p>
+                       <p> The data sharing agreement allows you to access the restricted values from this dataset when using the search, export features, and GlobAllomeTree API.</p>
+                    {% elif data_sharing_agreement.Agreement_status == 'pending' %}
+                      <h5 style="color:orange">Pending data provider response</h5>
+                      <p> Your request for access to this dataset has been sent to the 
+                          provider. Once the provider has responded, you will be sent an
+                          email with the reply.</p>
+                    {% elif data_sharing_agreement.Agreement_status == 'denied' %}
+                      <h5 style="color:red">Access not granted</h5>
+                      <p> Your request for access to this dataset was not accepted by the data provider. </p>
+                    {% endif %}
+                {% else %}
+
+                  <form method="post" action=".">{% csrf_token %}
+
+                    <p> You do not currently have a data sharing agreement to use this dataset. </p>
+
+                    {% if dataset.Data_license.Requires_provider_approval %}
+                      <p>Provider approval is required for each request to use this dataset. After you confirm that you agree to the license and terms of use, a request will be sent to the data provider to review. After access has been granted, then you will recieve an email. </p>
+
+                    {% else %}
+                       <p>Please review the license, terms and permitted use for this dataset. If you agree, then you will be able to access this dataset immediately.</p>
+
+                    {% endif %}
+                    <p> The data sharing agreement will permit you to access the restricted values from this dataset when using the search, export features, and GlobAllomeTree API.</p>
+                    <div id="terms-checkbox-wrapper">
+                      <div class="checkbox">
+                      <label><input type="checkbox" id="terms-checkbox"> I agree to the license, terms and permitted use for this dataset. </label>
+                      </div>
+                      <p id="terms-notification" style="display:none;color:#a94442;"> <br>Please accept the terms and conditions to continue!</p>
+                    </div>
+
+                    <button class="btn btn-success" id="request-access-button">
+                      {% if dataset.Data_license.Requires_provider_approval %}
+                        Send request to create a data sharing agreement
+                      {% else %}
+                        Create data sharing agreement
+                      {% endif %}
+                    </button>
+                  
+                  </form>
+                {% endif %}
+              {% else %}
+                  <p>This Dataset has not yet been imported. Please check back later to request access after the Dataset has been imported. </p>
+              {% endif %}
+            {% else %}
+             
+              <p>This is your dataset. For any modification to the dataset, please contact the GlobAllomeTree administrator using the email globallometree@fao.org.</p>
+              {% if not dataset.Imported %}
+                <p>This dataset has not yet been imported. Users will be able to request access to this data after it has been imported into the GlobAllomeTree database.</p>
+              {% endif%}
+              <h4>License Grant Process</h4>
+              {% if dataset.Requires_provider_approval %}
+                <p>When a user would like to access this dataset, you will be sent an email requesting your approval before the license is granted.</p>
+              {% else %}
+                <p>Users will be able to agree online to the license themselves and you will not need to grant individual approvals.</p>
+              {% endif %}
+             
+            {% endif %}
+
         </div>
       </div>
     </div>

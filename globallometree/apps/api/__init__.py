@@ -1,14 +1,14 @@
 
 from .serializers import (
-    SimpleAllometricEquationSerializer,
-    SimpleWoodDensitySerializer,
-    SimpleRawDataSerializer,
-    SimpleBiomassExpansionFactorSerializer
+    AllometricEquationSerializer,
+    WoodDensitySerializer,
+    RawDataSerializer,
+    BiomassExpansionFactorSerializer
 )
 
 from .renderers import (
-    SimpleJSONRenderer,
-    SimpleXMLRenderer
+    JSONRenderer,
+    XMLRenderer
 )
 
 from rest_framework.parsers import JSONParser
@@ -16,10 +16,10 @@ from rest_framework_xml.parsers import XMLParser
 
 
 Serializers = {
-                'raw_data': SimpleRawDataSerializer,
-                'biomass_expansion': SimpleBiomassExpansionFactorSerializer,
-                'wood_density': SimpleWoodDensitySerializer,
-                'allometric_equations': SimpleAllometricEquationSerializer
+                'raw_data': RawDataSerializer,
+                'biomass_expansion': BiomassExpansionFactorSerializer,
+                'wood_density': WoodDensitySerializer,
+                'allometric_equations': AllometricEquationSerializer
             }
 
 Parsers = {
@@ -29,8 +29,8 @@ Parsers = {
             }
 
 Renderers = {
-				 '.json': SimpleJSONRenderer,
-			     '.xml': SimpleXMLRenderer,
+				 '.json': JSONRenderer,
+			     '.xml': XMLRenderer,
 			     '.csv': None
 			}
 

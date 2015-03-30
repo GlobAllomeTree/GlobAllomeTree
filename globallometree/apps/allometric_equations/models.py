@@ -128,8 +128,8 @@ class AllometricEquation(LinkedBaseModel):
         return '/data/allometric-equations/%s' % self.ID
 
     def get_serializer_class(self):
-        from globallometree.apps.api import SimpleAllometricEquationSerializer
-        return SimpleAllometricEquationSerializer
+        from globallometree.apps.api import AllometricEquationSerializer
+        return AllometricEquationSerializer
 
     def get_index_class(self):
         from globallometree.apps.allometric_equations.indices import AllometricEquationIndex

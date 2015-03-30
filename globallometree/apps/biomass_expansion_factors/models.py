@@ -51,8 +51,8 @@ class BiomassExpansionFactor(LinkedBaseModel):
         )
 
     def get_serializer_class(self):
-        from globallometree.apps.api import SimpleBiomassExpansionFactorSerializer
-        return SimpleBiomassExpansionFactorSerializer
+        from globallometree.apps.api import BiomassExpansionFactorSerializer
+        return BiomassExpansionFactorSerializer
 
     def get_index_class(self):
         from globallometree.apps.biomass_expansion_factors.indices import BiomassExpansionFactorIndex

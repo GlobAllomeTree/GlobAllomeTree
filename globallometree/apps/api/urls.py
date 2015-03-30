@@ -27,7 +27,7 @@ from globallometree.apps.api.views import (
 	LocationGroupViewSet,
 	DataLicenseViewSet, 
 	DatasetViewSet,
-	DataRequestViewSet,
+	#DataRequestViewSet,
 	InstitutionViewSet,
 	BiomassExpansionFactorViewSet
 	)
@@ -66,7 +66,7 @@ router.register(r'divisions-bailey', DivisionBaileyViewSet)
 
 router.register(r'data-sharing-agreements',DataLicenseViewSet)
 router.register(r'datasets',DatasetViewSet)
-router.register(r'data-requests',DataRequestViewSet)
+#router.register(r'data-requests',DataRequestViewSet)
 router.register(r'biomass-expansion-factors', BiomassExpansionFactorViewSet)
 
 urlpatterns = patterns('',

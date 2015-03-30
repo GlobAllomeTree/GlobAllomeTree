@@ -7,8 +7,8 @@ from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 from globallometree.apps.wood_densities.models import WoodDensity
 from globallometree.apps.search_helpers.estypes import *
-from globallometree.apps.api.serializers import SimpleWoodDensitySerializer
-from globallometree.apps.api.renderers import SimpleJSONRenderer
+from globallometree.apps.api.serializers import WoodDensitySerializer
+from globallometree.apps.api.renderers import JSONRenderer
 
 class WoodDensityIndex(MappingType, Indexable):
 
@@ -77,8 +77,8 @@ class WoodDensityIndex(MappingType, Indexable):
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
-        obj_serialized = SimpleWoodDensitySerializer(obj)
-        json_string = SimpleJSONRenderer().render(obj_serialized.data)
+        obj_serialized = WoodDensitySerializer(obj)
+        json_string = JSONRenderer().render(obj_serialized.data)
         return json.loads(json_string)
 
 

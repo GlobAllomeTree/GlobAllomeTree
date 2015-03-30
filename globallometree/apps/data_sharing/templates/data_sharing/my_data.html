@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block script %}
+
+<script type="text/javascript">
+	$(function() {
+
+	});
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+   	    <h3>My Data</h3> 
+
+   	    <h4>Datasets</h4>
+   	    {% if datasets %} 
+   	    	<table class="table">
+   	    	<thead>
+	   	    	<tr>
+	   	    		<th>Dataset</th>
+	   	    		<th>Data type</th>
+	   	    		<th>Imported</th>
+	   	    		<th>License</th>
+	   	    		<th>Actions</th>
+	   	    	</tr>
+   	    	</thead>
+   	    	{% for dataset in datasets %}
+   	    		<tr>
+   	    			<td> {{ dataset.Title }} </td>
+   	    			<td> {{ dataset.get_Data_type_display }} </td>
+   	    			<td> {% if dataset.Imported %} Yes {% else %} No {% endif %} </td>
+   	    			<td> {{ dataset.Data_license.Title }} </td>
+   	    			<td> <a href="/data/sharing/datasets/{{ dataset.Dataset_ID }}/"			
+					        class="btn btn-default btn-xs"> 		
+							View 							
+						</a>
+						{% if dataset.is_editable %}
+						<a href="/data/sharing/datasets/{{ dataset.Dataset_ID }}/edit/"		
+					        class="btn btn-default btn-xs"> 		
+							Edit							
+						</a>
+						{% endif %}
+					 </td>
+   	    		</tr>
+   	    	{% endfor %}
+   	    	</table>
+   	    {% endif %}
+    </div>
+</div>
+
+{% endblock %}

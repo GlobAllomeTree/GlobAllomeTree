@@ -118,8 +118,8 @@ class WoodDensity(LinkedBaseModel):
     #CV Formula SD/Density if Density is an average Formula: IF(BH2="NA","NA",BH2/BA2)
 
     def get_serializer_class(self):
-        from globallometree.apps.api import SimpleWoodDensitySerializer
-        return SimpleWoodDensitySerializer
+        from globallometree.apps.api import WoodDensitySerializer
+        return WoodDensitySerializer
 
     def get_index_class(self):
         from globallometree.apps.wood_densities.indices import WoodDensityIndex

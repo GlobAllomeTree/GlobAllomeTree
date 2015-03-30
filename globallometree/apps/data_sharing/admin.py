@@ -8,9 +8,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from apps.api.serializers import (
-    SimpleAllometricEquationSerializer,
-    SimpleWoodDensitySerializer,
-    SimpleRawDataSerializer
+    AllometricEquationSerializer,
+    WoodDensitySerializer,
+    RawDataSerializer
 )
 
 from . import models
@@ -24,20 +24,21 @@ from .data_tools import(
 
 class DatasetForm(forms.ModelForm):
    
-   def clean_Uploaded_data_file(self):
-        extension = os.path.splitext(self.cleaned_data['Uploaded_data_file'].name.lower())[1]
-        if extension not in Parsers.keys():
-            valid_extensions = ", ".join(Parsers.keys())
-            raise forms.ValidationError("The uploaded file must end with one of the extensions:%s" % valid_extensions)
+   def clean_Uploaded_dataset_file(self):
+        if self.cleaned_data['Uploaded_dataset_file']:
+            extension = os.path.splitext(self.cleaned_data['Uploaded_dataset_file'].name.lower())[1]
+            if extension not in Parsers.keys():
+                valid_extensions = ", ".join(Parsers.keys())
+                raise forms.ValidationError("The uploaded file must end with one of the extensions:%s" % valid_extensions)
 
-        return self.cleaned_data['Uploaded_data_file']
+        return self.cleaned_data['Uploaded_dataset_file']
 
    def clean(self):
-        print "Clean"
-        if 'Uploaded_data_file' in self.cleaned_data.keys() and \
-        not hasattr(self.cleaned_data['Uploaded_data_file'], '_committed'):
+        if 'Uploaded_dataset_file' in self.cleaned_data.keys() and \
+        self.cleaned_data['Uploaded_dataset_file'] is not None and \
+        not hasattr(self.cleaned_data['Uploaded_dataset_file'], '_committed'):
                 data, data_errors = validate_data_file(
-                    self.cleaned_data['Uploaded_data_file'], 
+                    self.cleaned_data['Uploaded_dataset_file'], 
                     self.cleaned_data['Data_type']
                     )
                 # Since the file is ok, we keep a copy as json
@@ -114,9 +115,9 @@ class DatasetAdmin(admin.ModelAdmin):
             #Now that we have one row, we get the data submission from the query set
             dataset = queryset[0]
 
-        # if dataset.Imported:
-        #     messages.error(request, "That dataset selected has already been imported")
-        #     return None
+        if dataset.Imported:
+            messages.error(request, "That dataset selected has already been imported")
+            return None
      
         
         data = json.loads(dataset.Data_as_json)
@@ -143,5 +144,12 @@ class DataLicenseAdmin(admin.ModelAdmin):
     search_fields  = ['Title',]
     raw_id_fields = ('User',)
 
+
+class DataSharingAgreementAdmin(admin.ModelAdmin):
+    list_display = ('Dataset', 'User', 'Agreement_status',)
+    raw_id_fields = ('User',)
+
 admin.site.register(models.Dataset, DatasetAdmin)
 admin.site.register(models.DataLicense, DataLicenseAdmin)
+admin.site.register(models.DataSharingAgreement, DataSharingAgreementAdmin)
+

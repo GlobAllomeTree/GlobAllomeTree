@@ -11,5 +11,6 @@ urlpatterns = patterns('apps.data_sharing.views',
     url(r'^upload-confirm/(?P<Dataset_ID>\d+)/$', "upload_confirm", name="data-sharing-upload-confirm"),
     url(r'^datasets/(?P<Dataset_ID>\d+)/$', "dataset_detail", name="data-sharing-dataset-detail"),
     url(r'^datasets/$',  DatasetListView.as_view(), name="data-sharing-datasets"),
-    url(r'^datasets/(?P<Dataset_ID>\d+)/edit/$', 'dataset_edit', name="dataset-edit")
+    url(r'^datasets/(?P<Dataset_ID>\d+)/edit/$', 'dataset_edit', name="dataset-edit"),
+    url(r'^my-data/', 'my_data', name="my-data")
 )

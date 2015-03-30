@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import WoodDensity
 from .forms import WoodDensitySearchForm
 
-from globallometree.apps.api.serializers import SimpleWoodDensitySerializer
+from globallometree.apps.api.serializers import WoodDensitySerializer
 from globallometree.apps.search_helpers.views import LinkedModelSearchView
 from globallometree.apps.search_helpers.views import (
     record_by_id_view, 
@@ -46,5 +46,6 @@ def export(request):
     return export_view(request, 
                        doc_type="wooddensity", 
                        filename='wood_densities',
-                       serializer=SimpleWoodDensitySerializer)
-    
+                       serializer=WoodDensitySerializer)
+
+ 
