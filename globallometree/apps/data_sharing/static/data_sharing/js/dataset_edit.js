@@ -855,8 +855,8 @@
       this.model.trigger("change");
     },
 
-    collectionRemove: function () {
-      this.render()
+    collectionRemove: function (model, options) {
+      this.model.trigger("change");
     },
 
     
@@ -875,10 +875,13 @@
     //
     // Removes the equation when clicked.
     uiEquationRemove: function (event) {
-      var element = $(event.currentTarget)
-        , index = element.data("index");
+      var self = this;
 
-      this.collection.remove(this.collection.at(element.data("index")));
+      this.children.each(function (child, index) {
+        if (child.ui.equationRemove[0] === event.currentTarget) {
+          self.collection.remove(self.collection.at(index));
+        }
+      })
     },
 
     uiFormSubmit: function () {
