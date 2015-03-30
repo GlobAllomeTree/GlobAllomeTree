@@ -18,19 +18,20 @@
 <div class="row">
     <div class="col-md-12">
    	    <h3>My Data</h3> 
-
+   	    <br>
    	    <h4>Datasets</h4>
    	    {% if datasets %} 
    	    	<table class="table">
    	    	<thead>
 	   	    	<tr>
-	   	    		<th>Dataset</th>
+	   	    		<th style="width:320px">Dataset</th>
 	   	    		<th>Data type</th>
 	   	    		<th>Imported</th>
 	   	    		<th>License</th>
-	   	    		<th>Actions</th>
+	   	    		<th style="width:120px">Actions</th>
 	   	    	</tr>
    	    	</thead>
+            <tbody>
    	    	{% for dataset in datasets %}
    	    		<tr>
    	    			<td> {{ dataset.Title }} </td>
@@ -50,8 +51,54 @@
 					 </td>
    	    		</tr>
    	    	{% endfor %}
+            </tbody>
    	    	</table>
+
+   	    	<br>
+   	    	<h4>Requests made for your shared data</h4>
+   	    	{% if requests_made_to_user %} 
+
+	   	    {% else %}
+	   	    	<p> There have not been any requests made for your data yet. </p>
+	   	    {% endif %}
+
+   	    {% else %}
+   	   		<p> You have not yet uploaded any datasets </p>
    	    {% endif %}
+
+   	    <br>
+
+   	    <h4>Datasets you have requested access to</h4>
+   	    {% if requests_made_by_user %} 
+          <table class="table">
+          <thead>
+          <tr>
+            <th style="width:320px">Dataset</th>
+            <th>Data type</th>
+            <th>Access</th>
+            <th style="width:120px">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+   	    	{% for request_made_by_user in requests_made_by_user %}
+            <tr>
+   	    		<td>{{ request_made_by_user.Dataset.Title }}</td>
+               <td>{{ request_made_by_user.Dataset.get_Data_type_display }}</td>
+   	    		<td>{{ request_made_by_user.get_Agreement_status_display }}</td>
+               <td> <a href="/data/sharing/datasets/{{ request_made_by_user.Dataset.Dataset_ID }}/"         
+                       class="btn btn-default btn-xs">      
+                     View dataset                   
+                  </a></td>
+            </tr>
+   	    	{% endfor %}
+          </tbody>
+          </table>
+   	    {% else %}
+   	    	<p>You have not yet made any requests to access data shared by others.</p>
+   	    {% endif %}
+
+   	   
+
     </div>
 </div>
 
