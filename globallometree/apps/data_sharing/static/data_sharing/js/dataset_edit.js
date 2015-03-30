@@ -697,6 +697,8 @@
     // 1. `model` - Backbone.Model
     // 2. `options` - object
     changeField: function (model, options) {
+
+      console.log("test")
       var name = model.get("name")
         , value = model.get("value");
 
@@ -832,16 +834,11 @@
     // Clones the _Data\_as\_json_ collection and binds a change event listener
     // to the parent model.
     changeCollection: function (model, options) {
-      var clone = model.collection.clone()
-        , self = this;
+      var clone = model.collection.clone();
 
-      this.stopListening(model.collection);
       this.model.set("Data_as_json", clone);
-      // NOTE: Neccesary call after changing the collection.
-      this.model.listenToOnce(clone, "change", function () {
-        // NOTE: Subsequent change events will call this function recursively.
-        self.changeCollection.apply(self, arguments)
-      });
+      this.collection = clone;
+      this._initialEvents();
     },
 
 
