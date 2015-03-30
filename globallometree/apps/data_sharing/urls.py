@@ -12,5 +12,6 @@ urlpatterns = patterns('apps.data_sharing.views',
     url(r'^datasets/(?P<Dataset_ID>\d+)/$', "dataset_detail", name="data-sharing-dataset-detail"),
     url(r'^datasets/$',  DatasetListView.as_view(), name="data-sharing-datasets"),
     url(r'^datasets/(?P<Dataset_ID>\d+)/edit/$', 'dataset_edit', name="dataset-edit"),
+    url(r'^agreement/(?P<Data_sharing_agreement_ID>\d+)/$', 'agreement', name="dataset-agreement"),
     url(r'^my-data/', 'my_data', name="my-data")
 )
