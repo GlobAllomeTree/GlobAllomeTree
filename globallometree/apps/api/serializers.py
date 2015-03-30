@@ -870,6 +870,7 @@ class DatasetSerializer(serializers.ModelSerializer):
         instance.Data_as_json = validated_data.get('Data_as_json', instance.Data_as_json)
         instance.Title = validated_data.get('Title', instance.Title)
         instance.Description = validated_data.get('Description', instance.Description)
+        instance.save()
         return instance
 
     def to_representation(self, obj):
