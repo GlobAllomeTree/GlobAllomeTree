@@ -374,6 +374,10 @@
 
   Application.models.field.referenceWell = Backbone.Model.extend({
 
+    defaults: {
+      value: {}
+    },
+
     // Description:
     // ------------
     //
@@ -386,7 +390,13 @@
     // 2. `options` - object
     initialize: function (attrs, options) {
       this.options = options;
-    }
+    },
+
+
+    get: function (key, options) {
+      var out = Backbone.Model.prototype.get.call(this, key, options);
+      return out;
+    },
 
   });
 
@@ -665,12 +675,39 @@
   // ==============
   Application.views.field.referenceWell = Application.views.field.group.well.extend({
 
+    defaults: {
+      value: {}
+    },
+
+    initialize: function (options) {
+      var i
+        , field
+        , values = options.model.get("value") || {}
+
+      this.collection = new Application.collections.field();
+
+      for (i = 0; i < this.fields.length; i += 1) {
+        field = this.fields[i];
+
+        this.collection.add(
+          { name: field.name, value: values[field.name]},
+          field.options
+        )
+      }
+    },
+
     fields: [
       {name: "Label", options: {type: "char", maxLength: 20, nullable: true, blank: true}},
       {name: "Author", options: {type: "char", maxLength: 200, nullable: true, blank: true}},
       {name: "Year", options: {type: "char", maxLength: 12, nullable: true, blank: true}},
       {name: "Reference", options: {type: "char", nullable: true, blank: true}}
-    ]
+    ],
+
+    changeField: function (model, options) {
+      var out = _.clone(this.model.get("value"))
+      out[model.get("name")] = model.get("value");
+      this.model.set("value", out);
+    },
 
   });
 
@@ -689,24 +726,6 @@
 
     modelEvents: {
       "change:Equation": "changeEquation"
-    },
-
-    // Parameters:
-    // -----------
-    //
-    // 1. `model` - Backbone.Model
-    // 2. `options` - object
-    changeField: function (model, options) {
-
-      console.log("test")
-      var name = model.get("name")
-        , value = model.get("value");
-
-      if (name === "Reference") {
-        value = model.clone();
-      }
-
-      this.model.set(name, value);
     },
 
     changeEquation: function(model, options) {
@@ -806,12 +825,11 @@
       "click @ui.equationRemove": "uiEquationRemove"
     },
 
-
     // Collection Events
     // -----------------
     collectionEvents: {
-      "change": "changeCollection",
-      "remove": "childRemove"
+      "change": "collectionChange",
+      "remove": "collectionRemove"
     },
     
     // Description:
@@ -833,21 +851,14 @@
     //
     // Clones the _Data\_as\_json_ collection and binds a change event listener
     // to the parent model.
-    changeCollection: function (model, options) {
-      var clone = model.collection.clone();
-
-      this.model.set("Data_as_json", clone);
-      this.collection = clone;
-      this._initialEvents();
+    collectionChange: function (model, options) {
+      this.model.trigger("change");
     },
 
-
-    // Description:
-    //
-    // Re-renders the collection when a child is removed.
-    childRemove: function (model, options) {
-      this.render();
+    collectionRemove: function (model, options) {
+      this.model.trigger("change");
     },
+
     
     // Description:
     //
@@ -864,10 +875,13 @@
     //
     // Removes the equation when clicked.
     uiEquationRemove: function (event) {
-      var element = $(event.currentTarget)
-        , index = element.data("index");
+      var self = this;
 
-      this.collection.remove(this.collection.at(element.data("index")));
+      this.children.each(function (child, index) {
+        if (child.ui.equationRemove[0] === event.currentTarget) {
+          self.collection.remove(self.collection.at(index));
+        }
+      })
     },
 
     uiFormSubmit: function () {
