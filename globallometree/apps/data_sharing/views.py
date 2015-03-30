@@ -16,7 +16,12 @@ from apps.api.serializers import DatasetSerializer
 from apps.accounts.mixins import RestrictedPageMixin
 
 from .data_tools import validate_records, validate_data_file
-from .models import Dataset
+from .models import (
+    Dataset, 
+    DataSharingAgreement, 
+    DataLicense
+    )
+
 from .forms import ( 
     DataLicenseForm, 
     LicenseChoiceForm, 
@@ -141,13 +146,37 @@ def upload_data(request):
 @login_required(login_url='/accounts/login/')
 def dataset_detail(request, Dataset_ID):
     dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
-    assert (dataset.User.pk == request.user.pk) \
-        or dataset.Imported \
-        or request.user.is_staff
+    notify = None
+
+    try:
+        data_sharing_agreement = DataSharingAgreement.objects.get(
+            User=request.user,
+            Dataset=dataset
+            )
+    except DataSharingAgreement.DoesNotExist:
+        data_sharing_agreement = None
+
+    if request.method == 'POST' and \
+       dataset.Imported and \
+       data_sharing_agreement is None:        
+        data_sharing_agreement = DataSharingAgreement.objects.create(
+            User=request.user,
+            Dataset=dataset
+            )
+        license = dataset.Data_license
+
+        if license.Requires_provider_approval:
+            data_sharing_agreement.Agreement_status = 'pending'   
+            # send email
+        else:
+            data_sharing_agreement.Agreement_status = 'granted'
+        data_sharing_agreement.save()
+
     return render_to_response(
         "data_sharing/dataset_detail.html",
         {
-          'dataset': dataset,
+          'data_sharing_agreement' : data_sharing_agreement,
+          'dataset': dataset
         },
         context_instance=RequestContext(request)
     )
@@ -195,18 +224,26 @@ class DatasetListView(RestrictedPageMixin, ListView):
         return context
 
     def get_queryset(self, *args, **kwargs):
-        if self.request.user.is_staff:
-            return Dataset.objects.all()
-        else:
-            return Dataset.objects.filter(Imported=1)
+        return Dataset.objects.filter(Imported=1)
 
 
 @login_required(login_url='/accounts/login/')
 def my_data(request):
     datasets = Dataset.objects.filter(User=request.user)
+    
+    requests_made_for_user_data = DataSharingAgreement.objects.filter(
+        Dataset__User=request.user
+        )
+    
+    requests_made_by_user = DataSharingAgreement.objects.filter(
+        User=request.user
+        )
+
     return render_to_response(
         "data_sharing/my_data.html",
         {
+          'requests_made_to_user': requests_made_for_user_data,
+          'requests_made_by_user': requests_made_by_user,
           'datasets': datasets,
         },
         context_instance=RequestContext(request)

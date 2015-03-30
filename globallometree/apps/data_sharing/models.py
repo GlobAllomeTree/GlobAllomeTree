@@ -222,9 +222,9 @@ class Dataset(BaseModel):
 class DataSharingAgreement(BaseModel):
 
     AGREEMENT_STATUS_CHOICES = (
-        ('requested', "Data license has been requested, but the provider has not responded."),
-        ('granted', "The data provider has granted a license for the data to the user."),
-        ('denied', "The data provider has denied the request to share data.")
+        ('pending', "Pending provider response"),
+        ('granted', "Granted"),
+        ('denied', "Denied")
         )
 
     Data_sharing_agreement_ID = models.AutoField(primary_key=True)

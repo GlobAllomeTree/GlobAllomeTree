@@ -115,9 +115,9 @@ class DatasetAdmin(admin.ModelAdmin):
             #Now that we have one row, we get the data submission from the query set
             dataset = queryset[0]
 
-        # if dataset.Imported:
-        #     messages.error(request, "That dataset selected has already been imported")
-        #     return None
+        if dataset.Imported:
+            messages.error(request, "That dataset selected has already been imported")
+            return None
      
         
         data = json.loads(dataset.Data_as_json)
@@ -144,5 +144,12 @@ class DataLicenseAdmin(admin.ModelAdmin):
     search_fields  = ['Title',]
     raw_id_fields = ('User',)
 
+
+class DataSharingAgreementAdmin(admin.ModelAdmin):
+    list_display = ('Dataset', 'User', 'Agreement_status',)
+    raw_id_fields = ('User',)
+
 admin.site.register(models.Dataset, DatasetAdmin)
 admin.site.register(models.DataLicense, DataLicenseAdmin)
+admin.site.register(models.DataSharingAgreement, DataSharingAgreementAdmin)
+
