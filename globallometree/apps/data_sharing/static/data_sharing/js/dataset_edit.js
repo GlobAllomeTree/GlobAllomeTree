@@ -711,6 +711,14 @@
       {name: "Population",          options: {type: "lookup"}},
       {name: "Tree_type",           options: {type: "lookup"}}
     ],
+
+    ui: {
+      "equationRemove": ".remove"
+    },
+
+    events: {
+      "click:equationRemove": "equationRemove"
+    },
     
     // Description:
     // ------------
@@ -738,23 +746,26 @@
     ui: {
       "equationAdd": "#equationAdd",
       "form": "form",
-      "editField": ".editField"
+      "editField": ".editField",
+      "equationRemove": ".remove"
     },
     
     // User Interface Events
     // ---------------------
     events: {
-      "click @ui.equationAdd": "equationAdd",
-      "submit @ui.form": "formSubmit",
-      "click @ui.editField .read a": "fieldEdit",
-      "click @ui.editField .edit a": "fieldSubmit"
+      "click @ui.equationAdd": "uiEquationAdd",
+      "submit @ui.form": "uiFormSubmit",
+      "click @ui.editField .read a": "uiFieldEdit",
+      "click @ui.editField .edit a": "uiFieldSubmit",
+      "click @ui.equationRemove": "uiEquationRemove"
     },
 
 
     // Collection Events
     // -----------------
     collectionEvents: {
-      "change": "changeCollection"
+      "change": "changeCollection",
+      "remove": "childRemove"
     },
     
     // Description:
@@ -787,21 +798,46 @@
         self.changeCollection.apply(self, arguments)
       });
     },
+
+
+    // Description:
+    //
+    // Re-renders the collection when a child is removed.
+    childRemove: function (model, options) {
+      this.render();
+    },
     
     // Description:
     //
     // This function is called when the "Add Equation" button element is
     // clicked.
-    equationAdd: function () {
+    //
+    // TODO: Find out why this is not firing.
+    uiEquationAdd: function () {
       this.collection.add({});
+      this.$el.find(".panel:last").collapse("show");
     },
 
-    formSubmit: function () {
+    // Description:
+    //
+    // Removes the equation when clicked.
+    uiEquationRemove: function (event) {
+      var element = $(event.currentTarget)
+        , index = element.data("index");
+
+      this.collection.remove(this.collection.at(element.data("index")));
+    },
+
+    uiFormSubmit: function () {
       this.model.save();
       return false;
     },
 
-    fieldEdit: function (event) {
+    // Description:
+    // ------------
+    //
+    // Shows the input elements for the _Title_ and _Description_ fields.
+    uiFieldEdit: function (event) {
       var parent = $(event.target).closest(".editField")
         , input = parent.find("input")
         , length = input.val().length * 2;
@@ -813,7 +849,11 @@
       input[0].setSelectionRange(length, length);
     },
 
-    fieldSubmit: function (event) {
+    // Description:
+    // ------------
+    //
+    // Saves the values of the _Title_ and _Description_ fields.
+    uiFieldSubmit: function (event) {
       var parent = $(event.target).closest(".editField")
         , input = parent.find("input")
         , field = parent.find(".field")
@@ -826,6 +866,11 @@
       parent.find(".edit").hide();
     },
     
+    // Parameters:
+    // -----------
+    //
+    // 1. `model` - object
+    // 2. `index` - numbers
     childViewOptions: function (model, index) {
       return {
         index: index,
@@ -841,7 +886,10 @@
 
   // Set a jQuery domReady listener which initializes the application.
   $(function () {
-    // using jQuery
+    // Description:
+    // ------------
+    //
+    // Parses cookie components.
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -858,6 +906,7 @@
         return cookieValue;
     }
 
+    // Prepends the CSRFToken to the headers of any subsequent jqXHR requests.
     $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
       var token;
       options.xhrFields = {

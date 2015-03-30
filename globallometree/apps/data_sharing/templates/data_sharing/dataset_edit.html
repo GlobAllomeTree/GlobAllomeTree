@@ -27,13 +27,13 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
             </button>
-            <h4 class="modal-title"><%= title %></h4>
+            <h4 class="modal-title"><%- title %></h4>
           </div>
           <div class="modal-body">
-            <%= body %>
+            <%- body %>
           </div>
           <div class="modal-footer">
-            <%= footer %>
+            <%- footer %>
           </div>
         </div>
       </div>
@@ -80,13 +80,15 @@
   </script>
 
   <script type="text/template" id="templateEquation">
-    <div class="panel-heading" role="tab" id="heading<%= index %>">
+    <div class="panel-heading" role="tab" id="heading<%- index %>">
       <h3 class="panel-title">
-        <a href="#collapse<%= index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<% if(isExpanded) print("in") %>" aria-controls="collapse<%= index %>" class="pull-left">Equation <%= index + 1%></a>
+        <a href="#collapse<%- index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<% if(isExpanded) print("in") %>" aria-controls="collapse<%- index %>" class="pull-left">Equation <%- index + 1%></a>
       </h3>
-      <a href="#" class="remove" class="text-right"><span class="glyphicon glyphicon-remove"></span></a>
+      <a href="#" class="remove" class="text-right" data-index="<%- index %>">
+        <span class="glyphicon glyphicon-remove"></span>
+      </a>
     </div>
-    <div id="collapse<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= index %>">
+    <div id="collapse<%- index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%- index %>">
       <div class="panel-body">
         <ul class="list-unstyled">
         </ul>
@@ -95,17 +97,17 @@
   </script>
 
   <script type="text/template" id="templateInput">
-    <label for="<%= id %>" class="control-label col-sm-2"><%= label %></label>
+    <label for="<%- id %>" class="control-label col-sm-2"><%- label %></label>
     <div class="col-sm-6">
-      <input type="text" name="<%= name %>" id="<%= id %>" value="<%= value %>" class="form-control">
+      <input type="text" name="<%- name %>" id="<%- id %>" value="<%- value %>" class="form-control">
     </div>
     <div class="col-sm-4 help-block"></div>
   </script>
 
   <script type="text/template" id="templateNumber">
-    <label for="<%= id %>" class="control-label col-sm-2"><%= label %></label>
+    <label for="<%- id %>" class="control-label col-sm-2"><%- label %></label>
     <div class="col-sm-2">
-      <input type="number" name="<%= name %>" id="<%= id %>" value="<%= value %>" class="form-control">
+      <input type="number" name="<%- name %>" id="<%- id %>" value="<%- value %>" class="form-control">
     </div>
     <div class="col-sm-4 help-block"></div>
   </script>
