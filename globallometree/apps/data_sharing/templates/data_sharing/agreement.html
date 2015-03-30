@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block script %}
+
+<script type="text/javascript">
+	$(function() {
+
+	});
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+   	    <h3>Data sharing agreement</h3> 
+
+   	    <dl class="dl-horizontal">
+            <dt>Dataset</dt>
+            <dd><a href="/data/sharing/datasets/{{ data_sharing_agreement.Dataset.Dataset_ID }}/" target="_blank">{{data_sharing_agreement.Dataset.Title}}</a></dd>
+            <dt>Access requested by</dt>
+            <dd><a href="/accounts/profile/{{ data_sharing_agreement.User.get_profile.pk }}/" target="_blank">{{ data_sharing_agreement.User.username }}</a></dd>
+            <dt>Date requested</dt>
+            <dd>{{ data_sharing_agreement.Created|date:"M d, Y" }}</dd>
+            <dt>Agreement status</dt>
+            <dd>{{ data_sharing_agreement.get_Agreement_status_display }}</dd>
+          </dl>
+          {% if show_response_form %}
+          <div class="col-md-6 clearfix">
+             <h4>Respond to this request to access your dataset</h4>
+             <p> For any questions related to this request, you may email the requesting party directly at {{ data_sharing_agreement.User.email }} </p>
+             <form method="POST"> {% csrf_token %}
+               <div id="div_id_choose_response" class="form-group">
+                  <label for="id_choose_response" class="control-label requiredField">
+                     Response <span class="asteriskField">*</span>
+                  </label>
+                  <div class="controls ">
+                     <select class="select form-control" id="id_choose_response" name="response">
+                        <option value="" selected="selected">-- Select your response --</option>
+                         <option value="denied">Granted - I grant access to this dataset for user {{ data_sharing_agreement.User.username }} </option>
+                         <option value="granted">Denied - I do NOT grant access to this dataset for user {{ data_sharing_agreement.User.username }} </option>
+                     </select>
+                  </div>
+                </div>
+                 <button class="btn btn-success pull-right">Send response</button>
+             </form>  
+            </div>
+          {% endif %}
+    </div>
+</div>
+
+{% endblock %}

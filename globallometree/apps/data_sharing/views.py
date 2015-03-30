@@ -231,7 +231,7 @@ class DatasetListView(RestrictedPageMixin, ListView):
 def my_data(request):
     datasets = Dataset.objects.filter(User=request.user)
     
-    requests_made_for_user_data = DataSharingAgreement.objects.filter(
+    requests_made_to_user = DataSharingAgreement.objects.filter(
         Dataset__User=request.user
         )
     
@@ -242,9 +242,36 @@ def my_data(request):
     return render_to_response(
         "data_sharing/my_data.html",
         {
-          'requests_made_to_user': requests_made_for_user_data,
+          'requests_made_to_user': requests_made_to_user,
           'requests_made_by_user': requests_made_by_user,
           'datasets': datasets,
+        },
+        context_instance=RequestContext(request)
+    )
+
+
+@login_required(login_url='/accounts/login/')
+def agreement(request, Data_sharing_agreement_ID):
+    data_sharing_agreement = get_object_or_404(DataSharingAgreement,
+         Data_sharing_agreement_ID=Data_sharing_agreement_ID)
+
+    show_response_form = False
+    if request.user == data_sharing_agreement.Dataset.User \
+       and data_sharing_agreement.Agreement_status == 'pending':
+        if request.method == 'POST':
+            response = request.POST.get('response')
+            if response in ['granted', 'denied']:
+                data_sharing_agreement.Agreement_status = response
+                data_sharing_agreement.save()
+        else:
+            show_response_form = True
+        
+
+    return render_to_response(
+        "data_sharing/agreement.html",
+        {
+          'data_sharing_agreement': data_sharing_agreement,
+          'show_response_form': show_response_form
         },
         context_instance=RequestContext(request)
     )

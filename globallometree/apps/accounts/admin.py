@@ -6,7 +6,7 @@ from . import models
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'institution_name', 'location_country',  'data_may_provide')
-    search_fields  = ['user__username', 'institution_Name','address', 'location_country__Common_name', 'region']
+    search_fields  = ['user__username', 'institution_name','address', 'location_country__Common_name', 'region']
     list_filter = ['institution_name', 'location_country__Common_name']
     readonly_fields = ['user_link']
     raw_id_fields = ('user',)
