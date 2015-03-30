@@ -123,7 +123,7 @@
     toJSON: function (options) {
       var json = _.clone(this.attributes)
 
-      json.Data_as_json = this.get("Data_as_json").toJSON();
+      json.Data_as_json = JSON.stringify(this.get("Data_as_json").toJSON());
 
       return json;
     }
