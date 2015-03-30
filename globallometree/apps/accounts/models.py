@@ -96,7 +96,11 @@ def user_pre_save(sender, instance, signal, *args, **kwargs):
         #returns if user is new or fixture is being loaded
         return
     
-    if compare_user.is_active != instance.is_active and instance.is_active == True:
+    if compare_user.is_active == False and \
+       instance.is_active == True \
+       and not hasattr(instance, 'notification_email_sent'):
+        # prevent duplicate emails being sent out
+        instance.notification_email_sent = True
         #Mail the admin
         mail_managers('GlobAllomeTree New User "%s" APPROVED' % instance.username,
                       """
