@@ -55,7 +55,6 @@ class DatasetAdmin(admin.ModelAdmin):
     list_display = ('Title',  'Imported', 'User', 'Data_type',  'Data_license', 'Created')
     search_fields  = ['Title', 'Description']
     raw_id_fields = ('User',)
-    readonly_fields = ('Imported',)
     form = DatasetForm
         
     def get_form(self, request, obj=None, **kwargs):

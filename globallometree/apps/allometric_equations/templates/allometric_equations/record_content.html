@@ -57,10 +57,10 @@
             <tr><th> Unit_U: </th><td> {{ record.Unit_U }} </td></tr>
             <tr><th> V: </th><td> {{ record.V }} </td></tr>
             <tr><th> Unit V: </th><td> {{ record.Unit_V }} </td></tr>
-            <tr><th> Min X: </th><td> {{ record.Min_X|floatformat:"-2" }} </td></tr>
-            <tr><th> Max X: </th><td> {{ record.Max_X|floatformat:"-2" }} </td></tr>
-            <tr><th> Min Z: </th><td> {{ record.Min_Z|floatformat:"-2" }} </td></tr>
-            <tr><th> Max Z: </th><td> {{ record.Max_Z|floatformat:"-2" }} </td></tr>
+            <tr><th> Min X: </th><td> {% if record.Min_X %}{{ record.Min_X|floatformat:"-2" }}{% else %} None {% endif%} </td></tr>
+            <tr><th> Max X: </th><td> {% if record.Max_X %}{{ record.Max_X|floatformat:"-2" }} {% else %} None {% endif%} </td></tr>
+            <tr><th> Min Z: </th><td> {% if record.Min_Z %} {{ record.Min_Z|floatformat:"-2" }} {% else %} None {% endif%} </td></tr>
+            <tr><th> Max Z: </th><td> {% if record.Max_Z %} {{ record.Max_Z|floatformat:"-2" }}{% else %} None {% endif%}  </td></tr>
             <tr><th> Output: </th><td> {{ record.Output }} </td></tr>
             <tr><th> Output TR: </th><td> {{ record.Output_TR }} </td></tr>
             <tr><th> Age: </th><td> {{ record.Age }} </td></tr>

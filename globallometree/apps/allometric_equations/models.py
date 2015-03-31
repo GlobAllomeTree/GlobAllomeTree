@@ -48,7 +48,7 @@ class AllometricEquation(LinkedBaseModel):
     U = models.CharField(max_length=20, null=True, blank=True)
     Unit_U = models.CharField(max_length=20, null=True, blank=True)
     V = models.CharField(max_length=20, null=True, blank=True)
-    Unit_V = models.CharField(max_length=20, blank=True)
+    Unit_V = models.CharField(max_length=20, blank=True, null=True)
     W = models.CharField(max_length=20, null=True, blank=True)
     Unit_W = models.CharField(max_length=20, null=True, blank=True)
     X = models.CharField(max_length=20, null=True, blank=True)

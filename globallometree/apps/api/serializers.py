@@ -350,56 +350,61 @@ class LocationSerializer(serializers.ModelSerializer):
         source="Country.Formal_name", 
         allow_null=True,
         required=False,
-        choices = [(country.Formal_name, country.Formal_name) for country in location_models.Country.objects.all()]
+        choices = [country.Formal_name for country in location_models.Country.objects.all()]
         )
+
+    Continent = fields.CharField(
+        source="Country.Continent.Name", 
+        read_only=True
+        ) 
 
     Biome_FAO = fields.ChoiceField(
         source="Biome_FAO.Name", 
         allow_null=True,
         required=False,
-        choices = [(biome.Name, biome.Name) for biome in location_models.BiomeFAO.objects.all()]
+        choices = [biome.Name for biome in location_models.BiomeFAO.objects.all()]
         )
 
     Biome_UDVARDY = fields.ChoiceField(
         source="Biome_UDVARDY.Name", 
         allow_null=True,
         required=False,
-        choices = [(biome.Name, biome.Name) for biome in location_models.BiomeUdvardy.objects.all()]
+        choices = [biome.Name for biome in location_models.BiomeUdvardy.objects.all()]
         )
 
     Biome_WWF = fields.ChoiceField(
         source="Biome_WWF.Name", 
         allow_null=True,
         required=False,
-        choices= [(biome.Name, biome.Name) for biome in location_models.BiomeWWF.objects.all()]
+        choices= [biome.Name for biome in location_models.BiomeWWF.objects.all()]
         )
 
     Biome_HOLDRIDGE = fields.ChoiceField(
         source="Biome_HOLDRIDGE.Name", 
         allow_null=True,
         required=False,
-        choices=[(biome.Name, biome.Name) for biome in location_models.BiomeHoldridge.objects.all()]
+        choices=[biome.Name for biome in location_models.BiomeHoldridge.objects.all()]
         )
 
     Division_BAILEY = fields.ChoiceField(
         source="Division_BAILEY.Name", 
         allow_null=True,
         required=False,
-        choices=[(division.Name, division.Name) for division in location_models.DivisionBailey.objects.all()]
+        choices=[division.Name for division in location_models.DivisionBailey.objects.all()]
         )
 
     Forest_type = fields.ChoiceField(
         source="Forest_type.Name", 
         allow_null=True,
         required=False,
-        choices=[(forest.Name, forest.Name) for forest in location_models.ForestType.objects.all()]
+        choices=[forest.Name for forest in location_models.ForestType.objects.all()]
         )
 
     Country_3166_3 = fields.ChoiceField(
         source="Country.Iso3166a3", 
         allow_null=True,
         required=False,
-        choices = [(country.Iso3166a3, country.Iso3166a3) for country in location_models.Country.objects.all()]
+        choices = [country.Iso3166a3 for country in location_models.Country.objects.all()]
         )
 
     # IDs are read only since we are not trusting them at the moment
@@ -408,6 +413,12 @@ class LocationSerializer(serializers.ModelSerializer):
         source="Country.Country_ID", 
         read_only=True
         )
+
+    Continent_ID = fields.IntegerField(
+        source="Country.Continent.Continent_ID", 
+        read_only=True
+        ) 
+
     Biome_FAO_ID = fields.IntegerField(
         source="Biome_FAO.Biome_FAO_ID", 
         read_only=True
@@ -459,7 +470,8 @@ class LocationSerializer(serializers.ModelSerializer):
             "Province",
             "Region",
             "Country",
-            "Country_3166_3", 
+            "Country_3166_3",
+            "Continent", 
             "Biome_FAO",
             "Biome_HOLDRIDGE", 
             "Biome_UDVARDY", 
@@ -476,6 +488,7 @@ class LocationSerializer(serializers.ModelSerializer):
             "Biome_WWF_ID",
             "Division_BAILEY_ID", 
             "Country_ID",
+            "Continent_ID",
             "Forest_type_ID",
             )
 
@@ -488,50 +501,56 @@ class LocationDefinitionSerializer(serializers.Serializer):
     Location_name = fields.CharField(required=False, allow_null=True)
     Geohash = fields.CharField(required=False, allow_null=True)
     LatLonString = fields.CharField(required=False, allow_null=True)
-    Latitude = serializers.DecimalField(max_digits=9, decimal_places=5,required=False, allow_null=True)
-    Longitude = serializers.DecimalField(max_digits=9, decimal_places=5,required=False, allow_null=True)
+    Latitude = serializers.DecimalField(max_digits=12, decimal_places=9,required=False, allow_null=True)
+    Longitude = serializers.DecimalField(max_digits=12, decimal_places=9,required=False, allow_null=True)
     Commune = fields.CharField(required=False, allow_null=True)
     Province = fields.CharField(required=False, allow_null=True)
     Region = fields.CharField(required=False, allow_null=True)
+    Continent = fields.ChoiceField(
+        required=False, 
+        allow_null=True,
+        choices = [continent.Name for continent in location_models.Continent.objects.all()]
+    )
+
     Country = fields.ChoiceField(
         required=False, 
         allow_null=True,
-        choices = [(country.Formal_name, country.Formal_name) for country in location_models.Country.objects.all()]
+        choices = [country.Formal_name for country in location_models.Country.objects.all()]
     )
     Country_3166_3 = fields.ChoiceField(
         required=False, 
         allow_null=True,
-        choices = [(country.Iso3166a3, country.Iso3166a3) for country in location_models.Country.objects.all()]
+        choices = [country.Iso3166a3 for country in location_models.Country.objects.all()]
     )
     Biome_FAO = fields.ChoiceField(
         required=False,
         allow_null=True,
-        choices = [(biome.Name, biome.Name) for biome in location_models.BiomeFAO.objects.all()]
+        choices = [biome.Name for biome in location_models.BiomeFAO.objects.all()]
     )
     Biome_UDVARDY = fields.ChoiceField(
         required=False, 
         allow_null=True,
-        choices = [(biome.Name, biome.Name) for biome in location_models.BiomeUdvardy.objects.all()]
+        choices = [biome.Name for biome in location_models.BiomeUdvardy.objects.all()]
     )
     Biome_WWF = fields.ChoiceField(
         required=False, 
         allow_null=True,
-        choices= [(biome.Name, biome.Name) for biome in location_models.BiomeWWF.objects.all()]
+        choices= [biome.Name for biome in location_models.BiomeWWF.objects.all()]
     )
     Biome_HOLDRIDGE = fields.ChoiceField(
         required=False, 
         allow_null=True,
-        choices=[(biome.Name, biome.Name) for biome in location_models.BiomeHoldridge.objects.all()]
+        choices=[biome.Name for biome in location_models.BiomeHoldridge.objects.all()]
     )
     Division_BAILEY = fields.ChoiceField(
         required=False, 
         allow_null=True,
-        choices=[(division.Name, division.Name) for division in location_models.DivisionBailey.objects.all()]
+        choices=[division.Name for division in location_models.DivisionBailey.objects.all()]
     )
     Forest_type = fields.ChoiceField(
         required=False, 
         allow_null=True,
-        choices=[(forest.Name, forest.Name) for forest in location_models.ForestType.objects.all()]
+        choices=[forest.Name for forest in location_models.ForestType.objects.all()]
     )
     Plot_ID = fields.IntegerField(required=False, allow_null=True)
     Location_ID = fields.IntegerField(required=False, allow_null=True)
@@ -552,7 +571,6 @@ class LocationDefinitionSerializer(serializers.Serializer):
         return obj
 
      
-   
 class PlotSerializer(serializers.ModelSerializer):
     """ Maybe not that ... """
     Plot_name = fields.CharField(required=False, allow_null=True)
@@ -594,59 +612,57 @@ class PlotSerializer(serializers.ModelSerializer):
         allow_null=True,
         source='Location.Region'
         )
-    Country = fields.ChoiceField(
+    Country = fields.CharField(
         source="Location.Country.Formal_name", 
         allow_null=True,
         required=False,
-        choices = [(country.Formal_name, country.Formal_name) for country in location_models.Country.objects.all()]
         )
-    Country_3166_3 = fields.ChoiceField(
+
+    Country_3166_3 = fields.CharField(
         source="Location.Country.Iso3166a3", 
         allow_null=True,
-        required=False,
-        choices = [(country.Iso3166a3, country.Iso3166a3) for country in location_models.Country.objects.all()]
+        required=False
         )
 
-    Biome_FAO = fields.ChoiceField(
+    Continent = fields.CharField(
+        source="Location.Country.Continent.Name", 
+        read_only=True
+        ) 
+
+    Biome_FAO = fields.CharField(
         source="Location.Biome_FAO.Name", 
         allow_null=True,
-        required=False,
-        choices = [(biome.Name, biome.Name) for biome in location_models.BiomeFAO.objects.all()]
+        required=False
         )
 
-    Biome_UDVARDY = fields.ChoiceField(
+    Biome_UDVARDY = fields.CharField(
         source="Location.Biome_UDVARDY.Name", 
         allow_null=True,
         required=False,
-        choices = [(biome.Name, biome.Name) for biome in location_models.BiomeUdvardy.objects.all()]
         )
 
-    Biome_WWF = fields.ChoiceField(
+    Biome_WWF = fields.CharField(
         source="Location.Biome_WWF.Name", 
         allow_null=True,
         required=False,
-        choices= [(biome.Name, biome.Name) for biome in location_models.BiomeWWF.objects.all()]
         )
 
-    Biome_HOLDRIDGE = fields.ChoiceField(
+    Biome_HOLDRIDGE = fields.CharField(
         source="Location.Biome_HOLDRIDGE.Name", 
         allow_null=True,
         required=False,
-        choices=[(biome.Name, biome.Name) for biome in location_models.BiomeHoldridge.objects.all()]
         )
 
-    Division_BAILEY = fields.ChoiceField(
+    Division_BAILEY = fields.CharField(
         source="Location.Division_BAILEY.Name", 
         allow_null=True,
         required=False,
-        choices=[(division.Name, division.Name) for division in location_models.DivisionBailey.objects.all()]
         )
 
-    Forest_type = fields.ChoiceField(
+    Forest_type = fields.CharField(
         source="Location.Forest_type.Name", 
         allow_null=True,
         required=False,
-        choices=[(forest.Name, forest.Name) for forest in location_models.ForestType.objects.all()]
         )
 
     # Serializer fields are always read only
@@ -659,6 +675,12 @@ class PlotSerializer(serializers.ModelSerializer):
         source="Location.Country.Country_ID", 
         read_only=True
         )
+
+    Continent_ID = fields.CharField(
+        source="Location.Country.Continent_ID", 
+        read_only=True
+        ) 
+
     Biome_FAO_ID = fields.IntegerField(
         source="Location.Biome_FAO.Biome_FAO_ID", 
         read_only=True
@@ -772,6 +794,8 @@ class LocationGroupSerializer(serializers.ModelSerializer):
                     plot.Plot_size_m2 = location_def['Plot_size_m2']
 
                 plot.save()
+            else:
+                plot = None
 
             # link by plot if plot, else location
             if plot:
@@ -789,6 +813,7 @@ class LocationGroupSerializer(serializers.ModelSerializer):
         location_def['Biome_UDVARDY_ID'] = None
         location_def['Biome_HOLDRIDGE_ID'] = None
         location_def['Division_BAILEY_ID'] = None
+        location_def['Forest_Type_ID'] = None
 
         if 'Biome_FAO' in location_def.keys() and location_def['Biome_FAO']:
             location_def['db_biome_fao'] = location_models.BiomeFAO.objects.get(Name=location_def['Biome_FAO'])
@@ -811,7 +836,7 @@ class LocationGroupSerializer(serializers.ModelSerializer):
             location_def['db_biome_holdridge'] = None
 
         if 'Division_BAILEY' in location_def.keys() and location_def['Division_BAILEY']:
-            location_def['db_division_bailey'] = location_models.DivisionBailey.objects.get(Name=location_def['Biome_HOLDRIDGE'])
+            location_def['db_division_bailey'] = location_models.DivisionBailey.objects.get(Name=location_def['Division_BAILEY'])
         else:
             location_def['db_division_bailey'] = None
 
@@ -824,6 +849,8 @@ class LocationGroupSerializer(serializers.ModelSerializer):
 
         if 'Forest_type' in location_def.keys() and location_def['Forest_type']:
             location_def['db_forest_type'] = location_models.ForestType.objects.get(Name=location_def['Forest_type'])
+        else:
+            location_def['db_forest_type'] = None
 
         return location_def
 
@@ -856,15 +883,19 @@ class DataLicenseSerializer(serializers.ModelSerializer):
         
     class Meta:
         model = data_sharing_models.DataLicense        
-        exclude = ('Created', 'Modified', 'User','Public_choice')
+        exclude = ('Created', 'Modified', 'User', 'Public_choice')
 
 
 class DatasetSerializer(serializers.ModelSerializer):
     Data_license = DataLicenseSerializer(many=False, read_only=True)
+    Dataset_url = fields.SerializerMethodField()
     Data_type_text = fields.CharField(
         source="get_Data_type_display",
         read_only=True
         )
+
+    def get_Dataset_url(self, obj):
+        return obj.get_absolute_url()
 
     def update(self, instance, validated_data):
         instance.Data_as_json = validated_data.get('Data_as_json', instance.Data_as_json)
@@ -886,6 +917,7 @@ class DatasetSerializer(serializers.ModelSerializer):
         model = data_sharing_models.Dataset
         exclude = ('Created', 'Modified', 'User', 'Uploaded_dataset_file', 'Imported')
         read_only_fields = ('Data_license', 'Data_type_text', 'Record_count', 'Imported')
+
 
 class ReferenceSerializer(serializers.ModelSerializer):
     Year = fields.SerializerMethodField()
@@ -938,29 +970,108 @@ class LinkedModelSerializer(serializers.ModelSerializer):
 
         instance.Reference = source_models.Reference.objects.get_or_create(**reference_data)[0]
 
+        if 'dataset' in self.context.keys():
+            instance.Dataset = self.context['dataset']
+
         instance.save()
 
         return instance
 
+    def to_representation(self, obj):
+
+        # Here we figure out if the user has access to this data object
+        # through a data sharing agreement or since the object is permitted
+        # to all users
+        from globallometree.apps.data_sharing.data_tools import get_restricted_keys
+        representation = super(LinkedModelSerializer, self).to_representation(obj)
+        
+        # Being used for internal use
+        if not 'request' in self.context.keys() or \
+           not 'Dataset' in representation.keys() or \
+           representation['Dataset'] is None or \
+           not 'Data_license' in representation['Dataset'].keys():
+            return representation
+
+        license = representation['Dataset']['Data_license']
+        if license['Available_to_registered_users']:
+            representation['Dataset']['User_has_access'] = True
+            return representation
+        else:
+            user = self.context['request'].user
+            try:
+                data_sharing_agreement = data_sharing_models.DataSharingAgreement.objects.get(
+                    User=user,
+                    Dataset_id = representation['Dataset']['Dataset_ID']
+                    )
+                if data_sharing_agreement.Agreement_status == 'granted':
+                    representation['Dataset']['User_has_access'] = True
+                    return representation
+            except data_sharing_models.DataSharingAgreement.DoesNotExist:
+                pass
+
+        representation['Dataset']['User_has_access'] = False  
+
+        restricted_keys = get_restricted_keys(self.elasticsearch_index_name)
+
+        for key in restricted_keys:
+            representation[key] = 'access restricted'
+
+        return representation
+
 
 class AllometricEquationSerializer(LinkedModelSerializer):
+    elasticsearch_index_name = 'allometricequation'
+
+    def __init__(self, *args, **kwargs):
+        super(AllometricEquationSerializer, self).__init__(*args, **kwargs)
+
+    def create(self, validated_data):
+        
+        if validated_data['Population']['Name']:
+            validated_data['Population'] = allometric_equation_models.Population.objects.get(Name=validated_data['Population']['Name'])
+        else:
+            validated_data['Population'] = None
+
+        if validated_data['Tree_type']['Name']:
+            validated_data['Tree_type'] = allometric_equation_models.TreeType.objects.get(Name=validated_data['Tree_type']['Name'])
+        else:
+            validated_data['Tree_type'] = None
+
+        return super(AllometricEquationSerializer, self).create(validated_data)
+
+    Population = fields.ChoiceField(
+        source='Population.Name', 
+        allow_null=True,
+        choices= [pop.Name for pop in allometric_equation_models.Population.objects.all()]
+        )
+
+    Tree_type = fields.ChoiceField(
+        source='Tree_type.Name', 
+        allow_null=True,
+        choices=[tt.Name for tt in allometric_equation_models.TreeType.objects.all()]
+        )
+
     class Meta:
         model = allometric_equation_models.AllometricEquation
         exclude = ('Created', 'Modified')
 
 
 class WoodDensitySerializer(LinkedModelSerializer):
+    elasticsearch_index_name = 'wooddensity'
     class Meta:
         model = wood_density_models.WoodDensity
         exclude = ('Created', 'Modified', )
 
 
 class RawDataSerializer(LinkedModelSerializer):
+    elasticsearch_index_name = 'rawdata'
     class Meta:
         model = raw_data_models.RawData
         exclude = ('Created', 'Modified', )
 
+
 class BiomassExpansionFactorSerializer(LinkedModelSerializer):
+    elasticsearch_index_name = 'biomassexpansionfactor'
     class Meta:
         model = biomass_expansion_factors_models.BiomassExpansionFactor
         exclude = ('Created', 'Modified', )

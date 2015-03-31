@@ -17,6 +17,16 @@ from globallometree.apps.api import (
     Parsers
     )
 
+
+def get_restricted_keys(index_name):
+
+    restricted_keys = {
+        'allometricequation' : ['Equation', 'Substitute_equation']
+    }
+
+    return restricted_keys[index_name]
+
+
 def summarize_data(data):
     """
         Summarizes the dataset as far as which countries there are,
@@ -246,7 +256,7 @@ def match_or_clean_species_ids(species_def):
 
 def import_dataset_to_db(dataset, data):
     SerializerClass = Serializers[dataset.Data_type] 
-    serializer = SerializerClass(data=data, many=True)
+    serializer = SerializerClass(data=data, many=True, context={'dataset': dataset})
     if serializer.is_valid(): # Must call id valid
         serializer.save()
         dataset.Imported = True
