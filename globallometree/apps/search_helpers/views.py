@@ -157,7 +157,7 @@ def record_by_id_view(request, id, api_path, model_class,
         'search_helpers/template.record.html', 
         context_instance = RequestContext(
             request, {
-                'record': record.serialize(),
+                'record': record.serialize(request=request),
                 'record_id' : id,
                 'api_path': api_path, 
                 'record_content_template': record_content_template,
@@ -176,7 +176,7 @@ def record_by_id_pdf_view(request, id, model_class,
     template = get_template('search_helpers/template.record.pdf.html')
    
     html = template.render(Context({
-        'record': record.serialize(),
+        'record': record.serialize(request=request),
         'record_content_template': record_content_template,
         'record_title': record_title,
         'record_url': record_url,

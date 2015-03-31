@@ -47,9 +47,12 @@ class LinkedBaseModel(BaseModel):
     class Meta:
         abstract = True
 
-    def serialize(self):
+    def serialize(self, request=None):
         SerializerClass = self.get_serializer_class()
-        return SerializerClass(self).data
+        context = {}
+        if request:
+            context['request'] = request
+        return SerializerClass(self, context=context).data
 
     def update_index(self):
         IndexClass = self.get_index_class()
