@@ -21,7 +21,10 @@ from globallometree.apps.api import (
 def get_restricted_keys(index_name):
 
     restricted_keys = {
-        'allometricequation' : ['Equation', 'Substitute_equation']
+        'allometricequation' : ['Equation', 'Substitute_equation'],
+        'wooddensity' : [],
+        'rawdata': [],
+        'biomassexpansionfactor' : []
     }
 
     return restricted_keys[index_name]
