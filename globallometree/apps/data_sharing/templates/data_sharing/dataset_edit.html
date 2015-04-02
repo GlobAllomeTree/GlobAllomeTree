@@ -3,7 +3,7 @@
 
 {% block add_to_header %}
   <link rel="stylesheet" type="text/css" href="{% static 'data_sharing/css/dataset_edit.css' %}" />
-
+  <link rel="stylesheet" type="text/css" href="{static 'data_sharing/css/dataset-edit.css'}" />
 {% endblock %}
 
 {% block script %}
@@ -42,32 +42,38 @@
 
   <script type="text/template" id="templateDataset">
     <form role="form" class="form-horizontal">
-      <div class="editField" data-field="Title">
-        <div class="read">
-          <span class="h3 field"><%- Title %></span>
-          &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="editField" data-field="Title">
+            <div class="read">
+              <span class="h3 field"><%- Title %></span>
+              &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+            </div>
+            <div class="edit form-group" style="display: none">
+              <div class="col-sm-11">
+                <input class="form-control" value="<%- Title %>">
+              </div>
+              <div class="form-control-static col-sm-1">
+                &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
+              </div>
+            </div>
+          </div>
+          <div class="editField" data-field="Description">
+            <div class="read">
+              <span class="field"><%- Description %></span>
+              &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+            </div>
+            <div class="edit form-group" style="display: none">
+              <div class="col-sm-11">
+                <input class="form-control input-sm" value="<%- Description %>">
+              </div>
+              <div class="form-control-static col-sm-1">
+                &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="edit form-group" style="display: none">
-          <div class="col-sm-6">
-            <input class="form-control" value="<%- Title %>">
-          </div>
-          <div class="form-control-static">
-            &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
-          </div>
-        </div>
-      </div>
-      <div class="editField" data-field="Description">
-        <div class="read">
-          <span class="field"><%- Description %></span>
-          &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
-        </div>
-        <div class="edit form-group" style="display: none">
-          <div class="col-sm-6">
-            <input class="form-control input-sm" value="<%- Description %>">
-          </div>
-          <div class="form-control-static">
-            &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
-          </div>
+        <div class="col-sm-4" id="equationAlert">
         </div>
       </div>
       <div class="panel-group" id="equations" role="tablist" aria-multiselectable="true">
@@ -130,6 +136,10 @@
       </select>
     </div>
     <div class="col-sm-8 help-block"></div>
+  </script>
+
+  <script type="text/template" id="listView">
+
   </script>
 
 {% endblock %}
