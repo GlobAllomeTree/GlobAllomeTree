@@ -25,6 +25,7 @@
   // =================
   //
   // Description:
+  // ------------
   //
   // A global event listener which enables messaging between the different parts
   // of the application.  This is primarily useful for messaging between
@@ -35,6 +36,20 @@
   Application.events = _.extend({}, Backbone.Events);
 
   window.events = Application.events;
+
+
+  // Application.timers:
+  // ===================
+  //
+  // Description:
+  // ------------
+  //
+  // Stores timers used in the application.
+  //
+  // Timers:
+  //
+  // * save
+  Application.timers = {};
 
   // Application.models
   // ==================
@@ -124,14 +139,25 @@
 
       this.once("sync", function () {
         self.on("sync", function () {
-          Application.events.trigger("alert", "success", "Saved Dataset.")
+          Application.events.trigger("alert", "success", "Saved Dataset.");
+
+          self.setSaveTimer();
         });
 
-        // Auto-save every minute.
-        window.setInterval(function () {
-          self.save();
-        }, 60000)
+        self.setSaveTimer();
       });
+    },
+
+    setSaveTimer: function () {
+      var self = this;
+
+      if (Application.timers.save) {
+        window.clearTimeout(Application.timers.save);
+      }
+
+      Application.timers.save = window.setTimeout(function () {
+        self.save();
+      }, 60000);
     },
       
     // Description:
