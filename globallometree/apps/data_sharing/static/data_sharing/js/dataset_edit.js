@@ -153,6 +153,7 @@
 
       if (Application.timers.save) {
         window.clearTimeout(Application.timers.save);
+        delete Application.timers.save;
       }
 
       Application.timers.save = window.setTimeout(function () {
