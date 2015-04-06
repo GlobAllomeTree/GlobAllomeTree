@@ -6,6 +6,12 @@
 define(['settings'],
 function (Settings) {
   
+  var hostname = window.location.hostname;
+
+  if (window.location.port) {
+    hostname += ':' + window.location.port;
+  }
+
 
   /** @scratch /configuration/config.js/2
    * === Parameters
@@ -21,7 +27,7 @@ function (Settings) {
      * kibana installed on. You probably want to set it to the FQDN of your
      * elasticsearch host
      */
-    elasticsearch: "http://"+window.location.hostname + ":8083/elastic",
+    elasticsearch: "http://" + hostname + "/elastic",
 
     /** @scratch /configuration/config.js/5
      * ==== default_route

@@ -19,10 +19,7 @@ def parse_request_path(path):
             does this request apply to the cluster resources?
         indices / list /
             a simple list of indices that are included in the request
-      
-        script example:
-            http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-script-filter.html
-
+    
     """
 
     parsed = {}
