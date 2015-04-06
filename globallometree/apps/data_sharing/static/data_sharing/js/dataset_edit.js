@@ -20,7 +20,37 @@
     }
 
   });
-  
+
+  // Aplication.events
+  // =================
+  //
+  // Description:
+  // ------------
+  //
+  // A global event listener which enables messaging between the different parts
+  // of the application.  This is primarily useful for messaging between
+  // nested views.
+  //
+  // NOTE: This is an instantiated object and the only non-compartmentalized
+  //       entry of _Application_.
+  Application.events = _.extend({}, Backbone.Events);
+
+  window.events = Application.events;
+
+
+  // Application.timers:
+  // ===================
+  //
+  // Description:
+  // ------------
+  //
+  // Stores timers used in the application.
+  //
+  // Timers:
+  //
+  // * save
+  Application.timers = {};
+
   // Application.models
   // ==================
   Application.models = {};
@@ -72,19 +102,63 @@
   // # Models
   // ---------------------------------------------------------------------------
 
+
+  // Base Model
+  // ==========
+  Application.models.base = Backbone.Model.extend({
+
+    // Description:
+    // ------------
+    //
+    // Stores _options_ passed to initialize.
+    initialize: function (attrs, options) {
+      this.options = options;
+    },
+
+  });
+
   // Dataset Model
   // =============
+  //
+  // Description:
+  // ------------
+  //
+  // A model containing the entire dataset which syncs with the server via
+  // calls to _save_.
   Application.models.dataset = Backbone.Model.extend({
 
-    initialize: function () {
-      window.dataset = this;
+    "urlRoot": "/api/v1/datasets/",
 
+    initialize: function (attrs, options) {
+      var self = this;
+
+      // TODO: Remove this debugging code.
       this.on("change", function () {
         console.log(this.toJSON());
-      })
+      });
+
+      this.once("sync", function () {
+        self.on("sync", function () {
+          Application.events.trigger("alert", "success", "Saved Dataset.");
+
+          self.setSaveTimer();
+        });
+
+        self.setSaveTimer();
+      });
     },
-      
-    "urlRoot": "/api/v1/datasets/",
+
+    setSaveTimer: function () {
+      var self = this;
+
+      if (Application.timers.save) {
+        window.clearTimeout(Application.timers.save);
+      }
+
+      Application.timers.save = window.setTimeout(function () {
+        self.save();
+      }, 60000);
+    },
       
     // Description:
     // ------------
@@ -133,6 +207,11 @@
   // Field Model
   // ===========
   //
+  // Inherits:
+  // ---------
+  // 
+  // Application.models.base
+  //
   // Description:
   // ------------
   //
@@ -140,27 +219,13 @@
   // pre-validation and several validation routines.
   //
   // Each field has two attributes recorded the _name_ of the field and _value_.
-  Application.models.field = Backbone.Model.extend({
+  Application.models.field = Application.models.base.extend({
 
     validations: [
       "nullable",
       "blank",
       "maxLength"
     ],
-
-    // Description:
-    // ------------
-    //
-    // Attaches `options` as a member of the instanced object.
-    //
-    // Parameters:
-    // -----------
-    //
-    // 1. `attrs` - object
-    // 2. `options` - object
-    initialize: function (attrs, options) {
-      this.options = options;
-    },
 
     // Description:
     // ------------
@@ -372,31 +437,15 @@
   Application.models.field.lookup = Application.models.field.extend({
   });
 
-  Application.models.field.referenceWell = Backbone.Model.extend({
+  Application.models.field.modal = Application.models.base.extend({
+  });
+
+  // referenceWell
+  Application.models.field.referenceWell = Application.models.base.extend({
 
     defaults: {
       value: {}
-    },
-
-    // Description:
-    // ------------
-    //
-    // Attaches `options` as a member of the instanced object.
-    //
-    // Parameters:
-    // -----------
-    //
-    // 1. `attrs` - object
-    // 2. `options` - object
-    initialize: function (attrs, options) {
-      this.options = options;
-    },
-
-
-    get: function (key, options) {
-      var out = Backbone.Model.prototype.get.call(this, key, options);
-      return out;
-    },
+    }
 
   });
 
@@ -444,16 +493,24 @@
   // Layout View
   // ===========
   Application.views.layout = Backbone.Marionette.LayoutView.extend({
+
     template: "#templateLayout",
     el: "#equationEdit",
+
     regions: {
       "modal": "#equationModal",
       "page": "#equationPage"
     }
+
   });
 
   // Field View
   // ==========
+  //
+  // Description:
+  // ------------
+  //
+  // This view is inherited by other subsquent field views.
   Application.views.field = Backbone.Marionette.ItemView.extend({
 
     className: "form-group",
@@ -520,6 +577,11 @@
 
   // Char Field View
   // ===============
+  //
+  // Inherits:
+  // ---------
+  //
+  // Application.views.field
   Application.views.field["char"] = Application.views.field.extend({
     
     template: "#templateInput",
@@ -536,6 +598,11 @@
 
   // Char Field View
   // ===============
+  //
+  // Inherits:
+  // ---------
+  //
+  // Application.views.field
   Application.views.field["text"] = Application.views.field.extend({
     
     template: "#templateTextarea",
@@ -547,6 +614,11 @@
 
   // Integer Field View
   // ==================
+  //
+  // Inherits:
+  // ---------
+  //
+  // Application.views.field
   Application.views.field["integer"] = Application.views.field.extend({
     
     template: "#templateNumber",
@@ -564,6 +636,11 @@
 
   // Decimal Field View
   // ==================
+  //
+  // Inherits:
+  // ---------
+  //
+  // Application.views.field
   Application.views.field["decimal"] = Application.views.field.extend({
     
     template: "#templateInput",
@@ -581,6 +658,11 @@
 
   // NullBoolean Field View
   // ======================
+  //
+  // Inherits:
+  // ---------
+  //
+  // Application.views.field
   Application.views.field["nullBoolean"] = Application.views.field.extend({
     
     template: "#templateOption",
@@ -609,6 +691,11 @@
 
   // Lookup Field View
   // =================
+  //
+  // Inherits:
+  // ---------
+  //
+  // Application.views.field
   Application.views.field.lookup = Application.views.field.extend({
 
     template: "#templateInput",
@@ -621,7 +708,19 @@
 
   // Field Group View
   // ================
+  //
+  // Inherits:
+  // ---------
+  //
+  // Backbone.Marionette.CompositeView
+  //
+  // Description:
+  // ------------
+  //
+  // A group of fields assembled together in a list.
   Application.views.field.group = Backbone.Marionette.CompositeView.extend({
+
+    childViewContainer: "ul",
 
     collectionEvents: {
       "change": "changeField"
@@ -656,23 +755,57 @@
       return Application.views.field[child.options.type];
     },
 
-    changeField: function (model, options) {
-      this.model.set(model.get("name"), model.get("value"));
+    // Description:
+    //
+    // Event listener which fires when any field in the collection is changed.
+    // Updates the parent model's named attribute with the field's value.
+    changeField: function (childModel, options) {
+      var name = childModel.get("name")
+        , value = childModel.get("value");
+
+      this.model.set(name, value);
     }
     
   });
+
+  // Modal Form Group View
+
+  Application.views.field.modal = Application.views.field.group.extend({
+
+    template: "#templateModal",
+
+    fields: []
+
+  });
+
+  // Modal Group View
+  // ================
 
   // Nested Form Group View
   // ======================
   Application.views.field.group.well = Application.views.field.group.extend({
 
-    template: "#templateWell",
-    childViewContainer: "ul"
+    template: "#templateWell"
 
   });
 
   // Reference View
   // ==============
+  //
+  // Manipulates a model with the following attributes.  The attibute _value_
+  // is itself an object. Marionette does not set listeners recursively for
+  // for nested objects so we have to do some extra work to trigger the
+  // parent model's `change` event.
+  //
+  // {
+  //   name: "Reference",
+  //   value: {
+  //     "Label": "...",
+  //     "Author": "...",
+  //     "Year": "..."
+  //     ""
+  //   }
+  // }
   Application.views.field.referenceWell = Application.views.field.group.well.extend({
 
     defaults: {
@@ -703,10 +836,21 @@
       {name: "Reference", options: {type: "char", nullable: true, blank: true}}
     ],
 
-    changeField: function (model, options) {
-      var out = _.clone(this.model.get("value"))
-      out[model.get("name")] = model.get("value");
-      this.model.set("value", out);
+    // Description:
+    // ------------
+    //
+    // Updates the parent model's _value_ attribute using _\_.clone_ which
+    // causes will trigger the change event of parent _models_ and
+    // _collections_.
+    //
+    // For more information see this
+    // [blog post](http://www.crittercism.com/blog/nested-attributes-in-backbone-js-models)
+    // .
+    changeField: function (childModel, options) {
+      // Get a reference to 
+      var clone = _.clone(this.model.get("value"))
+      clone[childModel.get("name")] = childModel.get("value");
+      this.model.set("value", clone);
     },
 
   });
@@ -717,7 +861,6 @@
 
     template: "#templateEquation",
     className: "panel panel-default",
-    childViewContainer: "ul",
 
     ui: {
       "equationRemove": ".remove",
@@ -726,10 +869,6 @@
 
     modelEvents: {
       "change:Equation": "changeEquation"
-    },
-
-    changeEquation: function(model, options) {
-      this.ui.heading.text(model.get("Equation"));
     },
 
     fields: [
@@ -779,7 +918,17 @@
       {name: "Population",          options: {type: "lookup"}},
       {name: "Tree_type",           options: {type: "lookup"}},
       {name: "Reference",           options: {type: "referenceWell"}}
+
     ],
+
+    // Description:
+    // ------------
+    //
+    // Changes the _title_ of the corresponding child view's panel.
+    changeEquation: function(model, options) {
+      this.ui.heading.text(model.get("Equation"));
+    },
+
     
     // Description:
     // ------------
@@ -812,7 +961,8 @@
       "equationAdd": "#equationAdd",
       "form": "form",
       "editField": ".editField",
-      "equationRemove": ".remove"
+      "equationRemove": ".remove",
+      "equationAlert": "#equationAlert"
     },
     
     // User Interface Events
@@ -844,6 +994,32 @@
     initialize: function (options) {
       this.model = options.model;
       this.collection = this.model.get("Data_as_json");
+
+      // Bind a listener to _alert_ events triggered on the
+      // _Application.events_ object.
+      Application.events.on("alert", this.alert, this);
+    },
+
+    // Description:
+    // ------------
+    //
+    // Constructs a dismissable alert
+    alert: function (type, msg) {
+      var element = $("<div>");
+
+      this.ui.equationAlert.empty();
+
+      element
+        .addClass("alert")
+        .addClass("alert-"+type)
+        .attr("role", "alert")
+        .text(msg)
+        .appendTo(this.ui.equationAlert)
+
+      // Show the alert for two seconds then close.
+      element
+        .delay(2000)
+        .slideUp(200, function () { $(this).alert("close"); });
     },
 
     // Description:
@@ -881,7 +1057,9 @@
         if (child.ui.equationRemove[0] === event.currentTarget) {
           self.collection.remove(self.collection.at(index));
         }
-      })
+      });
+
+      this.render();
     },
 
     uiFormSubmit: function () {
