@@ -983,8 +983,11 @@ class LinkedModelSerializer(serializers.ModelSerializer):
         # to all users
         from globallometree.apps.data_sharing.data_tools import restrict_access
         record = super(LinkedModelSerializer, self).to_representation(obj)
-        return restrict_access(record, self.elasticsearch_index_name, self.context['request'].user)
-
+        
+        if self.context['request'].user:
+            return restrict_access(record, self.elasticsearch_index_name, self.context['request'].user)
+        else:
+            return record
 
 class AllometricEquationSerializer(LinkedModelSerializer):
     elasticsearch_index_name = 'allometricequation'
