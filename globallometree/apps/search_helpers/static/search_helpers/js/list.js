@@ -36,6 +36,13 @@ window.app.listController = function () {
 									Detailed information 							\
 									<span class="glyphicon glyphicon-chevron-right"></span> \
 								</a>												\
+								{{#showDatasetLink}}								\
+								<a href="{{ datasetLink }}"							\
+								style="margin-right:15px"							\
+								   class="btn btn-success pull-right btn-xs"> 		\
+									Request Access to Dataset						\
+								</a>												\
+								{{/showDatasetLink}}								\
 								<h3 class="panel-title">							\
 									<a href="/data/{{ recordLinkPrefix }}/{{ID}}/">	\
 										{{recordReadableType }} {{ID}}				\
@@ -89,7 +96,6 @@ window.app.listController = function () {
 			$resultsInfo.append('<p class="pull-left">No results were found for your query</p>');
 			return;
 		}
-		
 
 		var resultsShownCount = currentPage * resultsPerPage;
 		if(resultsShownCount > totalResults) {
@@ -205,6 +211,9 @@ window.app.listController = function () {
 
 			context['recordLinkPrefix'] = config['recordLinkPrefix'];
 			context['recordReadableType'] = config['recordReadableType'];
+
+			context['showDatasetLink'] = ! data['Dataset']['User_has_access']; 
+			context['datasetLink'] = data['Dataset']['Dataset_url'];
 
 			$resultsList.append(Mustache.render(getResultTemplate(), context));	
 		}

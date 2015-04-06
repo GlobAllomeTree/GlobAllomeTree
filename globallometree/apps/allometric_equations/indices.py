@@ -79,7 +79,8 @@ class AllometricEquationIndex(MappingType, Indexable):
                     "Unit_Y": estype_string_not_analyzed,
                     "Veg_Component": estype_string_not_analyzed,
                     "X": estype_string_not_analyzed,
-                    "Reference": estype_reference
+                    "Reference": estype_reference,
+                    "Dataset": estype_object
                 }
             }
         
@@ -95,7 +96,6 @@ class AllometricEquationIndex(MappingType, Indexable):
             obj = cls.get_model().objects.get(pk=obj_id)
 
         obj_serialized = AllometricEquationSerializer(obj).data
-        obj_serialized['Dataset'] = 0
         return obj_serialized
 
     

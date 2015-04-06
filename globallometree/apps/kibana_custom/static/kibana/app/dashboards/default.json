@@ -160,10 +160,10 @@
           ],
           "overflow": "min-height",
           "fields": [
-            "Reference.Reference",
-            "Reference.Year",
-            "Substitute_equation",
-            "Output"
+            "_type",
+            "_id",
+            "Contributor",
+            "Reference.Reference"
           ],
           "highlight": [],
           "sortable": false,
@@ -195,7 +195,7 @@
   "index": {
     "interval": "none",
     "pattern": "[logstash-]YYYY.MM.DD",
-    "default": "_all",
+    "default": "globallometree/allometricequation,rawdata,biomassexpansionfactor,wooddensity",
     "warm_fields": false
   },
   "style": "light",

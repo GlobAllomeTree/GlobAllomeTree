@@ -1,6 +1,7 @@
 import json
 
 from django.views.generic import TemplateView
+
 from globallometree.apps.locations.models import Country
 
 class UserMapView(TemplateView):
