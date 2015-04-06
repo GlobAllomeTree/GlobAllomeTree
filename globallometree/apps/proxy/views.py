@@ -91,8 +91,8 @@ def es_proxy(request):
         es_response = json.loads(r.content)
         if 'hits' in es_response.keys():
             for index, record in enumerate(es_response['hits']['hits']):
-                es_type = record['_type']
-                es_response['hits']['hits'][index]['_source'] = restrict_access(record['_source'], es_type, user)
+                index_name = record['_type']
+                es_response['hits']['hits'][index]['_source'] = restrict_access(record['_source'], index_name, user)
         content = json.dumps(es_response)
 
     return HttpResponse(content, content_type="application/json")

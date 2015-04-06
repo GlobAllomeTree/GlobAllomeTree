@@ -26,9 +26,9 @@ restricted_keys = {
     'biomassexpansionfactor' : []
 }
 
-def restrict_access(record, es_type, user):
+def restrict_access(record, index_name, user):
 
-    if not es_type in restricted_keys:
+    if not index_name in restricted_keys.keys():
         return record
 
     if not record['Dataset']:
@@ -44,20 +44,19 @@ def restrict_access(record, es_type, user):
                 User=user,
                 Dataset_id = record['Dataset']['Dataset_ID']
                 )
-            if data_sharing_agreement.Agreement_status == 'granted':
+            if data_sharing_agreement.Agreement_status == 'granted' or \
+               data_sharing_agreement.Dataset.User == user:
                 record['Dataset']['User_has_access'] = True
                 return record
         except DataSharingAgreement.DoesNotExist:
             pass
 
-    record['Dataset']['User_has_access'] = False  
+    record['Dataset']['User_has_access'] = False
 
-
-    for key in restricted_keys[es_type]:
+    for key in restricted_keys[index_name]:
         record[key] = 'access restricted'
 
     return record
-
 
 
 def summarize_data(data):

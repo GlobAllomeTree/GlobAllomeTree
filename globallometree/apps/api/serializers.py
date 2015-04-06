@@ -978,45 +978,12 @@ class LinkedModelSerializer(serializers.ModelSerializer):
         return instance
 
     def to_representation(self, obj):
-
         # Here we figure out if the user has access to this data object
         # through a data sharing agreement or since the object is permitted
         # to all users
-        from globallometree.apps.data_sharing.data_tools import restricted_keys
-        representation = super(LinkedModelSerializer, self).to_representation(obj)
-        
-        # Being used for internal use
-        if not 'request' in self.context.keys() or \
-           not 'Dataset' in representation.keys() or \
-           representation['Dataset'] is None or \
-           not 'Data_license' in representation['Dataset'].keys():
-            return representation
-
-        license = representation['Dataset']['Data_license']
-        if license['Available_to_registered_users']:
-            representation['Dataset']['User_has_access'] = True
-            return representation
-        else:
-            user = self.context['request'].user
-            try:
-                data_sharing_agreement = data_sharing_models.DataSharingAgreement.objects.get(
-                    User=user,
-                    Dataset_id = representation['Dataset']['Dataset_ID']
-                    )
-                if data_sharing_agreement.Agreement_status == 'granted':
-                    representation['Dataset']['User_has_access'] = True
-                    return representation
-            except data_sharing_models.DataSharingAgreement.DoesNotExist:
-                pass
-
-        representation['Dataset']['User_has_access'] = False  
-
-        restricted_keys = restricted_keys[self.elasticsearch_index_name]
-
-        for key in restricted_keys:
-            representation[key] = 'access restricted'
-
-        return representation
+        from globallometree.apps.data_sharing.data_tools import restrict_access
+        record = super(LinkedModelSerializer, self).to_representation(obj)
+        return restrict_access(record, self.elasticsearch_index_name, self.context['request'].user)
 
 
 class AllometricEquationSerializer(LinkedModelSerializer):
