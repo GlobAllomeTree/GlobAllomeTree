@@ -984,7 +984,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
         from globallometree.apps.data_sharing.data_tools import restrict_access
         record = super(LinkedModelSerializer, self).to_representation(obj)
         
-        if self.context['request'].user:
+        if 'request' in self.context.keys():
             return restrict_access(record, self.elasticsearch_index_name, self.context['request'].user)
         else:
             return record
