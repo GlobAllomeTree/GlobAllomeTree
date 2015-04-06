@@ -982,7 +982,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
         # Here we figure out if the user has access to this data object
         # through a data sharing agreement or since the object is permitted
         # to all users
-        from globallometree.apps.data_sharing.data_tools import get_restricted_keys
+        from globallometree.apps.data_sharing.data_tools import restricted_keys
         representation = super(LinkedModelSerializer, self).to_representation(obj)
         
         # Being used for internal use
@@ -1011,7 +1011,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
 
         representation['Dataset']['User_has_access'] = False  
 
-        restricted_keys = get_restricted_keys(self.elasticsearch_index_name)
+        restricted_keys = restricted_keys[self.elasticsearch_index_name]
 
         for key in restricted_keys:
             representation[key] = 'access restricted'

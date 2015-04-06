@@ -17,17 +17,47 @@ from globallometree.apps.api import (
     Parsers
     )
 
+from globallometree.apps.data_sharing.models import DataSharingAgreement
 
-def get_restricted_keys(index_name):
+restricted_keys = {
+    'allometricequation' : ['Equation', 'Substitute_equation'],
+    'wooddensity' : [],
+    'rawdata': [],
+    'biomassexpansionfactor' : []
+}
 
-    restricted_keys = {
-        'allometricequation' : ['Equation', 'Substitute_equation'],
-        'wooddensity' : [],
-        'rawdata': [],
-        'biomassexpansionfactor' : []
-    }
+def restrict_access(record, es_type, user):
 
-    return restricted_keys[index_name]
+    if not es_type in restricted_keys:
+        return record
+
+    if not record['Dataset']:
+        return record
+
+    license = record['Dataset']['Data_license']
+    if license['Available_to_registered_users']:
+        record['Dataset']['User_has_access'] = True
+        return record
+    else:
+        try:
+            data_sharing_agreement = DataSharingAgreement.objects.get(
+                User=user,
+                Dataset_id = record['Dataset']['Dataset_ID']
+                )
+            if data_sharing_agreement.Agreement_status == 'granted':
+                record['Dataset']['User_has_access'] = True
+                return record
+        except DataSharingAgreement.DoesNotExist:
+            pass
+
+    record['Dataset']['User_has_access'] = False  
+
+
+    for key in restricted_keys[es_type]:
+        record[key] = 'access restricted'
+
+    return record
+
 
 
 def summarize_data(data):

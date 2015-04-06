@@ -23,6 +23,8 @@ estype_geopoint_geohash = {'type': 'geo_point',
                              'geohash_precision': 9
                              }
 
+estype_object =  {"type" : "object"}
+
 estype_reference = {
                     "properties": {
                         "Author": estype_string_not_analyzed,

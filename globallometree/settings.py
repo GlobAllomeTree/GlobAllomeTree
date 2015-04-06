@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'globallometree.apps.allometric_equations',
     'globallometree.apps.raw_data',
     'globallometree.apps.wood_densities',
+    'globallometree.apps.proxy',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
     'globallometree.apps.api',
@@ -176,7 +177,7 @@ ES_INDEXES = {'default': 'globallometree'}
 
 #Search url is the url that the browser sends requests to
 #It should be the public url of the proxy server
-SEARCH_URL = 'http://localhost:9200'
+SEARCH_URL = '/elastic'
 
 #Celery
 # CELERY_ACCEPT_CONTENT = ['json',]
