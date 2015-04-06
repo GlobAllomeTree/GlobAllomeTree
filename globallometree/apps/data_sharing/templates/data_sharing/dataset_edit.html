@@ -12,6 +12,8 @@
 
   <script type="text/template" id="templateLayout">
     <div id="equationModal">
+      <div class="modal fade" tabindex="-1" role="dialog" aria-labeledby="modalWindow">
+      </div>
     </div>
 
     <div id="equationPage">
@@ -19,21 +21,20 @@
   </script>
 
   <script type="text/template" id="templateModal">
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labeledby="modalWindow">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
-            </button>
-            <h4 class="modal-title"><%- title %></h4>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+          </button>
+          <h4 class="modal-title"><%- title %></h4>
+        </div>
+        <div class="modal-body">
+          <div class="panel-group" id="modalFields" role="tablist" aria-multiselectable="false">
           </div>
-          <div class="modal-body">
-            <%- body %>
-          </div>
-          <div class="modal-footer">
-            <%- footer %>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <%- footer %>
         </div>
       </div>
     </div>
@@ -49,10 +50,10 @@
               &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
             </div>
             <div class="edit form-group" style="display: none">
-              <div class="col-sm-11">
+              <div class="col-sm-10">
                 <input class="form-control" value="<%- Title %>">
               </div>
-              <div class="form-control-static col-sm-1">
+              <div class="form-control-static col-sm-2">
                 &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
               </div>
             </div>
@@ -63,10 +64,10 @@
               &mdash; <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
             </div>
             <div class="edit form-group" style="display: none">
-              <div class="col-sm-11">
+              <div class="col-sm-10">
                 <input class="form-control input-sm" value="<%- Description %>">
               </div>
-              <div class="form-control-static col-sm-1">
+              <div class="form-control-static col-sm-2">
                 &mdash; <a href="#"><span class="glyphicon glyphicon-check"></span></a>
               </div>
             </div>
@@ -75,27 +76,27 @@
         <div class="col-sm-4" id="equationAlert">
         </div>
       </div>
-      <div class="panel-group" id="equations" role="tablist" aria-multiselectable="true">
+      <div class="panel-group" id="equations" role="tablist" aria-multiselectable="false">
       </div>
       <div class="text-right">
         <button id="equationAdd" type="button" class="btn btn-default">Add New Equation</button>
-        <button id="submitDataset" type="submit" class="btn btn-success">Save changes to dataset</button>
+        <button id="submitDataset" type="submit" class="btn btn-success">Save Changes To Dataset</button>
       </div>
     </form>
   </script>
 
-  <script type="text/template" id="templateEquation">
-    <div class="panel-heading nav" role="tab" id="heading<%- index %>">
+  <script type="text/template" id="templateFieldGroup">
+    <div class="panel-heading nav" role="tab" id="<%- prefix %>-heading-<%- index %>">
       <h3 class="panel-title col-sm-11">
-        <a href="#collapse<%- index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<% if(isExpanded) print("in") %>" aria-controls="collapse<%- index %>" class=""><%- heading %></a>
+        <a href="#<%- prefix %>-collapse-<%- index %>" data-toggle="collapse" data-parent="#accordion" aria-expanded="<% if(isExpanded) print(true) %>" aria-controls="collapse<%- index %>" class=""><%- heading %></a>
       </h3>
       <div class="col-sm-1 text-right">
-        <a href="#" class="remove" class="pull-right" data-index="<%- index %>">
+        <a href="#" class="remove pull-right" data-index="<%- index %>">
           <span class="glyphicon glyphicon-remove"></span>
         </a>
       </div>
     </div>
-    <div id="collapse<%- index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%- index %>">
+    <div id="<%- prefix %>-collapse-<%- index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<%- prefix %>-heading-<%- index %>">
       <div class="panel-body">
         <ul class="list-unstyled">
         </ul>
@@ -137,8 +138,22 @@
     <div class="col-sm-8 help-block"></div>
   </script>
 
-  <script type="text/template" id="listView">
+  <script type="text/template" id="templateDetail">
+    <div class="well">
+      <p class="lead"><%- title %></p>
+      <p><%- description %></p>
+      <div class="edit">
+      </div>
+      <div class="text-right" class="empty">
+        <button type="button" class="add btn btn-default">Add New</button>
+        <button type="button" class="lookup btn btn-default">Lookup <%- title %></button>
+      </div>
+    </div>
+  </script>
 
+  <script type="text/template" id="templateList">
+    <ul class="list-unstyled">
+    </ul>
   </script>
 
 {% endblock %}

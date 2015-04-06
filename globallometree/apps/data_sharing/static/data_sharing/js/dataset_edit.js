@@ -117,7 +117,7 @@
 
   });
 
-  // Dataset Model
+// Dataset Model
   // =============
   //
   // Description:
@@ -153,7 +153,6 @@
 
       if (Application.timers.save) {
         window.clearTimeout(Application.timers.save);
-        delete Application.timers.save;
       }
 
       Application.timers.save = window.setTimeout(function () {
@@ -435,18 +434,55 @@
 
   // Lookup Field Model
   // ==================
+  //
+  // Description:
+  // ------------
+  //
+  // Not used at the moment would theoretically act as a mixin for fields
+  // which need auto-complete with the server.
+  //
   Application.models.field.lookup = Application.models.field.extend({
   });
 
-  Application.models.field.modal = Application.models.base.extend({
-  });
-
-  // referenceWell
+  // Reference Well Model
+  // ====================
   Application.models.field.referenceWell = Application.models.base.extend({
 
     defaults: {
       value: {}
     }
+
+  });
+
+  // Species Detail Model
+  // ====================
+  Application.models.field.speciesDetail = Application.models.base.extend({
+
+    defaults: {
+      value: [{}]
+    }
+
+  });
+
+  // Location Detail Model
+  // =====================
+  Application.models.field.locationDetail = Application.models.base.extend({
+
+    defaults: {
+      value: [{}]
+    }
+
+  });
+
+  // Species Model
+  // =============
+  Application.models.species = Application.models.base.extend({
+
+  });
+
+  // Location Model
+  // ==============
+  Application.models.location = Application.models.base.extend({
 
   });
 
@@ -472,6 +508,22 @@
       this.add(JSON.parse(models));
     }
     
+  });
+
+  // Species Collection
+  // ==================
+  Application.collections.species = Backbone.Collection.extend({
+
+    model: Application.models.species
+
+  });
+
+  // Location Collection
+  // ===================
+  Application.collections.location = Backbone.Collection.extend({
+
+    model: Application.models.location
+
   });
 
   // Fields Collection
@@ -514,7 +566,7 @@
   // This view is inherited by other subsquent field views.
   Application.views.field = Backbone.Marionette.ItemView.extend({
 
-    className: "form-group",
+    className: "form-group row",
     tagName: "li",
 
     ui: {
@@ -703,7 +755,9 @@
 
     ui: {
       "valueField": "input"
-    }
+    },
+
+
 
   });
 
@@ -769,16 +823,6 @@
     
   });
 
-  // Modal Form Group View
-
-  Application.views.field.modal = Application.views.field.group.extend({
-
-    template: "#templateModal",
-
-    fields: []
-
-  });
-
   // Modal Group View
   // ================
 
@@ -790,8 +834,116 @@
 
   });
 
+  // Species Group View
+  // ==================
+  Application.views.field.detail = Backbone.Marionette.ItemView.extend({
+
+    template: "#templateDetail",
+    tagName: "li",
+
+    templateHelpers: function () {
+      var value = this.model.get("value")
+        , description = "Choose from one of the options below to add a species group";
+
+      if (value.length > 0) {
+        description = _.pluck(value, "Scientific_name").join(", ")
+      }
+
+      return {
+        title: "Species Group",
+        description: description
+      }
+    }
+
+  });
+
+  Application.views.field.speciesDetail = Application.views.field.detail.extend({
+
+    ui: {
+      "add": ".add"
+    },
+
+    events: {
+      "click @ui.add": "uiAdd"
+    },
+
+    templateHelpers: function () {
+      var value = this.model.get("value")
+        , description = "Choose from one of the options below to add a species group";
+
+      if (value.length > 0) {
+        description = _.pluck(value, "Scientific_name").join(", ")
+      }
+
+      return {
+        title: "Species Group",
+        description: description
+      }
+    },
+
+    uiAdd: function () {
+      var fieldGroup = new Application.views.speciesGroup({
+        model: this.model
+      });
+
+      fieldGroup.render();
+      var modalEl = $("#equationModal .modal");
+      modalEl.html(fieldGroup.el);
+      modalEl.modal("show")
+    }
+
+  });
+
+  Application.views.field.locationDetail = Application.views.field.detail.extend({
+
+    ui: {
+      "add": ".add"
+    },
+
+    events: {
+      "click @ui.add": "uiAdd"
+    },
+
+    templateHelpers: function () {
+      var value = this.model.get("value")
+        , description = "Choose from one of the options below to add a location group";
+
+      if (value.length > 0) {
+        description = _.pluck(value, "Country").join(", ")
+      }
+
+      return {
+        title: "Location Group",
+        description: description
+      }
+    },
+
+    uiAdd: function () {
+      var fieldGroup = new Application.views.locationGroup({
+        model: this.model
+      });
+
+      fieldGroup.render();
+      var modalEl = $("#equationModal .modal");
+      modalEl.html(fieldGroup.el);
+      modalEl.modal("show")
+    }
+
+  });
+
+  // Modal Form Group View
+  // =====================
+  Application.views.field.group.modal = Application.views.field.group.extend({
+
+    template: "#templateModal",
+
+  });
+
   // Reference View
   // ==============
+  //
+  // Description:
+  // ------------
   //
   // Manipulates a model with the following attributes.  The attibute _value_
   // is itself an object. Marionette does not set listeners recursively for
@@ -809,9 +961,7 @@
   // }
   Application.views.field.referenceWell = Application.views.field.group.well.extend({
 
-    defaults: {
-      value: {}
-    },
+    tagName: "li",
 
     initialize: function (options) {
       var i
@@ -852,7 +1002,298 @@
       var clone = _.clone(this.model.get("value"))
       clone[childModel.get("name")] = childModel.get("value");
       this.model.set("value", clone);
+    }
+
+  });
+
+  // Species View
+  // ============
+  Application.views.species = Application.views.field.group.extend({
+
+    template: "#templateFieldGroup",
+    className: "panel panel-default",
+
+    ui: {
+      "title": ".modal-title"
     },
+
+    modelEvents: {
+      "change:Family change:Species change:Species": "modelChangeTitle"
+    },
+
+    initialize: function (options) {
+      var i
+        , field
+        , values = options.model.get("value") || {}
+
+      this.collection = new Application.collections.field();
+
+      for (i = 0; i < this.fields.length; i += 1) {
+        field = this.fields[i];
+
+        this.collection.add(
+          { name: field.name, value: values[field.name]},
+          field.options
+        )
+      }
+    },
+
+    fields: [
+      {name: "Scientific_name",        options: {type: "char", maxLength: 80, nullable: true, blank: true, label: "Scientific name"}},
+      {name: "Family",                 options: {type: "char", maxLength: 80}},
+      {name: "Genus",                  options: {type: "char", maxLength: 80}},
+      {name: "Species",                options: {type: "char", maxLength: 80}},
+      {name: "Species_local_names",    options: {type: "char", maxLength: 80, label: "Species local names"}},
+      {name: "Subspecies",             options: {type: "char", maxLength: 80}},
+      {name: "Subspecies_local_names", options: {type: "char", maxLength: 80, label: "Subspecies local names"}}
+    ],
+
+    // Description:
+    // ------------
+    //
+    // Sets some additional view variables.
+    templateHelpers: function () {
+      var name = this.model.get("Scientific_name")
+        , heading = name || "Species "+(this.options.index + 1);
+
+      return {
+        heading: heading,
+        prefix: this.options.prefix,
+        index: this.options.index,
+        isExpanded: this.options.index === 0 ? true : false
+      }
+    },
+
+    modelChangeTitle: function () {
+      var title = ""
+                + this.model.get("Family") + " "
+                + this.model.get("Genus") + " "
+                + this.model.get("Species")
+
+      this.ui.title.html($("em").text(title));
+    }
+
+  });
+
+  // Location View
+  // =============
+  Application.views.location = Application.views.field.group.extend({
+
+    template: "#templateFieldGroup",
+    className: "panel panel-default",
+
+    ui: {
+      "title": ".modal-title"
+    },
+
+    modelEvents: {
+      "change:Continent change:Country": "modelChangeTitle"
+    },
+
+    initialize: function (options) {
+      var i
+        , field
+        , values = options.model.get("value") || {}
+
+      this.collection = new Application.collections.field();
+
+      for (i = 0; i < this.fields.length; i += 1) {
+        field = this.fields[i];
+
+        this.collection.add(
+          { name: field.name, value: values[field.name]},
+          field.options
+        )
+      }
+    },
+
+    fields: [
+      {name: "Location_name",   options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Location name"}},
+      {name: "Commune",         options: {type: "char", maxLength: 255, blank: true, nullable: true}},
+      {name: "Province",        options: {type: "char", maxLength: 255, blank: true, nullable: true}},
+      {name: "Region",          options: {type: "char", maxLength: 255, blank: true, nullable: true}},
+      {name: "Country",         options: {type: "char", }},
+      {name: "Biome_FAO",       options: {type: "char", blank: true, nullable: true, label: "Biome (FAO)"}},
+      {name: "Biome_UDVARDY",   options: {type: "char", blank: true, nullable: true, label: "Biome (UDVARDY)"}},
+      {name: "Biome_WWF",       options: {type: "char", blank: true, nullable: true, label: "Biome (WWF)"}},
+      {name: "Division_BAILEY", options: {type: "char", blank: true, nullable: true, label: "Division (BAILEY)"}},
+      {name: "Biome_HOLDRIDGE", options: {type: "char", blank: true, nullable: true, label: "Biome (HOLDRIDGE)"}},
+      {name: "Forest_type",     options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Forest type"}}
+    ],
+
+    // Description:
+    // ------------
+    //
+    // Sets some additional view variables.
+    templateHelpers: function () {
+      var equation = this.model.get("Equation")
+        , heading = equation || "Location "+(this.options.index + 1);
+
+      return {
+        heading: heading,
+        prefix: this.options.prefix,
+        index: this.options.index,
+        isExpanded: this.options.index === 0 ? true : false
+      }
+    },
+
+    modelChangeTitle: function () {
+      var title = ""
+                + this.model.get("Continent") + " "
+                + this.model.get("Country")
+
+      this.ui.title.text(title);
+    }
+
+  });
+
+  Application.views.speciesGroup = Backbone.Marionette.CompositeView.extend({
+    
+    template: "#templateModal",
+    childView: Application.views.species,
+    childViewContainer: ".panel-group",
+
+    ui: {
+      "speciesRemove": ".remove"
+    },
+
+    // Collection Events
+    // -----------------
+    collectionEvents: {
+      "change": "collectionChange",
+      "remove": "collectionRemove"
+    },
+
+    events: {
+      "click @ui.speciesRemove": "uiSpeciesRemove",
+      "show:view": "test"
+    },
+
+    // Description:
+    // ------------
+    //
+    // Clones the _Data\_as\_json_ collection and binds a change event listener
+    // to the parent model.
+    collectionChange: function (model, options) {
+      this.model.trigger("change");
+    },
+
+    collectionRemove: function () {
+      this.render()
+    },
+
+
+    initialize: function (options) {
+      this.model = options.model
+      this.collection = new Application.collections.species(this.model.get("value"))
+    },
+
+    templateHelpers: function () {
+      return {
+        title: "Species Group",
+        footer: "test"
+      }
+    },
+
+    // Description:
+    //
+    // Removes the equation when clicked.
+    uiSpeciesRemove: function (event) {
+      var element = $(event.currentTarget)
+        , index = element.data("index");
+
+      this.collection.remove(this.collection.at(element.data("index")));
+
+      return false;
+    },
+
+    // Parameters:
+    // -----------
+    //
+    // 1. `model` - object
+    // 2. `index` - numbers
+    childViewOptions: function (model, index) {
+      return {
+        prefix: "species",
+        index: index,
+        isExpanded: index === 0 ? true : false
+      }
+    }
+
+  });
+
+  Application.views.locationGroup = Backbone.Marionette.CompositeView.extend({
+    
+    template: "#templateModal",
+    childView: Application.views.location,
+    childViewContainer: ".panel-group",
+
+    ui: {
+      "locationRemove": ".remove"
+    },
+
+    // Collection Events
+    // -----------------
+    collectionEvents: {
+      "change": "collectionChange",
+      "remove": "collectionRemove"
+    },
+
+    events: {
+      "click @ui.locationRemove": "uiSpeciesRemove",
+      "show:view": "test"
+    },
+
+    // Description:
+    // ------------
+    //
+    // Clones the _Data\_as\_json_ collection and binds a change event listener
+    // to the parent model.
+    collectionChange: function (model, options) {
+      this.model.trigger("change");
+    },
+
+    collectionRemove: function () {
+      this.render()
+    },
+
+
+    initialize: function (options) {
+      this.model = options.model
+      this.collection = new Application.collections.location(this.model.get("value"))
+    },
+
+    templateHelpers: function () {
+      return {
+        title: "Species Group",
+        footer: "test"
+      }
+    },
+
+    // Description:
+    //
+    // Removes the equation when clicked.
+    uiSpeciesRemove: function (event) {
+      var element = $(event.currentTarget)
+        , index = element.data("index");
+
+      this.collection.remove(this.collection.at(element.data("index")));
+
+      return false;
+    },
+
+    // Parameters:
+    // -----------
+    //
+    // 1. `model` - object
+    // 2. `index` - numbers
+    childViewOptions: function (model, index) {
+      return {
+        prefix: "location",
+        index: index,
+        isExpanded: index === 0 ? true : false
+      }
+    }
 
   });
 
@@ -860,16 +1301,15 @@
   // =============
   Application.views.equation = Application.views.field.group.extend({
 
-    template: "#templateEquation",
+    template: "#templateFieldGroup",
     className: "panel panel-default",
 
     ui: {
-      "equationRemove": ".remove",
       "heading": ".panel-heading h3 a"
     },
 
     modelEvents: {
-      "change:Equation": "changeEquation"
+      "change:Equation": "modelChangeEquation"
     },
 
     fields: [
@@ -918,15 +1358,16 @@
       {name: "Sample_size",         options: {type: "char", maxLength: 150, nullable: true, blank: true}},
       {name: "Population",          options: {type: "lookup"}},
       {name: "Tree_type",           options: {type: "lookup"}},
-      {name: "Reference",           options: {type: "referenceWell"}}
-
+      {name: "Reference",           options: {type: "referenceWell"}},
+      {name: "Species_group",       options: {type: "speciesDetail"}},
+      {name: "Location_group",      options: {type: "locationDetail"}}
     ],
 
     // Description:
     // ------------
     //
     // Changes the _title_ of the corresponding child view's panel.
-    changeEquation: function(model, options) {
+    modelChangeEquation: function(model, options) {
       this.ui.heading.text(model.get("Equation"));
     },
 
@@ -941,6 +1382,7 @@
 
       return {
         heading: heading,
+        prefix: this.options.prefix,
         index: this.options.index,
         isExpanded: this.options.index === 0 ? true : false
       }
@@ -948,7 +1390,7 @@
     
   });
 
-  // Dataset View
+// Dataset View
   // ============
   Application.views.dataset = Backbone.Marionette.CompositeView.extend({
     
@@ -1032,8 +1474,8 @@
       this.model.trigger("change");
     },
 
-    collectionRemove: function (model, options) {
-      this.model.trigger("change");
+    collectionRemove: function () {
+      this.render()
     },
 
     
@@ -1052,15 +1494,10 @@
     //
     // Removes the equation when clicked.
     uiEquationRemove: function (event) {
-      var self = this;
+      var element = $(event.currentTarget)
+        , index = element.data("index");
 
-      this.children.each(function (child, index) {
-        if (child.ui.equationRemove[0] === event.currentTarget) {
-          self.collection.remove(self.collection.at(index));
-        }
-      });
-
-      this.render();
+      this.collection.remove(this.collection.at(element.data("index")));
     },
 
     uiFormSubmit: function () {
@@ -1108,12 +1545,14 @@
     // 2. `index` - numbers
     childViewOptions: function (model, index) {
       return {
+        prefix: "equations",
         index: index,
         isExpanded: index === 0 ? "true" : "false"
       }
     }
     
   });
+
 
   // # Application Initialization
   // 
