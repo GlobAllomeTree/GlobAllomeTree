@@ -138,7 +138,7 @@ class SpeciesGroupViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SpeciesGroupSerializer
 
 
-class SpeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
+class SpeciesLocalNameViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = SpeciesLocalName.objects.all()
@@ -152,7 +152,7 @@ class SubspeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SubspeciesLocalNameSerializer
 
 
-class PopulationViewSet(viewsets.ReadOnlyModelViewSet):
+class PopulationViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = Population.objects.all()
@@ -173,7 +173,7 @@ class CountryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CountrySerializer
 
 
-class ForestTypeViewSet(viewsets.ReadOnlyModelViewSet):
+class ForestTypeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
     queryset = ForestType.objects.all()

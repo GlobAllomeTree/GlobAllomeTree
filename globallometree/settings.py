@@ -232,7 +232,7 @@ REST_FRAMEWORK = {
     ),
     'PAGINATE_BY_PARAM' : 'limit',
     'PAGINATE_BY': 50,
-    'MAX_PAGINATE_BY': 200
+    'MAX_PAGINATE_BY': 500
 }
 
  

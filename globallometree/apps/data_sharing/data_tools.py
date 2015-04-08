@@ -20,11 +20,12 @@ from globallometree.apps.api import (
 from globallometree.apps.data_sharing.models import DataSharingAgreement
 
 restricted_keys = {
-    'allometricequation' : ['Equation', 'Substitute_equation'],
-    'wooddensity' : [],
+    'allometricequation' : ['Equation', 'Substitute_equation',],
+    'wooddensity' : ['Density_g_cm3',],
     'rawdata': [],
     'biomassexpansionfactor' : []
 }
+
 
 def restrict_access(record, index_name, user):
 
@@ -35,6 +36,7 @@ def restrict_access(record, index_name, user):
         return record
 
     license = record['Dataset']['Data_license']
+
     if license['Available_to_registered_users']:
         record['Dataset']['User_has_access'] = True
         return record
