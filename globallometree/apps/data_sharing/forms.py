@@ -1,8 +1,10 @@
-
+import os
 from django.db.models import Q
 from django import forms
 from .models import DataLicense, Dataset
 
+from globallometree.apps.api import Parsers
+    
 
 class LicenseChoiceForm(forms.Form):
     #Interesting - http://opendefinition.org/licenses/
@@ -87,6 +89,15 @@ class DatasetUploadForm(forms.ModelForm):
         if(commit):
             model.save()
         return model
+
+    def clean_Uploaded_dataset_file(self):
+        if self.cleaned_data['Uploaded_dataset_file']:
+            extension = os.path.splitext(self.cleaned_data['Uploaded_dataset_file'].name.lower())[1]
+            if extension not in Parsers.keys():
+                valid_extensions = ", ".join(Parsers.keys())
+                raise forms.ValidationError("The uploaded file must end with one of the extensions:%s" % valid_extensions)
+
+        return self.cleaned_data['Uploaded_dataset_file']
 
     class Meta:
         model = Dataset
