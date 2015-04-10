@@ -751,6 +751,8 @@ class PlotSerializer(serializers.ModelSerializer):
             "Division_BAILEY_ID", 
             "Country_ID",
             "Forest_type_ID",
+            "Continent",
+            "Continent_ID"
             )
 
 
@@ -894,6 +896,13 @@ class DatasetSerializer(serializers.ModelSerializer):
         read_only=True
         )
 
+    def __init__(self, *args, **kwargs):
+        if 'exclude_json' in kwargs.keys():
+            self.exclude_json = kwargs.pop('exclude_json')
+        else:
+            self.exclude_json = False
+        return super(DatasetSerializer, self).__init__(*args, **kwargs)
+
     def get_Dataset_url(self, obj):
         return obj.get_absolute_url()
 
@@ -909,6 +918,9 @@ class DatasetSerializer(serializers.ModelSerializer):
             if (not self.context['request'].user.is_superuser) and (self.context['request'].user != obj.User):
                 obj.Data_as_json = None
         except:
+            obj.Data_as_json = None
+
+        if self.exclude_json:
             obj.Data_as_json = None
 
         return super(DatasetSerializer, self).to_representation(obj)
@@ -937,7 +949,7 @@ class ReferenceSerializer(serializers.ModelSerializer):
 class LinkedModelSerializer(serializers.ModelSerializer):
     Species_group = SpeciesGroupSerializer(many=False)
     Location_group = LocationGroupSerializer(many=False)
-    Dataset = DatasetSerializer(many=False, read_only=True)
+    Dataset = DatasetSerializer(many=False, read_only=True, exclude_json=True)
     Reference = ReferenceSerializer(many=False)
     Contributor = fields.CharField(source='Contributor.Name', allow_null=True)
     Operator = fields.CharField(source='Operator.Name', allow_null=True)

@@ -222,7 +222,7 @@ class SpeciesGroup(BaseModel):
             data.append(species_def)
 
         for family in self.Families.all():
-            species_def = GenusSerializer(instance=family, many=False).data
+            species_def = FamilySerializer(instance=family, many=False).data
             data.append(species_def)
 
         return data

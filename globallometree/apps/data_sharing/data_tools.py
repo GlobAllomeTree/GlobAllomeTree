@@ -17,7 +17,7 @@ from globallometree.apps.api import (
     Parsers
     )
 
-from globallometree.apps.data_sharing.models import DataSharingAgreement
+from globallometree.apps.data_sharing.models import DataSharingAgreement, Dataset
 
 restricted_keys = {
     'allometricequation' : ['Equation', 'Substitute_equation',],
@@ -46,13 +46,23 @@ def restrict_access(record, index_name, user):
                 User=user,
                 Dataset_id = record['Dataset']['Dataset_ID']
                 )
-            if data_sharing_agreement.Agreement_status == 'granted' or \
-               data_sharing_agreement.Dataset.User == user:
+            if data_sharing_agreement.Agreement_status == 'granted':
                 record['Dataset']['User_has_access'] = True
                 return record
         except DataSharingAgreement.DoesNotExist:
             pass
 
+        try:
+            # If the dataset belongs to the user, then return true
+            dataset = Dataset.objects.get(
+                User=user,
+                pk=record['Dataset']['Dataset_ID']
+                )
+            record['Dataset']['User_has_access'] = True
+            return record
+        except Dataset.DoesNotExist:
+            pass
+        
     record['Dataset']['User_has_access'] = False
 
     for key in restricted_keys[index_name]:

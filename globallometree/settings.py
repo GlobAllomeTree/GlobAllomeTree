@@ -231,7 +231,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication'
     ),
     'PAGINATE_BY_PARAM' : 'limit',
-    'PAGINATE_BY': 50,
+    'PAGINATE_BY': 10,
     'MAX_PAGINATE_BY': 500
 }
 

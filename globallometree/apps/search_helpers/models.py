@@ -52,7 +52,8 @@ class LinkedBaseModel(BaseModel):
         context = {}
         if request:
             context['request'] = request
-        return SerializerClass(self, context=context).data
+        serialized_data = SerializerClass(self, context=context).data
+        return serialized_data 
 
     def update_index(self):
         IndexClass = self.get_index_class()
@@ -78,7 +79,4 @@ class LinkedBaseModel(BaseModel):
     def delete(self, *args, **kwargs):
         self.remove_from_index()
         return super(LinkedBaseModel, self).delete(*args, **kwargs)
-
-
-
 
