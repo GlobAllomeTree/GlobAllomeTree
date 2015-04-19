@@ -1,14 +1,9 @@
 // NOTE: This closure serves to keep the _window_ object tidy.
 (function () {
-  // # Application
-  // ---------------------------------------------------------------------------
-
-  // Application
-  // ===========
+  // #  Application
   var Application = Backbone.Marionette.Application.extend({
 
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `options` - object
     initialize: function (options) {
@@ -21,11 +16,9 @@
 
   });
 
-  // Aplication.events
-  // =================
+  // ###  Aplication.events
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // A global event listener which enables messaging between the different parts
   // of the application.  This is primarily useful for messaging between
@@ -35,14 +28,10 @@
   //       entry of _Application_.
   Application.events = _.extend({}, Backbone.Events);
 
-  window.events = Application.events;
 
-
-  // Application.timers:
-  // ===================
+  // ###  Application.timers:
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // Stores timers used in the application.
   //
@@ -51,35 +40,29 @@
   // * save
   Application.timers = {};
 
-  // Application.models
-  // ==================
+  // ###  Application.models
   Application.models = {};
 
-  // Application.collections
-  // =======================
+  // ###  Application.collections
   Application.collections = {};
 
-  // Application.views
-  // =================
+  // ###  Application.views
   Application.views = {};
 
-  // Application.routers
-  // ===================
+  // ###  Application.routers
   Application.routers = {};
 
-  // # Router
+  // ## Router
   // ---------------------------------------------------------------------------
 
-  // Main Router
-  // ===========
+  // ###  Main Router
   Application.routers.main = Backbone.Marionette.AppRouter.extend({
 
     routes: {
       "data/sharing/datasets/:id/*params": "loadDataset"
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Called from _AppRouter_ with string arguments corresponding to the named
     // route above.
@@ -99,16 +82,14 @@
 
   });
 
-  // # Models
+  // ## Models
   // ---------------------------------------------------------------------------
 
 
-  // Base Model
-  // ==========
+  // ###  Base Model
   Application.models.base = Backbone.Model.extend({
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Stores _options_ passed to initialize.
     initialize: function (attrs, options) {
@@ -117,11 +98,9 @@
 
   });
 
-// Dataset Model
-  // =============
+// ###  Dataset Model
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // A model containing the entire dataset which syncs with the server via
   // calls to _save_.
@@ -153,6 +132,7 @@
 
       if (Application.timers.save) {
         window.clearTimeout(Application.timers.save);
+        delete Application.timers.save;
       }
 
       Application.timers.save = window.setTimeout(function () {
@@ -160,8 +140,7 @@
       }, 60000);
     },
       
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Appends a trailing forward slash to the URL so the request is not
     // redirected. Saves the application a round trip to the server.
@@ -169,13 +148,11 @@
       return this.urlRoot + this.get("id") + "/";
     },
       
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Parses the JSON response from the server.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `response` - object
     // 2. `options` - object
@@ -188,8 +165,7 @@
       return response;
     },
       
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Returns a JSON object to send the server.
     //
@@ -204,16 +180,13 @@
       
   });
 
-  // Field Model
-  // ===========
+  // ###  Field Model
   //
   // Inherits:
-  // ---------
   // 
   // Application.models.base
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // This model acts as a base class for other field types it introduces
   // pre-validation and several validation routines.
@@ -227,13 +200,11 @@
       "maxLength"
     ],
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Validates if a field can be null.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `value` - [any type]
     validateNullable: function (value) {
@@ -242,13 +213,11 @@
       }
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Validates if a field can be blank.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `value` - [any type]
     validateBlank: function (value) {
@@ -257,13 +226,11 @@
       }
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Validates if a field meets its maxLength requirement.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `value` - [any type]
     validateMaxLength: function (value) {
@@ -272,13 +239,11 @@
       }
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Validates `value` against the choices list.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `value` - [any type]
     validateChoices: function (value) {
@@ -287,13 +252,11 @@
       }
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Calls the validate methods indexed in _validations_.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `attrs` - object
     // 2. `options` - object
@@ -317,8 +280,7 @@
     
   });
 
-  // Char Field Model
-  // ================
+  // ###  Char Field Model
   //
   // NOTE: The word "char" has special meaning in Javascript which is why object
   //       literal syntax is not used here.
@@ -326,8 +288,7 @@
 
   });
 
-  // Decimal Field Model
-  // ===================
+  // ###  Decimal Field Model
   Application.models.field["decimal"] = Application.models.field.extend({
 
     validations: [
@@ -338,8 +299,7 @@
       "maxDigits"
     ],
 
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `value` - [any type]
     validateNumeric: function (value) {
@@ -348,8 +308,7 @@
       }
     },
 
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `value` - [any type]
     validateDecimalPlaces: function (value) {
@@ -365,8 +324,7 @@
       }
     },
 
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `value` - [any type]
     validateMaxDigits: function (value) {
@@ -385,8 +343,7 @@
       }
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Convert the field _value_ to a number.
     get: function (key, options) {
@@ -397,14 +354,12 @@
 
   });
 
-  // Integer Field Model
-  // ===================
+  // ###  Integer Field Model
   Application.models.field["integer"] = Application.models.field.extend({
 
   });
 
-  // Null/Boolean Field Model
-  // ========================
+  // Null-Boolean Field Model
   Application.models.field["nullBoolean"] = Application.models.field.extend({
     
     validations: [
@@ -420,8 +375,7 @@
       this.options.blank = false;
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Convert the field _value_ to a Javascript primitive (null, false, true).
     get: function (key, options) {
@@ -432,11 +386,39 @@
     
   });
 
-  // Lookup Field Model
-  // ==================
+  // Biome-FAO Field Model
+  Application.models.field["ajaxSelect"] = Application.models.field.extend({
+
+    validations: [
+      "nullable",
+      "blank",
+      "choices"
+    ],
+
+    initialize: function (attrs, options) {
+      var self = this;
+
+      this.options = options;
+      this.options.nullable = true;
+      this.options.blank = false;
+
+      $.ajax(this.options.url, {
+        data: {
+          format: "json",
+          limit: 500
+        },
+        success: function (result) {
+          self.options.choices = _.pluck(result.results, "Name")
+        },
+        dataType: "json"
+      });
+    }
+
+  });
+
+  // ###  Lookup Field Model
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // Not used at the moment would theoretically act as a mixin for fields
   // which need auto-complete with the server.
@@ -444,8 +426,7 @@
   Application.models.field.lookup = Application.models.field.extend({
   });
 
-  // Reference Well Model
-  // ====================
+  // ###  Reference Well Model
   Application.models.field.referenceWell = Application.models.base.extend({
 
     defaults: {
@@ -454,8 +435,7 @@
 
   });
 
-  // Species Detail Model
-  // ====================
+  // ###  Species Detail Model
   Application.models.field.speciesDetail = Application.models.base.extend({
 
     defaults: {
@@ -464,8 +444,7 @@
 
   });
 
-  // Location Detail Model
-  // =====================
+  // ###  Location Detail Model
   Application.models.field.locationDetail = Application.models.base.extend({
 
     defaults: {
@@ -474,33 +453,28 @@
 
   });
 
-  // Species Model
-  // =============
+  // ###  Species Model
   Application.models.species = Application.models.base.extend({
 
   });
 
-  // Location Model
-  // ==============
+  // ###  Location Model
   Application.models.location = Application.models.base.extend({
 
   });
 
 
-  // # Application Collections
+  // ## Application Collections
   // ---------------------------------------------------------------------------
 
-  // Equation Collection
-  // ===================
+  // ###  Equation Collection
   Application.collections.equation = Backbone.Collection.extend({
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Parse the _Data_as_json_ string from the dataset.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `models` - array
     // 2. `options` - object
@@ -510,28 +484,24 @@
     
   });
 
-  // Species Collection
-  // ==================
+  // ###  Species Collection
   Application.collections.species = Backbone.Collection.extend({
 
     model: Application.models.species
 
   });
 
-  // Location Collection
-  // ===================
+  // ###  Location Collection
   Application.collections.location = Backbone.Collection.extend({
 
     model: Application.models.location
 
   });
 
-  // Fields Collection
-  // =================
+  // ###  Fields Collection
   Application.collections.field = Backbone.Collection.extend({
     
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Sets the _model_ for the collection entry to the _type_
     model: function (attrs, options) {
@@ -540,11 +510,10 @@
 
   });
 
-  // # Application Views
+  // ## Application Views
   // ---------------------------------------------------------------------------
 
-  // Layout View
-  // ===========
+  // ###  Layout View
   Application.views.layout = Backbone.Marionette.LayoutView.extend({
 
     template: "#templateLayout",
@@ -557,11 +526,9 @@
 
   });
 
-  // Field View
-  // ==========
+  // ###  Field View
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // This view is inherited by other subsquent field views.
   Application.views.field = Backbone.Marionette.ItemView.extend({
@@ -581,8 +548,7 @@
       "invalid": "showHelp"
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Hides the field's help block.
     hideHelp: function (event) {
@@ -590,8 +556,7 @@
       this.$el.find(".help-block").text("");
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Shows the field's help block with the current _validationError_.
     showHelp: function (event) {
@@ -599,8 +564,7 @@
       this.$el.find(".help-block").text(this.model.validationError);
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Updates the model with the value of the field from the user interface.
     valueFieldChange: function (event) {
@@ -613,14 +577,12 @@
       var name = this.model.get("name");
 
       return {
-        // Description:
-        // ------------
+        // **Description:**
         //
         // By default return the value of _name_ with underscores replaced by
         // whitespace
         label: this.model.options.label || name.replace(/_/g, " "),
-        // Description:
-        // ------------
+        // **Description:**
         //
         // By default return the value of _name_
         id: this.model.options.id || _.uniqueId("field_")
@@ -628,11 +590,9 @@
     }
   });
 
-  // Char Field View
-  // ===============
+  // ###  Char Field View
   //
   // Inherits:
-  // ---------
   //
   // Application.views.field
   Application.views.field["char"] = Application.views.field.extend({
@@ -649,11 +609,9 @@
     }
   });
 
-  // Char Field View
-  // ===============
+  // ###  Char Field View
   //
   // Inherits:
-  // ---------
   //
   // Application.views.field
   Application.views.field["text"] = Application.views.field.extend({
@@ -665,11 +623,9 @@
     }
   });
 
-  // Integer Field View
-  // ==================
+  // ###  Integer Field View
   //
   // Inherits:
-  // ---------
   //
   // Application.views.field
   Application.views.field["integer"] = Application.views.field.extend({
@@ -687,11 +643,9 @@
 
   });
 
-  // Decimal Field View
-  // ==================
+  // ###  Decimal Field View
   //
   // Inherits:
-  // ---------
   //
   // Application.views.field
   Application.views.field["decimal"] = Application.views.field.extend({
@@ -709,11 +663,9 @@
 
   });
 
-  // NullBoolean Field View
-  // ======================
+  // ###  NullBoolean Field View
   //
   // Inherits:
-  // ---------
   //
   // Application.views.field
   Application.views.field["nullBoolean"] = Application.views.field.extend({
@@ -724,8 +676,7 @@
       "valueField": "select"
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Assigns template variables on render.
     templateHelpers: function () {
@@ -742,14 +693,53 @@
 
   });
 
-  // Lookup Field View
-  // =================
+  Application.views.field["ajaxSelect"] = Application.views.field.extend({
+
+    template: "#templateOption",
+    
+    ui: {
+      "valueField": "select"
+    },
+
+    onRender: function () {
+      var target = this.$el.find("select");
+
+      $.ajax(this.model.options.url, {
+        data: {
+          format: "json",
+          limit: 500
+        },
+        success: function (result) {
+          _.each(result.results, function (field) {
+            target.append("<option value=\""+field.Name+"\">"+field.Name+"</option>");
+          });
+        },
+        dataType: "json"
+      });
+    },
+
+    // **Description:**
+    //
+    // Assigns template variables on render.
+    templateHelpers: function () {
+      var helpers = Application.views.field.prototype.templateHelpers.call(this);
+
+      // Initialize with one _blank_ option.
+      helpers.options = [
+        {label: "", value: ""}
+      ]
+
+      return helpers;
+    }
+
+  });
+
+  // ###  Lookup Field View
   //
   // Inherits:
-  // ---------
   //
   // Application.views.field
-  Application.views.field.lookup = Application.views.field.extend({
+  Application.views.field["lookup"] = Application.views.field.extend({
 
     template: "#templateInput",
 
@@ -761,16 +751,13 @@
 
   });
 
-  // Field Group View
-  // ================
+  // ###  Field Group View
   //
   // Inherits:
-  // ---------
   //
   // Backbone.Marionette.CompositeView
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // A group of fields assembled together in a list.
   Application.views.field.group = Backbone.Marionette.CompositeView.extend({
@@ -797,63 +784,47 @@
       }
     },
     
-    // Description:
+    // **Description:**
     //
     // Return the corresponding entry from
     // _Application.views.field[child.options.type]_.
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `child` - Backbone.Model
     getChildView: function (child) {
       return Application.views.field[child.options.type];
     },
 
-    // Description:
+    // **Description:**
     //
     // Event listener which fires when any field in the collection is changed.
     // Updates the parent model's named attribute with the field's value.
     changeField: function (childModel, options) {
-      var name = childModel.get("name")
-        , value = childModel.get("value");
+      if (childModel) {
+        var name = childModel.get("name")
+          , value = childModel.get("value");
 
-      this.model.set(name, value);
+        this.model.set(name, value);
+      }
     }
     
   });
 
-  // Modal Group View
-  // ================
+  // ###  Modal Group View
 
-  // Nested Form Group View
-  // ======================
+  // ###  Nested Form Group View
   Application.views.field.group.well = Application.views.field.group.extend({
 
     template: "#templateWell"
 
   });
 
-  // Species Group View
-  // ==================
+  // ###  Species Group View
   Application.views.field.detail = Backbone.Marionette.ItemView.extend({
 
     template: "#templateDetail",
-    tagName: "li",
-
-    templateHelpers: function () {
-      var value = this.model.get("value")
-        , description = "Choose from one of the options below to add a species group";
-
-      if (value.length > 0) {
-        description = _.pluck(value, "Scientific_name").join(", ")
-      }
-
-      return {
-        title: "Species Group",
-        description: description
-      }
-    }
+    tagName: "li"
 
   });
 
@@ -869,11 +840,13 @@
 
     templateHelpers: function () {
       var value = this.model.get("value")
-        , description = "Choose from one of the options below to add a species group";
+        , description;
 
       if (value.length > 0) {
         description = _.pluck(value, "Scientific_name").join(", ")
       }
+
+      description = description || "Choose from one of the options below to add a species group";
 
       return {
         title: "Species Group",
@@ -906,11 +879,13 @@
 
     templateHelpers: function () {
       var value = this.model.get("value")
-        , description = "Choose from one of the options below to add a location group";
+        , description;
 
       if (value.length > 0) {
         description = _.pluck(value, "Country").join(", ")
       }
+
+      description = description || "Choose from one of the options below to add a location group";
 
       return {
         title: "Location Group",
@@ -931,19 +906,16 @@
 
   });
 
-  // Modal Form Group View
-  // =====================
+  // ###  Modal Form Group View
   Application.views.field.group.modal = Application.views.field.group.extend({
 
     template: "#templateModal",
 
   });
 
-  // Reference View
-  // ==============
+  // ###  Reference View
   //
-  // Description:
-  // ------------
+  // **Description:**
   //
   // Manipulates a model with the following attributes.  The attibute _value_
   // is itself an object. Marionette does not set listeners recursively for
@@ -987,8 +959,7 @@
       {name: "Reference", options: {type: "char", nullable: true, blank: true}}
     ],
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Updates the parent model's _value_ attribute using _\_.clone_ which
     // causes will trigger the change event of parent _models_ and
@@ -1006,8 +977,7 @@
 
   });
 
-  // Species View
-  // ============
+  // ###  Species View
   Application.views.species = Application.views.field.group.extend({
 
     template: "#templateFieldGroup",
@@ -1039,17 +1009,14 @@
     },
 
     fields: [
-      {name: "Scientific_name",        options: {type: "char", maxLength: 80, nullable: true, blank: true, label: "Scientific name"}},
       {name: "Family",                 options: {type: "char", maxLength: 80}},
       {name: "Genus",                  options: {type: "char", maxLength: 80}},
       {name: "Species",                options: {type: "char", maxLength: 80}},
       {name: "Species_local_names",    options: {type: "char", maxLength: 80, label: "Species local names"}},
-      {name: "Subspecies",             options: {type: "char", maxLength: 80}},
-      {name: "Subspecies_local_names", options: {type: "char", maxLength: 80, label: "Subspecies local names"}}
+      {name: "Subspecies",             options: {type: "char", maxLength: 80}}
     ],
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Sets some additional view variables.
     templateHelpers: function () {
@@ -1075,8 +1042,7 @@
 
   });
 
-  // Location View
-  // =============
+  // ###  Location View
   Application.views.location = Application.views.field.group.extend({
 
     template: "#templateFieldGroup",
@@ -1107,22 +1073,29 @@
       }
     },
 
+    changeField: function (childModel, options) {
+      // Get a reference to 
+      var clone = _.clone(this.model.get("value") || {});
+      clone[childModel.get("name")] = childModel.get("value");
+      this.model.set("value", clone);
+    },
+
     fields: [
       {name: "Location_name",   options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Location name"}},
       {name: "Commune",         options: {type: "char", maxLength: 255, blank: true, nullable: true}},
       {name: "Province",        options: {type: "char", maxLength: 255, blank: true, nullable: true}},
       {name: "Region",          options: {type: "char", maxLength: 255, blank: true, nullable: true}},
-      {name: "Country",         options: {type: "char", }},
-      {name: "Biome_FAO",       options: {type: "char", blank: true, nullable: true, label: "Biome (FAO)"}},
-      {name: "Biome_UDVARDY",   options: {type: "char", blank: true, nullable: true, label: "Biome (UDVARDY)"}},
-      {name: "Biome_WWF",       options: {type: "char", blank: true, nullable: true, label: "Biome (WWF)"}},
-      {name: "Division_BAILEY", options: {type: "char", blank: true, nullable: true, label: "Division (BAILEY)"}},
+      {name: "Country",         options: {type: "ajaxSelect", url: "/api/v1/countries/" }},
+      {name: "Biome_FAO",       options: {type: "ajaxSelect", url: "/api/v1/biomes-fao/", blank: true, nullable: true, label: "Biome (FAO)"}},
+      {name: "Biome_UDVARDY",   options: {type: "ajaxSelect", url: "/api/v1/biomes-udvardy", blank: true, nullable: true, label: "Biome (UDVARDY)"}},
+      {name: "Biome_WWF",       options: {type: "ajaxSelect", url: "/api/v1/biomes-wwf", blank: true, nullable: true, label: "Biome (WWF)"}},
+      {name: "Division_BAILEY", options: {type: "ajaxSelect", url: "/api/v1/divisions-bailey/", blank: true, nullable: true, label: "Division (BAILEY)"}},
       {name: "Biome_HOLDRIDGE", options: {type: "char", blank: true, nullable: true, label: "Biome (HOLDRIDGE)"}},
-      {name: "Forest_type",     options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Forest type"}}
+      {name: "Forest_type",     options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Forest type"}},
+      {name: "Plot_name",       options: {type: "char", maxLength: 30, label: "Plot name"}}
     ],
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Sets some additional view variables.
     templateHelpers: function () {
@@ -1157,23 +1130,16 @@
       "speciesRemove": ".remove"
     },
 
-    // Collection Events
-    // -----------------
+    // **Collection Events:**
     collectionEvents: {
       "change": "collectionChange",
       "remove": "collectionRemove"
     },
 
     events: {
-      "click @ui.speciesRemove": "uiSpeciesRemove",
-      "show:view": "test"
+      "click @ui.speciesRemove": "uiSpeciesRemove"
     },
 
-    // Description:
-    // ------------
-    //
-    // Clones the _Data\_as\_json_ collection and binds a change event listener
-    // to the parent model.
     collectionChange: function (model, options) {
       this.model.trigger("change");
     },
@@ -1195,7 +1161,7 @@
       }
     },
 
-    // Description:
+    // **Description:**
     //
     // Removes the equation when clicked.
     uiSpeciesRemove: function (event) {
@@ -1207,8 +1173,7 @@
       return false;
     },
 
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `model` - object
     // 2. `index` - numbers
@@ -1232,8 +1197,7 @@
       "locationRemove": ".remove"
     },
 
-    // Collection Events
-    // -----------------
+    // Collection Events:
     collectionEvents: {
       "change": "collectionChange",
       "remove": "collectionRemove"
@@ -1244,8 +1208,7 @@
       "show:view": "test"
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Clones the _Data\_as\_json_ collection and binds a change event listener
     // to the parent model.
@@ -1270,7 +1233,7 @@
       }
     },
 
-    // Description:
+    // **Description:**
     //
     // Removes the equation when clicked.
     uiSpeciesRemove: function (event) {
@@ -1282,8 +1245,7 @@
       return false;
     },
 
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `model` - object
     // 2. `index` - numbers
@@ -1297,8 +1259,7 @@
 
   });
 
-  // Equation View
-  // =============
+  // ###  Equation View
   Application.views.equation = Application.views.field.group.extend({
 
     template: "#templateFieldGroup",
@@ -1363,8 +1324,7 @@
       {name: "Location_group",      options: {type: "locationDetail"}}
     ],
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Changes the _title_ of the corresponding child view's panel.
     modelChangeEquation: function(model, options) {
@@ -1372,8 +1332,7 @@
     },
 
     
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Sets some additional view variables.
     templateHelpers: function () {
@@ -1390,8 +1349,7 @@
     
   });
 
-// Dataset View
-  // ============
+// ###  Dataset View
   Application.views.dataset = Backbone.Marionette.CompositeView.extend({
     
     template: "#templateDataset",
@@ -1399,7 +1357,6 @@
     childViewContainer: "#equations",
     
     // User Interface Elements
-    // -----------------------
     ui: {
       "equationAdd": "#equationAdd",
       "form": "form",
@@ -1409,7 +1366,6 @@
     },
     
     // User Interface Events
-    // ---------------------
     events: {
       "click @ui.equationAdd": "uiEquationAdd",
       "submit @ui.form": "uiFormSubmit",
@@ -1419,19 +1375,16 @@
     },
 
     // Collection Events
-    // -----------------
     collectionEvents: {
       "change": "collectionChange",
       "remove": "collectionRemove"
     },
     
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Initializes the view using the model specified by `options.model`
     //
-    // Parameters:
-    // -----------
+    // **Parameters:**
     // 
     // 1. `options` - object
     initialize: function (options) {
@@ -1443,8 +1396,7 @@
       Application.events.on("alert", this.alert, this);
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Constructs a dismissable alert
     alert: function (type, msg) {
@@ -1465,8 +1417,7 @@
         .slideUp(200, function () { $(this).alert("close"); });
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Clones the _Data\_as\_json_ collection and binds a change event listener
     // to the parent model.
@@ -1479,7 +1430,7 @@
     },
 
     
-    // Description:
+    // **Description:**
     //
     // This function is called when the "Add Equation" button element is
     // clicked.
@@ -1490,7 +1441,7 @@
       this.$el.find(".panel:last").collapse("show");
     },
 
-    // Description:
+    // **Description:**
     //
     // Removes the equation when clicked.
     uiEquationRemove: function (event) {
@@ -1501,12 +1452,13 @@
     },
 
     uiFormSubmit: function () {
+      this.ui.editField.find(".edit a").trigger("click");
+
       this.model.save();
       return false;
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Shows the input elements for the _Title_ and _Description_ fields.
     uiFieldEdit: function (event) {
@@ -1521,8 +1473,7 @@
       input[0].setSelectionRange(length, length);
     },
 
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Saves the values of the _Title_ and _Description_ fields.
     uiFieldSubmit: function (event) {
@@ -1538,8 +1489,7 @@
       parent.find(".edit").hide();
     },
     
-    // Parameters:
-    // -----------
+    // **Parameters:**
     //
     // 1. `model` - object
     // 2. `index` - numbers
@@ -1554,14 +1504,13 @@
   });
 
 
-  // # Application Initialization
+  // ## Application Initialization
   // 
   // ---------------------------------------------------------------------------
 
   // Set a jQuery domReady listener which initializes the application.
   $(function () {
-    // Description:
-    // ------------
+    // **Description:**
     //
     // Parses cookie components.
     function getCookie(name) {
