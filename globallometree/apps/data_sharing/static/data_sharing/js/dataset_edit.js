@@ -907,9 +907,75 @@
   });
 
   // ###  Modal Form Group View
-  Application.views.field.group.modal = Application.views.field.group.extend({
+  Application.views.field.group.modal = Backbone.Marionette.CompositeView.extend({
 
     template: "#templateModal",
+
+    childViewContainer: ".panel-group",
+
+    ui: {
+      "remove": ".remove",
+      "add": ".modal-footer .add"
+    },
+
+    // Collection Events:
+    collectionEvents: {
+      "change": "collectionChange",
+      "remove": "collectionRemove"
+    },
+
+    events: {
+      "click @ui.remove": "uiRemove",
+      "click @ui.add": "uiAdd"
+    },
+
+    // **Description:**
+    //
+    // Clones the _Data\_as\_json_ collection and binds a change event listener
+    // to the parent model.
+    collectionChange: function (model, options) {
+      this.model.trigger("change");
+    },
+
+    collectionRemove: function () {
+      this.render();
+    },
+
+    templateHelpers: function () {
+      var helpers = {};
+
+      helpers.footer = _.template($("#templateModalFormButtons").html())();
+
+      return helpers;
+    },
+
+    uiAdd: function (event) {
+      this.collection.add({});
+    },
+
+    // **Description:**
+    //
+    // Removes the equation when clicked.
+    uiRemove: function (event) {
+      var element = $(event.currentTarget)
+        , index = element.data("index");
+
+      this.collection.remove(this.collection.at(element.data("index")));
+
+      return false;
+    },
+
+    // **Parameters:**
+    //
+    // 1. `model` - object
+    // 2. `index` - numbers
+    childViewOptions: function (model, index) {
+      return {
+        prefix: "species",
+        index: index,
+        isExpanded: index === 0 ? true : false
+      }
+    }
 
   });
 
@@ -1120,33 +1186,10 @@
 
   });
 
-  Application.views.speciesGroup = Backbone.Marionette.CompositeView.extend({
+  Application.views.speciesGroup = Application.views.field.group.modal.extend({
     
     template: "#templateModal",
     childView: Application.views.species,
-    childViewContainer: ".panel-group",
-
-    ui: {
-      "speciesRemove": ".remove"
-    },
-
-    // **Collection Events:**
-    collectionEvents: {
-      "change": "collectionChange",
-      "remove": "collectionRemove"
-    },
-
-    events: {
-      "click @ui.speciesRemove": "uiSpeciesRemove"
-    },
-
-    collectionChange: function (model, options) {
-      this.model.trigger("change");
-    },
-
-    collectionRemove: function () {
-      this.render()
-    },
 
 
     initialize: function (options) {
@@ -1155,70 +1198,19 @@
     },
 
     templateHelpers: function () {
-      return {
-        title: "Species Group",
-        footer: "test"
-      }
-    },
+      var helpers = Application.views.field.group.modal.prototype.templateHelpers.call(this);
 
-    // **Description:**
-    //
-    // Removes the equation when clicked.
-    uiSpeciesRemove: function (event) {
-      var element = $(event.currentTarget)
-        , index = element.data("index");
+      helpers.title = "Species Group";
 
-      this.collection.remove(this.collection.at(element.data("index")));
-
-      return false;
-    },
-
-    // **Parameters:**
-    //
-    // 1. `model` - object
-    // 2. `index` - numbers
-    childViewOptions: function (model, index) {
-      return {
-        prefix: "species",
-        index: index,
-        isExpanded: index === 0 ? true : false
-      }
+      return helpers;
     }
 
   });
 
-  Application.views.locationGroup = Backbone.Marionette.CompositeView.extend({
+  Application.views.locationGroup = Application.views.field.group.modal.extend({
     
     template: "#templateModal",
     childView: Application.views.location,
-    childViewContainer: ".panel-group",
-
-    ui: {
-      "locationRemove": ".remove"
-    },
-
-    // Collection Events:
-    collectionEvents: {
-      "change": "collectionChange",
-      "remove": "collectionRemove"
-    },
-
-    events: {
-      "click @ui.locationRemove": "uiSpeciesRemove",
-      "show:view": "test"
-    },
-
-    // **Description:**
-    //
-    // Clones the _Data\_as\_json_ collection and binds a change event listener
-    // to the parent model.
-    collectionChange: function (model, options) {
-      this.model.trigger("change");
-    },
-
-    collectionRemove: function () {
-      this.render()
-    },
 
 
     initialize: function (options) {
@@ -1227,34 +1219,11 @@
     },
 
     templateHelpers: function () {
-      return {
-        title: "Species Group",
-        footer: "test"
-      }
-    },
+      var helpers = Application.views.field.group.modal.prototype.templateHelpers.call(this);
 
-    // **Description:**
-    //
-    // Removes the equation when clicked.
-    uiSpeciesRemove: function (event) {
-      var element = $(event.currentTarget)
-        , index = element.data("index");
+      helpers.title = "Species Group"
 
-      this.collection.remove(this.collection.at(element.data("index")));
-
-      return false;
-    },
-
-    // **Parameters:**
-    //
-    // 1. `model` - object
-    // 2. `index` - numbers
-    childViewOptions: function (model, index) {
-      return {
-        prefix: "location",
-        index: index,
-        isExpanded: index === 0 ? true : false
-      }
+      return helpers;
     }
 
   });
