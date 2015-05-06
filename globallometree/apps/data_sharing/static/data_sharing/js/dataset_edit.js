@@ -702,7 +702,8 @@
     },
 
     onRender: function () {
-      var target = this.$el.find("select");
+      var target = this.$el.find("select")
+        , value = this.model.get("value");
 
       $.ajax(this.model.options.url, {
         data: {
@@ -711,7 +712,8 @@
         },
         success: function (result) {
           _.each(result.results, function (field) {
-            target.append("<option value=\""+field.Name+"\">"+field.Name+"</option>");
+            var selected = (field.Name === value) ? "selected=\"selected\"" : "";
+            target.append("<option value=\""+field.Name+"\" "+selected+">"+field.Name+"</option>");
           });
         },
         dataType: "json"
@@ -907,7 +909,7 @@
   });
 
   // ###  Modal Form Group View
-  Application.views.field.group.modal = Backbone.Marionette.CompositeView.extend({
+  Application.views.modal = Backbone.Marionette.CompositeView.extend({
 
     template: "#templateModal",
 
@@ -931,9 +933,15 @@
 
     // **Description:**
     //
-    // Clones the _Data\_as\_json_ collection and binds a change event listener
-    // to the parent model.
-    collectionChange: function (model, options) {
+    // Updates the parent model's _value_ attribute using _\_.clone_ which
+    // causes will trigger the change event of parent _models_ and
+    // _collections_.
+    //
+    // For more information see this
+    // [blog post](http://www.crittercism.com/blog/nested-attributes-in-backbone-js-models)
+    // .
+    collectionChange: function (childModel, options) {
+      this.model.set("value", this.collection.toJSON());
       this.model.trigger("change");
     },
 
@@ -1043,24 +1051,19 @@
 
   });
 
-  // ###  Species View
-  Application.views.species = Application.views.field.group.extend({
-
-    template: "#templateFieldGroup",
-    className: "panel panel-default",
+  // ### Modal Field Group View
+  Application.views.field.group.modal = Application.views.field.group.extend({
 
     ui: {
       "title": ".modal-title"
     },
 
-    modelEvents: {
-      "change:Family change:Species change:Species": "modelChangeTitle"
-    },
+    template: "#templateFieldGroup",
+    className: "panel panel-default",
 
     initialize: function (options) {
       var i
-        , field
-        , values = options.model.get("value") || {}
+        , field;
 
       this.collection = new Application.collections.field();
 
@@ -1068,10 +1071,19 @@
         field = this.fields[i];
 
         this.collection.add(
-          { name: field.name, value: values[field.name]},
+          { name: field.name, value: options.model.get(field.name)},
           field.options
         )
       }
+    }
+
+  });
+
+  // ###  Species View
+  Application.views.species = Application.views.field.group.modal.extend({
+
+    modelEvents: {
+      "change:Family change:Species change:Species": "modelChangeTitle"
     },
 
     fields: [
@@ -1109,41 +1121,10 @@
   });
 
   // ###  Location View
-  Application.views.location = Application.views.field.group.extend({
-
-    template: "#templateFieldGroup",
-    className: "panel panel-default",
-
-    ui: {
-      "title": ".modal-title"
-    },
+  Application.views.location = Application.views.field.group.modal.extend({
 
     modelEvents: {
       "change:Continent change:Country": "modelChangeTitle"
-    },
-
-    initialize: function (options) {
-      var i
-        , field
-        , values = options.model.get("value") || {}
-
-      this.collection = new Application.collections.field();
-
-      for (i = 0; i < this.fields.length; i += 1) {
-        field = this.fields[i];
-
-        this.collection.add(
-          { name: field.name, value: values[field.name]},
-          field.options
-        )
-      }
-    },
-
-    changeField: function (childModel, options) {
-      // Get a reference to 
-      var clone = _.clone(this.model.get("value") || {});
-      clone[childModel.get("name")] = childModel.get("value");
-      this.model.set("value", clone);
     },
 
     fields: [
@@ -1186,32 +1167,41 @@
 
   });
 
-  Application.views.speciesGroup = Application.views.field.group.modal.extend({
+  Application.views.speciesGroup = Application.views.modal.extend({
     
-    template: "#templateModal",
     childView: Application.views.species,
 
-
     initialize: function (options) {
-      this.model = options.model
-      this.collection = new Application.collections.species(this.model.get("value"))
+      this.model = options.model;
+      this.collection = new Application.collections.species(this.model.get("value"));
     },
 
     templateHelpers: function () {
-      var helpers = Application.views.field.group.modal.prototype.templateHelpers.call(this);
+      var helpers = Application.views.modal.prototype.templateHelpers.call(this);
 
       helpers.title = "Species Group";
 
       return helpers;
+    },
+
+
+    // **Parameters:**
+    //
+    // 1. `model` - object
+    // 2. `index` - numbers
+    childViewOptions: function (model, index) {
+      return {
+        prefix: "species",
+        index: index,
+        isExpanded: index === 0 ? true : false
+      }
     }
 
   });
 
-  Application.views.locationGroup = Application.views.field.group.modal.extend({
+  Application.views.locationGroup = Application.views.modal.extend({
     
-    template: "#templateModal",
     childView: Application.views.location,
-
 
     initialize: function (options) {
       this.model = options.model
@@ -1219,11 +1209,24 @@
     },
 
     templateHelpers: function () {
-      var helpers = Application.views.field.group.modal.prototype.templateHelpers.call(this);
+      var helpers = Application.views.modal.prototype.templateHelpers.call(this);
 
-      helpers.title = "Species Group"
+      helpers.title = "Location Group"
 
       return helpers;
+    },
+
+    // **Parameters:**
+    //
+    // 1. `model` - object
+    // 2. `index` - numbers
+    childViewOptions: function (model, index) {
+      return {
+        prefix: "location",
+        index: index,
+        isExpanded: index === 0 ? true : false
+      }
+
     }
 
   });
@@ -1397,7 +1400,6 @@
     collectionRemove: function () {
       this.render()
     },
-
     
     // **Description:**
     //
