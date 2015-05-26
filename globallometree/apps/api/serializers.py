@@ -433,7 +433,7 @@ class LocationSerializer(serializers.ModelSerializer):
     # Geohash and LatLonString are designed to help out with elasticsearch queries 
     def get_Geohash(self, obj):
         if obj.Latitude and obj.Longitude:
-            return Geohash.encode(obj.Latitude, obj.Longitude)
+            return Geohash.encode(float(obj.Latitude), float(obj.Longitude))
         else:
             return None
 
