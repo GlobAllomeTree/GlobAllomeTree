@@ -34,9 +34,16 @@
           </div>
         </div>
         <div class="modal-footer">
-          <%- footer %>
+          <%= footer %>
         </div>
       </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="templateModalFormButtons">
+    <div class="text-right" class="empty">
+      <button type="button" class="add btn btn-default">Add</button>
+      <button type="button" class="dismiss btn btn-default" data-dismiss="modal" aria-label="Done">Done</button>
     </div>
   </script>
 
@@ -128,14 +135,14 @@
 
   <script type="text/template" id="templateOption">
     <label for="<%- id %>" class="control-label col-sm-2"><%= label %></label>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
       <select name="<%- name %>" id="<%- id %>" class="form-control">
       <% _.each(options, function (option) { %>
         <option value="<%- String(option.value) %>" <% if(value === option.value) print("selected") %>><%- option.label %></option>
       <% }); %>
       </select>
     </div>
-    <div class="col-sm-8 help-block"></div>
+    <div class="col-sm-7 help-block"></div>
   </script>
 
   <script type="text/template" id="templateDetail">
