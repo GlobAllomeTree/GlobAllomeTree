@@ -73,7 +73,7 @@ class LinkedBaseModel(BaseModel):
 
     def save(self, *args, **kwargs):
         return_val = super(LinkedBaseModel, self).save(*args, **kwargs)
-        # self.update_index()
+        self.update_index()
         return return_val
         
     def delete(self, *args, **kwargs):
