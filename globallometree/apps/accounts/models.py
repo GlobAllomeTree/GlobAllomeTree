@@ -83,58 +83,58 @@ class UserProfile(models.Model):
 
 
 
-# Notify a user their status has changed to active
-@receiver(pre_save, sender=User)
-def user_pre_save(sender, instance, signal, *args, **kwargs):
+# # Notify a user their status has changed to active
+# @receiver(pre_save, sender=User)
+# def user_pre_save(sender, instance, signal, *args, **kwargs):
 
 
-    try:
-        #instance is the record about to be saved
-        #compare user is the record in the db
-        compare_user = User.objects.get(pk=instance.id)
-    except:
-        #returns if user is new or fixture is being loaded
-        return
+#     try:
+#         #instance is the record about to be saved
+#         #compare user is the record in the db
+#         compare_user = User.objects.get(pk=instance.id)
+#     except:
+#         #returns if user is new or fixture is being loaded
+#         return
     
-    if compare_user.is_active == False and \
-       instance.is_active == True \
-       and not hasattr(instance, 'notification_email_sent'):
-        # prevent duplicate emails being sent out
-        instance.notification_email_sent = True
-        #Mail the admin
-        mail_managers('GlobAllomeTree New User "%s" APPROVED' % instance.username,
-                      """
-Dear GlobAllomeTree Admin,
+#     if compare_user.is_active == False and \
+#        instance.is_active == True \
+#        and not hasattr(instance, 'notification_email_sent'):
+#         # prevent duplicate emails being sent out
+#         instance.notification_email_sent = True
+#         #Mail the admin
+#         mail_managers('GlobAllomeTree New User "%s" APPROVED' % instance.username,
+#                       """
+# Dear GlobAllomeTree Admin,
 
-A new user has been correctly approved for your website.
+# A new user has been correctly approved for your website.
 
-You can view the user's information here:
-Django User
-http://globallometree.org/admin/auth/user/%s/
-User Profile
-http://globallometree.org/admin/accounts/userprofile/%s/
+# You can view the user's information here:
+# Django User
+# http://globallometree.org/admin/auth/user/%s/
+# User Profile
+# http://globallometree.org/admin/accounts/userprofile/%s/
 
-""" % (instance.id, instance.get_profile().id),
-                     fail_silently=False)
+# """ % (instance.id, instance.get_profile().id),
+#                      fail_silently=False)
         
-        #Mail the new user
-        send_mail('GlobAllomeTree  account "%s" approved!' % instance.username,
-                      """
-Dear %s,
+#         #Mail the new user
+#         send_mail('GlobAllomeTree  account "%s" approved!' % instance.username,
+#                       """
+# Dear %s,
 
-Your account has been approved at www.globallometree.org
+# Your account has been approved at www.globallometree.org
 
-You may login at the following link:
+# You may login at the following link:
 
-http://www.globallometree.org/accounts/login/
+# http://www.globallometree.org/accounts/login/
 
-""" % instance.username, 
-                    'no-reply@globallometree.org',
-                     [instance.email], 
-                     fail_silently=False)
+# """ % instance.username, 
+#                     'no-reply@globallometree.org',
+#                      [instance.email], 
+#                      fail_silently=False)
 
-@receiver(post_save, sender=User)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.get_or_create(user=instance)
-    UserChanged.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_auth_token(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         Token.objects.get_or_create(user=instance)
+#     UserChanged.objects.create(user=instance)
