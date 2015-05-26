@@ -56,7 +56,7 @@ class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
         countries = {}
         for country in Country.objects.all():
             if country.Iso3166a3:
-                countries[country.Iso3166a3] = {
+                countries[country.Iso3166a3.lower()] = {
                     'latitude' : str(country.Centroid_latitude),
                     'longitude' : str(country.Centroid_longitude),
                     'common_name' : str(country.Common_name)
