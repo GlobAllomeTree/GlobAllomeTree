@@ -116,7 +116,6 @@ class SubspeciesSerializer(serializers.ModelSerializer):
                   'Species',
                   'Subspecies',
                   'Species_local_names',
-                  'Subspecies_local_names',
                   'Family_ID',
                   'Genus_ID',
                   'Species_ID',
@@ -165,9 +164,6 @@ class SpeciesDefinitionSerializer(serializers.Serializer):
         if 'Subspecies' not in obj.keys():
             obj['Subspecies'] = None
             obj['Subspecies_ID'] = None
-
-        if 'Subspecies_local_names' not in obj.keys():
-            obj['Subspecies_local_names'] = []
 
         return obj
 
@@ -662,7 +658,6 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                         location.Forest_type = location_models.ForestType.objects.get(Name=location_def['Forest_type']['Name'])
                        
                     location.save()
-                    import pdb; pdb.set_trace()
                     location_group.Locations.add(location)
            
         instance.Reference = source_models.Reference.objects.get_or_create(**reference_data)[0]
