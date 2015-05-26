@@ -8,8 +8,7 @@ from globallometree.apps.taxonomy.models import (
     Genus,
     Species,
     Subspecies,
-    SpeciesLocalName,
-    SubspeciesLocalName
+    SpeciesLocalName
     )
 
 from globallometree.apps.api import (
@@ -301,7 +300,7 @@ def match_or_clean_species_ids(species_def):
 def import_dataset_to_db(dataset, data):
     SerializerClass = Serializers[dataset.Data_type] 
     serializer = SerializerClass(data=data, many=True, context={'dataset': dataset})
-    if serializer.is_valid(): # Must call id valid
+    if serializer.is_valid(): # Must call is valid before calling save
         serializer.save()
         dataset.Imported = True
         dataset.save()

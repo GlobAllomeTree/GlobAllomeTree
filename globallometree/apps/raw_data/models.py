@@ -15,11 +15,6 @@ class RawData(LinkedBaseModel):
         null=True, blank=True, max_digits=16, decimal_places=10,
         help_text="Average height of tree measured")
 
-    Plot_ID = models.IntegerField(
-        null=True, blank=True,
-        help_text="Identification number of the plot where the data have been collected"
-        )
-
     Forest_type = models.CharField(
         null=True, blank=True, max_length="255",
         help_text="Description of the forest type where the data have been collected" )

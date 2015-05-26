@@ -33,6 +33,7 @@ class DatasetForm(forms.ModelForm):
 
         return self.cleaned_data['Uploaded_dataset_file']
 
+
    def clean(self):
         if 'Uploaded_dataset_file' in self.cleaned_data.keys() and \
         self.cleaned_data['Uploaded_dataset_file'] is not None and \
@@ -41,12 +42,13 @@ class DatasetForm(forms.ModelForm):
                     self.cleaned_data['Uploaded_dataset_file'], 
                     self.cleaned_data['Data_type']
                     )
-                # Since the file is ok, we keep a copy as json
-                self.cleaned_data['Data_as_json'] = json.dumps(data)
+              
                 if data_errors:
                     self.request._data_errors = data_errors
                     raise forms.ValidationError("The uploaded file has errors in the data")
- 
+                else:
+                    self.request._data_as_json = json.dumps(data)
+
         return self.cleaned_data
 
 
@@ -55,6 +57,7 @@ class DatasetAdmin(admin.ModelAdmin):
     list_display = ('Title',  'Imported', 'User', 'Data_type',  'Data_license', 'Created')
     search_fields  = ['Title', 'Description']
     raw_id_fields = ('User',)
+    exclude = ('Data_as_json',)
     form = DatasetForm
         
     def get_form(self, request, obj=None, **kwargs):
@@ -81,6 +84,16 @@ class DatasetAdmin(admin.ModelAdmin):
             return self.error_view(request)
         else:
             return add_response
+
+    def save_model(self, request, obj, form, change):
+        """
+        Given a model instance save it to the database.
+        """
+        # New valid json, so we store it (Since Data_as_json is an exluded field from the admin
+        # the form doesn't manage to save it automatically)
+        if hasattr(request, '_data_as_json'):
+            obj.Data_as_json = request._data_as_json
+        obj.save()
 
     def error_view(self, request):
 
@@ -118,8 +131,15 @@ class DatasetAdmin(admin.ModelAdmin):
             messages.error(request, "That dataset selected has already been imported")
             return None
      
-        
-        data = json.loads(dataset.Data_as_json)
+        if not dataset.Data_as_json or len(dataset.Data_as_json) == 0:
+            messages.error(request, "There is not any structured data in this dataset. Please upload a structured dataset file in order to import this dataset into the database.")
+            return None
+
+        try:
+            data = json.loads(dataset.Data_as_json)
+        except:
+            messages.error(request, "There was an error trying to parse the structured data, and the dataset could not be imported.")
+            return None
 
         if import_confirmed:
             import_dataset_to_db(dataset, data)

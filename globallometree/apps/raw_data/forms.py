@@ -16,11 +16,6 @@ class RawDataSearchForm(LinkedModelSearchForm):
     H_tree_avg__lte = forms.DecimalField(required=False,
         label='H tree avg To')
 
-    Plot_ID__gte = forms.IntegerField(required=False,
-        label='Plot ID From')
-    Plot_ID__lte = forms.IntegerField(required=False,
-        label='Plot ID To')
-
     Forest_type = forms.CharField(required=False, label='Forest type')
 
     Tree_ID__gte = forms.IntegerField(required=False,

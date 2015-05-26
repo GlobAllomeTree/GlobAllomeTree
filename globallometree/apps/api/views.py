@@ -21,7 +21,6 @@ from globallometree.apps.taxonomy.models import (
     Species, 
     Subspecies, 
     SpeciesLocalName, 
-    SubspeciesLocalName, 
     SpeciesGroup
 	)
 
@@ -53,7 +52,6 @@ from globallometree.apps.locations.models import (
     BiomeHoldridge, 
     LocationGroup, 
     Location, 
-    Plot,
     ForestType,
 	)
 
@@ -64,7 +62,6 @@ from globallometree.apps.api.serializers import (
     SpeciesSerializer,
     SubspeciesSerializer,
     SpeciesLocalNameSerializer,
-    SubspeciesLocalNameSerializer,  
     AllometricEquationSerializer,
     SpeciesGroupSerializer,
     ForestTypeSerializer,
@@ -74,7 +71,6 @@ from globallometree.apps.api.serializers import (
     DivisionBaileySerializer, 
     BiomeHoldridgeSerializer,
     PopulationSerializer,
-    PlotSerializer, 
     LocationSerializer,
     LocationGroupSerializer,
     ContinentSerializer,
@@ -146,13 +142,6 @@ class SpeciesLocalNameViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SpeciesLocalNameSerializer
 
 
-class SubspeciesLocalNameViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    """
-    queryset = SubspeciesLocalName.objects.all()
-    serializer_class = SubspeciesLocalNameSerializer
-
-
 class PopulationViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
@@ -221,13 +210,6 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
-
-
-class PlotViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    """
-    queryset = Plot.objects.all()
-    serializer_class = PlotSerializer
 
 
 class LocationGroupViewSet(viewsets.ReadOnlyModelViewSet):

@@ -4,7 +4,10 @@
 
 {% block script %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
 <script type="text/javascript">
+
 	$(function() {
 
 		var $editorInfo = $('<p id="div_id_editor_info">On the next screen you will be able to create the dataset using the allometric equation editor.</p>');
@@ -46,6 +49,10 @@
 				$('option[value="editor"]').attr('disabled',true).attr('hidden', true).attr('selected', false);
 				showSubmissionChoice();
 			}
+		}
+
+		function toggleSource(identifier) {
+			$(identifier).slideToggle('slow');
 		}
 
 		$('#id_Submission_method').change(showSubmissionChoice);
@@ -100,7 +107,7 @@
 			<br>
 			{% for record_errors in data_errors %}
 				<h4><span 
-				    onclick="$('#record-source-{{ record_errors.record_number }}').slideToggle('slow');"
+				    onclick="toggleSource('#record-source-{{ record_errors.record_number }}')"
 					style="float:right;font-weight:normal;font-size:small;cursor:pointer;padding-top:5px;"> show / hide source
 					</span>
 				Record: {{ record_errors.record_number }}</h4>

@@ -1,8 +1,7 @@
 from django.contrib import admin
 from globallometree.apps.locations.models import (
     Continent, Country, Location, LocationGroup,
-    BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge,
-    Plot, ForestType)
+    BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge, ForestType)
 
 class ContinentAdmin(admin.ModelAdmin):
     list_display = ('Name', 'Code')
@@ -22,27 +21,19 @@ class LocationInline(admin.TabularInline):
     model = LocationGroup.Locations.through
     raw_id_fields = ('location',)
 
-class PlotInline(admin.TabularInline):
-    model = LocationGroup.Plots.through
-    raw_id_fields = ('plot',)
-
-
-class PlotAdmin(admin.ModelAdmin):
-    list_display = ('Plot_name', 'Plot_size_m2','Location', )
-
 
 class ForestTypeAdmin(admin.ModelAdmin):
     list_display = ('Name',)
 
 
 class LocationGroupAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Modified')
+    list_display = ('Name', 'Dataset', 'Dataset_Location_group_ID', 'Modified')
+    list_filter  = ('Dataset',)
     search_fields = ('Name',)
     exclude = ('Locations',)
     fields = ('Name', )
     inlines = [
-    	 LocationInline,
-         PlotInline
+    	 LocationInline
     	]
 
 class BiomeFAOAdmin(admin.ModelAdmin):
@@ -74,5 +65,4 @@ admin.site.register(BiomeUdvardy, BiomeUdvardyAdmin)
 admin.site.register(BiomeWWF, BiomeWWFAdmin)
 admin.site.register(DivisionBailey, DivisionBaileyAdmin)
 admin.site.register(BiomeHoldridge, BiomeHoldridgeAdmin)
-admin.site.register(Plot, PlotAdmin)
 admin.site.register(ForestType, ForestTypeAdmin)

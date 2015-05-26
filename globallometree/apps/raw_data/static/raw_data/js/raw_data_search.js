@@ -7,8 +7,6 @@ window.app.searchManager.config.termFilterKeys = [
 window.app.searchManager.config.rangeFilterKeys = [
 		'H_tree_avg__gte',
         'H_tree_avg__lte',
-        'Plot_ID__gte',
-        'Plot_ID__lte',
         'Tree_ID__gte',
         'Tree_ID__lte',
         'Date_collection__gte',

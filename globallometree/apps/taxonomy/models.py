@@ -114,33 +114,6 @@ class SpeciesLocalName(BaseModel):
         db_table = "Species_local_name"
 
 
-class SubspeciesLocalName(BaseModel):
-    Subspecies_local_name_ID = models.AutoField(primary_key=True)
-    
-    # A local name could either be for a species or a subspecies
-    Subspecies = models.ForeignKey(Subspecies, blank=True, null=True,related_name="Local_names", db_column="Subspecies_ID")
-
-    Local_name = models.CharField(
-        max_length=80,
-        help_text="The local name of this subspecies in the local language"
-    )
-
-    Local_name_latin = models.CharField(
-        max_length=80,
-        null=True,
-        blank=True,
-        help_text="A phonetic version using the latin alphabet"
-    )
-
-    Language_iso_639_3 = models.CharField(
-        max_length=3, 
-        help_text="The ISO 639-3 Language Code for the language"
-    )
-
-    class Meta:
-        db_table = "Subspecies_local_name"
-
-
 class SpeciesGroup(BaseModel):
 
     Species_group_ID = models.AutoField(primary_key=True)

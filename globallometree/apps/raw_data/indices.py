@@ -38,7 +38,6 @@ class RawDataIndex(MappingType, Indexable):
             "properties": {
                 "Raw_data_ID": estype_long,
                 "H_tree_avg": estype_float,
-                "Plot_ID": estype_long,
                 "Forest_type": estype_string_not_analyzed,
                 "Tree_ID": estype_long,
                 "Date_collection": estype_date,

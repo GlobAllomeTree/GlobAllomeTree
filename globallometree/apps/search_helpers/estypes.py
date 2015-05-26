@@ -58,7 +58,9 @@ estype_location_group = {
                                         "LatLonString": estype_string_not_analyzed,
                                         "Location_ID": estype_long,
                                         "Name": estype_string_not_analyzed,
-                                        "Geohash": estype_geopoint_geohash
+                                        "Geohash": estype_geopoint_geohash,
+                                        "Plot_name": estype_string_not_analyzed,
+                                        "Plot_size_m2": estype_long,
                                     }
                                 }
                             }
@@ -75,7 +77,9 @@ estype_species_group = {
                                     "Genus": estype_string_not_analyzed,
                                     "Genus_ID": estype_long,
                                     "Species": estype_string_not_analyzed,
-                                    "Species_ID": estype_long
+                                    "Species_ID": estype_long,
+                                    "Subspecies": estype_string_not_analyzed,
+                                    "Species_local_name": estype_string_not_analyzed,
                                 }
                             },
                             "Species_group_ID": estype_long
