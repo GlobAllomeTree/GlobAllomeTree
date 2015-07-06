@@ -28,7 +28,7 @@ class AllometricEquationIndex(MappingType, Indexable):
     @classmethod
     def get_indexable(cls):
         #return a queryset of models that should be indexed
-        return cls.get_model().objects.all()
+        return cls.get_model().objects.all().order_by('pk')
 
     @classmethod
     def get_mapping(cls):

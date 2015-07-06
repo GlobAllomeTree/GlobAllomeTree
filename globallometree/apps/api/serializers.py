@@ -716,27 +716,27 @@ class AllometricEquationSerializer(LinkedModelSerializer):
 
     class Meta:
         model = allometric_equation_models.AllometricEquation
-        exclude = ('Created', 'Modified')
+        exclude = ('Created', 'Modified', 'Elasticsearch_doc_hash')
 
 
 class WoodDensitySerializer(LinkedModelSerializer):
     elasticsearch_index_name = 'wooddensity'
     class Meta:
         model = wood_density_models.WoodDensity
-        exclude = ('Created', 'Modified', )
+        exclude = ('Created', 'Modified', 'Elasticsearch_doc_hash')
 
 
 class RawDataSerializer(LinkedModelSerializer):
     elasticsearch_index_name = 'rawdata'
     class Meta:
         model = raw_data_models.RawData
-        exclude = ('Created', 'Modified', )
+        exclude = ('Created', 'Modified', 'Elasticsearch_doc_hash')
 
 
 class BiomassExpansionFactorSerializer(LinkedModelSerializer):
     elasticsearch_index_name = 'biomassexpansionfactor'
     class Meta:
         model = biomass_expansion_factors_models.BiomassExpansionFactor
-        exclude = ('Created', 'Modified', )
+        exclude = ('Created', 'Modified', 'Elasticsearch_doc_hash')
 
 

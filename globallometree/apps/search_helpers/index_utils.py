@@ -45,7 +45,7 @@ def rebuild(index_cls, limit):
             sys.stdout.flush()
 
             document = index_cls.extract_document(obj=obj)
-            #pprint(document)
+            obj.update_elasticsearch_doc_hash(document)
             documents.append(document)
 
            

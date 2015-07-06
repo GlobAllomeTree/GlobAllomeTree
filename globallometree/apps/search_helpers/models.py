@@ -1,3 +1,5 @@
+import hashlib
+import json
 from django.db import models
 from elasticutils.contrib.django import get_es
 
@@ -44,6 +46,14 @@ class LinkedBaseModel(BaseModel):
         'data_sharing.Dataset',null=True, blank=True,
         help_text="The Dataset that this raw data record came from")
 
+    Elasticsearch_doc_hash = models.CharField(
+        help_text="The hash of the denormalized version of this model in elasticsearch, used for knowing if the es index needs to be updated or not",
+        blank=True,
+        null=True,
+        verbose_name="Elasticsearhch document md5 hash",
+        max_length=255
+        )
+
     class Meta:
         abstract = True
 
@@ -55,13 +65,27 @@ class LinkedBaseModel(BaseModel):
         serialized_data = SerializerClass(self, context=context).data
         return serialized_data 
 
-    def update_index(self):
+    
+    def update_index(self, add=True, document=None):
         IndexClass = self.get_index_class()
-        document = IndexClass.extract_document(obj=self)
+        if document is None:
+            document = IndexClass.extract_document(obj=self)
         index = IndexClass.get_index()
         type_name = IndexClass.get_mapping_type_name()
         es = get_es()
-        es.index(index=index, doc_type=type_name, body=document, id=self.pk)
+        if add:
+            es.create(index=index, doc_type=type_name, body={'doc':document}, id=self.pk)
+        else:
+            es.update(index=index, doc_type=type_name, body={'doc':document}, id=self.pk)
+
+        self.update_elasticsearch_doc_hash(document)
+
+    def update_elasticsearch_doc_hash(self, document):
+        new_hash = hashlib.md5(json.dumps(document)).hexdigest()
+        if new_hash != self.Elasticsearch_doc_hash:
+            self.Elasticsearch_doc_hash = new_hash
+            self.save()
+
 
     def remove_from_index(self):
         IndexClass = self.get_index_class()
@@ -70,13 +94,3 @@ class LinkedBaseModel(BaseModel):
         type_name = IndexClass.get_mapping_type_name()
         es = get_es()
         es.delete(index=index, doc_type=type_name, id=self.pk)
-
-    def save(self, *args, **kwargs):
-        return_val = super(LinkedBaseModel, self).save(*args, **kwargs)
-        self.update_index()
-        return return_val
-        
-    def delete(self, *args, **kwargs):
-        self.remove_from_index()
-        return super(LinkedBaseModel, self).delete(*args, **kwargs)
-
