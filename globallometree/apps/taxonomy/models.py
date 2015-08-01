@@ -5,200 +5,169 @@ from globallometree.apps.data_sharing.models import Dataset
 
 
 class TaxonomyModel(BaseModel):
-    TPL_Status = models.CharField(max_length=80, blank=True, null=True)
-    TPL_Confidence_level = models.CharField(max_length=10, blank=True, null=True)
-    TPL_ID = models.CharField(max_length=40, blank=True, null=True)
+    TPL_Status = models.CharField(max_length=80, blank=True, null=True, db_column="tpl_status")
+    TPL_Confidence_level = models.CharField(max_length=10, blank=True, null=True, db_column="tpl_confidence_level")
+    TPL_ID = models.CharField(max_length=40, blank=True, null=True, db_column="tpl_ip")
     class Meta:
         abstract = True
 
 class Family(TaxonomyModel):
-    Family_ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=80, null=True, blank=True)
+    Family_ID = models.AutoField(primary_key=True, db_column="family_id")
+    Name = models.CharField(max_length=120, null=True, blank=True, db_column="name")
 
     class Meta:
         verbose_name_plural = 'Families'
-        db_table = "Family"
         ordering = ('Name',)
+        db_table = 'taxonomy_family'
         
     def __unicode__(self):
         return self.Name
 
-    def get_scientific_name(self):
-       return self.Name
-
 
 class Genus(TaxonomyModel):
-    Genus_ID = models.AutoField(primary_key=True)
-    Name  = models.CharField(max_length=80)
-    Family = models.ForeignKey(Family, db_column="Family_ID")
+    Genus_ID = models.AutoField(primary_key=True, db_column="genus_id")
+    Name  = models.CharField(max_length=120, db_column="name")
+    Family = models.ForeignKey(Family, db_column="family_id")
 
     class Meta:
         verbose_name_plural = 'Genera'
-        db_table = "Genus"
         ordering = ('Name',)
+        db_table = 'taxonomy_genus'
 
     def __unicode__(self):
         return self.Name
-
-    def get_scientific_name(self):
-       return ' '.join([self.Family.Name,
-                        self.Name])
-       
+ 
 
 class Species(TaxonomyModel):
-    Species_ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=80)
-    Genus = models.ForeignKey(Genus, db_column="Genus_ID")
-    
+    Species_ID = models.AutoField(primary_key=True, db_column="species_id")
+    Name = models.CharField(max_length=120, db_column="name")
+    Genus = models.ForeignKey(Genus, db_column="genus_id")
+    Author = models.CharField(max_length=120, db_column="author")
+
     class Meta:
         verbose_name_plural = 'Species'
-        db_table = "Species"
         ordering = ('Name',)
+        db_table = 'taxonomy_species'
 
     def __unicode__(self):
         return self.Name
-
-    def get_scientific_name(self):
-       return ' '.join([self.Genus.Family.Name,
-                        self.Genus.Name,
-                        self.Name])
 
 
 class Subspecies(TaxonomyModel):
-    Subspecies_ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=80)
-    Species = models.ForeignKey(Species, db_column="Species_ID")
+    Subspecies_ID = models.AutoField(primary_key=True, db_column="subspecies_id")
+    Name = models.CharField(max_length=120, db_column="name")
+    Species = models.ForeignKey(Species, db_column="species_id")
+    Author = models.CharField(max_length=120, db_column="author")
 
     class Meta:
         verbose_name_plural = 'Subspecies'
-        db_table = "Subspecies"
         ordering = ('Name',)
+        db_table = 'taxonomy_subspecies'
 
     def __unicode__(self):
         return self.Name
-
-    def get_scientific_name(self):
-
-       return ' '.join([self.Species.Genus.Family.Name,
-                        self.Species.Genus.Name,
-                        self.Species.Name,
-                        'var.',
-                        self.Name])
 
 
 class SpeciesLocalName(BaseModel):
 
-    Species_local_name_ID = models.AutoField(primary_key=True)
+    Species_local_name_ID = models.AutoField(primary_key=True, db_column="species_local_name_id")
     
-    # A local name could either be for a species or a subspecies
-    Species = models.ForeignKey(Species, blank=True, null=True, related_name="Local_names", db_column="Species_ID")
+    Species = models.ForeignKey(Species, related_name="Local_names", db_column="species_id")
 
     Local_name = models.CharField(
-        max_length=80,
-        help_text="The local name of this species in the local language"
+        max_length=120,
+        help_text="The local name of this species in the local language",
+        db_column="local_name"
     )
 
     Local_name_latin = models.CharField(
         max_length=80,
         null=True,
         blank=True,
-        help_text="A phonetic version using the latin alphabet"
+        help_text="A phonetic version using the latin alphabet",
+        db_column="local_name_latin"
     )
 
     Language_iso_639_3 = models.CharField(
         max_length=3, 
-        help_text="The ISO 639-3 Language Code for the language"
+        help_text="The ISO 639-3 Language Code for the language",
+        db_column="language_iso_639_3"
     )
 
     class Meta:
-        db_table = "Species_local_name"
+        db_table = "taxonomy_species_local_name"
+
+
+class SpeciesDefinition(BaseModel):
+    Species_definition_ID = models.AutoField(primary_key=True, db_column="species_definition_id")
+    Family = models.ForeignKey(Family, db_column="family_id")
+    Genus = models.ForeignKey(Genus, blank=True, null=True, db_column="genus_id")
+    Species = models.ForeignKey(Species, blank=True, null=True, db_column="species_id")
+    Subspecies = models.ForeignKey(Subspecies, blank=True, null=True, db_column="subspecies_id")
+
+    def Scientific_name(self):
+        scientific_name = ''
+
+        if self.Family:
+            scientific_name += self.Family.Name
+
+        if self.Genus:
+            scientific_name += ' ' + self.Genus.Name
+
+        if self.Species.Name:
+            scientific_name += ' ' + self.Species.Name
+
+        if self.Subspecies:
+            scientific_name += ' ' + self.Subspecies.Name
+
+        return scientific_name
+
+    def __unicode__(self):
+        return "Species Defintion %s" % self.pk
+
+    class Meta:
+        db_table = "taxonomy_species_definition"
 
 
 class SpeciesGroup(BaseModel):
 
-    Species_group_ID = models.AutoField(primary_key=True)
+    Species_group_ID = models.AutoField(
+        primary_key=True,
+        db_column="species_group_id"
+        )
 
     Dataset = models.ForeignKey(
         'data_sharing.Dataset',
         blank = True,
         null = True,
-        help_text = "If group was created from a dataset, the dataset id"
+        help_text = "If group was created from a dataset, the dataset id",
+        db_column="dataset_id"
         )
 
     Dataset_Species_group_ID = models.IntegerField(
         blank = True,
         null = True,
-        help_text = "If group was created from a dataset, references the local group id in the source dataset"
+        help_text = "If group was created from a dataset, references the local group id in the source dataset",
+        db_column="dataset_species_group_id"
     )
 
     Name = models.CharField(
         max_length=255, 
         null=True, 
         blank=True, 
-        verbose_name="Group Name"
+        verbose_name="Group Name",
+        db_column="name"
     )
 
-    Subspecies = models.ManyToManyField(
-        Subspecies, 
-        verbose_name="List of Subspecies", 
-        blank=True, 
-        null=True,
-    )
-
-    Species = models.ManyToManyField(
-        Species, 
-        verbose_name="List of Species", 
-        blank=True, 
-        null=True,
-    )
-
-    Genera = models.ManyToManyField(
-        Genus, 
-        verbose_name="List of Genus", 
-        blank=True, 
-        null=True,
-    )
-
-    Families = models.ManyToManyField(
-        Family, 
-        verbose_name="List of Families", 
-        blank=True, 
-        null=True,
-    )
+    Species_definitions = models.ManyToManyField(SpeciesDefinition,
+        verbose_name="List of Species Definitions",
+        blank=True,
+        db_table='taxonomy_species_group_definitions'
+        )
 
     class Meta:
-        db_table = "Species_group"
+        db_table = "taxonomy_species_group"
 
-    def Group(self):
-        """
-            Returns a flat list of species, subspecies, etc for the SpeciesGroupSerializer,
-            Ideally this would be in the api, but the syntax for that was not working
-        """
-        data = []
-        from globallometree.apps.api.serializers import (
-            SpeciesSerializer,
-            SubspeciesSerializer,
-            GenusSerializer,
-            FamilySerializer
-            )
-
-        for species in self.Species.all():
-            species_def = SpeciesSerializer(instance=species, many=False).data
-            data.append(species_def)
-
-        for subspecies in self.Subspecies.all():
-            species_def = SubspeciesSerializer(instance=subspecies, many=False).data
-            data.append(species_def)
-
-        for genus in self.Genera.all():
-            species_def = GenusSerializer(instance=genus, many=False).data
-            data.append(species_def)
-
-        for family in self.Families.all():
-            species_def = FamilySerializer(instance=family, many=False).data
-            data.append(species_def)
-
-        return data
 
     def save(self, *args, **kwargs):
 

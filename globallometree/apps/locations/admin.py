@@ -1,7 +1,8 @@
 from django.contrib import admin
 from globallometree.apps.locations.models import (
     Continent, Country, Location, LocationGroup,
-    BiomeFAO, BiomeUdvardy, BiomeWWF, DivisionBailey, BiomeHoldridge, ForestType)
+    ZoneFAO, EcoregionUdvardy, EcoregionWWF, DivisionBailey, 
+    ZoneHoldridge, ForestType, BiomeLocal)
 
 class ContinentAdmin(admin.ModelAdmin):
     list_display = ('Name', 'Code')
@@ -36,15 +37,15 @@ class LocationGroupAdmin(admin.ModelAdmin):
     	 LocationInline
     	]
 
-class BiomeFAOAdmin(admin.ModelAdmin):
+class ZoneFAOAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
-class BiomeUdvardyAdmin(admin.ModelAdmin):
+class EcoregionUdvardyAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
-class BiomeWWFAdmin(admin.ModelAdmin):
+class EcoregionWWFAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
@@ -52,17 +53,21 @@ class DivisionBaileyAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
-class BiomeHoldridgeAdmin(admin.ModelAdmin):
+class ZoneHoldridgeAdmin(admin.ModelAdmin):
     list_display = ('Name', )    
 
+
+class BiomeLocalAdmin(admin.ModelAdmin):
+    list_display = ('Name', 'Reference') 
 
 admin.site.register(Continent, ContinentAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(LocationGroup, LocationGroupAdmin)
-admin.site.register(BiomeFAO, BiomeFAOAdmin)
-admin.site.register(BiomeUdvardy, BiomeUdvardyAdmin)
-admin.site.register(BiomeWWF, BiomeWWFAdmin)
+admin.site.register(BiomeLocal, BiomeLocalAdmin)
+admin.site.register(ZoneFAO, ZoneFAOAdmin)
+admin.site.register(EcoregionUdvardy, EcoregionUdvardyAdmin)
+admin.site.register(EcoregionWWF, EcoregionWWFAdmin)
 admin.site.register(DivisionBailey, DivisionBaileyAdmin)
-admin.site.register(BiomeHoldridge, BiomeHoldridgeAdmin)
+admin.site.register(ZoneHoldridge, ZoneHoldridgeAdmin)
 admin.site.register(ForestType, ForestTypeAdmin)

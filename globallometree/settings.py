@@ -52,23 +52,35 @@ MEDIA_ROOT = '/opt/globallometree_data/web/media/'
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-)
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.request',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'cms.context_processors.cms_settings',
-    'sekizai.context_processors.sekizai',
-    'globallometree.apps.search_helpers.context_processors.template_settings'
-)
+TEMPLATES = [
+{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'APP_DIRS': True,
+    'DIRS' : [
+         os.path.join(PROJECT_PATH, 'templates'),
+    ],
+    'OPTIONS': {
+        'context_processors':
+            (
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                'django.template.context_processors.csrf',
+                'django.template.context_processors.request',
+                "django.contrib.messages.context_processors.messages"
+                'sekizai.context_processors.sekizai',
+                'cms.context_processors.cms_settings',
+                'globallometree.apps.search_helpers.context_processors.template_settings'
+
+            )
+    }
+},
+]
+
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
@@ -88,9 +100,6 @@ ROOT_URLCONF = 'globallometree.urls'
 
 WSGI_APPLICATION = 'globallometree.wsgi.application'
 
-TEMPLATE_DIRS = (
-    os.path.join(PROJECT_PATH, 'templates'),
-)
 
 CMS_TEMPLATES = (
     ('cms/basic_page.html', 'CMS basic page'),
@@ -112,9 +121,10 @@ INSTALLED_APPS = (
 
     #django add ons
     'django_extensions',
-    'south',
     'crispy_forms',
 
+    #django cms
+    'treebeard',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'cms',
     'menus',
@@ -123,6 +133,7 @@ INSTALLED_APPS = (
     'djangocms_link',
     'djangocms_file',
     'globallometree.plugins.linkbox',
+
     # project apps
     'globallometree.apps.search_helpers',
     'globallometree.apps.source',
@@ -130,10 +141,8 @@ INSTALLED_APPS = (
     'globallometree.apps.community',
     'globallometree.apps.accounts',
     'globallometree.apps.journals',
-    'globallometree.apps.data',
     'globallometree.apps.taxonomy',
     'globallometree.apps.locations',
-    'globallometree.apps.search_helpers',
     'globallometree.apps.allometric_equations',
     'globallometree.apps.raw_data',
     'globallometree.apps.wood_densities',
@@ -223,7 +232,7 @@ REST_FRAMEWORK = {
         'globallometree.apps.api.renderers.BrowsableAPIRenderer',
         'globallometree.apps.api.renderers.JSONRenderer',
         'globallometree.apps.api.renderers.XMLRenderer',
-        'globallometree.apps.api.renderers.CSVRenderer',
+#        'globallometree.apps.api.renderers.CSVRenderer',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
@@ -261,6 +270,19 @@ SWAGGER_SETTINGS = {
     },
 }
 
+
+MIGRATION_MODULES = {
+    'djangocms_file': 'djangocms_file.migrations_django',
+    'djangocms_flash': 'djangocms_flash.migrations_django',
+    'djangocms_googlemap': 'djangocms_googlemap.migrations_django',
+    'djangocms_inherit': 'djangocms_inherit.migrations_django',
+    'djangocms_link': 'djangocms_link.migrations_django',
+    'djangocms_picture': 'djangocms_picture.migrations_django',
+    'djangocms_snippet': 'djangocms_snippet.migrations_django',
+    'djangocms_teaser': 'djangocms_teaser.migrations_django',
+    'djangocms_video': 'djangocms_video.migrations_django',
+    'linkbox': 'globallometree.plugins.linkbox.migrations',
+}
 
 if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
     print "settings_local.py not present - skipping"

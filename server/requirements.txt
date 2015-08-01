@@ -1,23 +1,23 @@
 #Non compiled python requirements
 
 ######################## Django Core 
-django==1.6.2
-south==1.0.2
-gunicorn==18.0
-django-redis-sessions==0.4.0
+django==1.8.3
+gunicorn==19.3.0
+django-redis-sessions==0.5.0
 
 ######################## Django CMS 
-django-cms==3.0.1
-djangocms-admin-style==0.2.2
-cmsplugin-filer==0.9.5
-djangocms-file==0.0.1
-djangocms-text-ckeditor==2.1.4
-djangocms-link==1.3.4
-Pillow==2.5.3
+django-sekizai==0.8.2
+django-cms==3.1.2
+djangocms-admin-style==0.2.7
+cmsplugin-filer==0.10.2
+djangocms-file==0.1
+djangocms-text-ckeditor==2.5.3
+djangocms-link==1.6.2
+Pillow==2.9.0
 
 ######################## Django Extras 
 django-crispy-forms==1.4.0
-django-extensions==1.3.3
+django-extensions==1.5.5
 
 ######################## Parsing Journal Feeds
 feedparser==5.1.3
@@ -28,7 +28,7 @@ reportlab==2.7
 
 ######################## ElasticUtils based search
 -e git+https://github.com/tomgruner/elasticutils.git@patch-1#egg=elasticutils
-elasticsearch==1.0.0
+elasticsearch==1.6.0
 celery==3.1.10
 redis==2.9.1
 
@@ -45,12 +45,11 @@ pygeocoder==1.2.5
 geohash==1.0
 
 ####################### API
-djangorestframework==3.1.2
-django-filter==0.9.2
-django-rest-swagger==0.3.0
+djangorestframework==3.1.3
+django-filter==0.10.0
+django-rest-swagger==0.3.3
 defusedxml==0.4.1
-djangorestframework-csv==1.3.3
-djangorestframework-xml==1.0.1
+djangorestframework-xml==1.2.0
 
 ################# CSV
-unicodecsv==0.9.4
+unicodecsv==0.13.0

@@ -4,19 +4,19 @@
     <p class="search-help-text">
         Search allometric equations by tree location and biome. <br>
         Example searches: 
-           <a href="?Biome_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
+           <a href="?Zone_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
            <a href="?Country=Benin">Country: Benin</a>
     </p>
     <h3>Country or Biome</h3>
     <div class="row">
         <div class="col-lg-6">
             {{ form.Country|as_crispy_field }}
-            {{ form.Biome_HOLDRIDGE|as_crispy_field }}
-            {{ form.Biome_UDVARDY|as_crispy_field }}
+            {{ form.Zone_Holdridge|as_crispy_field }}
+            {{ form.Ecoregion_Udvardy|as_crispy_field }}
         </div>
         <div class="col-lg-6">
-            {{ form.Biome_FAO|as_crispy_field }}
-            {{ form.Biome_WWF|as_crispy_field }}
+            {{ form.Zone_FAO|as_crispy_field }}
+            {{ form.Ecoregion_WWF|as_crispy_field }}
             {{ form.Division_BAILEY|as_crispy_field }}
         </div>
 

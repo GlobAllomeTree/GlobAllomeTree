@@ -106,7 +106,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "Biome_FAO",
+          "field": "Zone_FAO",
           "exclude": [
             "unknown"
           ],

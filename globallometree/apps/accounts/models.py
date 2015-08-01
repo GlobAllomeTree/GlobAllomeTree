@@ -38,7 +38,7 @@ class UserProfile(models.Model):
                                 ('volume_tables',       'Volume Tables'),
                                 )
 
-    PRIVACY_CHOICES =  (        ('none',               "Private   - Don't share my profile or location at all"),
+    PRIVACY_CHOICES =  (        ('none',                "Private   - Don't share my profile or location at all"),
                                 ('anonymous',           "Anonymous - Share my location anonymously, but don't share my profile"),
                                 ('public',              "Public    - Share my location and my profile information"),)
 

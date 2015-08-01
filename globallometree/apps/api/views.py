@@ -45,45 +45,55 @@ from globallometree.apps.biomass_expansion_factors.models import (
 from globallometree.apps.locations.models import (
     Continent, 
     Country, 
-    BiomeFAO, 
-    BiomeUdvardy, 
-    BiomeWWF, 
+    ZoneFAO, 
+    EcoregionUdvardy, 
+    EcoregionWWF, 
     DivisionBailey, 
-    BiomeHoldridge, 
+    ZoneHoldridge, 
     LocationGroup, 
     Location, 
     ForestType,
 	)
 
 from globallometree.apps.api.serializers import (
-    
+    AllometricEquationSerializer,
+    PopulationSerializer,
+    PopulationSerializer,
+    ReferenceSerializer,
+    WoodDensitySerializer,
+    RawDataSerializer,
+    InstitutionSerializer,
+    BiomassExpansionFactorSerializer,
+	)
+
+
+from globallometree.apps.api.serializers_data_sharing import (
+    DataLicenseSerializer,
+    DatasetSerializer,
+    )
+
+from globallometree.apps.api.serializers_location import (
+    ZoneFAOSerializer, 
+    EcoregionUdvardySerializer, 
+    EcoregionWWFSerializer, 
+    DivisionBaileySerializer, 
+    ZoneHoldridgeSerializer,
+    ForestTypeSerializer,
+    LocationSerializer,
+    LocationGroupSerializer,
+    ContinentSerializer,
+    CountrySerializer,
+    )
+
+
+from globallometree.apps.api.serializers_taxonomy import (
     GenusSerializer,
     FamilySerializer,
     SpeciesSerializer,
     SubspeciesSerializer,
     SpeciesLocalNameSerializer,
-    AllometricEquationSerializer,
     SpeciesGroupSerializer,
-    ForestTypeSerializer,
-    BiomeFAOSerializer, 
-    BiomeUdvardySerializer, 
-    BiomeWWFSerializer, 
-    DivisionBaileySerializer, 
-    BiomeHoldridgeSerializer,
-    PopulationSerializer,
-    LocationSerializer,
-    LocationGroupSerializer,
-    ContinentSerializer,
-    CountrySerializer,
-    ReferenceSerializer,
-    WoodDensitySerializer,
-    RawDataSerializer,
-    InstitutionSerializer,
-    DatasetSerializer,
-    DataLicenseSerializer,
-    BiomassExpansionFactorSerializer,
-	)
-
+    )
 
 
 class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
@@ -170,25 +180,25 @@ class ForestTypeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = ForestTypeSerializer
 
 
-class BiomeFAOViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
+class ZoneFAOViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = BiomeFAO.objects.all()
-    serializer_class = BiomeFAOSerializer
+    queryset = ZoneFAO.objects.all()
+    serializer_class = ZoneFAOSerializer
 
 
-class BiomeUdvardyViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
+class EcoregionUdvardyViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = BiomeUdvardy.objects.all()
-    serializer_class = BiomeUdvardySerializer
+    queryset = EcoregionUdvardy.objects.all()
+    serializer_class = EcoregionUdvardySerializer
 
 
-class BiomeWWFViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
+class EcoregionWWFViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = BiomeWWF.objects.all()
-    serializer_class = BiomeWWFSerializer
+    queryset = EcoregionWWF.objects.all()
+    serializer_class = EcoregionWWFSerializer
 
 
 class DivisionBaileyViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
@@ -198,11 +208,11 @@ class DivisionBaileyViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = DivisionBaileySerializer
 
 
-class BiomeHoldridgeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
+class ZoneHoldridgeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = BiomeHoldridge.objects.all()
-    serializer_class = BiomeHoldridgeSerializer
+    queryset = ZoneHoldridge.objects.all()
+    serializer_class = ZoneHoldridgeSerializer
 
 
 class LocationViewSet(viewsets.ReadOnlyModelViewSet):

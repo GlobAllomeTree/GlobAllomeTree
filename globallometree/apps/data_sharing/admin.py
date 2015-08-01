@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from apps.api.serializers import (
+from globallometree.apps.api.serializers import (
     AllometricEquationSerializer,
     WoodDensitySerializer,
     RawDataSerializer
@@ -127,9 +127,9 @@ class DatasetAdmin(admin.ModelAdmin):
             #Now that we have one row, we get the data submission from the query set
             dataset = queryset[0]
 
-        if dataset.Imported:
-            messages.error(request, "That dataset selected has already been imported")
-            return None
+        # if dataset.Imported:
+        #     messages.error(request, "That dataset selected has already been imported")
+        #     return None
      
         if not dataset.Data_as_json or len(dataset.Data_as_json) == 0:
             messages.error(request, "There is not any structured data in this dataset. Please upload a structured dataset file in order to import this dataset into the database.")

@@ -23,11 +23,12 @@ class DataLicense(BaseModel):
         ('none', 'No expiry'),
         )
 
-    Data_license_ID = models.AutoField(primary_key=True)
+    Data_license_ID = models.AutoField(primary_key=True, db_column="data_license_id")
 
     Title = models.CharField(
         verbose_name='License Title',
         max_length=200,
+        db_column="title"
         )
 
     Requires_provider_approval = models.BooleanField(
@@ -36,29 +37,33 @@ class DataLicense(BaseModel):
                    If you check the box, an email will be sent each time a user requests access to your data. \
                    If the box is not checked, then users will be able to agree to the license themselves online before \
                    bieing granted access to the data.",
-        default=True
+        default=True,
+        db_column="requires_provider_approval"
         )
 
     Available_to_registered_users = models.BooleanField(
         help_text="Is this license granted to all registered globallometree users?",
-        default=False
+        default=False,
+        db_column="available_to_registered_users"
         )
 
     Public_choice = models.BooleanField(
         default=True,
-        help_text="Should all GlobAllomeTree users have the option to choose this license when uploading data?"
+        help_text="Should all GlobAllomeTree users have the option to choose this license when uploading data?",
+        db_column="public_choice"
         )
 
     License_url = models.URLField(
         verbose_name='Link to License',
         help_text="This is shown in the admin only and is mostly used for creative commons licenses",
         blank=True,
-        null=True
+        null=True,
+        db_column="license_url"
         )
 
     User = models.ForeignKey(
         User,
-        db_column="User_ID",
+        db_column="user_id",
         blank=True,
         null=True
         )
@@ -66,59 +71,72 @@ class DataLicense(BaseModel):
     Permitted_use = models.CharField(
         max_length=100,
         choices=PERMITTED_USE_CHOICES,
-        default='assessment'
+        default='assessment',
+        db_column="permitted_use"
     )
 
     Permitted_use_other_value = models.TextField(
         verbose_name="Permitted Use (Other)",
         blank=True,
-        null=True
+        null=True,
+        db_column="permitted_use_other_value"
     )
 
     Restrict_resell = models.BooleanField(
         default=False,
-        help_text="The Data User shall not sell, market, rent, lease, sublicense, lend, assign, time-share, distribute, disseminate or transfer, in whole or in part, the Raw Data, any updates, or end user's rights under this Agreement." 
+        help_text="The Data User shall not sell, market, rent, lease, sublicense, lend, assign, time-share, distribute, disseminate or transfer, in whole or in part, the Raw Data, any updates, or end user's rights under this Agreement.",
+        db_column="restrict_resell"
     )
 
     Restrict_duplication = models.BooleanField(
         default=False,
-        help_text="The Data User shall not duplicate the Data Provider's proprietary and copyright-protected Raw Data or attempt to do so by altering, decompiling, or disassembling the Raw Data."
+        help_text="The Data User shall not duplicate the Data Provider's proprietary and copyright-protected Raw Data or attempt to do so by altering, decompiling, or disassembling the Raw Data.",
+        db_column="restrict_duplication"
     )
 
     Restrict_reproduction = models.BooleanField(
         default=False,
-        help_text="The Data User shall not reproduce certain portions of the data for sale or any other commercial purposes with written permission of the data provider."
+        help_text="The Data User shall not reproduce certain portions of the data for sale or any other commercial purposes with written permission of the data provider.",
+        db_column="restrict_reproduction"
     )
 
     Restrict_derivation = models.BooleanField(
         default=False,
-        help_text="The Data User shall not publish the Derivative Data without acknowledging the Data Provider.")
+        help_text="The Data User shall not publish the Derivative Data without acknowledging the Data Provider.",
+        db_column="restrict_derivation"
+        )
 
     Restrict_association = models.BooleanField(
         default=False,
-        help_text="The Data User shall not publish the Derivative Data without associating the Data Provider as a co-author.")
+        help_text="The Data User shall not publish the Derivative Data without associating the Data Provider as a co-author.",
+        db_column="restrict_association"
+        )
 
     Restrict_attributed_ownership = models.BooleanField(
         default=False,
-        help_text="The Data Provider shall be acknowledged as the data source. If changes are made to the Raw Data, attribution should be given to the Data Provider as owner of the Raw Data."
+        help_text="The Data Provider shall be acknowledged as the data source. If changes are made to the Raw Data, attribution should be given to the Data Provider as owner of the Raw Data.",
+        db_column="restrict_attributed_ownership"
     )
 
     Restrict_other_value = models.TextField(
         verbose_name="Additional restrictions",
         blank=True,
-        null=True
+        null=True,
+        db_column="restrict_other_value"
     )
 
     Expires = models.CharField(
         max_length=100,
         choices=EXPIRE_CHOICES,
-        default='on_activity_completion'
+        default='on_activity_completion',
+        db_column="expires"
     )
 
     Expires_on_date = models.DateField(
         blank=True,
         null=True,
-        verbose_name="Expiry Date"
+        verbose_name="Expiry Date",
+        db_column="expires_on_date"
     )
 
     def get_Permitted_use_text(self):
@@ -128,7 +146,7 @@ class DataLicense(BaseModel):
             return self.get_Permitted_use_display()
 
     class Meta:
-        db_table = "Data_license"
+        db_table = "data_license"
 
     def __unicode__(self):
         return self.Title
@@ -136,11 +154,11 @@ class DataLicense(BaseModel):
 
 class Dataset(BaseModel):
 
-    Dataset_ID = models.AutoField(primary_key=True)
+    Dataset_ID = models.AutoField(primary_key=True, db_column="dataset_id")
 
     User = models.ForeignKey(
         User,
-        db_column='User_ID'
+        db_column='user_id',
     )
 
     DATA_TYPE_CHOICES = (
@@ -152,7 +170,8 @@ class Dataset(BaseModel):
 
     Title = models.CharField(
         max_length = 100,
-        verbose_name = 'Dataset Title'
+        verbose_name = 'Dataset Title', 
+        db_column="title"
     )
 
     Uploaded_dataset_file = models.FileField(
@@ -160,7 +179,8 @@ class Dataset(BaseModel):
         verbose_name='Structured dataset file (csv, json, xml)',
         blank=True,
         null=True,
-        help_text="The structure must match the GlobAllomeTree API structure. Samples may be found on the right."
+        help_text="The structure must match the GlobAllomeTree API structure. Samples may be found on the right.",
+        db_column="uploaded_dataset_file"
     )
 
     Uploaded_source_document = models.FileField(
@@ -168,40 +188,47 @@ class Dataset(BaseModel):
         verbose_name='Source document with data in any format',
         blank=True,
         null=True,
-        help_text="The source document can be a pdf, excel file, word document or other with data in any format."
+        help_text="The source document can be a pdf, excel file, word document or other with data in any format.",
+        db_column="uploaded_source_document"
+
     )
 
     Description = models.TextField(
         blank=True,
         null=True,
-        verbose_name = 'Brief description'
+        verbose_name = 'Brief description',
+        db_column="description"
     )
 
     Data_type = models.CharField(
         choices = DATA_TYPE_CHOICES,
         max_length=100,
-        verbose_name = 'Type'
+        verbose_name = 'Type',
+        db_column="data_type"
     )
 
     Data_as_json = models.TextField(
         blank=True,
-        null=True
+        null=True,
+        db_column="data_as_json"
     )
 
     Record_count = models.IntegerField(
         blank=True,
-        null=True
+        null=True,
+        db_column="record_count"
         )
 
     Data_license = models.ForeignKey(
         DataLicense,
-        db_column="Data_license_ID",
-        verbose_name = 'License'
+        db_column="data_license_id",
+        verbose_name = 'License',
     )
 
     Imported = models.BooleanField(
         default=False,
-        help_text="If this file has been imported into the GlobAllomeTree database yet or not"
+        help_text="If this file has been imported into the GlobAllomeTree database yet or not",
+        db_column="imported"
         )
 
     def is_editable(self):
@@ -216,7 +243,7 @@ class Dataset(BaseModel):
         return self.Title
 
     class Meta:
-        db_table = "Dataset"
+        db_table = "data_dataset"
 
 
 class DataSharingAgreement(BaseModel):
@@ -227,21 +254,22 @@ class DataSharingAgreement(BaseModel):
         ('denied', "Denied")
         )
 
-    Data_sharing_agreement_ID = models.AutoField(primary_key=True)
+    Data_sharing_agreement_ID = models.AutoField(primary_key=True, db_column="data_sharing_agreement_id")
 
     User = models.ForeignKey(
         User,
         help_text="The user requesting access to the dataset",
-        db_column="User_ID"
+        db_column="user_id"
     )
 
     Dataset = models.ForeignKey(
-        Dataset, db_column="Dataset_ID")
+        Dataset, db_column="dataset_id")
 
     Agreement_status = models.CharField(
         max_length=15,
-        choices = AGREEMENT_STATUS_CHOICES
+        choices = AGREEMENT_STATUS_CHOICES,
+        db_column="agreement_status"
         )
 
     class Meta:
-        db_table = "Data_sharing_agreement"
+        db_table = "data_sharing_agreement"

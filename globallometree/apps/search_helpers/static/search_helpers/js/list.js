@@ -56,7 +56,7 @@ window.app.listController = function () {
 								  <dd><small>{{{Reference}}}&nbsp;</small></dd>	    \
 										  								 			\
 								  <dt><small>FAO Biomes</small></dt>				\
-								  <dd><small>{{{Biome_FAO}}}&nbsp;</small></dd>   	\
+								  <dd><small>{{{Zone_FAO}}}&nbsp;</small></dd>   	\
 								 													\
 								  <dt><small>Species</small></dt>					\
 								  <dd><small>{{{Species}}}&nbsp;</small></dd>		\
@@ -151,13 +151,13 @@ window.app.listController = function () {
 
 
 			try {
-				var biomeFAOList = [];
+				var ZoneFAOList = [];
 				var countryList = [];
 				var locationList = [];
 				for (var j=0; j < data['Location_group']['Group'].length; j++ ) {
 					var location_record = data['Location_group']['Group'][j];
-					if (!_.contains(biomeFAOList,location_record['Biome_FAO'])) {
-						biomeFAOList.push(location_record['Biome_FAO'])
+					if (!_.contains(ZoneFAOList,location_record['Zone_FAO'])) {
+						ZoneFAOList.push(location_record['Zone_FAO'])
 					}
 
 					if (!_.contains(countryList,location_record['Country'])) {
@@ -193,12 +193,12 @@ window.app.listController = function () {
 
 					locationList.push(locationHTML);
 				}
-				context['Biome_FAO'] = biomeFAOList.join('<br>');
+				context['Zone_FAO'] = ZoneFAOList.join('<br>');
 				context['Country'] = countryList.join('<br>');
 				context['Locations'] = locationList.join('<br> ');
 
 			} catch (e) {
-				context['Biome_FAO'] = '';
+				context['Zone_FAO'] = '';
 				context['Country'] = '';
 				context['Locations'] = '';
 			}

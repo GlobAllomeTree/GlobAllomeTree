@@ -343,7 +343,7 @@ window.app.mapController = function() {
 						ejs.TermsAggregation('Species').field('Scientific_name')
 					)
 					.aggregation(
-						ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
+						ejs.TermsAggregation('Zone_FAO').field('Zone_FAO')
 					)
 
 			_.each(config.customGeohashAggs, function (agg) {
@@ -387,7 +387,7 @@ window.app.mapController = function() {
 				ejs.TermsAggregation('Species').field('Scientific_name')
 			)
 			.aggregation(
-				ejs.TermsAggregation('Biome_FAO').field('Biome_FAO')
+				ejs.TermsAggregation('Zone_FAO').field('Zone_FAO')
 			)
 			.aggregation(
 					ejs.TermsAggregation('Output').field('Output')
@@ -478,9 +478,9 @@ window.app.mapController = function() {
 			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Species'].buckets, ', ') + '</p>';
 		}
 		
-		if(aggregation['Biome_FAO'].buckets.length){
+		if(aggregation['Zone_FAO'].buckets.length){
 			html += '<h5>FAO Biomes</h5>'  
-			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Biome_FAO'].buckets, ', ') + '</p>';
+			html += '<p style="margin-top:0px;">' + getBucketsAsList(aggregation['Zone_FAO'].buckets, ', ') + '</p>';
 		}
 
 		html += config.renderCustomAggHTML(aggregation);

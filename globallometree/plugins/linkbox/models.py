@@ -7,7 +7,7 @@ class LinkBox(CMSPlugin):
     A Link Box
     """
     title = models.CharField(_("title"), max_length=255)
-    image = models.ImageField(_("image"), upload_to=CMSPlugin.get_media_path, blank=True, null=True)
+    image = models.ImageField(_("image"), upload_to='linkbox', blank=True, null=True)
     link_text = models.CharField("link text", max_length=255, blank=True, null=True)
     page_link = models.ForeignKey(
         Page, 

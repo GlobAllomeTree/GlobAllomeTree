@@ -48,7 +48,6 @@ def rebuild(index_cls, limit):
             obj.update_elasticsearch_doc_hash(document)
             documents.append(document)
 
-           
             #Send in batches of 50
             if len(documents) == 50:
                 send_to_index(documents)

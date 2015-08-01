@@ -26,7 +26,6 @@ class Command(BaseCommand):
         #Get an instance of the elasticsearch python wrapper
         es = get_es()
 
-
         for index_cls in index_classes:
             updated = 0
             skipped = 0
@@ -58,7 +57,6 @@ class Command(BaseCommand):
                 else:
                     skipped += 1
 
-                # print 'obj %s, Updated %s, Skipped %s, Created %s' % (obj.pk, updated, skipped, created)
 
             
             # Handle deletions
@@ -86,5 +84,5 @@ class Command(BaseCommand):
             index_client = elasticsearch.client.IndicesClient(es)
             index_client.flush(index=index_name)
 
-            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s' % (index_name, updated, skipped, created, deleted)
+            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s' % (type_name, updated, skipped, created, deleted)
 

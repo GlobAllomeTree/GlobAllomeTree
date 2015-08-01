@@ -16,11 +16,11 @@ from globallometree.apps.api.views import (
 	ContinentViewSet, 
 	CountryViewSet, 
 	ForestTypeViewSet,
-	BiomeFAOViewSet, 
-	BiomeUdvardyViewSet, 
-	BiomeWWFViewSet, 
+	ZoneFAOViewSet, 
+	EcoregionUdvardyViewSet, 
+	EcoregionWWFViewSet, 
 	DivisionBaileyViewSet, 
-	BiomeHoldridgeViewSet, 
+	ZoneHoldridgeViewSet, 
 	LocationViewSet,
 	LocationGroupViewSet,
 	DataLicenseViewSet, 
@@ -54,10 +54,10 @@ router.register(r'locations', LocationViewSet)
 router.register(r'location-groups', LocationGroupViewSet)
 
 router.register(r'forest-types', ForestTypeViewSet)
-router.register(r'biomes-fao', BiomeFAOViewSet)
-router.register(r'biomes-udvardy', BiomeUdvardyViewSet)
-router.register(r'biomes-wwf', BiomeWWFViewSet)
-router.register(r'biomes-holdridge', BiomeHoldridgeViewSet)
+router.register(r'biomes-fao', ZoneFAOViewSet)
+router.register(r'biomes-udvardy', EcoregionUdvardyViewSet)
+router.register(r'biomes-wwf', EcoregionWWFViewSet)
+router.register(r'biomes-holdridge', ZoneHoldridgeViewSet)
 router.register(r'divisions-bailey', DivisionBaileyViewSet)
 
 router.register(r'data-sharing-agreements',DataLicenseViewSet)

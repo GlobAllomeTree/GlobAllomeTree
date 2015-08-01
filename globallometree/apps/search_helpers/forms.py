@@ -2,11 +2,11 @@ from django import forms
 
 from globallometree.apps.locations.models import (
     Country, 
-    BiomeFAO, 
-    BiomeUdvardy, 
-    BiomeWWF, 
+    ZoneFAO, 
+    EcoregionUdvardy, 
+    EcoregionWWF, 
     DivisionBailey, 
-    BiomeHoldridge
+    ZoneHoldridge
 )
 
 class LinkedModelSearchForm(forms.Form):
@@ -16,11 +16,11 @@ class LinkedModelSearchForm(forms.Form):
         super(LinkedModelSearchForm, self).__init__(*args, **kwargs)
 
         for select_name, select_label in (
-            ('Biome_FAO', 'Biome (FAO)'),
-            ('Biome_UDVARDY', 'Biome (UDVARDY)'),
-            ('Biome_WWF','Biome (WWF)'),
+            ('Zone_FAO', 'Biome (FAO)'),
+            ('Ecoregion_Udvardy', 'Biome (UDVARDY)'),
+            ('Ecoregion_WWF','Biome (WWF)'),
             ('Division_BAILEY', 'Division (BAILEY)' ),
-            ('Biome_HOLDRIDGE','Biome (HOLDRIDGE)'),
+            ('Zone_Holdridge','Biome (HOLDRIDGE)'),
             ('Population','Population'),
             ('Country','Country')
         ):
@@ -28,24 +28,24 @@ class LinkedModelSearchForm(forms.Form):
                 choices = [('', '')] + list(Country.objects.all().values_list(
                     'Formal_name', 'Formal_name'
                 ))
-            elif select_name == 'Biome_FAO':
-                choices = [('', '')] + list(BiomeFAO.objects.all().values_list(
+            elif select_name == 'Zone_FAO':
+                choices = [('', '')] + list(ZoneFAO.objects.all().values_list(
                     'Name', 'Name'
                 ))
-            elif select_name == 'Biome_UDVARDY':
-                choices = [('', '')] + list(BiomeUdvardy.objects.all().values_list(
+            elif select_name == 'Ecoregion_Udvardy':
+                choices = [('', '')] + list(EcoregionUdvardy.objects.all().values_list(
                     'Name', 'Name'
                 ))
-            elif select_name == 'Biome_WWF':
-                choices = [('', '')] + list(BiomeWWF.objects.all().values_list(
+            elif select_name == 'Ecoregion_WWF':
+                choices = [('', '')] + list(EcoregionWWF.objects.all().values_list(
                     'Name', 'Name'
                 ))
             elif select_name == 'Division_BAILEY':
                 choices = [('', '')] + list(DivisionBailey.objects.all().values_list(
                     'Name', 'Name'
                 ))
-            elif select_name == 'Biome_HOLDRIDGE':
-                choices = [('', '')] + list(BiomeHoldridge.objects.all().values_list(
+            elif select_name == 'Zone_Holdridge':
+                choices = [('', '')] + list(ZoneHoldridge.objects.all().values_list(
                     'Name', 'Name'
                 ))  
 

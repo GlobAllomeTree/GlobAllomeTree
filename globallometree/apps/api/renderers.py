@@ -1,8 +1,7 @@
 
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.renderers import JSONRenderer
-from rest_framework_xml.renderers import XMLRenderer
-from rest_framework_csv.renderers import CSVRenderer
+from rest_framework_xml.renderers import XMLRenderer, BaseRenderer
 from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 
 class JSONRenderer(JSONRenderer):
@@ -25,15 +24,9 @@ class BrowsableAPIRenderer(BrowsableAPIRenderer):
         return context
 
 
-class CSVRenderer(CSVRenderer):
+class CSVRenderer(BaseRenderer):
     format='csv'
-    # expand_lists = 'vertical'
-    # sort_headers = False
+    media_type='text/csv'
 
-    # def get_data(self, data):
-    #     if type(data) == ReturnDict:
-    #         data = dict(data)
-    #         return data['results']
-    #     if type(data) == ReturnList:
-    #         data = [data]
-    #     return data
+    def render(self, data, media_type=None, renderer_context=None):
+        return data.encode(self.charset)

@@ -6,7 +6,7 @@ from django.db import transaction
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from globallometree.apps.locations.models import BiomeUdvardy, BiomeFAO, BiomeWWF, BiomeHoldridge, DivisionBailey
+from globallometree.apps.locations.models import EcoregionUdvardy, ZoneFAO, EcoregionWWF, ZoneHoldridge, DivisionBailey
 
 class Command(BaseCommand):
     args = '<limit (optional)>'
@@ -15,28 +15,28 @@ class Command(BaseCommand):
     def handle(self,*args, **options):
         data = self.load_csv('biomes_udvardy.csv')
         for row in data:
-            BiomeUdvardy.objects.create(
+            EcoregionUdvardy.objects.create(
                 pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_fao.csv')
         for row in data:
-            BiomeFAO.objects.create(
+            ZoneFAO.objects.create(
                 pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_wwf.csv')
         for row in data:
-            BiomeWWF.objects.create(
+            EcoregionWWF.objects.create(
                 pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_holdridge.csv')
         for row in data:
-            BiomeHoldridge.objects.create(
+            ZoneHoldridge.objects.create(
                 pk = row['ID'], 
                 Name = row['Name']
             )

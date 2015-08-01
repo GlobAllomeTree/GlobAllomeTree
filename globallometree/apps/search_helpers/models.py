@@ -4,8 +4,8 @@ from django.db import models
 from elasticutils.contrib.django import get_es
 
 class BaseModel(models.Model):
-    Created = models.DateTimeField(auto_now_add=True)
-    Modified = models.DateTimeField(auto_now=True, verbose_name="Last modified")
+    Created = models.DateTimeField(auto_now_add=True, db_column='created')
+    Modified = models.DateTimeField(auto_now=True, verbose_name="Last modified", db_column='modified')
 
     class Meta:
         abstract = True
@@ -15,43 +15,48 @@ class LinkedBaseModel(BaseModel):
         'taxonomy.SpeciesGroup',
         null=True, 
         blank=True,
-        db_column='Species_group_ID')
+        db_column='species_group_id')
 
     Location_group = models.ForeignKey(
         'locations.LocationGroup',
         null=True, 
         blank=True,
-        db_column='Location_group_ID')
+        db_column='location_group_id')
 
     Reference = models.ForeignKey(
         'source.Reference', 
         blank=True, 
         null=True,
-        db_column='Reference_ID')
+        db_column='reference_id')
 
     Operator = models.ForeignKey(
         'source.Operator', 
         blank=True, 
         null=True,
-        db_column='Operator_ID'
+        db_column='operator_id'
         )
 
     Contributor = models.ForeignKey(
         'source.Institution', 
         blank=True, 
         null=True,
-        db_column='Contributor_ID')
+        db_column='contributor_id')
 
     Dataset = models.ForeignKey(
-        'data_sharing.Dataset',null=True, blank=True,
-        help_text="The Dataset that this raw data record came from")
+        'data_sharing.Dataset',
+        null=True, 
+        blank=True,
+        help_text="The Dataset that this raw data record came from",
+        db_column="dataset_id"
+        )
 
     Elasticsearch_doc_hash = models.CharField(
         help_text="The hash of the denormalized version of this model in elasticsearch, used for knowing if the es index needs to be updated or not",
         blank=True,
         null=True,
-        verbose_name="Elasticsearhch document md5 hash",
-        max_length=255
+        verbose_name="Elasticsearch document md5 hash",
+        max_length=255,
+        db_column="elasticsearch_doc_hash"
         )
 
     class Meta:

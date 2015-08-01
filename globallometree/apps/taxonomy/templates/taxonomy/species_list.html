@@ -15,8 +15,8 @@
 		var speciesAgg = ejs.TermsAggregation('Scientific_name').field('Scientific_name').size(10000).order('_term', 'asc');
 		var countryAgg = ejs.TermsAggregation('Country').field('Country').size(10000);
 		var typeAgg = ejs.TermsAggregation('Type').field('_type');
-		var biomeFAOAgg = ejs.TermsAggregation('Biome_FAO').field('Biome_FAO').size(400);
-		speciesAgg.aggregation(biomeFAOAgg);
+		var ZoneFAOAgg = ejs.TermsAggregation('Zone_FAO').field('Zone_FAO').size(400);
+		speciesAgg.aggregation(ZoneFAOAgg);
 		speciesAgg.aggregation(typeAgg);
 		speciesAgg.aggregation(countryAgg);
 		request.aggregation(speciesAgg);
@@ -121,7 +121,7 @@
 				speciesDetail += '<dt><small>Data from countries</small></dt><dd>' + countries.join(', ') + '</dd>';
 
 				var biomes = [];
-				_.each(speciesBucket.Biome_FAO.buckets, function (bucket) {
+				_.each(speciesBucket.Zone_FAO.buckets, function (bucket) {
 					biomes.push(bucket.key  + ' (' + bucket.doc_count +')');
 				});
 				speciesDetail += '<dt><small>Data in FAO Biomes</small></dt><dd>' + biomes.join(', ') + '</dd>';
