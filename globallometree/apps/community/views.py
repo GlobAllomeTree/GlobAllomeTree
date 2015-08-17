@@ -2,7 +2,7 @@ import json
 
 from django.views.generic import TemplateView
 
-from globallometree.apps.locations.models import Country
+from apps.locations.models import Country
 
 class UserMapView(TemplateView):
     template_name = 'community/template.user_map.html'

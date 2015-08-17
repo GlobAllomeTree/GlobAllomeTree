@@ -1,16 +1,17 @@
 from rest_framework import serializers, fields
-from globallometree.apps.taxonomy import models
+from apps.taxonomy import models
+
 
 class SpeciesLocalNameSerializer(serializers.ModelSerializer):
     Language_iso_639 = fields.CharField(source="Language_iso_639_3")
+    Local_name_ID = fields.CharField(source="Species_local_name_ID")
     class Meta:
         model = models.SpeciesLocalName
-        fields = ('Local_name', 'Language_iso_639')
+        fields = ('Local_name', 'Language_iso_639', 'Local_name_latin', 'Local_name_ID')
 
 
 class FamilySerializer(serializers.ModelSerializer):
     Family = fields.CharField(source="Name")
-    Scientific_name = fields.SerializerMethodField()
 
     class Meta:
         model = models.Family
@@ -24,9 +25,6 @@ class GenusSerializer(serializers.ModelSerializer):
     Genus_ID = fields.IntegerField()
     Family_ID = fields.IntegerField(source="Family.Family_ID")
     
-    Scientific_name = fields.SerializerMethodField()
-
-
     class Meta:
         model = models.Genus
         fields = ('Family', 'Genus', 'Family_ID', 'Genus_ID')
@@ -43,18 +41,19 @@ class SpeciesSerializer(serializers.ModelSerializer):
         )
     Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
     Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
-    
-    Scientific_name = fields.SerializerMethodField()
+    Species_author = fields.CharField(source="Author")
 
     class Meta:
         model = models.Species
         fields = ('Family', 
                   'Genus',
                   'Species',
+                  'Species_author',
                   'Species_local_names',
                   'Family_ID',
                   'Genus_ID',
                   'Species_ID',
+                  'Species_author'
                   )
 
 class SubspeciesSerializer(serializers.ModelSerializer):
@@ -64,6 +63,7 @@ class SubspeciesSerializer(serializers.ModelSerializer):
     Species = fields.CharField(source="Species.Name")
     Species_local_names = SpeciesLocalNameSerializer(
         many = True,
+        required=False,
         source = 'Species.Local_names'
         )
     Species_ID = fields.IntegerField(source="Species.Species_ID")
@@ -72,6 +72,15 @@ class SubspeciesSerializer(serializers.ModelSerializer):
 
     Subspecies = fields.CharField(source="Name")
   
+    Species_author = fields.SerializerMethodField()
+
+    def get_Species_author(self, obj):
+        if obj.Author:
+            return obj.Author
+        elif obj.Species.Author:
+            return obj.Species.Author
+        else:
+            return None
 
     class Meta:
         model = models.Subspecies
@@ -79,6 +88,7 @@ class SubspeciesSerializer(serializers.ModelSerializer):
                   'Genus',
                   'Species',
                   'Subspecies',
+                  'Species_author',
                   'Species_local_names',
                   'Family_ID',
                   'Genus_ID',
@@ -109,6 +119,16 @@ class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
     Genus_ID = fields.IntegerField(required=False,allow_null=True, source='Genus.pk')
     Species_ID = fields.IntegerField(required=False,allow_null=True, source='Species.pk')
     Subspecies_ID = fields.IntegerField(required=False,allow_null=True, source='Subspecies.pk')
+    Species_author = fields.SerializerMethodField()
+
+    def get_Species_author(self, obj):
+        if obj.Subspecies and obj.Subspecies.Author:
+            return obj.Subspecies.Author
+        elif obj.Species and obj.Species.Author:
+            return obj.Species.Author
+        else:
+            return None
+
 
     class Meta:
          model = models.SpeciesDefinition
@@ -117,6 +137,7 @@ class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
             'Genus',
             'Species',
             'Subspecies',
+            'Species_author',
             'Species_local_names',
             'Scientific_name',
             'Family_ID',

@@ -1,11 +1,11 @@
 from django import forms
 
-from globallometree.apps.allometric_equations.models import (
+from apps.allometric_equations.models import (
     AllometricEquation, 
     Population 
     )
 
-from globallometree.apps.search_helpers.forms import LinkedModelSearchForm
+from apps.search_helpers.forms import LinkedModelSearchForm
 
 COMPONENT_CHOICES = (
             ('', ''),

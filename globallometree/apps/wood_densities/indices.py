@@ -5,10 +5,10 @@ from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
-from globallometree.apps.wood_densities.models import WoodDensity
-from globallometree.apps.search_helpers.estypes import *
-from globallometree.apps.api.serializers import WoodDensitySerializer
-from globallometree.apps.api.renderers import JSONRenderer
+from apps.wood_densities.models import WoodDensity
+from apps.search_helpers.estypes import *
+from apps.api.serializers import WoodDensitySerializer
+from apps.api.renderers import JSONRenderer
 
 class WoodDensityIndex(MappingType, Indexable):
 

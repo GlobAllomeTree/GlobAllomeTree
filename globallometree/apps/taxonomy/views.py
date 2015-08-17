@@ -1,5 +1,5 @@
 from django.views.generic.base import TemplateView
-from globallometree.apps.accounts.mixins import RestrictedPageMixin
+from apps.accounts.mixins import RestrictedPageMixin
 
 
 class SpeciesListView(RestrictedPageMixin, TemplateView):

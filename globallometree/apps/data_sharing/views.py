@@ -11,9 +11,9 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
 
-from globallometree.apps.api.serializers import DatasetSerializer
+from apps.api.serializers import DatasetSerializer
 
-from globallometree.apps.accounts.mixins import RestrictedPageMixin
+from apps.accounts.mixins import RestrictedPageMixin
 
 from .data_tools import validate_records, validate_data_file
 from .models import (

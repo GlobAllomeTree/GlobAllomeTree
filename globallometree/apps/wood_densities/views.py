@@ -3,9 +3,9 @@ from django.contrib.auth.decorators import login_required
 from .models import WoodDensity
 from .forms import WoodDensitySearchForm
 
-from globallometree.apps.api.serializers import WoodDensitySerializer
-from globallometree.apps.search_helpers.views import LinkedModelSearchView
-from globallometree.apps.search_helpers.views import (
+from apps.api.serializers import WoodDensitySerializer
+from apps.search_helpers.views import LinkedModelSearchView
+from apps.search_helpers.views import (
     record_by_id_view, 
     record_by_id_pdf_view,
     export_view

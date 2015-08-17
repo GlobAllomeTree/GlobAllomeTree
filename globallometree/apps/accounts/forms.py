@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import UserProfile
-from globallometree.apps.locations.models import Country
+from apps.locations.models import Country
 from rest_framework.authtoken.models import Token
 
 
@@ -111,6 +111,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)

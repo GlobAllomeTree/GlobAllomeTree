@@ -1,5 +1,5 @@
 from django.contrib import admin
-from globallometree.apps.taxonomy.models import (
+from apps.taxonomy.models import (
     Family, 
     Genus, 
     Species, 
@@ -34,14 +34,14 @@ class SpeciesLocalNameInline(admin.TabularInline):
 
 class SubspeciesAdmin(admin.ModelAdmin):
     raw_id_fields = ('Species',)
-    list_display = ('Name', 'Species', 'Modified')
+    list_display = ('Name', 'Species', 'Author', 'Modified')
     search_fields  = ('Name','Species__Genus__Family__Name', 'Species__Genus__Name', 'Species__Name' )
     read_only_fields = ('created', 'modified')
 
 
 class SpeciesAdmin(admin.ModelAdmin):
     raw_id_fields = ('Genus',)
-    list_display = ('Name', 'Genus', 'Modified')
+    list_display = ('Name', 'Genus', 'Author', 'Modified')
     search_fields  = ('Name','Genus__Family__Name', 'Genus__Name', )
     read_only_fields = ('Created', 'Modified')
     inlines = (SpeciesLocalNameInline,)

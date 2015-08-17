@@ -10,12 +10,14 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = ['institution_name', 'location_country__Common_name']
     readonly_fields = ['user_link']
     raw_id_fields = ('user',)
-    exclude = ['country',]
+    exclude = ('country',)
 
     def user_link(self, obj):
         change_url = urlresolvers.reverse('admin:auth_user_change', args=(obj.user.id,))
         return mark_safe('<a href="%s">%s</a>' % (change_url, change_url))
     user_link.short_description = 'Django User Link'
     user_link.allow_tags = True
+
+
    
 admin.site.register(models.UserProfile, UserProfileAdmin)

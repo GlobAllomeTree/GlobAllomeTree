@@ -1,6 +1,6 @@
 from django import forms
 
-from globallometree.apps.locations.models import (
+from apps.locations.models import (
     Country, 
     ZoneFAO, 
     EcoregionUdvardy, 

@@ -3,7 +3,7 @@ import json
 
 from django.contrib import messages
 
-from globallometree.apps.taxonomy.models import (
+from apps.taxonomy.models import (
     Family,
     Genus,
     Species,
@@ -11,12 +11,12 @@ from globallometree.apps.taxonomy.models import (
     SpeciesLocalName
     )
 
-from globallometree.apps.api import (
+from apps.api import (
     Serializers,
     Parsers
     )
 
-from globallometree.apps.data_sharing.models import DataSharingAgreement, Dataset
+from apps.data_sharing.models import DataSharingAgreement, Dataset
 
 restricted_keys = {
     'allometricequation' : ['Equation', 'Substitute_equation',],

@@ -71,10 +71,10 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 'django.template.context_processors.csrf',
                 'django.template.context_processors.request',
-                "django.contrib.messages.context_processors.messages"
+                "django.contrib.messages.context_processors.messages",
                 'sekizai.context_processors.sekizai',
                 'cms.context_processors.cms_settings',
-                'globallometree.apps.search_helpers.context_processors.template_settings'
+                'apps.search_helpers.context_processors.template_settings'
 
             )
     }
@@ -88,7 +88,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.doc.XViewMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.middleware.common.CommonMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
@@ -128,18 +128,17 @@ INSTALLED_APPS = (
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'cms',
     'menus',
-    'mptt',
     'sekizai',
     'djangocms_link',
     'djangocms_file',
     'globallometree.plugins.linkbox',
 
     # project apps
+    'globallometree.apps.accounts',
     'globallometree.apps.search_helpers',
     'globallometree.apps.source',
     'globallometree.apps.data_sharing',
     'globallometree.apps.community',
-    'globallometree.apps.accounts',
     'globallometree.apps.journals',
     'globallometree.apps.taxonomy',
     'globallometree.apps.locations',
@@ -150,10 +149,11 @@ INSTALLED_APPS = (
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
     'globallometree.apps.api',
+    'globallometree.apps.biomass_expansion_factors',
+
     'rest_framework',
     'rest_framework_swagger',
     'rest_framework.authtoken',
-    'globallometree.apps.biomass_expansion_factors'
 )
 
 
@@ -229,10 +229,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_RENDERER_CLASSES': (
-        'globallometree.apps.api.renderers.BrowsableAPIRenderer',
-        'globallometree.apps.api.renderers.JSONRenderer',
-        'globallometree.apps.api.renderers.XMLRenderer',
-#        'globallometree.apps.api.renderers.CSVRenderer',
+        'apps.api.renderers.BrowsableAPIRenderer',
+        'apps.api.renderers.JSONRenderer',
+        'apps.api.renderers.XMLRenderer',
+        'apps.api.renderers.CSVRenderer',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',

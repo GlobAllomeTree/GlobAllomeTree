@@ -1,9 +1,10 @@
-
+import Geohash
 from django.contrib.auth.models import User
 
 from rest_framework import serializers, fields
 
-from globallometree.apps.locations import models
+from apps.locations import models
+from .validators import ValidRelatedField
 
 class ZoneFAOSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,11 +50,12 @@ class LocationSerializer(serializers.ModelSerializer):
         required=False
         )
 
-    Country = fields.ChoiceField(
+    Country = fields.CharField(
         source="Country.Formal_name", 
         allow_null=True,
         required=False,
-        choices = []
+        validators=[ValidRelatedField(model=models.Country, 
+                                     field_name="Formal_name")]
         )
 
     Continent = fields.CharField(
@@ -61,54 +63,61 @@ class LocationSerializer(serializers.ModelSerializer):
         read_only=True
         ) 
 
-    # Zone_FAO = fields.ChoiceField(
-    #     source="Zone_FAO.Name", 
-    #     allow_null=True,
-    #     required=False,
-    #     choices = [zone.Name for zone in models.ZoneFAO.objects.all()]
-    #     )
+    Zone_FAO = fields.CharField(
+        source="Zone_FAO.Name", 
+        allow_null=True,
+        required=False,
+        validators=[ValidRelatedField(model=models.ZoneFAO, 
+                                     field_name="Name")]
+        )
 
-    # Ecoregion_Udvardy = fields.ChoiceField(
-    #     source="Ecoregion_Udvardy.Name", 
-    #     allow_null=True,
-    #     required=False,
-    #     choices = [biome.Name for biome in models.EcoregionUdvardy.objects.all()]
-    #     )
+    Ecoregion_Udvardy = fields.CharField(
+        source="Ecoregion_Udvardy.Name", 
+        allow_null=True,
+        required=False,
+        validators=[ValidRelatedField(model=models.EcoregionUdvardy, 
+                                     field_name="Name")]
+        )
 
-    # Ecoregion_WWF = fields.ChoiceField(
-    #     source="Ecoregion_WWF.Name", 
-    #     allow_null=True,
-    #     required=False,
-    #     choices= [biome.Name for biome in models.EcoregionWWF.objects.all()]
-    #     )
+    Ecoregion_WWF = fields.CharField(
+        source="Ecoregion_WWF.Name", 
+        allow_null=True,
+        required=False,
+        validators=[ValidRelatedField(model=models.EcoregionWWF, 
+                                     field_name="Name")]
+        )
 
-    # Zone_Holdridge = fields.ChoiceField(
-    #     source="Zone_Holdridge.Name", 
-    #     allow_null=True,
-    #     required=False,
-    #     choices=[biome.Name for biome in models.ZoneHoldridge.objects.all()]
-    #     )
+    Zone_Holdridge = fields.CharField(
+        source="Zone_Holdridge.Name", 
+        allow_null=True,
+        required=False,
+        validators=[ValidRelatedField(model=models.ZoneHoldridge, 
+                                     field_name="Name")]
+        )
 
-    # Division_BAILEY = fields.ChoiceField(
-    #     source="Division_BAILEY.Name", 
-    #     allow_null=True,
-    #     required=False,
-    #     choices=[division.Name for division in models.DivisionBailey.objects.all()]
-    #     )
+    Division_BAILEY = fields.CharField(
+        source="Division_BAILEY.Name", 
+        allow_null=True,
+        required=False,
+        validators=[ValidRelatedField(model=models.DivisionBailey, 
+                                     field_name="Name")]
+        )
 
-    # Forest_type = fields.ChoiceField(
-    #     source="Forest_type.Name", 
-    #     allow_null=True,
-    #     required=False,
-    #     choices=[forest.Name for forest in models.ForestType.objects.all()]
-    #     )
+    Forest_type = fields.CharField(
+        source="Forest_type.Name", 
+        allow_null=True,
+        required=False,
+        validators=[ValidRelatedField(model=models.ForestType, 
+                                     field_name="Name")]
+        )
 
-    # Country_3166_3 = fields.ChoiceField(
-    #     source="Country.Iso3166a3", 
-    #     allow_null=True,
-    #     required=False,
-    #     choices = [country.Iso3166a3 for country in models.Country.objects.all()]
-    #     )
+    Country_3166_3 = fields.CharField(
+        source="Country.Iso3166a3", 
+        allow_null=True,
+        required=False,
+        validators=[ValidRelatedField(model=models.Country, 
+                                     field_name="Iso3166a3")]
+        )
 
     # IDs are read only since we are not trusting them at the moment
     # They could be ids internal to a single dataset or study
@@ -162,12 +171,6 @@ class LocationSerializer(serializers.ModelSerializer):
         else:
             lat_lon_string = None  
         return lat_lon_string
-
-
-    def get_fields(self, *args, **kwargs):
-        fields = super(LocationSerializer, self).get_fields(*args, **kwargs)
-        fields['Country'].choices = [country.Formal_name for country in models.Country.objects.all()] 
-        return fields
 
     class Meta: 
         model = models.Location

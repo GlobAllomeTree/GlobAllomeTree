@@ -1,5 +1,5 @@
 from django.db import models
-from globallometree.apps.search_helpers.models import BaseModel
+from apps.search_helpers.models import BaseModel
 
 
 class Reference(BaseModel):

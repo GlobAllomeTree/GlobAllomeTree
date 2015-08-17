@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from globallometree.apps.api.serializers import (
+from apps.api.serializers import (
     AllometricEquationSerializer,
     WoodDensitySerializer,
     RawDataSerializer

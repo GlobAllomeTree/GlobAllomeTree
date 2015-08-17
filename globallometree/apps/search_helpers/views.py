@@ -24,7 +24,7 @@ from django.views.generic.edit import FormView
 from apps.locations.models import Country
 from apps.accounts.mixins import RestrictedPageMixin
 
-from globallometree.apps.api import Renderers
+from apps.api import Renderers
 
 class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
     template_name = 'search_helpers/template.search.html'

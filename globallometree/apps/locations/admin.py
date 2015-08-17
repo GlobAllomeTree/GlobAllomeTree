@@ -1,5 +1,5 @@
 from django.contrib import admin
-from globallometree.apps.locations.models import (
+from apps.locations.models import (
     Continent, Country, Location, LocationGroup,
     ZoneFAO, EcoregionUdvardy, EcoregionWWF, DivisionBailey, 
     ZoneHoldridge, ForestType, BiomeLocal)
@@ -16,6 +16,7 @@ class CountryAdmin(admin.ModelAdmin):
 class LocationAdmin(admin.ModelAdmin):
     list_display = ('Name', 'Country', 'Modified')
     list_filter  = ('Country',)
+    search_fields = ('Name',)
 
 
 class LocationInline(admin.TabularInline):

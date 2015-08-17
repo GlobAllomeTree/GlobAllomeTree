@@ -1,21 +1,21 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from globallometree.apps.api.permissions import IsOwnerOrReadOnly
+from apps.api.permissions import IsOwnerOrReadOnly
 
-from globallometree.apps.api.mixins import NameQueryMixin
+from apps.api.mixins import NameQueryMixin
 
-from globallometree.apps.source.models import (
+from apps.source.models import (
     Reference, 
     Institution
 	)
 
-from globallometree.apps.data_sharing.models import (
+from apps.data_sharing.models import (
     DataLicense, 
     Dataset, 
 #    DataRequest
 )
 
-from globallometree.apps.taxonomy.models import (
+from apps.taxonomy.models import (
     Family, 
     Genus, 
     Species, 
@@ -24,25 +24,25 @@ from globallometree.apps.taxonomy.models import (
     SpeciesGroup
 	)
 
-from globallometree.apps.allometric_equations.models import (
+from apps.allometric_equations.models import (
     Population, 
     TreeType, 
     AllometricEquation
 	)	
 
-from globallometree.apps.wood_densities.models import (
+from apps.wood_densities.models import (
     WoodDensity
 	)
 
-from globallometree.apps.raw_data.models import (
+from apps.raw_data.models import (
     RawData
     )
 
-from globallometree.apps.biomass_expansion_factors.models import (
+from apps.biomass_expansion_factors.models import (
     BiomassExpansionFactor
     )
 
-from globallometree.apps.locations.models import (
+from apps.locations.models import (
     Continent, 
     Country, 
     ZoneFAO, 
@@ -55,7 +55,7 @@ from globallometree.apps.locations.models import (
     ForestType,
 	)
 
-from globallometree.apps.api.serializers import (
+from apps.api.serializers import (
     AllometricEquationSerializer,
     PopulationSerializer,
     PopulationSerializer,
@@ -67,12 +67,12 @@ from globallometree.apps.api.serializers import (
 	)
 
 
-from globallometree.apps.api.serializers_data_sharing import (
+from apps.api.serializers_data_sharing import (
     DataLicenseSerializer,
     DatasetSerializer,
     )
 
-from globallometree.apps.api.serializers_location import (
+from apps.api.serializers_location import (
     ZoneFAOSerializer, 
     EcoregionUdvardySerializer, 
     EcoregionWWFSerializer, 
@@ -86,7 +86,7 @@ from globallometree.apps.api.serializers_location import (
     )
 
 
-from globallometree.apps.api.serializers_taxonomy import (
+from apps.api.serializers_taxonomy import (
     GenusSerializer,
     FamilySerializer,
     SpeciesSerializer,

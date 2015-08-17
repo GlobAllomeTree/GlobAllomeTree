@@ -1,7 +1,7 @@
 ## api/urls.py
 from django.conf.urls import patterns, include, url
 from rest_framework.routers import DefaultRouter
-from globallometree.apps.api.views import ( 
+from apps.api.views import ( 
 	ReferenceViewSet, 
 	WoodDensityViewSet, 
 	RawDataViewSet,
@@ -54,10 +54,10 @@ router.register(r'locations', LocationViewSet)
 router.register(r'location-groups', LocationGroupViewSet)
 
 router.register(r'forest-types', ForestTypeViewSet)
-router.register(r'biomes-fao', ZoneFAOViewSet)
-router.register(r'biomes-udvardy', EcoregionUdvardyViewSet)
-router.register(r'biomes-wwf', EcoregionWWFViewSet)
-router.register(r'biomes-holdridge', ZoneHoldridgeViewSet)
+router.register(r'ecological-zones-fao', ZoneFAOViewSet)
+router.register(r'ecoregions-udvardy', EcoregionUdvardyViewSet)
+router.register(r'ecoregions-wwf', EcoregionWWFViewSet)
+router.register(r'life-zones-holdridge', ZoneHoldridgeViewSet)
 router.register(r'divisions-bailey', DivisionBaileyViewSet)
 
 router.register(r'data-sharing-agreements',DataLicenseViewSet)

@@ -1,10 +1,10 @@
 from django import forms
 
-from globallometree.apps.wood_densities.models import (
+from apps.wood_densities.models import (
     WoodDensity
     )
 
-from globallometree.apps.search_helpers.forms import LinkedModelSearchForm
+from apps.search_helpers.forms import LinkedModelSearchForm
 
 class WoodDensitySearchForm(LinkedModelSearchForm):
 

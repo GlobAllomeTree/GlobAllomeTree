@@ -3,9 +3,9 @@ from django.contrib.auth.decorators import login_required
 from .models import BiomassExpansionFactor
 from .forms import BiomassExpansionFactorSearchForm
 
-from globallometree.apps.api.serializers import BiomassExpansionFactorSerializer
-from globallometree.apps.search_helpers.views import LinkedModelSearchView
-from globallometree.apps.search_helpers.views import (
+from apps.api.serializers import BiomassExpansionFactorSerializer
+from apps.search_helpers.views import LinkedModelSearchView
+from apps.search_helpers.views import (
     record_by_id_view, 
     record_by_id_pdf_view,
     export_view

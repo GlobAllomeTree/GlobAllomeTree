@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
-from globallometree.apps.journals.models import Journal
-from globallometree.apps.journals.models import Article
+from apps.journals.models import Journal
+from apps.journals.models import Article
 from datetime import datetime
 from time import mktime
 import feedparser

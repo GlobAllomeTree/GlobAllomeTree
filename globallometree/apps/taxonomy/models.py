@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
-from globallometree.apps.search_helpers.models import BaseModel
-from globallometree.apps.data_sharing.models import Dataset
+from apps.search_helpers.models import BaseModel
+from apps.data_sharing.models import Dataset
 
 
 class TaxonomyModel(BaseModel):
@@ -42,7 +42,7 @@ class Species(TaxonomyModel):
     Species_ID = models.AutoField(primary_key=True, db_column="species_id")
     Name = models.CharField(max_length=120, db_column="name")
     Genus = models.ForeignKey(Genus, db_column="genus_id")
-    Author = models.CharField(max_length=120, db_column="author")
+    Author = models.CharField(max_length=120, db_column="author", blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Species'
@@ -57,7 +57,7 @@ class Subspecies(TaxonomyModel):
     Subspecies_ID = models.AutoField(primary_key=True, db_column="subspecies_id")
     Name = models.CharField(max_length=120, db_column="name")
     Species = models.ForeignKey(Species, db_column="species_id")
-    Author = models.CharField(max_length=120, db_column="author")
+    Author = models.CharField(max_length=120, db_column="author", blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Subspecies'
@@ -114,7 +114,7 @@ class SpeciesDefinition(BaseModel):
         if self.Genus:
             scientific_name += ' ' + self.Genus.Name
 
-        if self.Species.Name:
+        if self.Species:
             scientific_name += ' ' + self.Species.Name
 
         if self.Subspecies:

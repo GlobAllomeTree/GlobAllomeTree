@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse 
 from django.contrib.auth.decorators import login_required
 
-from globallometree.apps.data_sharing.data_tools import restrict_access
+from apps.data_sharing.data_tools import restrict_access
 
 def parse_request_path(path):
     """

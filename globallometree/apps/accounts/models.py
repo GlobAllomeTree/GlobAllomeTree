@@ -9,7 +9,7 @@ from django.db import models
 from rest_framework.authtoken.models import Token
 from django.views.generic.edit import UpdateView
 
-from globallometree.apps.locations.models import Country
+from apps.locations.models import Country
 
 
 # Monkey patch the User class for django 1.6

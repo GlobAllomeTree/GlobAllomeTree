@@ -1,5 +1,5 @@
 from django.contrib import admin
-from globallometree.apps.wood_densities.models import WoodDensity
+from apps.wood_densities.models import WoodDensity
 
 
 class WoodDensityAdmin(admin.ModelAdmin):
