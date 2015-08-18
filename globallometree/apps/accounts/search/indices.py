@@ -4,7 +4,7 @@ from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
-from apps.search_helpers.estypes import *
+from globallometree.apps.search_helpers.estypes import *
 
 from ..models import UserProfile
 

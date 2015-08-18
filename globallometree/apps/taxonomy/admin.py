@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.taxonomy.models import (
+from globallometree.apps.taxonomy.models import (
     Family, 
     Genus, 
     Species, 

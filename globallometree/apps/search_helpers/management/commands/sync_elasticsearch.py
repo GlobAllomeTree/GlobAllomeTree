@@ -4,12 +4,12 @@ import hashlib
 import elasticsearch
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from apps.allometric_equations.models import AllometricEquation
+from globallometree.apps.allometric_equations.models import AllometricEquation
 from elasticutils.contrib.django import get_es
-from apps.allometric_equations.indices import AllometricEquationIndex
-from apps.wood_densities.indices import WoodDensityIndex
-from apps.raw_data.indices import RawDataIndex
-from apps.biomass_expansion_factors.indices import BiomassExpansionFactorIndex
+from globallometree.apps.allometric_equations.indices import AllometricEquationIndex
+from globallometree.apps.wood_densities.indices import WoodDensityIndex
+from globallometree.apps.raw_data.indices import RawDataIndex
+from globallometree.apps.biomass_expansion_factors.indices import BiomassExpansionFactorIndex
 
 class Command(BaseCommand):
     help = 'Fully synchronizes the elasticsearch indices from the postgresql database'

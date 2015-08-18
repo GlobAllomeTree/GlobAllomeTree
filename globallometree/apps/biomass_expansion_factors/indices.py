@@ -5,10 +5,10 @@ from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
-from apps.biomass_expansion_factors.models import BiomassExpansionFactor
-from apps.search_helpers.estypes import *
-from apps.api.serializers import BiomassExpansionFactorSerializer
-from apps.api.renderers import JSONRenderer
+from globallometree.apps.biomass_expansion_factors.models import BiomassExpansionFactor
+from globallometree.apps.search_helpers.estypes import *
+from globallometree.apps.api.serializers import BiomassExpansionFactorSerializer
+from globallometree.apps.api.renderers import JSONRenderer
 
 class BiomassExpansionFactorIndex(MappingType, Indexable):
 

@@ -4,7 +4,7 @@ getcontext().prec = 10
 from django.db import models
 from django.contrib.auth.models import User
 
-from apps.search_helpers.models import LinkedBaseModel
+from globallometree.apps.search_helpers.models import LinkedBaseModel
 
 
 class RawData(LinkedBaseModel):
@@ -168,11 +168,11 @@ class RawData(LinkedBaseModel):
         db_column="bef")
 
     def get_serializer_class(self):
-        from apps.api import RawDataSerializer
+        from globallometree.apps.api import RawDataSerializer
         return RawDataSerializer
 
     def get_index_class(self):
-        from apps.raw_data.indices import RawDataIndex
+        from globallometree.apps.raw_data.indices import RawDataIndex
         return RawDataIndex
 
     def get_absolute_url(self):

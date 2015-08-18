@@ -3,7 +3,7 @@ from django.db.models import Q
 from django import forms
 from .models import DataLicense, Dataset
 
-from apps.api import Parsers
+from globallometree.apps.api import Parsers
     
 
 class LicenseChoiceForm(forms.Form):

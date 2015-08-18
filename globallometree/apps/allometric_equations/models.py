@@ -7,14 +7,14 @@ from django.conf import settings
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from apps.taxonomy.models import (
+from globallometree.apps.taxonomy.models import (
     Family, Genus, Species, SpeciesGroup
 )
-from apps.locations.models import (
+from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, ZoneFAO, EcoregionUdvardy, 
     EcoregionWWF, DivisionBailey, ZoneHoldridge
 )
-from apps.search_helpers.models import BaseModel, LinkedBaseModel
+from globallometree.apps.search_helpers.models import BaseModel, LinkedBaseModel
 
 
 class Population(BaseModel):
@@ -127,11 +127,11 @@ class AllometricEquation(LinkedBaseModel):
         return '/data/allometric-equations/%s' % self.ID
 
     def get_serializer_class(self):
-        from apps.api import AllometricEquationSerializer
+        from globallometree.apps.api import AllometricEquationSerializer
         return AllometricEquationSerializer
 
     def get_index_class(self):
-        from apps.allometric_equations.indices import AllometricEquationIndex
+        from globallometree.apps.allometric_equations.indices import AllometricEquationIndex
         return AllometricEquationIndex
 
     def __unicode__(self):

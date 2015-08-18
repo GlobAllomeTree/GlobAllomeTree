@@ -1,10 +1,10 @@
 from django import forms
 
-from apps.biomass_expansion_factors.models import (
+from globallometree.apps.biomass_expansion_factors.models import (
     BiomassExpansionFactor
     )
 
-from apps.search_helpers.forms import LinkedModelSearchForm
+from globallometree.apps.search_helpers.forms import LinkedModelSearchForm
 
 class BiomassExpansionFactorSearchForm(LinkedModelSearchForm):
 

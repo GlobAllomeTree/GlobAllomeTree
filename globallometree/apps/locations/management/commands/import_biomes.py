@@ -6,7 +6,7 @@ from django.db import transaction
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from apps.locations.models import EcoregionUdvardy, ZoneFAO, EcoregionWWF, ZoneHoldridge, DivisionBailey
+from globallometree.apps.locations.models import EcoregionUdvardy, ZoneFAO, EcoregionWWF, ZoneHoldridge, DivisionBailey
 
 class Command(BaseCommand):
     args = '<limit (optional)>'

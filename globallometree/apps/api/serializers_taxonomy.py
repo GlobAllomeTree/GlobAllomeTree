@@ -1,5 +1,5 @@
 from rest_framework import serializers, fields
-from apps.taxonomy import models
+from globallometree.apps.taxonomy import models
 
 
 class SpeciesLocalNameSerializer(serializers.ModelSerializer):

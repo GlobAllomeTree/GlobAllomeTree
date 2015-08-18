@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.source.models import Institution, Reference, Operator
+from globallometree.apps.source.models import Institution, Reference, Operator
 
 class InstitutionAdmin(admin.ModelAdmin):
     list_display = ('Name', )

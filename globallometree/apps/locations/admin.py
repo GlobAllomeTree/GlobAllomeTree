@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.locations.models import (
+from globallometree.apps.locations.models import (
     Continent, Country, Location, LocationGroup,
     ZoneFAO, EcoregionUdvardy, EcoregionWWF, DivisionBailey, 
     ZoneHoldridge, ForestType, BiomeLocal)

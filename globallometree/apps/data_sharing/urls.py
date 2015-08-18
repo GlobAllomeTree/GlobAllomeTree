@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url, include
-from apps.data_sharing.views import (
+from globallometree.apps.data_sharing.views import (
     DataSharingOverview, 
     DatasetListView
     )

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.biomass_expansion_factors.models import BiomassExpansionFactor
+from globallometree.apps.biomass_expansion_factors.models import BiomassExpansionFactor
 
 
 class BiomassExpansionFactorAdmin(admin.ModelAdmin):

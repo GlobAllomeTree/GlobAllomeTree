@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from apps.search_helpers.models import BaseModel
+from globallometree.apps.search_helpers.models import BaseModel
 
 class DataLicense(BaseModel):
 

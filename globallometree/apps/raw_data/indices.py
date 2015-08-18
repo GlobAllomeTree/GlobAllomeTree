@@ -5,10 +5,10 @@ from django.conf import settings
 
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
-from apps.raw_data.models import RawData
-from apps.search_helpers.estypes import *
-from apps.api.serializers import RawDataSerializer
-from apps.api.renderers import JSONRenderer
+from globallometree.apps.raw_data.models import RawData
+from globallometree.apps.search_helpers.estypes import *
+from globallometree.apps.api.serializers import RawDataSerializer
+from globallometree.apps.api.renderers import JSONRenderer
 
 class RawDataIndex(MappingType, Indexable):
 

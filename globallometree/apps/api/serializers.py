@@ -5,16 +5,16 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers, fields
 
-from apps.source import models as source_models
-from apps.allometric_equations import models as allometric_equation_models
-from apps.wood_densities import models as wood_density_models 
-from apps.raw_data import models as raw_data_models
-from apps.biomass_expansion_factors import models as biomass_expansion_factors_models
-from apps.locations import models as location_models
-from apps.taxonomy import models as taxonomy_models
+from globallometree.apps.source import models as source_models
+from globallometree.apps.allometric_equations import models as allometric_equation_models
+from globallometree.apps.wood_densities import models as wood_density_models 
+from globallometree.apps.raw_data import models as raw_data_models
+from globallometree.apps.biomass_expansion_factors import models as biomass_expansion_factors_models
+from globallometree.apps.locations import models as location_models
+from globallometree.apps.taxonomy import models as taxonomy_models
 
 
-from apps.api.serializers_location import (
+from globallometree.apps.api.serializers_location import (
     ZoneFAOSerializer, 
     EcoregionUdvardySerializer, 
     EcoregionWWFSerializer, 
@@ -27,7 +27,7 @@ from apps.api.serializers_location import (
     CountrySerializer,
     )
 
-from apps.api.serializers_taxonomy import (
+from globallometree.apps.api.serializers_taxonomy import (
     GenusSerializer,
     FamilySerializer,
     SpeciesSerializer,
@@ -36,7 +36,7 @@ from apps.api.serializers_taxonomy import (
     SpeciesGroupSerializer
     )
 
-from apps.api.serializers_data_sharing import (
+from globallometree.apps.api.serializers_data_sharing import (
     DataLicenseSerializer,
     DatasetSerializer,
     )
@@ -220,7 +220,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
         # Here we figure out if the user has access to this data object
         # through a data sharing agreement or since the object is permitted
         # to all users
-        from apps.data_sharing.data_tools import restrict_access
+        from globallometree.apps.data_sharing.data_tools import restrict_access
         record = super(LinkedModelSerializer, self).to_representation(obj)
         
         if 'request' in self.context.keys():

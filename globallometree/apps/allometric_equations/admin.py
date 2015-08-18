@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 
-from apps.allometric_equations.models import (
+from globallometree.apps.allometric_equations.models import (
     AllometricEquation, Population, TreeType
 )
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
-from apps.search_helpers.models import BaseModel
-from apps.data_sharing.models import Dataset
+from globallometree.apps.search_helpers.models import BaseModel
+from globallometree.apps.data_sharing.models import Dataset
 
 
 class TaxonomyModel(BaseModel):

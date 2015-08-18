@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers, fields
 
-from apps.locations import models
+from globallometree.apps.locations import models
 from .validators import ValidRelatedField
 
 class ZoneFAOSerializer(serializers.ModelSerializer):

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.conf.urls import patterns, url, include
 from django.views.generic import RedirectView
 from django.core.urlresolvers import reverse_lazy
-from apps.proxy.views import es_proxy
+from globallometree.apps.proxy.views import es_proxy
 
 admin.autodiscover()
 

@@ -6,7 +6,7 @@ from StringIO import StringIO
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from apps.taxonomy.models import Subspecies, Species, Family, Genus, SpeciesGroup
+from globallometree.apps.taxonomy.models import Subspecies, Species, Family, Genus, SpeciesGroup
 
 class Command(BaseCommand):
     help = 'Runs through all species, families, genera, and subspecies \

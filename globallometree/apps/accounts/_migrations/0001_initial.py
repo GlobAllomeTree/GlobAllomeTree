@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('data_may_provide', models.CharField(blank=True, max_length=40, choices=[(b'no_data', b'No data available'), (b'Species_data', b'Species data'), (b'wood_density', b'Wood Density'), (b'allometric_equation', b'Allometric Equation'), (b'reports', b'Reports and scientific literature containing new allometric equations'), (b'biomass_factors', b'Biomass Expansion Factors'), (b'volume_tables', b'Volume Tables')])),
                 ('location_latitude', models.DecimalField(null=True, max_digits=8, decimal_places=5, blank=True)),
                 ('location_longitude', models.DecimalField(null=True, max_digits=8, decimal_places=5, blank=True)),
-                ('privacy', models.CharField(default=b'anonymous', max_length=20, null=True, blank=True, choices=[(b'none', b"Private   - Don't share my profile or location at all"), (b'anonymous', b"Anonymous - Share my location anonymously, but don't share my profile"), (b'public', b'Public    - Share my location and my profile information')])),
+                ('privacy', models.CharField(default=b'anonymous', max_length=20, choices=[(b'none', b"Private   - Don't share my profile or location at all"), (b'anonymous', b"Anonymous - Share my location anonymously, but don't share my profile"), (b'public', b'Public    - Share my location and my profile information')])),
                 ('location_country', models.ForeignKey(blank=True, to='locations.Country', null=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],

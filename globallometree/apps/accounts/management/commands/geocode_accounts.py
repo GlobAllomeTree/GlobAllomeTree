@@ -10,8 +10,8 @@ from django.core.management.base import BaseCommand
 from pygeocoder import Geocoder
 from pygeolib import GeocoderError
 
-from apps.accounts.models import UserProfile
-from apps.locations.models import Country
+from globallometree.apps.accounts.models import UserProfile
+from globallometree.apps.locations.models import Country
 
 class Command(BaseCommand):
     args = '<limit (optional)>'

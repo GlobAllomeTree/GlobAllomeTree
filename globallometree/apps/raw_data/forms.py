@@ -1,10 +1,10 @@
 from django import forms
 
-from apps.raw_data.models import (
+from globallometree.apps.raw_data.models import (
     RawData
     )
 
-from apps.search_helpers.forms import LinkedModelSearchForm
+from globallometree.apps.search_helpers.forms import LinkedModelSearchForm
 
 class RawDataSearchForm(LinkedModelSearchForm):
 

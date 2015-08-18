@@ -107,7 +107,7 @@ CMS_TEMPLATES = (
 )
 
 INSTALLED_APPS = (
-    # django apps
+    # django globallometree.apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -133,23 +133,23 @@ INSTALLED_APPS = (
     'djangocms_file',
     'globallometree.plugins.linkbox',
 
-    # project apps
-    'globallometree.apps.accounts',
-    'globallometree.apps.search_helpers',
-    'globallometree.apps.source',
-    'globallometree.apps.data_sharing',
-    'globallometree.apps.community',
-    'globallometree.apps.journals',
-    'globallometree.apps.taxonomy',
-    'globallometree.apps.locations',
-    'globallometree.apps.allometric_equations',
-    'globallometree.apps.raw_data',
-    'globallometree.apps.wood_densities',
-    'globallometree.apps.proxy',
-    'globallometree.apps.kibana_custom', #custom must go before source for overrides
-    'globallometree.apps.kibana_src',
-    'globallometree.apps.api',
-    'globallometree.apps.biomass_expansion_factors',
+    # project globallometree.apps
+    'apps.accounts',
+    'apps.search_helpers',
+    'apps.source',
+    'apps.data_sharing',
+    'apps.community',
+    'apps.journals',
+    'apps.taxonomy',
+    'apps.locations',
+    'apps.allometric_equations',
+    'apps.raw_data',
+    'apps.wood_densities',
+    'apps.proxy',
+    'apps.kibana_custom', #custom must go before source for overrides
+    'apps.kibana_src',
+    'apps.api',
+    'apps.biomass_expansion_factors',
 
     'rest_framework',
     'rest_framework_swagger',

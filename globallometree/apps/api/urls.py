@@ -1,7 +1,7 @@
 ## api/urls.py
 from django.conf.urls import patterns, include, url
 from rest_framework.routers import DefaultRouter
-from apps.api.views import ( 
+from globallometree.apps.api.views import ( 
 	ReferenceViewSet, 
 	WoodDensityViewSet, 
 	RawDataViewSet,

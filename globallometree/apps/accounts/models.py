@@ -9,7 +9,7 @@ from django.db import models
 from rest_framework.authtoken.models import Token
 from django.views.generic.edit import UpdateView
 
-from apps.locations.models import Country
+from globallometree.apps.locations.models import Country
 
 
 # Monkey patch the User class for django 1.6
@@ -76,7 +76,7 @@ class UserProfile(models.Model):
     )
     location_country     = models.ForeignKey(Country, blank=True, null=True)
 
-    privacy  = models.CharField(max_length=20, default='anonymous', choices=PRIVACY_CHOICES)
+    privacy  = models.CharField(max_length=20, default='anonymous', choices=PRIVACY_CHOICES, blank=True, null=True)
 
     def __unicode__(self):
         return u"User profile for %s" % self.user

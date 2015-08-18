@@ -1,7 +1,7 @@
 
 from rest_framework import serializers, fields
 
-from apps.data_sharing import models 
+from globallometree.apps.data_sharing import models 
 
 
 class DataLicenseSerializer(serializers.ModelSerializer):
