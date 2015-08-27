@@ -19,11 +19,44 @@ from globallometree.apps.api import (
 from globallometree.apps.data_sharing.models import DataSharingAgreement, Dataset
 
 restricted_keys = {
-    'allometricequation' : ['Equation', 'Substitute_equation',],
-    'wooddensity' : ['Density_g_cm3',],
-    'rawdata': [],
-    'biomassexpansionfactor' : []
+    'allometricequation' : ['Equation', 
+                            'Substitute_equation',
+                            ],
+    'wooddensity' : [
+                            'Density_g_cm3',
+                            ],
+    'rawdata': [
+                            'H_m', 
+                            'F_Bole_kg',
+                            'F_Branch_kg',
+                            'F_Foliage_kg',
+                            'F_Stump_kg',
+                            'F_Buttress_kg',
+                            'F_Roots_kg',
+                            'Volume_bole_m3',
+                            'DF_Bole_AVG',
+                            'DF_Branch_AVG', 
+                            'DF_Foliage_AVG',
+                            'DF_Stump_AVG',
+                            'DF_Buttress_AVG',
+                            'DF_Roots_AVG',
+                            'D_Bole_kg',
+                            'D_Branch_kg',
+                            'D_Foliage_kg',
+                            'D_Stump_kg',
+                            'D_Buttress_kg',
+                            'D_Roots_kg',
+                            'ABG_kg',
+                            'BGB_kg',
+                            'Tot_Biomass_kg',
+                            'BEF',
+                            'Volume_m3',
+                            'WD_AVG_gcm3',
+                            ],
+    'biomassexpansionfactor' : ['BEF',]
 }
+
+
 
 
 def restrict_access(record, index_name, user):
@@ -72,9 +105,7 @@ def restrict_access(record, index_name, user):
 
 def summarize_data(data):
     """
-        Summarizes the dataset as far as which countries there are,
-        what species, which new species will be created, future - swhat biomes 
-        there are
+        Summarizes the dataset as far as which new species will be created
     """
 
     new_families = []
@@ -157,8 +188,9 @@ def get_sub_errors(sub_errors):
                 'field' : None,
                 'error' : sub_error_item
                 }
-        if val not in sub_error_list:
-            sub_error_list.append(val)
+            if val not in sub_error_list:
+                sub_error_list.append(val)
+            
     return sub_error_list
 
 
@@ -220,7 +252,12 @@ def validate_data_file(data_file, data_type):
     extension = os.path.splitext(data_file.name.lower())[1]
     ParserClass = Parsers[extension]
     SerializerClass = Serializers[data_type]
-    parser = ParserClass()
+    
+    if extension == '.csv':
+        parser = ParserClass(data_type=data_type)
+    else:
+        parser = ParserClass()
+
     data = parser.parse(data_file)
     data_errors = validate_records(data, SerializerClass)
     
@@ -295,14 +332,3 @@ def match_or_clean_species_ids(species_def):
             pass
 
     return species_def
-
-
-def import_dataset_to_db(dataset, data):
-    SerializerClass = Serializers[dataset.Data_type] 
-    serializer = SerializerClass(data=data, many=True, context={'dataset': dataset})
-    if serializer.is_valid(): # Must call is valid before calling save
-        serializer.save()
-        dataset.Imported = True
-        dataset.save()
-    else:
-        raise Exception("The dataset could not be validated and was not imported.") 

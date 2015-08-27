@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url, include
 from .views import WoodDensitySearchView
 
-urlpatterns = patterns('apps.wood_densities.views',
+urlpatterns = patterns('globallometree.apps.wood_densities.views',
 
     url(r'^export/$', 'export', name='wood_densities_export'),
             

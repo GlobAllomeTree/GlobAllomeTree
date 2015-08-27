@@ -18,8 +18,7 @@ from .data_tools import(
     match_data_to_database, 
     summarize_data,
     Parsers,
-    validate_data_file,
-    import_dataset_to_db
+    validate_data_file
 )
 
 class DatasetForm(forms.ModelForm):
@@ -47,6 +46,7 @@ class DatasetForm(forms.ModelForm):
                     self.request._data_errors = data_errors
                     raise forms.ValidationError("The uploaded file has errors in the data")
                 else:
+                    self.request._record_count = len(data)
                     self.request._data_as_json = json.dumps(data)
 
         return self.cleaned_data
@@ -54,7 +54,7 @@ class DatasetForm(forms.ModelForm):
 
 class DatasetAdmin(admin.ModelAdmin):
     actions = ['run_import']
-    list_display = ('Title',  'Imported', 'User', 'Data_type',  'Data_license', 'Created')
+    list_display = ('Title',  'Imported', 'Marked_for_import', 'Import_error', 'Record_count', 'Records_imported', 'User', 'Data_type',  'Data_license', 'Created')
     search_fields  = ['Title', 'Description']
     raw_id_fields = ('User',)
     exclude = ('Data_as_json',)
@@ -93,6 +93,7 @@ class DatasetAdmin(admin.ModelAdmin):
         # the form doesn't manage to save it automatically)
         if hasattr(request, '_data_as_json'):
             obj.Data_as_json = request._data_as_json
+            obj.Record_count = request._record_count
         obj.save()
 
     def error_view(self, request):
@@ -127,12 +128,17 @@ class DatasetAdmin(admin.ModelAdmin):
             #Now that we have one row, we get the data submission from the query set
             dataset = queryset[0]
 
-        # if dataset.Imported:
-        #     messages.error(request, "That dataset selected has already been imported")
-        #     return None
      
         if not dataset.Data_as_json or len(dataset.Data_as_json) == 0:
             messages.error(request, "There is not any structured data in this dataset. Please upload a structured dataset file in order to import this dataset into the database.")
+            return None
+
+        if dataset.Marked_for_import:
+            messages.error(request, "The dataset '%s' has already been marked for import and will be imported by a scheduled task." % dataset.Title)
+            return None
+
+        if dataset.Imported:
+            messages.error(request, "The dataset '%s' has already been imported." % dataset.Title)
             return None
 
         try:
@@ -142,8 +148,9 @@ class DatasetAdmin(admin.ModelAdmin):
             return None
 
         if import_confirmed:
-            import_dataset_to_db(dataset, data)
-            messages.info(request, "The dataset '%s' was import correctly" % dataset.Title)
+            dataset.Marked_for_import = True
+            dataset.save()
+            messages.info(request, "The dataset '%s' was marked for import and the import process has started" % dataset.Title)
    
         else:
 
@@ -156,7 +163,8 @@ class DatasetAdmin(admin.ModelAdmin):
 
             return render_to_response('data_sharing/admin_confirm_import.html', context,
                                             context_instance=RequestContext(request))
-
+            
+    run_import.short_description = "Mark dataset to start import"
 
 class DataLicenseAdmin(admin.ModelAdmin):
     list_display = ('Title', 'User', 'Public_choice',)

@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url, include
 from .views import AllometricEquationSearchView
 
-urlpatterns = patterns('apps.allometric_equations.views',
+urlpatterns = patterns('globallometree.apps.allometric_equations.views',
 
     url(r'^export/$', 'export', name='equations_export'),
             

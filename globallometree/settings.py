@@ -74,7 +74,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'sekizai.context_processors.sekizai',
                 'cms.context_processors.cms_settings',
-                'apps.search_helpers.context_processors.template_settings'
+                'globallometree.apps.search_helpers.context_processors.template_settings'
 
             )
     }
@@ -134,22 +134,22 @@ INSTALLED_APPS = (
     'globallometree.plugins.linkbox',
 
     # project globallometree.apps
-    'apps.accounts',
-    'apps.search_helpers',
-    'apps.source',
-    'apps.data_sharing',
-    'apps.community',
-    'apps.journals',
-    'apps.taxonomy',
-    'apps.locations',
-    'apps.allometric_equations',
-    'apps.raw_data',
-    'apps.wood_densities',
-    'apps.proxy',
-    'apps.kibana_custom', #custom must go before source for overrides
-    'apps.kibana_src',
-    'apps.api',
-    'apps.biomass_expansion_factors',
+    'globallometree.apps.accounts',
+    'globallometree.apps.search_helpers',
+    'globallometree.apps.source',
+    'globallometree.apps.data_sharing',
+    'globallometree.apps.community',
+    'globallometree.apps.journals',
+    'globallometree.apps.taxonomy',
+    'globallometree.apps.locations',
+    'globallometree.apps.allometric_equations',
+    'globallometree.apps.raw_data',
+    'globallometree.apps.wood_densities',
+    'globallometree.apps.proxy',
+    'globallometree.apps.kibana_custom', #custom must go before source for overrides
+    'globallometree.apps.kibana_src',
+    'globallometree.apps.api',
+    'globallometree.apps.biomass_expansion_factors',
 
     'rest_framework',
     'rest_framework_swagger',
@@ -229,10 +229,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_RENDERER_CLASSES': (
-        'apps.api.renderers.BrowsableAPIRenderer',
-        'apps.api.renderers.JSONRenderer',
-        'apps.api.renderers.XMLRenderer',
-        'apps.api.renderers.CSVRenderer',
+        'globallometree.apps.api.renderers.BrowsableAPIRenderer',
+        'globallometree.apps.api.renderers.JSONRenderer',
+        'globallometree.apps.api.renderers.XMLRenderer',
+        'globallometree.apps.api.renderers.CSVRenderer',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',

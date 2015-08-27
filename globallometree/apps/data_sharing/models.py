@@ -190,7 +190,6 @@ class Dataset(BaseModel):
         null=True,
         help_text="The source document can be a pdf, excel file, word document or other with data in any format.",
         db_column="uploaded_source_document"
-
     )
 
     Description = models.TextField(
@@ -230,6 +229,32 @@ class Dataset(BaseModel):
         help_text="If this file has been imported into the GlobAllomeTree database yet or not",
         db_column="imported"
         )
+
+    Marked_for_import = models.BooleanField(
+        default=False,
+        db_column="marked_for_import"
+        )
+
+    Locked = models.BooleanField(
+        default=False,
+        db_column="locked"
+        )
+
+    Records_imported = models.IntegerField(
+        default=0,
+        db_column="records_imported"
+        )
+
+    Import_error = models.BooleanField(
+        default=False,
+        db_column="import_error"
+        )
+
+    Import_error_details = models.TextField(
+        db_column="import_error_details",
+        blank=True,
+        null=True
+    )
 
     def is_editable(self):
         if self.Data_type == 'allometric_equations' and not self.Imported:

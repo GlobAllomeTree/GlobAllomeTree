@@ -105,14 +105,14 @@ class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
    
     Family = fields.CharField(required=False, allow_null=True, source='Family.Name')
     Genus = fields.CharField(required=False,allow_null=True, source='Genus.Name')
-    Species = fields.CharField(required=False,allow_null=True)
+    Species = fields.CharField(required=False,allow_null=True, source='Species.Name')
     Species_local_names = SpeciesLocalNameSerializer(
         many=True,
         required=False,
         source='Species.Local_names'
         )
     
-    Subspecies = fields.CharField(required=False,allow_null=True, source='Subspecies.pk')
+    Subspecies = fields.CharField(required=False, allow_null=True, source='Subspecies.Name')
     Scientific_name = fields.CharField(read_only=True, allow_null=True)
 
     Family_ID = fields.IntegerField(required=False,allow_null=True, source='Family.pk')
@@ -173,7 +173,7 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
 
         # Family and Genus are required by the parser
         try:
-            species_def['db_family'] = models.Family.objects.get(Name=species_def['Family'])
+            species_def['db_family'] = models.Family.objects.get(Name=species_def['Family']['Name'])
             species_def['Family_ID'] = species_def['db_family'].pk
         except models.Family.DoesNotExist:
             pass
@@ -183,28 +183,28 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
             try:
                 species_def['db_genus'] = models.Genus.objects.get(
                     Family=species_def['db_family'],
-                    Name=species_def['Genus']
+                    Name=species_def['Genus']['Name']
                     )
                 species_def['Genus_ID'] = species_def['db_genus'].pk
             except models.Genus.DoesNotExist:
                 pass
                 
         # If we have the genus in our db, we try to find the species id
-        if species_def['db_genus'] and 'Species' in species_def.keys():
+        if species_def['db_genus'] and species_def['Species']['Name']:
             try:
                 species_def['db_species'] = models.Species.objects.get(
                     Genus=species_def['db_genus'],
-                    Name=species_def['Species'])
+                    Name=species_def['Species']['Name'])
                 species_def['Species_ID'] = species_def['db_species'].pk
             except models.Species.DoesNotExist:
                 pass
 
         # If we have the species in our db, we try to find the subspecies id
-        if species_def['db_species'] and 'Subspecies' in species_def.keys():
+        if species_def['db_species'] and species_def['Subspecies']['Name']:
             try:
                 species_def['db_subspecies'] = models.Subspecies.objects.get(
                     Species=species_def['db_species'], 
-                    Name=species_def['Subspecies']
+                    Name=species_def['Subspecies']['Name']
                     )
                 species_def['Subpsecies_ID'] = species_def['db_subspecies'].pk
             except models.Subspecies.DoesNotExist:

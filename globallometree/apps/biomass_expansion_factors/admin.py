@@ -4,8 +4,8 @@ from globallometree.apps.biomass_expansion_factors.models import BiomassExpansio
 
 class BiomassExpansionFactorAdmin(admin.ModelAdmin):
     raw_id_fields = ('Species_group', 'Location_group', 'Reference')
-    list_display = ('ID_BEF', 'Modified')
-    ordering = ("ID_BEF",)
-    search_fields  = ('ID_BEF',)
+    list_display = ('Biomass_expansion_factor_ID', 'Modified')
+    ordering = ("Biomass_expansion_factor_ID",)
+    search_fields  = ('Biomass_expansion_factor_ID',)
 
 admin.site.register(BiomassExpansionFactor, BiomassExpansionFactorAdmin)

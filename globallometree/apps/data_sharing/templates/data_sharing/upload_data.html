@@ -2,8 +2,8 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
-{% block script %}
-
+{% block extrahead %}
+{{ block.super }}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -51,9 +51,7 @@
 			}
 		}
 
-		function toggleSource(identifier) {
-			$(identifier).slideToggle('slow');
-		}
+		
 
 		$('#id_Submission_method').change(showSubmissionChoice);
 		$('#id_Data_type').change(modifySubmisisonChoices);
@@ -62,6 +60,10 @@
 		modifySubmisisonChoices();
 
 	});
+
+	function toggleSource(identifier) {
+		$(identifier).slideToggle('slow');
+	}
 </script>
 
 {% endblock %}

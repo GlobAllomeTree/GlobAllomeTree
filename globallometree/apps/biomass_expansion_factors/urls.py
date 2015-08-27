@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url, include
 from .views import BiomassExpansionFactorSearchView
 
-urlpatterns = patterns('apps.biomass_expansion_factors.views',
+urlpatterns = patterns('globallometree.apps.biomass_expansion_factors.views',
 
     url(r'^export/$', 'export', name='biomass_expansion_factors_export'),
             

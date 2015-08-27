@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url, include
 from .views import RawDataSearchView
 
-urlpatterns = patterns('apps.raw_data.views',
+urlpatterns = patterns('globallometree.apps.raw_data.views',
 
     url(r'^export/$', 'export', name='raw_data_export'),
             

@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('Created', models.DateTimeField(auto_now_add=True, db_column=b'created')),
                 ('Modified', models.DateTimeField(auto_now=True, verbose_name=b'Last modified', db_column=b'modified')),
                 ('Elasticsearch_doc_hash', models.CharField(db_column=b'elasticsearch_doc_hash', max_length=255, blank=True, help_text=b'The hash of the denormalized version of this model in elasticsearch, used for knowing if the es index needs to be updated or not', null=True, verbose_name=b'Elasticsearch document md5 hash')),
-                ('ID_BEF', models.AutoField(serialize=False, primary_key=True, db_column=b'id_bef')),
+                ('Biomass_expansion_factor_ID', models.AutoField(serialize=False, primary_key=True, db_column=b'biomass_expansion_factor_id')),
                 ('Growing_stock', models.DecimalField(db_column=b'growing_stock', decimal_places=10, max_digits=16, blank=True, help_text=b'Growing stock', null=True)),
                 ('Aboveground_biomass', models.DecimalField(db_column=b'aboveground_biomass', decimal_places=10, max_digits=16, blank=True, help_text=b'Above ground  biomass', null=True)),
                 ('Net_annual_increment', models.DecimalField(db_column=b'net_annual_increment', decimal_places=10, max_digits=16, blank=True, help_text=b'Net annual increment', null=True)),

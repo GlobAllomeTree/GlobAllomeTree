@@ -8,8 +8,11 @@ from .serializers import (
 
 from .renderers import (
     JSONRenderer,
-    XMLRenderer
+    XMLRenderer,
+    CSVRenderer
 )
+
+from .parsers import CSVParser
 
 from rest_framework.parsers import JSONParser
 from rest_framework_xml.parsers import XMLParser
@@ -25,12 +28,12 @@ Serializers = {
 Parsers = {
                 '.json': JSONParser,
                 '.xml': XMLParser,
-                '.csv': None
+                '.csv': CSVParser
             }
 
 Renderers = {
 				 '.json': JSONRenderer,
 			     '.xml': XMLRenderer,
-			     '.csv': None
+			     '.csv': CSVRenderer
 			}
 

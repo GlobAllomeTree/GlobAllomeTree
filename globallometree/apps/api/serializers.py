@@ -41,6 +41,8 @@ from globallometree.apps.api.serializers_data_sharing import (
     DatasetSerializer,
     )
 
+from globallometree.apps.api.validators import ValidRelatedField
+
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = source_models.Institution
@@ -117,29 +119,29 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                     # create any needed taxonomy models
                     # when there is not an id, but there is a name,
                     # it indicates we need to create the model
-                    if species_def_matched['Family'] and not species_def_matched['Family_ID']:
+                    if species_def_matched['Family']['Name'] and not species_def_matched['Family_ID']:
                         family = taxonomy_models.Family.objects.get_or_create(
-                            Name=species_def_matched['Family'])[0]
+                            Name=species_def_matched['Family']['Name'])[0]
                     else:
                         family = species_def_matched['db_family']
 
-                    if species_def_matched['Genus'] and not species_def_matched['Genus_ID']:
+                    if species_def_matched['Genus']['Name'] and not species_def_matched['Genus_ID']:
                         genus = taxonomy_models.Genus.objects.get_or_create(
-                            Name=species_def_matched['Genus'], 
+                            Name=species_def_matched['Genus']['Name'], 
                             Family=family)[0]
                     else:
                         genus = species_def_matched['db_genus']
 
-                    if species_def_matched['Species'] and not species_def_matched['Species_ID']:
+                    if species_def_matched['Species']['Name'] and not species_def_matched['Species_ID']:
                         species = taxonomy_models.Species.objects.get_or_create(
-                            Name=species_def_matched['Species'], 
+                            Name=species_def_matched['Species']['Name'], 
                             Genus=genus)[0]
                     else:
                         species = species_def_matched['db_species']
 
-                    if species_def_matched['Subspecies'] and not species_def_matched['Subspecies_ID']:
+                    if species_def_matched['Subspecies']['Name'] and not species_def_matched['Subspecies_ID']:
                         subspecies = taxonomy_models.Subspecies.objects.get_or_create(
-                            Name=species_def_matched['Subspecies'], 
+                            Name=species_def_matched['Subspecies']['Name'], 
                             Species=species)[0]
                     else:
                         subspecies = species_def_matched['db_subspecies']
@@ -171,14 +173,13 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                 for location_def in location_data['Locations']:
 
                     relational_kwargs = ['Forest_type', 'Country', 'Country_3166_3', 
-                                         'Division_BAILEY', 'Ecoregion_Udvardy', 'Ecoregion_WWF', 'Zone_FAO']
+                                         'Division_BAILEY', 'Ecoregion_Udvardy', 'Ecoregion_WWF', 'Zone_FAO', 'Zone_Holdridge']
                     location_kwargs = {}
                     for key in location_def.keys():
                         if key not in relational_kwargs:
                             location_kwargs[key] = location_def[key]
 
                     location = location_models.Location.objects.create(**location_kwargs)
-
 
                     if 'Zone_FAO' in location_def.keys() and location_def['Zone_FAO']['Name']:
                         location.Zone_FAO = location_models.ZoneFAO.objects.get(Name=location_def['Zone_FAO']['Name'])
@@ -210,7 +211,8 @@ class LinkedModelSerializer(serializers.ModelSerializer):
 
         if 'dataset' in self.context.keys():
             instance.Dataset = self.context['dataset']
-
+            self.context['dataset'].Records_imported += 1
+            self.context['dataset'].save()
         instance.save()
 
         return instance
@@ -248,16 +250,18 @@ class AllometricEquationSerializer(LinkedModelSerializer):
 
         return super(AllometricEquationSerializer, self).create(validated_data)
 
-    Population = fields.ChoiceField(
+    Population = fields.CharField(
         source='Population.Name', 
         allow_null=True,
-        choices= []
+        validators=[ValidRelatedField(model=allometric_equation_models.Population, 
+                                      field_name="Name")]
         )
 
-    Tree_type = fields.ChoiceField(
+    Tree_type = fields.CharField(
         source='Tree_type.Name', 
         allow_null=True,
-        choices=[]
+        validators=[ValidRelatedField(model=allometric_equation_models.TreeType, 
+                                      field_name="Name")]
         )
 
     def get_fields(self, *args, **kwargs):

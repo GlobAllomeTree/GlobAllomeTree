@@ -151,10 +151,10 @@ class WoodDensity(LinkedBaseModel):
         return WoodDensityIndex
 
     def get_absolute_url(self):
-        return '/data/wood_densities/%s' % self.ID
+        return '/data/wood_densities/%s' % self.Wood_density_ID
 
-    def unicode(self):
-        return 'Wood Density %s' % self.ID
+    def __unicode__(self):
+        return 'Wood Density %s' % self.Wood_density_ID
 
     class Meta:
         verbose_name = 'Wood Density'

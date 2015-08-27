@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('apps.journals.views',
+urlpatterns = patterns('globallometree.apps.journals.views',
     #List of journals
     url(r'^$', 'list'),
 

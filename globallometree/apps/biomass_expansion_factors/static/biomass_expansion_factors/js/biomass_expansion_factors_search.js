@@ -30,7 +30,7 @@ window.app.listController.config.customListTemplate = '\
   <dd>{{ BEF }}</dd>';
 
 window.app.listController.config.getRecordContext = function (data) {
-	data['ID'] = data['ID_BEF'];
+	data['ID'] = data['Biomass_expansion_factor_ID'];
 	return data;
 }
 
