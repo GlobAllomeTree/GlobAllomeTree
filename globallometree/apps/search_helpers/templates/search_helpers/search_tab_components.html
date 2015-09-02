@@ -1,0 +1,29 @@
+ {% load crispy_forms_tags %}
+ {% load staticfiles %}
+
+ <div class="tab-pane" id="components">
+    <p class="search-help-text">
+        Search by tree components such as branch diameter, leaves, stump and fruit. <br>
+        Example searches: 
+           <a href="?B=Yes&amp;Rf=Yes">B Bark: Yes + Rf Fine Roots: Yes</a>,
+           <a href="?F=No&amp;S=Yes">F Fruit: No +  S Stump: Yes</a>
+    </p>
+    <div class="row smallInputs">
+        <div class="col-lg-4">
+            {{ form.B|as_crispy_field }}
+            {{ form.Bd|as_crispy_field }}
+            {{ form.Bg|as_crispy_field }}
+            {{ form.Bt|as_crispy_field }}
+            {{ form.L|as_crispy_field }}
+            {{ form.Rb|as_crispy_field }}
+            {{ form.Rf|as_crispy_field }}
+            {{ form.Rm|as_crispy_field }}
+            {{ form.S|as_crispy_field }}
+            {{ form.T|as_crispy_field }}
+            {{ form.F|as_crispy_field }}
+        </div>
+        <div class="col-lg-8">
+            <img src="{% static 'images/components.png' %}" width="500" />
+        </div>
+    </div>
+</div>

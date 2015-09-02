@@ -13,15 +13,25 @@
         {% if record.Species_group %}
             
     	        <table class="table">
-    	            <th>Family:</th>
-                    <th>Genus:</th>
-    	            <th>Species:</th>
-                    <th>Subspecies:</th></tr>
+    	            <tr>
+                        <th>Family:</th>
+                        <th>Genus:</th>
+        	            <th>Species:</th>
+                        <th>Subspecies:</th>
+                        <th>Author:</th>
+                        <th>Local Names:</th>
+                    </tr>
                     {% for species_def in record.Species_group.Group %} 
                         <td >{{ species_def.Family }}</td>
                         <td >{{ species_def.Genus }}</td>
                         <td >{{ species_def.Species }}</td>
-                        <td >{{ species_def.Subspecies }}</td></tr>
+                        <td >{{ species_def.Subspecies }}</td>
+                        <td >{{ species_def.Species_author }}</td>
+                        <td >{% for local_name in species_def.Species_local_names %}
+                                {{ local_name.Local_name}} <span style="color:#999;padding-left:10px">{{ local_name.Local_name_latin}} ({{ local_name.Language_iso_639 }}) </span><br>
+                             {% endfor %}
+                        </td>
+                        </tr>
                     {% endfor %}
     	        </table>
             

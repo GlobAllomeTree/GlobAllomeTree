@@ -4,9 +4,10 @@ from globallometree.apps.raw_data.models import (
     RawData
     )
 
-from globallometree.apps.search_helpers.forms import LinkedModelSearchForm
+from globallometree.apps.search_helpers.forms import LinkedModelSearchForm, ComponentSearchForm
 
-class RawDataSearchForm(LinkedModelSearchForm):
+
+class RawDataSearchForm(LinkedModelSearchForm, ComponentSearchForm):
 
     def __init__(self, *args, **kwargs):
         super(RawDataSearchForm, self).__init__(*args, **kwargs)

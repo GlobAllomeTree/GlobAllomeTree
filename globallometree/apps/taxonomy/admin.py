@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+from globallometree.apps.search_helpers.admin_helpers import ImproveRawIdFieldsForm
+
 from globallometree.apps.taxonomy.models import (
     Family, 
     Genus, 
@@ -11,12 +14,12 @@ from globallometree.apps.taxonomy.models import (
 
 
 class FamilyAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Modified')
+    list_display = ('Family_ID', 'Name', 'Modified')
     search_fields  = ('Name',)
 
 
 class GenusAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Family',  'Modified')
+    list_display = ('Genus_ID', 'Name', 'Family',  'Modified')
     search_fields  = ('Name','Family__Name', )
     read_only_fields = ('Created', 'Modified')
 
@@ -32,16 +35,16 @@ class SpeciesLocalNameInline(admin.TabularInline):
 
 
 
-class SubspeciesAdmin(admin.ModelAdmin):
+class SubspeciesAdmin(ImproveRawIdFieldsForm):
     raw_id_fields = ('Species',)
-    list_display = ('Name', 'Species', 'Author', 'Modified')
+    list_display = ('Subspecies_ID', 'Name', 'Species', 'Author', 'Modified')
     search_fields  = ('Name','Species__Genus__Family__Name', 'Species__Genus__Name', 'Species__Name' )
     read_only_fields = ('created', 'modified')
 
 
-class SpeciesAdmin(admin.ModelAdmin):
+class SpeciesAdmin(ImproveRawIdFieldsForm):
     raw_id_fields = ('Genus',)
-    list_display = ('Name', 'Genus', 'Author', 'Modified')
+    list_display = ('Species_ID', 'Name', 'Genus', 'Author', 'Modified')
     search_fields  = ('Name','Genus__Family__Name', 'Genus__Name', )
     read_only_fields = ('Created', 'Modified')
     inlines = (SpeciesLocalNameInline,)
@@ -51,13 +54,22 @@ class SpeciesDefinitionInline(admin.TabularInline):
     model = SpeciesGroup.Species_definitions.through
     raw_id_fields = ('speciesdefinition',)
 
-class SpeciesDefinitionAdmin(admin.ModelAdmin):
+    readonly_fields = ('admin_link',)
+
+    def admin_link(self, instance):
+        if instance.pk:
+            return mark_safe(u'<a href="/admin/taxonomy/speciesdefinition/%s/">Edit Species Definition</a>' % instance.speciesdefinition.pk)
+        else:
+            return ''
+
+
+class SpeciesDefinitionAdmin(ImproveRawIdFieldsForm):
     read_only_fields = ('Created', 'Modified')
-    raw_id_fields = ('Family', 'Genus', 'Species', 'Subspecies')
-    list_display = ('__unicode__', 'Family', 'Genus', 'Species', 'Subspecies')
+    raw_id_fields = ( 'Family', 'Genus', 'Species', 'Subspecies')
+    list_display = ('Species_definition_ID', '__unicode__', 'Family', 'Genus', 'Species', 'Subspecies')
 
 class SpeciesGroupAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Modified')
+    list_display = ('Species_group_ID', 'Name', 'Modified')
     search_fields  = ('Name', )
     read_only_fields = ('Created', 'Modified')
     fields = ('Name', )

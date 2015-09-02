@@ -5,17 +5,10 @@ from globallometree.apps.allometric_equations.models import (
     Population 
     )
 
-from globallometree.apps.search_helpers.forms import LinkedModelSearchForm
-
-COMPONENT_CHOICES = (
-            ('', ''),
-            ('0', 'No'),
-            ('1', 'Yes')
-        )
+from globallometree.apps.search_helpers.forms import LinkedModelSearchForm, ComponentSearchForm
 
 
-
-class AllometricEquationSearchForm(LinkedModelSearchForm):
+class AllometricEquationSearchForm(LinkedModelSearchForm, ComponentSearchForm):
 
     def __init__(self, *args, **kwargs):
         
@@ -64,17 +57,7 @@ class AllometricEquationSearchForm(LinkedModelSearchForm):
     Output = forms.CharField(required=False, label='Output')
     Unit_Y = forms.CharField(required=False, label='Unit Y')
     
-    B = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='B - Bark')
-    Bd = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bd - Dead branches')
-    Bg = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bg - Big branches')
-    Bt = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Bt - Thin branches')
-    L = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='L - Leaves')
-    Rb = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rb - Large roots')
-    Rf = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rf - Fine roots')
-    Rm = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='Rm - Medium roots')
-    S = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='S - Stump')
-    T = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='T - Trunks' )
-    F = forms.ChoiceField(choices=COMPONENT_CHOICES, required=False, label='F - Fruit')
+
 
     Equation = forms.CharField(required=False, label='Equation')
 

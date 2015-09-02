@@ -17,7 +17,7 @@ class Family(TaxonomyModel):
 
     class Meta:
         verbose_name_plural = 'Families'
-        ordering = ('Name',)
+        ordering = ('Family_ID',)
         db_table = 'taxonomy_family'
         
     def __unicode__(self):
@@ -31,7 +31,7 @@ class Genus(TaxonomyModel):
 
     class Meta:
         verbose_name_plural = 'Genera'
-        ordering = ('Name',)
+        ordering = ('Genus_ID',)
         db_table = 'taxonomy_genus'
 
     def __unicode__(self):
@@ -46,7 +46,7 @@ class Species(TaxonomyModel):
 
     class Meta:
         verbose_name_plural = 'Species'
-        ordering = ('Name',)
+        ordering = ('Species_ID',)
         db_table = 'taxonomy_species'
 
     def __unicode__(self):
@@ -61,7 +61,7 @@ class Subspecies(TaxonomyModel):
 
     class Meta:
         verbose_name_plural = 'Subspecies'
-        ordering = ('Name',)
+        ordering = ('Subspecies_ID',)
         db_table = 'taxonomy_subspecies'
 
     def __unicode__(self):
@@ -96,6 +96,7 @@ class SpeciesLocalName(BaseModel):
 
     class Meta:
         db_table = "taxonomy_species_local_name"
+        ordering = ("Species_local_name_ID",)
 
 
 class SpeciesDefinition(BaseModel):
@@ -122,11 +123,22 @@ class SpeciesDefinition(BaseModel):
 
         return scientific_name
 
+    def Author(self):
+        if self.Subspecies and self.Subspecies.Author:
+            return self.Subspecies.Author
+        elif self.Species and self.Species.Author:
+            return self.Species.Author
+        else:
+            return None
+
+
     def __unicode__(self):
         return "Species Defintion %s" % self.pk
 
+
     class Meta:
         db_table = "taxonomy_species_definition"
+        ordering = ("Species_definition_ID",)
 
 
 class SpeciesGroup(BaseModel):
@@ -167,7 +179,7 @@ class SpeciesGroup(BaseModel):
 
     class Meta:
         db_table = "taxonomy_species_group"
-
+        ordering = ('Species_group_ID',)
 
     def save(self, *args, **kwargs):
 

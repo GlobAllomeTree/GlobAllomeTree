@@ -81,7 +81,15 @@ estype_species_group = {
                                     "Species": estype_string_not_analyzed,
                                     "Species_ID": estype_long,
                                     "Subspecies": estype_string_not_analyzed,
-                                    "Species_local_name": estype_string_not_analyzed,
+                                    "Species_author": estype_string_not_analyzed,
+                                    "Species_local_names": { 
+                                        "properties": {
+                                             "Local_name": estype_string_not_analyzed,
+                                             "Language_iso_639": estype_string_not_analyzed,
+                                             "Local_name_latin": estype_string_not_analyzed,
+                                             "Local_name_ID": estype_long
+                                         }
+                                    },
                                 }
                             },
                             "Species_group_ID": estype_long
