@@ -1,22 +1,23 @@
 <div class="row">     
     <div class="col-md-12">
         <br>
-        <h3>{% if record.Species_group %} 
-            <p style="float:right; font-weight:normal;font-size:11px;padding-top:14px;color:#999;">
+        <h3 class="section-header">
+            Taxonomy
+            {% if record.Species_group %} 
+            <span style="color:#999;font-size:11px;font-weight:normal;">
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 Species Group {{record.Species_group.Species_group_ID }}
-            </p>
+            </span>
             {% endif %}
-        Taxonomy</h3>
+        </h3>
         {% if record.Species_group %}
             
     	        <table class="table">
-    	        	<tr><th>Scientific name:</th>
     	            <th>Family:</th>
                     <th>Genus:</th>
     	            <th>Species:</th>
                     <th>Subspecies:</th></tr>
                     {% for species_def in record.Species_group.Group %} 
-                        <tr><td >{{ species_def.Scientific_name }}</td>
                         <td >{{ species_def.Family }}</td>
                         <td >{{ species_def.Genus }}</td>
                         <td >{{ species_def.Species }}</td>

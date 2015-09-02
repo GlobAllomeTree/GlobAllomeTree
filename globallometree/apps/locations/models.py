@@ -95,7 +95,7 @@ class EcoregionWWF(BaseModel):
 
 
 class DivisionBailey(BaseModel):
-    Division_BAILEY_ID = models.AutoField(primary_key=True, db_column="division_bailey_id")
+    Division_Bailey_ID = models.AutoField(primary_key=True, db_column="division_bailey_id")
     Name = models.CharField(max_length=200, db_column="name")
 
     def __unicode__(self):
@@ -122,8 +122,8 @@ class ZoneHoldridge(BaseModel):
         db_table = 'locations_zone_holdridge'
 
 
-class ForestType(BaseModel):
-    Forest_type_ID = models.AutoField(primary_key=True, db_column="forest_type_id")
+class VegetationType(BaseModel):
+    Vegetation_type_ID = models.AutoField(primary_key=True, db_column="vegetation_type_id")
     Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
 
     def __unicode__(self):
@@ -131,7 +131,7 @@ class ForestType(BaseModel):
 
     class Meta:
         ordering = ('Name',)
-        db_table = 'locations_forest_type'
+        db_table = 'locations_vegetation_type'
 
 
 class Location(BaseModel):
@@ -165,9 +165,9 @@ class Location(BaseModel):
     Zone_FAO = models.ForeignKey(ZoneFAO, blank=True, null=True, db_column="zone_fao_id")
     Ecoregion_Udvardy = models.ForeignKey(EcoregionUdvardy, blank=True, null=True, db_column="ecoregion_udvardy_id")
     Ecoregion_WWF = models.ForeignKey(EcoregionWWF, blank=True, null=True, db_column="ecoregion_wwf_id")
-    Division_BAILEY = models.ForeignKey(DivisionBailey, blank=True, null=True, db_column="division_bailey_id")
+    Division_Bailey = models.ForeignKey(DivisionBailey, blank=True, null=True, db_column="division_bailey_id")
     Zone_Holdridge = models.ForeignKey(ZoneHoldridge, blank=True, null=True, db_column="zone_holdridge_id")
-    Forest_type =  models.ForeignKey(ForestType, blank=True, null=True, db_column="forest_type_id")
+    Vegetation_type =  models.ForeignKey(VegetationType, blank=True, null=True, db_column="vegetation_type_id")
     Biome_local =  models.ForeignKey(BiomeLocal, blank=True, null=True, db_column="biome_local_id")
 
     def __unicode__(self):
@@ -177,7 +177,7 @@ class Location(BaseModel):
             return 'Location %s' % self.pk
 
     class Meta:
-        ordering = ('Name',)
+        ordering = ('Location_ID',)
         db_table = 'locations_location'
 
 

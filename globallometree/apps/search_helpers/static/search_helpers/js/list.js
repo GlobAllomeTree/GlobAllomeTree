@@ -143,7 +143,7 @@ window.app.listController = function () {
 					speciesHTML += ' ' + species_record['Species'];
 					speciesList.push(speciesHTML);
 				}
-				context['Species'] = speciesList.join('<br>');
+				context['Species'] = speciesList.join(', ');
 
 			} catch (e) {
 				context['Species'] = '';

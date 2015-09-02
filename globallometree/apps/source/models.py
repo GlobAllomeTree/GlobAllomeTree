@@ -4,17 +4,16 @@ from globallometree.apps.search_helpers.models import BaseModel
 
 class Reference(BaseModel):
     Reference_ID = models.AutoField(primary_key=True, db_column="reference_id")
-    Label = models.CharField(max_length=20, null=True, blank=True, db_column="label")
     Author = models.CharField(max_length=200, null=True, blank=True, db_column="author")
     Year = models.CharField(max_length=12, null=True, blank=True, db_column="year")
     Reference = models.TextField(null=True, blank=True, db_column="reference")
 
     class Meta:
-        ordering = ('Label',)
+        ordering = ('Reference',)
         db_table = "source_reference"
 
     def __unicode__(self):
-        return u'%s' % self.Label
+        return u'%s' % self.Reference
 
 
 class Institution(BaseModel):

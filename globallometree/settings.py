@@ -262,7 +262,7 @@ SWAGGER_SETTINGS = {
     "permission_denied_handler": None,
     "info": {
         #'contact': 'apiteam@wordnik.com',
-        'description': 'This is automatically generated documentation for the GlobAllomeTree API in swagger format.',
+        'description': 'This is automatically generated documentation for the GlobAllomeTree API in swagger format. This page takes a few moments to load completely.',
         #'license': 'Apache 2.0',
         #'licenseUrl': 'http://www.apache.org/licenses/LICENSE-2.0.html',
         #'termsOfServiceUrl': 'http://globallometree.org/terms/',

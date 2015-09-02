@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from globallometree.apps.taxonomy.models import Subspecies, Species, Family, Genus, SpeciesGroup
 from globallometree.apps.allometric_equations.models import AllometricEquation, Population, TreeType
 from globallometree.apps.locations.models import ZoneFAO, EcoregionUdvardy, EcoregionWWF, DivisionBailey, ZoneHoldridge
-from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup, ForestType
+from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup, VegetationType
 from globallometree.apps.source.models import Reference, Institution
 from globallometree.apps.data_sharing.models import Dataset
 
@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self,*args, **options):
 
         if not settings.DEBUG:
-            print "Holy *&$#$, what are you trying to do!"
+            print "Holy *&$#$, don't do it!"
             return
 
         AllometricEquation.objects.all().delete()
@@ -32,5 +32,5 @@ class Command(BaseCommand):
         Reference.objects.all().delete()
         Institution.objects.all().delete()
         TreeType.objects.all().delete()
-        ForestType.objects.all().delete()
+        VegetationType.objects.all().delete()
         WoodDensity.objects.all().delete()

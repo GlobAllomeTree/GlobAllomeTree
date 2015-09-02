@@ -37,10 +37,6 @@ class RawDataIndex(MappingType, Indexable):
         mapping = {
             "properties": {
                 "Raw_data_ID": estype_long,
-                "H_tree_avg": estype_float,
-                "Forest_type": estype_string_not_analyzed,
-                "Tree_ID": estype_long,
-                "Date_collection": estype_date,
                 "DBH_cm": estype_float,
                 "H_m": estype_float,
                 "CD_m": estype_float,
@@ -53,12 +49,6 @@ class RawDataIndex(MappingType, Indexable):
                 "Volume_m3": estype_float,
                 "Volume_bole_m3": estype_float,
                 "WD_AVG_gcm3": estype_float,
-                "DF_Bole_AVG": estype_float,
-                "DF_Branch_AVG": estype_float,
-                "DF_Foliage_AVG": estype_float,
-                "DF_Stump_AVG": estype_float,
-                "DF_Buttress_AVG": estype_float,
-                "DF_Roots_AVG": estype_float,
                 "D_Bole_kg": estype_float,
                 "D_Branch_kg": estype_float,
                 "D_Foliage_kg": estype_float,
@@ -68,7 +58,8 @@ class RawDataIndex(MappingType, Indexable):
                 "ABG_kg": estype_float,
                 "BGB_kg": estype_float,
                 "Tot_Biomass_kg": estype_float,
-                "BEF": estype_float
+                "Remark": estype_string_analyzed,
+                "Contact": estype_string_analyzed
                 }
             }
 

@@ -43,6 +43,7 @@ window.app.searchManager.config.indexName = 'allometricequation';
 
 window.app.listController.config.recordLinkPrefix = 'allometric-equations';
 window.app.listController.config.recordReadableType = 'Allometric Equation';
+window.app.searchManager.config.sortField = 'Allometric_equation_ID';
 window.app.listController.config.customListTemplate = '\
   <dt><small>Equation</small></dt>					   \
   <dd><code>{{Equation}}</code></dd>				   \

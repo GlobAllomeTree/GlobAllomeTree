@@ -7,22 +7,28 @@
            <a href="?Zone_FAO=Tropical+dry+forest">Biome (FAO): Tropical dry forest</a>,
            <a href="?Country=Benin">Country: Benin</a>
     </p>
-    <h3>Country or Biome</h3>
+    <h3>Country</h3>
     <div class="row">
         <div class="col-lg-6">
             {{ form.Country|as_crispy_field }}
+        </div>
+    </div>
+    <h3>Ecological Zone, Region, and Vegetaion Type</h3>
+    <div class="row">
+        <div class="col-lg-6">
             {{ form.Zone_Holdridge|as_crispy_field }}
             {{ form.Ecoregion_Udvardy|as_crispy_field }}
+            {{ form.Vegetation_type|as_crispy_field }}
         </div>
         <div class="col-lg-6">
             {{ form.Zone_FAO|as_crispy_field }}
             {{ form.Ecoregion_WWF|as_crispy_field }}
-            {{ form.Division_BAILEY|as_crispy_field }}
+            {{ form.Division_Bailey|as_crispy_field }}
         </div>
 
     </div>
     <h3>Geographic Location</h3>
-    <p>Note that when you search by precise location on the map, records that do not have a latitude and longitude will not be displayed. This includes records that have only a country but no latitude or longitude, they will not be included in these search results.</p>
+    <p>Note that when you search by precise location on the map, records that do not have a latitude and longitude specified will not be displayed.</p>
      <div class="row">
         <div class="col-lg-6">
             <h4>By Latitude and Longitude</h4>

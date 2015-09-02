@@ -4,28 +4,13 @@ getcontext().prec = 10
 from django.db import models
 from django.contrib.auth.models import User
 
-from globallometree.apps.search_helpers.models import LinkedBaseModel
+from globallometree.apps.search_helpers.models import LinkedBaseModel, ComponentBaseModel
 
 
-class RawData(LinkedBaseModel):
+class RawData(LinkedBaseModel, ComponentBaseModel):
 
     Raw_data_ID = models.AutoField(primary_key=True, db_column="raw_data_id")
 
-    H_tree_avg = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average height of tree measured", 
-        db_column="h_tree_avg")
-
-    Tree_ID = models.IntegerField(
-        null=True, blank=True,
-        help_text="Identification number of the tree from which data were collected",
-        db_column="tree_id"
-        )
-
-    Date_collection = models.DateField(
-        null=True, blank=True,
-        help_text="Date of the data collection",
-        db_column="date_collection")
 
     DBH_cm = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
@@ -87,36 +72,6 @@ class RawData(LinkedBaseModel):
         help_text="Average wood density value for the whole tree in grams/cubic centimeters",
         db_column="wd_avg_gcm3")
 
-    DF_Bole_AVG = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average ratio between dry and fresh weight of the bole",
-        db_column="df_bole_avg")
-
-    DF_Branch_AVG = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average ratio between dry and fresh weight of the branches",
-        db_column="df_branch_avg")
-
-    DF_Foliage_AVG = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average ratio between dry and fresh weight of the foliage",
-        db_column="df_foliage_avg")
-
-    DF_Stump_AVG = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average ratio between dry and fresh  weight of the stump",
-        db_column="df_stump_avg")
-
-    DF_Buttress_AVG = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average ratio between dry and fresh  weight of the buttress",
-        db_column="df_buttress_avg")
-
-    DF_Roots_AVG = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Average ratio between dry and fresh weight of the roots",
-        db_column="df_roots_avg")
-
     D_Bole_kg = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
         help_text="Dry weight of the bole in kg",
@@ -162,10 +117,11 @@ class RawData(LinkedBaseModel):
         help_text="Total biomass of the tree in kg (aboveground + belowground)",
         db_column="tot_biomass_kg")
 
-    BEF = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
-        help_text="Biomass expansion factor",
-        db_column="bef")
+    Remark = models.TextField(
+        null=True, blank=True)
+
+    Contact = models.CharField(
+        null=True, blank=True, max_length=255)
 
     def get_serializer_class(self):
         from globallometree.apps.api import RawDataSerializer

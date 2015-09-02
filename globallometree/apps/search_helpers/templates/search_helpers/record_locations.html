@@ -1,17 +1,22 @@
 <div class="row">     
     <div class="col-md-12">    
         <br>
-        <h3>{% if record.Location_group %} 
-            <p style="float:right; font-weight:normal;font-size:11px;padding-top:14px;color:#999;">
-                Location Group {{record.Location_group.Location_group_ID }}
-            </p>
-            {% endif %}
-            Locations</h3>
+        <h3 class="section-header">
+            Locations
+
             {% if record.Location_group %}
+            <span style="color:#999;font-size:11px;font-weight:normal;">
+                &nbsp;&nbsp;&nbsp;&nbsp;Location Group ID {{record.Location_group.Location_group_ID }}
+            </span>
+            {% endif %}
+
+            </h3>
+            {% if record.Location_group %}
+           
             {% for location in record.Location_group.Group %}
             <table class="table">
                 <tr>
-                    <td style="width:50%">
+                    <td style="width:40%">
                         <table>
                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Plot name: </th><td  class="pdf-record-td"> {{ location.Plot_name }} </td></tr>
                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Plot size m2: </th><td  class="pdf-record-td"> {{ location.Plot_size_m2 }} </td></tr>
@@ -25,14 +30,16 @@
                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Longitude: </th><td  class="pdf-record-td"> {{ location.Longitude }} </td></tr>
                         </table>
                     </td>
-                    <td style="width:50%">
+                    <td style="width:60%">
                         <table>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Vegetation Type: </th><td  class="pdf-record-td"> {{ location.Vegetation_type }} </td></tr>
                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> FAO Global Ecological Zone: </th><td class="pdf-record-td"> {{ location.Zone_FAO }} </td></tr>
                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Udvardy Ecoregion: </th><td  class="pdf-record-td"> {{ location.Ecoregion_Udvardy }} </td></tr>
                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> WWF Terrestrial Ecoregion: </th><td class="pdf-record-td"> {{ location.Ecoregion_WWF }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Division Bailey: </th><td class="pdf-record-td"> {{ location.Division_BAILEY }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Division Bailey: </th><td class="pdf-record-td"> {{ location.Division_Bailey }} </td></tr>
                             <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Holdridge Life Zone: </th><td  class="pdf-record-td"> {{ location.Zone_Holdridge }} </td></tr>
-                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Forest Type: </th><td  class="pdf-record-td"> {{ location.Forest_type }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Local Biome: </th><td  class="pdf-record-td"> {{ location.Biome_local }} </td></tr>
+                            <tr><th style="padding:2px 10px 2px 2px" class="pdf-record-th"> Local Biome Reference: </th><td  class="pdf-record-td"> {{ location.Biome_local_reference }} </td></tr>
                         </table>
                     </td>
                 </tr>
@@ -43,8 +50,8 @@
             <p>There is no location information for this record. </p>
         {% endif %}
         {% if not is_pdf %}
-            <h5>Map</h5>
             <div id="point_map_canvas"></div>
         {% endif %}
+       
   </div>
 </div>

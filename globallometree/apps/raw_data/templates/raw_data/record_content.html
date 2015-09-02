@@ -3,41 +3,36 @@
 <div class="row">     
     <div class="col-md-12">
          <br>
-        <h3>Record Details</h3>
+        <h3 class="section-header">Record Details</h3>
         <table class="table">
-            <tr><th style="width:210px"> Forest Type: </th><td>{{ record.Forest_type }}</td></tr>
-            <tr><th style="width:210px"> Tree Height Avg: </th><td>{{ record.H_tree_avg }}</td></tr>
-            <tr><th style="width:210px"> Tree ID: </th><td>{{ record.Tree_ID }}</td></tr>
-            <tr><th style="width:210px"> Date collection: </th><td>{{ record.Date_collection }}</td></tr>
-            <tr><th style="width:210px"> DBH (cm): </th><td>{{ record.DBH_cm }}</td></tr>
-            <tr><th style="width:210px"> Total Tree Height (m): </th><td>{{ record.H_m }}</td></tr>
-            <tr><th style="width:210px"> Crown Diameter (m): </th><td>{{ record.CD_m }}</td></tr>
-            <tr><th style="width:210px"> Fresh Bole Weight (kg): </th><td>{{ record.F_Bole_kg }}</td></tr>
-            <tr><th style="width:210px"> Fresh Branch Weight (kg): </th><td>{{ record.F_Branch_kg }}</td></tr>
-            <tr><th style="width:210px"> Fresh Foliage Weight (kg): </th><td>{{ record.F_Foliage_kg }}</td></tr>
-            <tr><th style="width:210px"> Fresh Stump Weight (kg): </th><td>{{ record.F_Stump_kg }}</td></tr>
-            <tr><th style="width:210px"> Fresh Buttress Weight (kg): </th><td>{{ record.F_Buttress_kg }}</td></tr>
-            <tr><th style="width:210px"> Fresh Roots Weight (kg): </th><td>{{ record.F_Roots_kg }}</td></tr>
-            <tr><th style="width:210px"> Total Tree Volume (m3): </th><td>{{ record.Volume_m3 }}</td></tr>
-            <tr><th style="width:210px"> Bole Volume (m3): </th><td>{{ record.Volume_bole_m3 }}</td></tr>
-            <tr><th style="width:210px"> Tree Wood Density Avg (g/cm3): </th><td>{{ record.WD_AVG_gcm3 }}</td></tr>
-            <tr><th style="width:210px"> Avg Ratio Bole Weight (dry/fresh): </th><td>{{ record.DF_Bole_AVG }}</td></tr>
-            <tr><th style="width:210px"> Avg Ratio Branch Weight (dry/fresh): </th><td>{{ record.DF_Branch_AVG }}</td></tr>
-            <tr><th style="width:210px"> Avg Ratio Foliage Weight (dry/fresh): </th><td>{{ record.DF_Foliage_AVG }}</td></tr>
-            <tr><th style="width:210px"> Avg Ratio Stump Weight (dry/fresh): </th><td>{{ record.DF_Stump_AVG }}</td></tr>
-            <tr><th style="width:210px"> Avg Ratio Buttress Weight (dry/fresh): </th><td>{{ record.DF_Buttress_AVG }}</td></tr>
-            <tr><th style="width:210px"> Avg Ratio Roots Weight (dry/fresh): </th><td>{{ record.DF_Roots_AVG }}</td></tr>
-            <tr><th style="width:210px"> Dry Bole Weight (kg): </th><td>{{ record.D_Bole_kg }}</td></tr>
-            <tr><th style="width:210px"> Dry Branch Weight (kg): </th><td>{{ record.D_Branch_kg }}</td></tr>
-            <tr><th style="width:210px"> Dry Foliage Weight (kg): </th><td>{{ record.D_Foliage_kg }}</td></tr>
-            <tr><th style="width:210px"> Dry Stump Weight (kg): </th><td>{{ record.D_Stump_kg }}</td></tr>
-            <tr><th style="width:210px"> Dry Buttress Weight (kg): </th><td>{{ record.D_Buttress_kg }}</td></tr>
-            <tr><th style="width:210px"> Dry Roots Weight (kg): </th><td>{{ record.D_Roots_kg }}</td></tr>
-            <tr><th style="width:210px"> Total Aboveground Mass (kg): </th><td>{{ record.ABG_kg }}</td></tr>
-            <tr><th style="width:210px"> Total Belowground Mass (kg): </th><td>{{ record.BGB_kg }}</td></tr>
-            <tr><th style="width:210px"> Total Biomass (kg): </th><td>{{ record.Tot_Biomass_kg }}</td></tr>
-            <tr><th style="width:210px"> Biomass Expansion Factor: </th><td>{{ record.BEF }}</td></tr>
+            <tr><th style="width:340px"> DBH (cm): </th><td>{{ record.DBH_cm }}</td></tr>
+            <tr><th style="width:340px"> Total Tree Height (m): </th><td>{{ record.H_m }}</td></tr>
+            <tr><th style="width:340px"> Crown Diameter (m): </th><td>{{ record.CD_m }}</td></tr>
+            <tr><th style="width:340px"> Fresh Bole Weight (kg): </th><td>{{ record.F_Bole_kg }}</td></tr>
+            <tr><th style="width:340px"> Fresh Branch Weight (kg): </th><td>{{ record.F_Branch_kg }}</td></tr>
+            <tr><th style="width:340px"> Fresh Foliage Weight (kg): </th><td>{{ record.F_Foliage_kg }}</td></tr>
+            <tr><th style="width:340px"> Fresh Stump Weight (kg): </th><td>{{ record.F_Stump_kg }}</td></tr>
+            <tr><th style="width:340px"> Fresh Buttress Weight (kg): </th><td>{{ record.F_Buttress_kg }}</td></tr>
+            <tr><th style="width:340px"> Fresh Roots Weight (kg): </th><td>{{ record.F_Roots_kg }}</td></tr>
+            <tr><th style="width:340px"> Total Tree Volume (m3): </th><td>{{ record.Volume_m3 }}</td></tr>
+            <tr><th style="width:340px"> Bole Volume (m3): </th><td>{{ record.Volume_bole_m3 }}</td></tr>
+            <tr><th style="width:340px"> Tree Wood Density Avg (g/cm3): </th><td>{{ record.WD_AVG_gcm3 }}</td></tr>
+            
+            <tr><th style="width:340px"> Dry Bole Weight (kg): </th><td>{{ record.D_Bole_kg }}</td></tr>
+            <tr><th style="width:340px"> Dry Branch Weight (kg): </th><td>{{ record.D_Branch_kg }}</td></tr>
+            <tr><th style="width:340px"> Dry Foliage Weight (kg): </th><td>{{ record.D_Foliage_kg }}</td></tr>
+            <tr><th style="width:340px"> Dry Stump Weight (kg): </th><td>{{ record.D_Stump_kg }}</td></tr>
+            <tr><th style="width:340px"> Dry Buttress Weight (kg): </th><td>{{ record.D_Buttress_kg }}</td></tr>
+            <tr><th style="width:340px"> Dry Roots Weight (kg): </th><td>{{ record.D_Roots_kg }}</td></tr>
+            <tr><th style="width:340px"> Total Aboveground Mass (kg): </th><td>{{ record.ABG_kg }}</td></tr>
+            <tr><th style="width:340px"> Total Belowground Mass (kg): </th><td>{{ record.BGB_kg }}</td></tr>
+            <tr><th style="width:340px"> Total Biomass (kg): </th><td>{{ record.Tot_Biomass_kg }}</td></tr>
+            <tr><th style="width:340px"> Remark: </th><td>{{ record.Remark }}</td></tr>
+            <tr><th style="width:340px"> Contact: </th><td>{{ record.Contact }}</td></tr>
 
         </table>
     </div>
 </div>
+
+
+{% include 'search_helpers/record_components.html' %}

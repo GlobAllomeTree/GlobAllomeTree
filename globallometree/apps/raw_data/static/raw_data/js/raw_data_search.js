@@ -1,7 +1,7 @@
 
 // Add in keys and config unique to the allometric equation search 
 window.app.searchManager.config.termFilterKeys = [
-        'Forest_type'
+        'Vegetation_type'
 		];
 
 window.app.searchManager.config.rangeFilterKeys = [
@@ -68,12 +68,14 @@ window.app.searchManager.config.rangeFilterKeys = [
 	];
 
 window.app.searchManager.config.indexName = 'rawdata';
+window.app.searchManager.config.sortField = 'Raw_data_ID';
 
 window.app.listController.config.recordLinkPrefix = 'raw-data';
 window.app.listController.config.recordReadableType = 'Raw Data';
+
 window.app.listController.config.customListTemplate = '\
-  <dt><small>Forest Type </small></dt>					   \
-  <dd>{{ Forest_type }}</dd>';
+  <dt><small>Vegetation Type </small></dt>					   \
+  <dd>{{ Vegetation_type }}</dd>';
 
 window.app.listController.config.getRecordContext = function (data) {
 	data['ID'] = data['Raw_data_ID'];

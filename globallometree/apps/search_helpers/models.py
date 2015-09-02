@@ -10,6 +10,23 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
+class ComponentBaseModel(models.Model):
+    B = models.NullBooleanField(db_column="b")
+    Bd = models.NullBooleanField(db_column="bd")
+    Bg = models.NullBooleanField(db_column="bg")
+    Bt = models.NullBooleanField(db_column="bt")
+    L = models.NullBooleanField(db_column="l")
+    Rb = models.NullBooleanField(db_column="rb")
+    Rf = models.NullBooleanField(db_column="rf")
+    Rm = models.NullBooleanField(db_column="rm")
+    S = models.NullBooleanField(db_column="s")
+    T = models.NullBooleanField(db_column="t")
+    F = models.NullBooleanField(db_column="f")
+
+    class Meta:
+        abstract = True
+
 class LinkedBaseModel(BaseModel):
     Species_group = models.ForeignKey(
         'taxonomy.SpeciesGroup',

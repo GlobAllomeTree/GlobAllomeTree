@@ -7,47 +7,20 @@
         <table class="table">
             <tr><th style="width:210px"> Equation: </th><td> <code>{{ record.Substitute_equation }} </code> </td></tr>
             <tr><th> Sample size: </th><td> {{ record.Sample_size }} </td></tr>
-            <tr><th> R2: </th><td> {{ record.R2|floatformat:"-2" }} </td></tr>
+            <tr><th> R<sup>2</sup>: </th><td> {{ record.R2|floatformat:"-2" }} </td></tr>
               <tr><th style="width:210px"> Population: </th><td> {{ record.Population }} </td></tr>
         </table>
     </div>
 </div>
 
-<div class="row">    
-    <div class="col-md-12">
-        <br>
-        <h3>Components</h3>
-        <table class="table" >
-            <tr>
-                <th style="width:210px"> Components: </th>
-                <td >
-                    <strong><em>
-                    {% if record.B %} B {% endif %}
-                    {% if record.Bd %} Bd {% endif %}
-                    {% if record.Bg %} Bg {% endif %}
-                    {% if record.Bt %} Bt {% endif %}
-                    {% if record.L %} L {% endif %}
-                    {% if record.Rb %} Rb {% endif %}
-                    {% if record.Rf %} Rf {% endif %}
-                    {% if record.Rm %} Rm {% endif %}
-                    {% if record.S %} S {% endif %}
-                    {% if record.T %} T {% endif %}
-                    {% if record.F %} F {% endif %}
-                    </em></strong>
-                </td>
-            </tr>
-        </table> 
-        <img src="{% static 'images/components.png' %}" width="300" />
-        <br><br>
-    </div>
-</div>
+{% include 'search_helpers/record_components.html' %}
 
 <div class="row">     
     <div class="col-md-12">
         <br>
         <h3>Input/Output</h3>
         <table class="table">
-            <tr><th style="width:210px"> X: </th><td> {{ record.X }} </td></tr>
+            <tr><th style="width:340px"> X: </th><td> {{ record.X }} </td></tr>
             <tr><th> Unit X: </th><td> {{ record.Unit_X }} </td></tr>
             <tr><th> Z: </th><td> {{ record.Z }} </td></tr>
             <tr><th> Unit Z: </th><td> {{ record.Unit_Z }} </td></tr>

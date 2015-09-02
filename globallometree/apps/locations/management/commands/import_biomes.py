@@ -10,41 +10,36 @@ from globallometree.apps.locations.models import EcoregionUdvardy, ZoneFAO, Ecor
 
 class Command(BaseCommand):
     args = '<limit (optional)>'
-    help = 'Imports from the old data.TreeEquation model to the new normalized structure'
+    help = 'Import biomes from the csv files'
 
     def handle(self,*args, **options):
         data = self.load_csv('biomes_udvardy.csv')
         for row in data:
             EcoregionUdvardy.objects.create(
-                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_fao.csv')
         for row in data:
             ZoneFAO.objects.create(
-                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_wwf.csv')
         for row in data:
             EcoregionWWF.objects.create(
-                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('biomes_holdridge.csv')
         for row in data:
             ZoneHoldridge.objects.create(
-                pk = row['ID'], 
                 Name = row['Name']
             )
 
         data = self.load_csv('division_bailey.csv')
         for row in data:
             DivisionBailey.objects.create(
-                pk = row['ID'], 
                 Name = row['Name']
             )
 

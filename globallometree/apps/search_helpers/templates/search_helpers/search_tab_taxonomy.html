@@ -2,17 +2,20 @@
  
  <div class="tab-pane" id="taxonomy">
     <p class="search-help-text">
-        Search allometric equations by tree genus or species. <br>
+        Search allometric equations by family, genus or species. <br>
         Example searches: 
            <a href="?Genus=Gmelina">Genus: Gmelina</a>,
            <a href="?Species=schweinfurthii">Species: schweinfurthii</a>
     </p>
     <div class="row">
         <div class="col-lg-6">
+      
+            {{ form.Family|as_crispy_field }}
+       
             {{ form.Genus|as_crispy_field }}
-        </div>
-        <div class="col-lg-6">
+       
             {{ form.Species|as_crispy_field }}
         </div>
+
     </div>
 </div>

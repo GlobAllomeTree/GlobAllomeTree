@@ -33,13 +33,13 @@ class ZoneHoldridgeSerializer(serializers.ModelSerializer):
 class DivisionBaileySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DivisionBailey
-        fields = ('Division_BAILEY_ID', 'Name',)
+        fields = ('Division_Bailey_ID', 'Name',)
 
 
-class ForestTypeSerializer(serializers.ModelSerializer):
+class VegetationTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.ForestType
-        fields = ('Forest_type_ID', 'Name',)
+        model = models.VegetationType
+        fields = ('Vegetation_type_ID', 'Name',)
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -95,19 +95,31 @@ class LocationSerializer(serializers.ModelSerializer):
                                      field_name="Name")]
         )
 
-    Division_BAILEY = fields.CharField(
-        source="Division_BAILEY.Name", 
+    Division_Bailey = fields.CharField(
+        source="Division_Bailey.Name", 
         allow_null=True,
         required=False,
         validators=[ValidRelatedField(model=models.DivisionBailey, 
                                      field_name="Name")]
         )
 
-    Forest_type = fields.CharField(
-        source="Forest_type.Name", 
+    Biome_local = fields.CharField(
+        source="Biome_local.Name", 
+        allow_null=True,
+        required=False
+        )
+
+    Biome_local_reference = fields.CharField(
+        source="Biome_local.Reference", 
+        allow_null=True,
+        required=False
+        )
+
+    Vegetation_type = fields.CharField(
+        source="Vegetation_type.Name", 
         allow_null=True,
         required=False,
-        validators=[ValidRelatedField(model=models.ForestType, 
+        validators=[ValidRelatedField(model=models.VegetationType, 
                                      field_name="Name")]
         )
 
@@ -143,15 +155,19 @@ class LocationSerializer(serializers.ModelSerializer):
         source="Ecoregion_WWF.Ecoregion_WWF_ID",
         read_only=True
         )    
-    Division_BAILEY_ID = fields.IntegerField(
-        source="Division_BAILEY.Division_BAILEY_ID", 
+    Division_Bailey_ID = fields.IntegerField(
+        source="Division_Bailey.Division_Bailey_ID", 
         read_only=True
         ) 
     Zone_Holdridge_ID = fields.IntegerField(
         source="Zone_Holdridge.Zone_Holdridge_ID",
         read_only=True) 
-    Forest_type_ID = fields.IntegerField(
-        source="Forest_type.Forest_type_ID", 
+    Vegetation_type_ID = fields.IntegerField(
+        source="Vegetation_type.Vegetation_type_ID", 
+        read_only=True) 
+
+    Biome_local_ID = fields.IntegerField(
+        source="Biome_local.Biome_local_ID", 
         read_only=True) 
 
     # Serializer fields are always read only
@@ -186,24 +202,27 @@ class LocationSerializer(serializers.ModelSerializer):
             "Country",
             "Country_3166_3",
             "Continent", 
+            "Vegetation_type",
             "Zone_FAO",
             "Zone_Holdridge", 
             "Ecoregion_Udvardy", 
             "Ecoregion_WWF",
-            "Division_BAILEY",
-            "Forest_type",
+            "Division_Bailey",
+            "Biome_local",
+            "Biome_local_reference",
             "Geohash", 
             "Latitude",
             "Longitude",
             "LatLonString",
+            "Vegetation_type_ID",
             "Zone_FAO_ID",
             "Ecoregion_Udvardy_ID",
             "Zone_Holdridge_ID", 
             "Ecoregion_WWF_ID",
-            "Division_BAILEY_ID", 
+            "Division_Bailey_ID", 
             "Country_ID",
             "Continent_ID",
-            "Forest_type_ID",
+            "Biome_local_ID",
             )
 
 

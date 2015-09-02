@@ -28,7 +28,6 @@ estype_object =  {"type" : "object"}
 estype_reference = {
                     "properties": {
                         "Author": estype_string_not_analyzed,
-                        "Label": estype_string_not_analyzed,
                         "Reference": estype_string_not_analyzed,
                         "Reference_ID": estype_long,
                         "Year": estype_long
@@ -48,11 +47,14 @@ estype_location_group = {
                                         "Ecoregion_Udvardy_ID": estype_long,
                                         "Ecoregion_WWF": estype_string_not_analyzed,
                                         "Ecoregion_WWF_ID": estype_long,
+                                        "Biome_local": estype_string_not_analyzed,
+                                        "Biome_local_reference": estype_string_not_analyzed,
+                                        "Biome_local_ID": estype_long,
                                         "Country": estype_string_not_analyzed,
                                         "Country_3166_3" : estype_string_not_analyzed,
                                         "Country_ID": estype_long,
-                                        "Division_BAILEY": estype_string_not_analyzed,
-                                        "Division_BAILEY_ID": estype_long,
+                                        "Division_Bailey": estype_string_not_analyzed,
+                                        "Division_Bailey_ID": estype_long,
                                         "Latitude": estype_float,
                                         "Longitude": estype_float,
                                         "LatLonString": estype_string_not_analyzed,

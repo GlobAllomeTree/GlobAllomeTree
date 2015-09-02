@@ -13,7 +13,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="keyword">
                 <p class="search-help-text">
-                    Search wood densities by keyword.
+                    Search raw data by keyword.
                     This searches accross several text fields. <br>
                     Example searches: <a href="?q=Acacia">Acacia</a>,
                        <a href="?q=Zambia">Zambia</a>,
@@ -30,173 +30,40 @@
 
             <div class="tab-pane" id="rawdata">
                 <p class="search-help-text">
-                    Search raw data.<br>
+                    Search by tree height, diameter, and volume.<br>
                 </p>
-                <h2>General Information</h2>
-                <div class="row smallInputs">
+
+                <h4>Tree Height <span class="variable-label">H_m</span></h4>
+                <div>
                     <div class="col-lg-4">
-                        <h4>Collection Date</h4>
-                        {{ form.Date_collection__gte|as_crispy_field }}
-                        {{ form.Date_collection__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Forest</h4>
-                        {{ form.Forest_type|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Tree</h4>
-                        {{ form.Tree_ID__gte|as_crispy_field }}
-                        {{ form.Tree_ID__lte|as_crispy_field }}
-                        {{ form.H_tree_avg__gte|as_crispy_field }}
-                        {{ form.H_tree_avg__lte|as_crispy_field }}
-                        {{ form.DBH_cm__gte|as_crispy_field }}
-                        {{ form.DBH_cm__lte|as_crispy_field }}
                         {{ form.H_m__gte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
                         {{ form.H_m__lte|as_crispy_field }}
-                        {{ form.CD_m__gte|as_crispy_field }}
-                        {{ form.CD_m__lte|as_crispy_field }}
+                    </div>
+                </div>
+
+                <h4 class="search-form-row-label">Tree Diameter at Breast Height <span class="variable-label">DBH_cm</span></h4>
+                <div>
+                    <div class="col-lg-4">
+                        {{ form.DBH_cm__gte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
+                        {{ form.DBH_cm__lte|as_crispy_field }}
+                    </div>
+                </div>
+
+                <h4 class="search-form-row-label">Total Volume <span class="variable-label">Volume_m3</span></h4>
+                <div>
+                    <div class="col-lg-4">
                         {{ form.Volume_m3__gte|as_crispy_field }}
+                    </div>
+                    <div class="col-lg-4">
                         {{ form.Volume_m3__lte|as_crispy_field }}
-                        {{ form.WD_AVG_gcm3__gte|as_crispy_field }}
-                        {{ form.WD_AVG_gcm3__lte|as_crispy_field }}
                     </div>
                 </div>
-                <br />
-                <h2>Bole</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        <h4>Fresh</h4>
-                        {{ form.F_Bole_kg__gte|as_crispy_field }}
-                        {{ form.F_Bole_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Dry</h4>
-                        {{ form.D_Bole_kg__gte|as_crispy_field }}
-                        {{ form.D_Bole_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Ratio Dry/Fresh</h4>
-                        {{ form.DF_Bole_AVG__gte|as_crispy_field }}
-                        {{ form.DF_Bole_AVG__lte|as_crispy_field }}
-                    </div>
-                </div>
-                <br />
-                <h2>Bole Volume</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        {{ form.Volume_bole_m3__gte|as_crispy_field }}
-                        {{ form.Volume_bole_m3__lte|as_crispy_field }}
-                    </div>
-                </div>
-                <br />
-                <h2>Branch Weight</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        <h4>Fresh</h4>
-                        {{ form.F_Branch_kg__gte|as_crispy_field }}
-                        {{ form.F_Branch_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Dry</h4>
-                        {{ form.D_Branch_kg__gte|as_crispy_field }}
-                        {{ form.D_Branch_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Ratio Dry/Fresh</h4>
-                        {{ form.DF_Branch_AVG__gte|as_crispy_field }}
-                        {{ form.DF_Branch_AVG__lte|as_crispy_field }}
-                    </div>
-                </div>
-                <br />
-                <h2>Foliage Weight</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        <h4>Fresh</h4>
-                        {{ form.F_Foliage_kg__gte|as_crispy_field }}
-                        {{ form.F_Foliage_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Dry</h4>
-                        {{ form.D_Foliage_kg__gte|as_crispy_field }}
-                        {{ form.D_Foliage_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Ratio Dry/Fresh</h4>
-                        {{ form.DF_Foliage_AVG__gte|as_crispy_field }}
-                        {{ form.DF_Foliage_AVG__lte|as_crispy_field }}
-                    </div>
-                </div>
-                <br />
-                <h2>Stump Weight</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        <h4>Fresh</h4>
-                        {{ form.F_Stump_kg__gte|as_crispy_field }}
-                        {{ form.F_Stump_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Dry</h4>
-                        {{ form.D_Stump_kg__gte|as_crispy_field }}
-                        {{ form.D_Stump_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Ratio Dry/Fresh</h4>
-                        {{ form.DF_Stump_AVG__gte|as_crispy_field }}
-                        {{ form.DF_Stump_AVG__lte|as_crispy_field }}
-                    </div>
-                </div>
-                <br />
-                <h2>Buttress Weight</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        <h4>Fresh</h4>
-                        {{ form.F_Buttress_kg__gte|as_crispy_field }}
-                        {{ form.F_Buttress_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Dry</h4>
-                        {{ form.D_Buttress_kg__gte|as_crispy_field }}
-                        {{ form.D_Buttress_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Ratio Dry/Fresh</h4>
-                        {{ form.DF_Buttress_AVG__gte|as_crispy_field }}
-                        {{ form.DF_Buttress_AVG__lte|as_crispy_field }}
-                    </div>
-                </div>
-                <br />
-                <h2>Roots Weight</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        <h4>Fresh</h4>
-                        {{ form.F_Roots_kg__gte|as_crispy_field }}
-                        {{ form.F_Roots_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Dry</h4>
-                        {{ form.D_Roots_kg__gte|as_crispy_field }}
-                        {{ form.D_Roots_kg__lte|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-4">
-                        <h4>Ratio Dry/Fresh</h4>
-                        {{ form.DF_Roots_AVG__gte|as_crispy_field }}
-                        {{ form.DF_Roots_AVG__lte|as_crispy_field }}
-                    </div>
-                </div>
-                <br />
-                <h2>Biomass</h2>
-                <div class="row smallInputs">
-                    <div class="col-lg-4">
-                        {{ form.ABG_kg__gte|as_crispy_field }}
-                        {{ form.ABG_kg__lte|as_crispy_field }}
-                        {{ form.BGB_kg__gte|as_crispy_field }}
-                        {{ form.BGB_kg__lte|as_crispy_field }}
-                        {{ form.Tot_Biomass_kg__gte|as_crispy_field }}
-                        {{ form.Tot_Biomass_kg__lte|as_crispy_field }}
-                        {{ form.BEF__gte|as_crispy_field }}
-                        {{ form.BEF__lte|as_crispy_field }}
-                    </div>
-                </div>
+
+                <div style="clear:both;"></div>
             </div>
 
            {% include 'search_helpers/search_tab_taxonomy.html' %}

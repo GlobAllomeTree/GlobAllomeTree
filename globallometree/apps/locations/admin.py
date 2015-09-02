@@ -2,7 +2,9 @@ from django.contrib import admin
 from globallometree.apps.locations.models import (
     Continent, Country, Location, LocationGroup,
     ZoneFAO, EcoregionUdvardy, EcoregionWWF, DivisionBailey, 
-    ZoneHoldridge, ForestType, BiomeLocal)
+    ZoneHoldridge, VegetationType, BiomeLocal)
+
+from django.utils.safestring import mark_safe
 
 class ContinentAdmin(admin.ModelAdmin):
     list_display = ('Name', 'Code')
@@ -14,17 +16,24 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Country', 'Modified')
+    list_display = ('Location_ID', 'Name', 'Region', 'Country', 'Latitude', 'Longitude', 'Zone_FAO','Modified')
     list_filter  = ('Country',)
-    search_fields = ('Name',)
+    search_fields = ('Name', 'Region')
 
 
 class LocationInline(admin.TabularInline):
     model = LocationGroup.Locations.through
     raw_id_fields = ('location',)
+    readonly_fields = ('admin_link',)
+
+    def admin_link(self, instance):
+        if instance.pk:
+            return mark_safe(u'<a href="/admin/locations/location/%s/">Edit Location</a>' % instance.location.pk)
+        else:
+            return ''
 
 
-class ForestTypeAdmin(admin.ModelAdmin):
+class VegetationTypeAdmin(admin.ModelAdmin):
     list_display = ('Name',)
 
 
@@ -71,4 +80,4 @@ admin.site.register(EcoregionUdvardy, EcoregionUdvardyAdmin)
 admin.site.register(EcoregionWWF, EcoregionWWFAdmin)
 admin.site.register(DivisionBailey, DivisionBaileyAdmin)
 admin.site.register(ZoneHoldridge, ZoneHoldridgeAdmin)
-admin.site.register(ForestType, ForestTypeAdmin)
+admin.site.register(VegetationType, VegetationTypeAdmin)

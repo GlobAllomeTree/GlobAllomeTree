@@ -198,7 +198,7 @@ def record_by_id_pdf_view(request, id, model_class,
     buffer.close()
     
     # Create the HttpResponse object with the appropriate PDF headers.
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % record_title.lower().replace(' ', '_')
     response.write(pdf)
     return response
@@ -210,8 +210,7 @@ def export_view(request, doc_type, filename, serializer):
     # We also strip it down to make the json more useful for researchers
     query = json.loads(request.POST.get('query'))
     extension = request.POST.get('extension')
-    #Try to prevent any obvious hacking attempts
-    assert query.keys() == [u'query', u'from']
+    assert query.keys() == [u'sort', u'query', u'from']
     es = get_es(urls=settings.ES_URLS)
     result = es.search(doc_type=doc_type, body=query)
     data = []

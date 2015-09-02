@@ -25,10 +25,9 @@ a:hover {
 /* Header */
 
 header {
-	background-color: #ccddcc;
+	background-color: #98B9C7;
 	margin-bottom:14px;
-	border-bottom: 1px solid #EFEFEF;
-	height:90px;
+	height:100px;
 
 }
 
@@ -42,7 +41,7 @@ header {
 
 #header-trees {
 	position:absolute;
-	top:9px;
+	top:0px;
 	left:-160px;
 	z-index:1;
 }
@@ -52,46 +51,46 @@ header .container {
 }
 
 header h1 {
-    font-size: 35px;
+    font-size: 38px;
     font-weight:normal;
-    color:#147A00;
+    color:#fff;
     position:absolute;
-	top:10px;
+	top:11px;
 	left:10px;
 	z-index:2;
-	text-shadow: 2px 2px 3px #60738C;
-	font-family: serif;
+	text-shadow: 2px 2px 4px #60738C;
+	font-family: 'Titillium Web', arial, sans-serif;
+	letter-spacing: 3px;
 }
 
 #logo-cirad {
 	position:absolute;
-	top:7px;
+	top:12px;
 	right:80px;
 	z-index:1;
 }
 
 #logo-fao {
 	position:absolute;
-	top:7px;
+	top:12px;
 	right:165px;
 	z-index:1;
 }
 
 #logo-tuscia {
 	position:absolute;
-	top:7px;
+	top:12px;
 	right:270px;
 	z-index:1;
 }
 
-
 .header-summary {
 	color:#40536C;
     position:absolute;
-	top:60px;
-	left:10px;
+	top:69px;
+	left:13px;
 	z-index:2;
-	text-shadow: 2px 2px 3px #60738C;
+	text-shadow: 2px 2px 3px #9DCDE0;
 }
 
 /* Navbar */
@@ -288,6 +287,18 @@ header h1 {
     width:160px;
     display:block;
     clear:left;
+}
+
+.variable-label {
+	font-weight:normal;
+	padding-left:20px;
+	font-size:14px;
+	color:#aaa;
+}
+
+.search-form-row-label {
+	clear:both;
+	padding-top:15px;
 }
 
 #searchForm .floatedCheckBoxBlock {

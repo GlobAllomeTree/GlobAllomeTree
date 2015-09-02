@@ -9,7 +9,7 @@ class OperatorAdmin(admin.ModelAdmin):
 
 
 class ReferenceAdmin(admin.ModelAdmin):
-    list_display = ('Label', 'Author', 'Year')
+    list_display = ('Reference', 'Author', 'Year')
 
 admin.site.register(Institution, InstitutionAdmin)
 admin.site.register(Reference, ReferenceAdmin)

@@ -16,17 +16,15 @@ window.app.searchManager = function (){
 			'Ecoregion_Udvardy',
 			'Zone_FAO',
 			'Ecoregion_WWF',
-			'Division_BAILEY',
+			'Division_Bailey',
 			'Author',
 			'Reference',
 			'Year'];
 
-	//Simple term filters which can be string or boolean mapping types
-	//When boolean 0,f alse, off, no and and empty string are false 
-	var config = {
-		termFilterKeys : [],
-	    rangeFilterKeys :[]
-	}
+	// Simple term filters which can be string or boolean mapping types
+	// When boolean 0,f alse, off, no and and empty string are false 
+	// Declare an object propery which later gets modified by individual config files
+	var config = {};
 
 	var setSearchDict = function(dict) {
 		//Save the search dictionary in the function context
@@ -145,6 +143,8 @@ window.app.searchManager = function (){
 				ejs.AndFilter(filters)	
 			)
 		);
+
+		query.sort(config.sortField);
 
 		if (params['aggregations']) {
 			for(var i = 0; i < params['aggregations'].length; i++) {

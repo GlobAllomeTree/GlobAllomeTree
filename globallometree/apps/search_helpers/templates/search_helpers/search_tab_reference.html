@@ -8,15 +8,13 @@
            <a href="?Reference=Pieper,+Y.+%26+Laumans">Reference: Pieper, Y. &amp; Laumans,</a>
            <a href="?Year=2004">Year: 2004</a>
     </p>
-
-    <div class="row">
-        <div class="col-lg-4">
-            {{ form.Author|as_crispy_field }}
-        </div>
-        <div class="col-lg-4">
+   <div class="row">
+       <div class="col-lg-6">
+          
             {{ form.Reference|as_crispy_field }}
-        </div>        
-        <div class="col-lg-4">
+
+            {{ form.Author|as_crispy_field }}
+           
             {{ form.Year|as_crispy_field }}
         </div>
     </div>

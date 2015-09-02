@@ -69,7 +69,7 @@ class CSVRenderer(BaseRenderer):
         table = self.tablize(data)
 
         csv_buffer = StringIO()
-        csv_writer = csv.writer(csv_buffer, **writer_opts)
+        csv_writer = csv.writer(csv_buffer, delimiter=str('\t'), **writer_opts)
         for row in table:
             # Assume that strings should be encoded as UTF-8
             csv_writer.writerow([
@@ -87,9 +87,18 @@ class CSVRenderer(BaseRenderer):
                         'Species_local_names',
                         'Species_group',
                         'Reference',
-                        'Location_group']
+                        'Location_group',
+                        'Dataset',
+                        'LatLonString',
+                        'Geohash',
+                        ]
 
-        for line in data['results']:
+        if isinstance(data, dict) and 'results' in data.keys():
+            data = data['results']
+        elif isinstance(data, dict):
+            data = [data]
+
+        for line in data:
             nested_rows_added = False
             for key in line.keys():
                 if key not in self.headers and key not in skip_headers:
@@ -101,11 +110,10 @@ class CSVRenderer(BaseRenderer):
                 reference = line.pop('Reference')
                 self.add_reference_headers()
                 line.update({
-                    'Reference_label': reference['Label'],
                     'Reference_author': reference['Author'],
                     'Reference_year': reference['Year'],
                     'Reference': reference['Reference'],
-                    'Reference_ID': reference['Reference_ID']
+                   # 'Reference_ID': reference['Reference_ID']
                     })
 
             # Direct call to the species group api endpoint
@@ -174,8 +182,9 @@ class CSVRenderer(BaseRenderer):
         return rows
 
     def get_location_rows(self, location, context):
-        context.update(location)
-        return [context]
+        row = context.copy()
+        row.update(location)
+        return [row]
 
 
     def get_species_local_name_rows(self, species_local_names, context):
@@ -183,21 +192,21 @@ class CSVRenderer(BaseRenderer):
         self.add_species_local_name_headers()
         if type(species_local_names) == list and len(species_local_names):
             for local_name in species_local_names:
-                definition = context.copy()
-                definition.update({
+                row = context.copy()
+                row.update({
                         'Species_local_name': local_name['Local_name'], 
                         'Species_local_name_iso': local_name['Language_iso_639'], 
                         'Species_local_name_latin': local_name['Local_name_latin'], 
                         'Species_local_name_ID': local_name['Local_name_ID'], 
                     })
-                rows.append(definition)
+                rows.append(row)
 
         return rows
 
     def add_location_headers(self):
         if 'Location_ID' not in self.headers:
             self.headers += [
-                                "Location_ID",
+                               # "Location_ID",
                                 "Location_name",
                                 "Plot_name",
                                 "Plot_size_m2",
@@ -211,20 +220,20 @@ class CSVRenderer(BaseRenderer):
                                 "Zone_Holdridge",
                                 "Ecoregion_Udvardy",
                                 "Ecoregion_WWF",
-                                "Division_BAILEY",
-                                "Forest_type",
-                                "Geohash",
+                                "Division_Bailey",
+                                "Vegetation_type",
+                                #"Geohash",
                                 "Latitude",
                                 "Longitude",
-                                "LatLonString",
-                                "Zone_FAO_ID",
-                                "Ecoregion_Udvardy_ID",
-                                "Zone_Holdridge_ID",
-                                "Ecoregion_WWF_ID",
-                                "Division_BAILEY_ID",
-                                "Country_ID",
-                                "Continent_ID",
-                                "Forest_type_ID"
+                                #"LatLonString",
+                                #"Zone_FAO_ID",
+                                #"Ecoregion_Udvardy_ID",
+                                #"Zone_Holdridge_ID",
+                                #"Ecoregion_WWF_ID",
+                                #"Division_Bailey_ID",
+                                #"Country_ID",
+                                #"Continent_ID",
+                                #"Vegetation_type_ID"
                                ]
 
     def add_species_definition_headers(self):
@@ -235,10 +244,10 @@ class CSVRenderer(BaseRenderer):
                            'Species',
                            'Subspecies',
                            'Species_author', 
-                           'Family_ID', 
-                           'Genus_ID',
-                           'Species_ID', 
-                           'Subspecies_ID'
+                           #'Family_ID', 
+                           #'Genus_ID',
+                           #'Species_ID', 
+                           #'Subspecies_ID'
                            ]
         self.add_species_local_name_headers()
 
@@ -248,16 +257,15 @@ class CSVRenderer(BaseRenderer):
                            'Species_local_name', 
                            'Species_local_name_iso', 
                            'Species_local_name_latin', 
-                           'Species_local_name_ID',
+                           #'Species_local_name_ID',
                            ]
 
     def add_reference_headers(self):
         if 'Reference' not in self.headers:
             self.headers += [
-                'Reference_label',
                 'Reference_author',
                 'Reference_year',
                 'Reference',
-                'Reference_ID',
+                #'Reference_ID',
                 ]
 

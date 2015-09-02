@@ -1,4 +1,12 @@
+import json
+
 from rest_framework import viewsets
+
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
+from rest_framework import status
+
+
 from rest_framework.permissions import IsAuthenticated
 from globallometree.apps.api.permissions import IsOwnerOrReadOnly
 
@@ -52,7 +60,7 @@ from globallometree.apps.locations.models import (
     ZoneHoldridge, 
     LocationGroup, 
     Location, 
-    ForestType,
+    VegetationType,
 	)
 
 from globallometree.apps.api.serializers import (
@@ -78,7 +86,7 @@ from globallometree.apps.api.serializers_location import (
     EcoregionWWFSerializer, 
     DivisionBaileySerializer, 
     ZoneHoldridgeSerializer,
-    ForestTypeSerializer,
+    VegetationTypeSerializer,
     LocationSerializer,
     LocationGroupSerializer,
     ContinentSerializer,
@@ -173,11 +181,11 @@ class CountryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CountrySerializer
 
 
-class ForestTypeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
+class VegetationTypeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     """
-    queryset = ForestType.objects.all()
-    serializer_class = ForestTypeSerializer
+    queryset = VegetationType.objects.all()
+    serializer_class = VegetationTypeSerializer
 
 
 class ZoneFAOViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
@@ -263,7 +271,12 @@ class DatasetViewSet(viewsets.ModelViewSet):
     """
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)   
+
+    @detail_route(methods=['get'])
+    def data_as_json(self, request, pk=None):
+        dataset = self.get_object()
+        return Response(json.loads(dataset.Data_as_json))
 
 
 # class DataRequestViewSet(viewsets.ReadOnlyModelViewSet):

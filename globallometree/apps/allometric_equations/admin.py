@@ -7,6 +7,8 @@ from globallometree.apps.allometric_equations.models import (
     AllometricEquation, Population, TreeType
 )
 
+from globallometree.apps.search_helpers.admin_helpers import ImproveRawIdFieldsForm
+
 class PopulationAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
@@ -15,7 +17,7 @@ class TreeTypeAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
-class AllometricEquationAdmin(admin.ModelAdmin):
+class AllometricEquationAdmin(ImproveRawIdFieldsForm):
     raw_id_fields = ('Species_group','Location_group','Reference')
     list_display = ("Allometric_equation_ID", 'Equation', 'Modified')
     ordering = ("Allometric_equation_ID",)

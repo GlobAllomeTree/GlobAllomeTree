@@ -14,7 +14,7 @@ from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, ZoneFAO, EcoregionUdvardy, 
     EcoregionWWF, DivisionBailey, ZoneHoldridge
 )
-from globallometree.apps.search_helpers.models import BaseModel, LinkedBaseModel
+from globallometree.apps.search_helpers.models import BaseModel, LinkedBaseModel, ComponentBaseModel
 
 
 class Population(BaseModel):
@@ -41,7 +41,7 @@ class TreeType(BaseModel):
         db_table = 'allometric_equation_tree_type'
 
 
-class AllometricEquation(LinkedBaseModel):
+class AllometricEquation(LinkedBaseModel, ComponentBaseModel):
     Allometric_equation_ID = models.AutoField(primary_key=True, db_column="allometric_equation_id")
    
     U = models.CharField(max_length=20, null=True, blank=True, db_column="u")
@@ -72,17 +72,7 @@ class AllometricEquation(LinkedBaseModel):
     Unit_Y = models.CharField(max_length=50, null=True, blank=True, db_column="unit_y")
     Age = models.CharField(max_length=50, null=True, blank=True, db_column="age")
     Veg_Component = models.CharField(max_length=150, null=True, blank=True, db_column="veg_component")
-    B = models.NullBooleanField(db_column="b")
-    Bd = models.NullBooleanField(db_column="bd")
-    Bg = models.NullBooleanField(db_column="bg")
-    Bt = models.NullBooleanField(db_column="bt")
-    L = models.NullBooleanField(db_column="l")
-    Rb = models.NullBooleanField(db_column="rb")
-    Rf = models.NullBooleanField(db_column="rf")
-    Rm = models.NullBooleanField(db_column="rm")
-    S = models.NullBooleanField(db_column="s")
-    T = models.NullBooleanField(db_column="t")
-    F = models.NullBooleanField(db_column="f")
+    
     Equation = models.CharField(max_length=500, db_column="equation") 
     Substitute_equation = models.CharField(
         max_length=500, null=True, blank=True, db_column="substitute_equation"

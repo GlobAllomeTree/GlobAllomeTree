@@ -43,7 +43,8 @@
 				$('#div_id_Submission_method').slideDown();
 			}
 
-			if(val == 'allometric_equations') {
+			// For now disable the allometric equation editor until it can be finished
+			if(0 && val == 'allometric_equations') {
 				$('option[value="editor"]').removeAttr('disabled').removeAttr('hidden');
 			} else {
 				$('option[value="editor"]').attr('disabled',true).attr('hidden', true).attr('selected', false);

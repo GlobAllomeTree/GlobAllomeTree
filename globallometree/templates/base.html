@@ -12,7 +12,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-  {% endaddtoblock %}
+    <link href='https://fonts.googleapis.com/css?family=Titillium+Web:300' rel='stylesheet' type='text/css'>
+
+     {% endaddtoblock %}
 
   {% block add_to_header %}
   {% endblock %}
@@ -27,22 +29,8 @@
     <div class="container" >
       <h1>GlobAllomeTree</h1>
       <p class="header-summary">Assessing volume, biomass and carbon stocks of trees and forests.</p>
-      <img src="{% static 'images/white_trees.png' %}" alt="" id="header-trees" width="1400" height="81" style="width:1400px;height:81px;max-width:1400px;"/>
-      <div id="logo-cirad" class="logo-image-link" title="CIRAD - Centre de coopération internationale en recherche agronomique pour le développement">
-        <a  href="http://www.cirad.fr/" target="_blank" >
-          <img src="{% static 'images/logos/logo-cirad-75.png' %}" alt="Cirad"  />
-        </a>
-      </div>
-      <div id="logo-fao" class="logo-image-link" title="FAO - Food and Agriculture Organization of the United Nations">
-        <a  href="http://www.fao.org/" target="_blank" >
-          <img src="{% static 'images/logos/logo-fao-75.png' %}" alt="FAO" />
-        </a>
-      </div>
-      <div id="logo-tuscia" class="logo-image-link" title="UNITUS - DIBAF: Università degli Studi della Tuscia">
-        <a  href="http://www.unitus.it/" target="_blank" >
-           <img src="{% static 'images/logos/logo-tuscia-75.png' %}" alt="Tuscia University" />
-        </a>
-      </div>
+      <img src="{% static 'images/white_trees.png' %}" alt="" id="header-trees" width="1400" height="100" style="width:1400px;height:100px;max-width:1400px;"/>
+      
     </div>
   </header>
    <div class="container">
@@ -106,7 +94,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p class="pull-right" style="font-size:85%;color:#999;">&copy; 2013 - 2014 All Rights Reserved</p>      
+      <p class="pull-right" style="font-size:85%;color:#999;">&copy; 2013 - {% now "Y" %} All Rights Reserved</p>      
     </div>
   </footer>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

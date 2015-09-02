@@ -66,7 +66,6 @@ class CSVParser(BaseParser):
         }
 
         convert_v1_headers = {
-            'Label': 'Reference_label',
             'Author': 'Reference_author',               
             'Year': 'Reference_year',      
             'ID_Location': 'Location_ID',
@@ -99,7 +98,7 @@ class CSVParser(BaseParser):
             'Longitude',
             'Country',
             'Region',
-            'Forest_type',
+            'Vegetation_type',
             'Location',
             'Contributor',
             'Operator',
@@ -111,7 +110,6 @@ class CSVParser(BaseParser):
             'Genus',
             'Species',
             'Family',
-            'Label',
             'Author',
             'Year',
             'Reference',
@@ -191,7 +189,7 @@ class CSVParser(BaseParser):
                 'Division_Bailey': row_data.pop('Division_Bailey'),
                 'Country': row_data.pop("Country"),
                 'Region': row_data.pop("Region"),
-                'Forest_type': row_data.pop("Forest_type"),
+                'Vegetation_type': row_data.pop("Vegetation_type"),
                 'Location_name': row_data.pop("Location"),
                 'Latitude': row_data.pop("Latitude"),
                 'Longitude': row_data.pop("Longitude")
@@ -217,7 +215,6 @@ class CSVParser(BaseParser):
                 species_groups[Species_group_ID].append(species_definition)
 
             row_data['Reference'] = {
-                "Label": row_data.pop("Label"), 
                 "Author": row_data.pop("Author"), 
                 "Year": row_data.pop("Year"), 
                 "Reference": row_data.pop("Reference")

@@ -7,6 +7,8 @@ class WoodDensityAdmin(admin.ModelAdmin):
     list_display = ('Wood_density_ID', 'Modified')
     ordering = ("Wood_density_ID",)
     search_fields  = ('Wood_density_ID',)
+    exclude = ('Elasticsearch_doc_hash',)
+
 
 
 admin.site.register(WoodDensity, WoodDensityAdmin)

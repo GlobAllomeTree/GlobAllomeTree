@@ -25,13 +25,14 @@
             font-weight:normal;
         }
 
-        h1, p, table, td {
+        h1, p, table, td, h3 {
             display:block;
         } 
 
         .section-header {
-            font-size: 14pt;
-            color:#147A00;
+            font-size: 15pt;
+            color:#666;
+            font-weight:normal;
             padding:20px 0px 0px 0px;
             margin:0px 0px 0px 0px;
         }
@@ -77,6 +78,7 @@
 {% include 'search_helpers/record_taxonomy.html' %}
 {% include 'search_helpers/record_locations.html' %}
 {% include 'search_helpers/record_reference.html' %}
+{% include 'search_helpers/record_contributor.html' %}
 {% include 'search_helpers/record_dataset.html' %}
 
 </body>

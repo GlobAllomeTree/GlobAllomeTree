@@ -6,7 +6,8 @@ from globallometree.apps.locations.models import (
     EcoregionUdvardy, 
     EcoregionWWF, 
     DivisionBailey, 
-    ZoneHoldridge
+    ZoneHoldridge,
+    VegetationType
 )
 
 class LinkedModelSearchForm(forms.Form):
@@ -16,13 +17,15 @@ class LinkedModelSearchForm(forms.Form):
         super(LinkedModelSearchForm, self).__init__(*args, **kwargs)
 
         for select_name, select_label in (
-            ('Zone_FAO', 'Biome (FAO)'),
-            ('Ecoregion_Udvardy', 'Biome (UDVARDY)'),
-            ('Ecoregion_WWF','Biome (WWF)'),
-            ('Division_BAILEY', 'Division (BAILEY)' ),
-            ('Zone_Holdridge','Biome (HOLDRIDGE)'),
+            ('Zone_FAO', 'FAO Global Ecological Zone '),
+            ('Ecoregion_Udvardy', 'Udvardy Ecoregion'),
+            ('Ecoregion_WWF','WWF Terrestrial Ecoregion'),
+            ('Division_Bailey', 'Division Bailey' ),
+            ('Zone_Holdridge','Holdridge Life Zone'),
             ('Population','Population'),
-            ('Country','Country')
+            ('Country','Country'),
+            ('Vegetation_type','Vegetation Type'),
+
         ):
             if select_name == 'Country':
                 choices = [('', '')] + list(Country.objects.all().values_list(
@@ -40,11 +43,15 @@ class LinkedModelSearchForm(forms.Form):
                 choices = [('', '')] + list(EcoregionWWF.objects.all().values_list(
                     'Name', 'Name'
                 ))
-            elif select_name == 'Division_BAILEY':
+            elif select_name == 'Division_Bailey':
                 choices = [('', '')] + list(DivisionBailey.objects.all().values_list(
                     'Name', 'Name'
                 ))
             elif select_name == 'Zone_Holdridge':
+                choices = [('', '')] + list(ZoneHoldridge.objects.all().values_list(
+                    'Name', 'Name'
+                ))  
+            elif select_name == 'Vegetation_type':
                 choices = [('', '')] + list(ZoneHoldridge.objects.all().values_list(
                     'Name', 'Name'
                 ))  

@@ -1138,7 +1138,7 @@
       {name: "Ecoregion_WWF",       options: {type: "ajaxSelect", url: "/api/v1/biomes-wwf", blank: true, nullable: true, label: "Biome (WWF)"}},
       {name: "Division_BAILEY", options: {type: "ajaxSelect", url: "/api/v1/divisions-bailey/", blank: true, nullable: true, label: "Division (BAILEY)"}},
       {name: "Zone_Holdridge", options: {type: "char", blank: true, nullable: true, label: "Biome (HOLDRIDGE)"}},
-      {name: "Forest_type",     options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Forest type"}},
+      {name: "Vegetation_type",     options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Forest type"}},
       {name: "Plot_name",       options: {type: "char", maxLength: 30, label: "Plot name"}}
     ],
 

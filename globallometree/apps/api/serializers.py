@@ -20,7 +20,7 @@ from globallometree.apps.api.serializers_location import (
     EcoregionWWFSerializer, 
     DivisionBaileySerializer, 
     ZoneHoldridgeSerializer,
-    ForestTypeSerializer,
+    VegetationTypeSerializer,
     LocationSerializer,
     LocationGroupSerializer,
     ContinentSerializer,
@@ -59,7 +59,7 @@ class ReferenceSerializer(serializers.ModelSerializer):
     Year = fields.SerializerMethodField()
     class Meta:
         model = source_models.Reference
-        fields = ('Label', 'Author', 'Year', 'Reference', 'Reference_ID')
+        fields = ('Author', 'Year', 'Reference', 'Reference_ID')
 
     def get_Year(self, obj):
         #Trim 1986b to be 1986
@@ -73,7 +73,7 @@ class ReferenceSerializer(serializers.ModelSerializer):
 class LinkedModelSerializer(serializers.ModelSerializer):
     Species_group = SpeciesGroupSerializer(many=False, required=False)
     Location_group = LocationGroupSerializer(many=False, required=False)
-    Dataset = DatasetSerializer(many=False, read_only=True, exclude_json=True)
+    Dataset = DatasetSerializer(many=False, read_only=True)
     Reference = ReferenceSerializer(many=False, required=False)
     Contributor = fields.CharField(source='Contributor.Name', allow_null=True, required=False)
     Operator = fields.CharField(source='Operator.Name', allow_null=True, required=False)
@@ -172,8 +172,8 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                 
                 for location_def in location_data['Locations']:
 
-                    relational_kwargs = ['Forest_type', 'Country', 'Country_3166_3', 
-                                         'Division_BAILEY', 'Ecoregion_Udvardy', 'Ecoregion_WWF', 'Zone_FAO', 'Zone_Holdridge']
+                    relational_kwargs = ['Vegetation_type', 'Country', 'Country_3166_3', 
+                                         'Division_Bailey', 'Ecoregion_Udvardy', 'Ecoregion_WWF', 'Zone_FAO', 'Zone_Holdridge']
                     location_kwargs = {}
                     for key in location_def.keys():
                         if key not in relational_kwargs:
@@ -193,16 +193,16 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                     if 'Zone_Holdridge' in location_def.keys() and location_def['Zone_Holdridge']['Name']:
                         location.Zone_Holdridge = location_models.ZoneHoldridge.objects.get(Name=location_def['Zone_Holdridge']['Name'])
 
-                    if 'Division_BAILEY' in location_def.keys() and location_def['Division_BAILEY']['Name']:
-                        location.Division_BAILEY = location_models.DivisionBailey.objects.get(Name=location_def['Division_BAILEY']['Name'])
+                    if 'Division_Bailey' in location_def.keys() and location_def['Division_Bailey']['Name']:
+                        location.Division_Bailey = location_models.DivisionBailey.objects.get(Name=location_def['Division_Bailey']['Name'])
                     
                     if 'Country_3166_3' in location_def.keys() and location_def['Country_3166_3']:
                         location.Country = location_models.Country.objects.get(Iso3166a3=location_def['Country_3166_3'])
                     elif 'Country' in location_def.keys() and location_def['Country']['Formal_name']:
                         location.Country = location_models.Country.objects.get(Formal_name=location_def['Country']['Formal_name'])
 
-                    if 'Forest_type' in location_def.keys() and location_def['Forest_type']['Name']:
-                        location.Forest_type = location_models.ForestType.objects.get(Name=location_def['Forest_type']['Name'])
+                    if 'Vegetation_type' in location_def.keys() and location_def['Vegetation_type']['Name']:
+                        location.Vegetation_type = location_models.VegetationType.objects.get(Name=location_def['Vegetation_type']['Name'])
                        
                     location.save()
                     location_group.Locations.add(location)

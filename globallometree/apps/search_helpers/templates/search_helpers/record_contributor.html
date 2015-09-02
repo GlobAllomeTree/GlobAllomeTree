@@ -1,10 +1,11 @@
 <div class="row">     
     <div class="col-md-12">
         <br>
-        <h3>Contributor</h3>
+        <h3 class="section-header">Contributor</h3>
         {% if record.Contributor %}
-            
-    	   <p>{{ record.Contributor }}</p>
+            <table class="table">
+                <tr><th style="width:210px">Contributor:</th><td> {{ record.Contributor}} </td></tr>
+            </table>
             
         {% else %}
             <p>There is no contributor information for this record.</p>
