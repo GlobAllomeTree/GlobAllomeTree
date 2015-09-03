@@ -289,7 +289,6 @@ if not os.path.isfile(os.path.join(PROJECT_PATH, 'settings_local.py')):
 else:
     try:
         from settings_local import *
-        print "loading settings_local.py"
     except ImportError:
         print "import error in the settings_local.py file."
         raise
