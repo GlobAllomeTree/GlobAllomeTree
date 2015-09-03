@@ -1,11 +1,6 @@
-import csv
-import codecs
-
 from django.conf import settings
 from rest_framework.parsers import BaseParser
 from rest_framework.exceptions import ParseError
-
-
 
 def universal_newlines(stream):
     for intermediate_line in stream:
@@ -112,10 +107,10 @@ class CSVParser(BaseParser):
 
         rows = []
         for line in universal_newlines(stream):
-            row = line.split('\t')
+            row = unicode(line, 'utf8').split('\t')
             rows.append(row)
         
-        header = next(rows)
+        header = rows.pop(0)
         
         for index, item in enumerate(header):
             if item in convert_v1_headers.keys():
