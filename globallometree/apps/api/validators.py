@@ -10,9 +10,7 @@ class ValidRelatedField(object):
         self.require_reload = True
 
         def require_reload(**kwargs):
-          
             self.require_reload = True
-            print "Requiring reload of %s" % self.model
 
         post_delete.connect(require_reload, sender=self.model, weak=False)
         post_save.connect(require_reload, sender=self.model, weak=False)
