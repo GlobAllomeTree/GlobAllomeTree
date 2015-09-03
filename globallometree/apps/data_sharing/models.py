@@ -11,13 +11,13 @@ class DataLicense(BaseModel):
         )
 
     SHARING_CHOICES = (
-        ('raw_yes__derivative_no', 'The Data User is not permitted to share the Raw Data with a third Party, but is allowed to share Derivative Data.'),
-        ('raw_no__derivative_no', 'The Data user is not permitted to share the Raw Data or Derivative Data to a third Party.'),
-        ('raw_yes__deritive_yes', 'The Data user is permitted to share the Raw Data and Derivative Data to a third Party without informing the Data Provider.'),
+        ('raw_yes__derivative_no', 'The Data User is not permitted to share the Data with a third Party, but is allowed to share Derivative Data.'),
+        ('raw_no__derivative_no', 'The Data user is not permitted to share the Data or Derivative Data to a third Party.'),
+        ('raw_yes__deritive_yes', 'The Data user is permitted to share the Data and Derivative Data to a third Party without informing the Data Provider.'),
         )
 
     EXPIRE_CHOICES = (
-        ('on_activity_completion', 'When Data User has completed the activities for which the Raw Data were provided.'),
+        ('on_activity_completion', 'When Data User has completed the activities for which the Data was provided.'),
         ('on_three_months_notice', 'If either Party terminates this Agreement by notifying the other by email of its intent to terminate at least three months in advance of the effective date of termination, and indicating such termination date.'),
         ('on_date', 'On the indicated date'),
         ('none', 'No expiry'),
@@ -42,9 +42,10 @@ class DataLicense(BaseModel):
         )
 
     Available_to_registered_users = models.BooleanField(
-        help_text="Is this license granted to all registered globallometree users?",
+        help_text="Is this license automatically granted to all registered globallometree users?",
         default=False,
-        db_column="available_to_registered_users"
+        db_column="available_to_registered_users",
+        verbose_name="Automatically granted"
         )
 
     Public_choice = models.BooleanField(
@@ -84,13 +85,13 @@ class DataLicense(BaseModel):
 
     Restrict_resell = models.BooleanField(
         default=False,
-        help_text="The Data User shall not sell, market, rent, lease, sublicense, lend, assign, time-share, distribute, disseminate or transfer, in whole or in part, the Raw Data, any updates, or end user's rights under this Agreement.",
+        help_text="The Data User shall not sell, market, rent, lease, sublicense, lend, assign, time-share, distribute, disseminate or transfer, in whole or in part, the Data, any updates, or end user's rights under this Agreement.",
         db_column="restrict_resell"
     )
 
     Restrict_duplication = models.BooleanField(
         default=False,
-        help_text="The Data User shall not duplicate the Data Provider's proprietary and copyright-protected Raw Data or attempt to do so by altering, decompiling, or disassembling the Raw Data.",
+        help_text="The Data User shall not duplicate the Data Provider's proprietary and copyright-protected Data or attempt to do so by altering, decompiling, or disassembling the Data.",
         db_column="restrict_duplication"
     )
 
@@ -114,7 +115,7 @@ class DataLicense(BaseModel):
 
     Restrict_attributed_ownership = models.BooleanField(
         default=False,
-        help_text="The Data Provider shall be acknowledged as the data source. If changes are made to the Raw Data, attribution should be given to the Data Provider as owner of the Raw Data.",
+        help_text="The Data Provider shall be acknowledged as the data source. If changes are made to the Data, attribution should be given to the Data Provider as owner of the Data.",
         db_column="restrict_attributed_ownership"
     )
 

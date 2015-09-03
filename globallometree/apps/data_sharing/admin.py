@@ -167,7 +167,7 @@ class DatasetAdmin(admin.ModelAdmin):
     run_import.short_description = "Mark dataset to start import"
 
 class DataLicenseAdmin(admin.ModelAdmin):
-    list_display = ('Title', 'User', 'Public_choice',)
+    list_display = ('Title', 'User', 'Public_choice','Available_to_registered_users', 'Requires_provider_approval')
     search_fields  = ['Title',]
     raw_id_fields = ('User',)
 
