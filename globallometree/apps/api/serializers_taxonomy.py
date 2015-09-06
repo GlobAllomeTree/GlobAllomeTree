@@ -97,18 +97,6 @@ class SubspeciesSerializer(serializers.ModelSerializer):
                   'Subspecies_ID',
                   )
 
-class SpeciesAuthorField(serializers.Field):
-    """
-    Color objects are serialized into 'rgb(#, #, #)' notation.
-    """
-    def to_representation(self, obj):
-        return "rgb(%d, %d, %d)" % (obj.red, obj.green, obj.blue)
-
-    def to_internal_value(self, data):
-        data = data.strip('rgb(').rstrip(')')
-        red, green, blue = [int(col) for col in data.split(',')]
-        return Color(red, green, blue)
-
 
 class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
     """
@@ -116,23 +104,25 @@ class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
     etc into a  single record
     """
    
-    Family = fields.CharField(required=False, allow_null=True, source='Family.Name')
-    Genus = fields.CharField(required=False,allow_null=True, source='Genus.Name')
-    Species = fields.CharField(required=False,allow_null=True, source='Species.Name')
+    Family = fields.CharField(required=False, allow_null=True, source='Family.Name', max_length=120)
+    Genus = fields.CharField(required=False,allow_null=True, source='Genus.Name', max_length=120)
+    Species = fields.CharField(required=False,allow_null=True, source='Species.Name', max_length=120)
     Species_local_names = SpeciesLocalNameSerializer(
         many=True,
         required=False,
         source='Species.Local_names'
         )
     
-    Subspecies = fields.CharField(required=False, allow_null=True, source='Subspecies.Name')
+    Subspecies = fields.CharField(required=False, allow_null=True, source='Subspecies.Name', max_length=120)
+    Species_author = fields.CharField(required=False,allow_null=True, max_length=120)
+
     Scientific_name = fields.CharField(read_only=True, allow_null=True)
 
     Family_ID = fields.IntegerField(required=False,allow_null=True, source='Family.pk')
     Genus_ID = fields.IntegerField(required=False,allow_null=True, source='Genus.pk')
     Species_ID = fields.IntegerField(required=False,allow_null=True, source='Species.pk')
     Subspecies_ID = fields.IntegerField(required=False,allow_null=True, source='Subspecies.pk')
-    Species_author = fields.CharField(required=False,allow_null=True)
+   
 
     def get_Species_author(self, obj):
         if self.Subspecies and self.Subspecies.Species_author:

@@ -236,7 +236,7 @@ def validate_records(data, SerializerClass):
             data_errors.append({
                 'record_number': record_number,
                 'errors' : record_errors,
-                'source' : json.dumps(record_data, indent=4)
+                'source' : json.dumps(record_data, indent=4, ensure_ascii=False).encode('utf8')
                 })
     return data_errors
 

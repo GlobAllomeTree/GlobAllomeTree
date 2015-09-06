@@ -47,7 +47,8 @@ class LocationSerializer(serializers.ModelSerializer):
     Location_name = fields.CharField(
         source="Name", 
         allow_null=True,
-        required=False
+        required=False,
+        max_length=255
         )
 
     Country = fields.CharField(
@@ -55,7 +56,7 @@ class LocationSerializer(serializers.ModelSerializer):
         allow_null=True,
         required=False,
         validators=[ValidRelatedField(model=models.Country, 
-                                     field_name="Formal_name")]
+                                     field_name="Formal_name")],
         )
 
     Continent = fields.CharField(
@@ -106,13 +107,15 @@ class LocationSerializer(serializers.ModelSerializer):
     Biome_local = fields.CharField(
         source="Biome_local.Name", 
         allow_null=True,
-        required=False
+        required=False,
+        max_length=200
         )
 
     Biome_local_reference = fields.CharField(
         source="Biome_local.Reference", 
         allow_null=True,
-        required=False
+        required=False,
+        max_length=200
         )
 
     Vegetation_type = fields.CharField(

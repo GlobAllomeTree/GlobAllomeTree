@@ -133,6 +133,10 @@ INSTALLED_APPS = (
     'djangocms_file',
     'globallometree.plugins.linkbox',
 
+    'rest_framework',
+    'rest_framework_swagger',
+    'rest_framework.authtoken',
+
     # project globallometree.apps
     'globallometree.apps.accounts',
     'globallometree.apps.search_helpers',
@@ -148,12 +152,8 @@ INSTALLED_APPS = (
     'globallometree.apps.proxy',
     'globallometree.apps.kibana_custom', #custom must go before source for overrides
     'globallometree.apps.kibana_src',
-    'globallometree.apps.api',
     'globallometree.apps.biomass_expansion_factors',
 
-    'rest_framework',
-    'rest_framework_swagger',
-    'rest_framework.authtoken',
 )
 
 
