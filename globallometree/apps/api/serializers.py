@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 from django.contrib.auth.models import User
+from django.db import transaction
 
 from rest_framework import serializers, fields
 
@@ -82,138 +83,159 @@ class LinkedModelSerializer(serializers.ModelSerializer):
         super(LinkedModelSerializer, self).__init__(*args, **kwargs)
 
     def create(self, validated_data):
-        species_data = validated_data.pop('Species_group')
-        location_data = validated_data.pop('Location_group')
-        reference_data = validated_data.pop('Reference')
-        contributor_data = validated_data.pop('Contributor')
-        operator_data = validated_data.pop('Operator')
+        with transaction.atomic():
+            species_data = validated_data.pop('Species_group')
+            location_data = validated_data.pop('Location_group')
+            reference_data = validated_data.pop('Reference')
+            contributor_data = validated_data.pop('Contributor')
+            operator_data = validated_data.pop('Operator')
 
-        ModelClass = self.Meta.model
-        instance = ModelClass.objects.create(**validated_data)
+            ModelClass = self.Meta.model
+            instance = ModelClass.objects.create(**validated_data)
 
-        if contributor_data and contributor_data['Name']:
-            instance.Contributor = source_models.Institution.objects.get_or_create(Name=contributor_data['Name'])[0]
-        
-            if operator_data and operator_data['Name']:
-                instance.Operator = source_models.Operator.objects.get_or_create(Name=operator_data['Name'],
-                                                                                 Institution=instance.Contributor)[0]
-        if species_data:
-            species_group, created = taxonomy_models.SpeciesGroup.objects.get_or_create(
-                Dataset=self.context['dataset'],
-                Dataset_Species_group_ID=species_data['Species_group_ID']
-                )
+            species_data['Species_group_ID'] = species_data['Species_group_ID'] + 13
 
-            instance.Species_group = species_group
-            # First time we have seen this species group so we save all the details
-            # otherwise we assume that it's repeated data of the same group
-            if created:
+            if contributor_data and contributor_data['Name']:
+                instance.Contributor = source_models.Institution.objects.get_or_create(Name=contributor_data['Name'])[0]
+            
+                if operator_data and operator_data['Name']:
+                    instance.Operator = source_models.Operator.objects.get_or_create(Name=operator_data['Name'],
+                                                                                     Institution=instance.Contributor)[0]
+            if species_data:
+                species_group, created = taxonomy_models.SpeciesGroup.objects.get_or_create(
+                    Dataset=self.context['dataset'],
+                    Dataset_Species_group_ID=species_data['Species_group_ID']
+                    )
 
-                # Since the species group is m2m, we need to save a copy of it
-                # before adding any species
-                species_group.save()
-                for species_def in species_data['Species_definitions']:
+                instance.Species_group = species_group
+                # First time we have seen this species group so we save all the details
+                # otherwise we assume that it's repeated data of the same group
+                if created:
 
-                    # match the species def to our database
-                    species_def_matched = SpeciesGroupSerializer.match_species_def_to_db(species_def)
+                    # Since the species group is m2m, we need to save a copy of it
+                    # before adding any species
+                    species_group.save()
+                    for species_def in species_data['Species_definitions']:
 
-                    # create any needed taxonomy models
-                    # when there is not an id, but there is a name,
-                    # it indicates we need to create the model
-                    if species_def_matched['Family']['Name'] and not species_def_matched['Family_ID']:
-                        family = taxonomy_models.Family.objects.get_or_create(
-                            Name=species_def_matched['Family']['Name'])[0]
-                    else:
-                        family = species_def_matched['db_family']
+                        family = None
+                        genus = None
+                        species = None
+                        subspecies = None
 
-                    if species_def_matched['Genus']['Name'] and not species_def_matched['Genus_ID']:
-                        genus = taxonomy_models.Genus.objects.get_or_create(
-                            Name=species_def_matched['Genus']['Name'], 
-                            Family=family)[0]
-                    else:
-                        genus = species_def_matched['db_genus']
+                        # create any needed taxonomy models
+                        # when there is not an id, but there is a name,
+                        # it indicates we need to create the model
+                        if species_def['Family']['Name']:
+                            family = taxonomy_models.Family.objects.get_or_create(
+                                Name=species_def['Family']['Name'])[0]
+                        
+                            if species_def['Genus']['Name']:
+                                genus = taxonomy_models.Genus.objects.get_or_create(
+                                    Name=species_def['Genus']['Name'], 
+                                    Family=family)[0]
 
-                    if species_def_matched['Species']['Name'] and not species_def_matched['Species_ID']:
-                        species = taxonomy_models.Species.objects.get_or_create(
-                            Name=species_def_matched['Species']['Name'], 
-                            Genus=genus)[0]
-                    else:
-                        species = species_def_matched['db_species']
+                                if species_def['Species']['Name']:
+                                    
+                                    if species_def['Species_author']:
+                                        if species_def['Subspecies']['Name']:
+                                            subspecies_author = species_def['Species_author']
+                                            species_author = None
+                                        elif species_def['Species']['Name']:
+                                            subspecies_author = None
+                                            species_author = species_def['Species_author']
+                                    else:
+                                        species_author = None
+                                        subspecies_author = None
 
-                    if species_def_matched['Subspecies']['Name'] and not species_def_matched['Subspecies_ID']:
-                        subspecies = taxonomy_models.Subspecies.objects.get_or_create(
-                            Name=species_def_matched['Subspecies']['Name'], 
-                            Species=species)[0]
-                    else:
-                        subspecies = species_def_matched['db_subspecies']
+                                    species = taxonomy_models.Species.objects.get_or_create(
+                                                Name=species_def['Species']['Name'], 
+                                                Genus=genus,
+                                                Author=species_author
+                                                )[0]
+                        
+                                    for sln in species_def['Species']['Local_names']:
+                                        species_local_name = taxonomy_models.SpeciesLocalName.objects.get_or_create(
+                                            Species = species,
+                                            Local_name=sln['Local_name'],
+                                            Local_name_latin=sln['Local_name_latin'],
+                                            Language_iso_639_3=sln['Language_iso_639_3']
+                                            )
 
-                    species_def = taxonomy_models.SpeciesDefinition(
-                        Family=family,
-                        Genus=genus,
-                        Species=species,
-                        Subspecies=subspecies
-                        )
-
-                    species_def.save()
-                    species_group.Species_definitions.add(species_def)      
+                                    if species_def['Subspecies']['Name']:
+                                        subspecies = taxonomy_models.Subspecies.objects.get_or_create(
+                                            Name=species_def['Subspecies']['Name'], 
+                                            Species=species,
+                                            Author=subspecies_author)[0]
 
 
-        if location_data:
-            location_group, created = location_models.LocationGroup.objects.get_or_create(
-                Dataset=self.context['dataset'],
-                Dataset_Location_group_ID=location_data['Location_group_ID']
-                )
-            instance.Location_group = location_group
-            # First time we have seen this location group so we save all the details
-            # otherwise we assume that it's repeated data of the same group
-            if created:
-                # Since the location group is m2m, we need to save a copy of it
-                # before adding any biomes, country, etc...
-                location_group.save()
-                
-                for location_def in location_data['Locations']:
+                        species_def_model = taxonomy_models.SpeciesDefinition(
+                            Family=family,
+                            Genus=genus,
+                            Species=species,
+                            Subspecies=subspecies
+                            )
 
-                    relational_kwargs = ['Vegetation_type', 'Country', 'Country_3166_3', 
-                                         'Division_Bailey', 'Ecoregion_Udvardy', 'Ecoregion_WWF', 'Zone_FAO', 'Zone_Holdridge']
-                    location_kwargs = {}
-                    for key in location_def.keys():
-                        if key not in relational_kwargs:
-                            location_kwargs[key] = location_def[key]
+                        species_def_model.save()
+                        species_group.Species_definitions.add(species_def_model)      
 
-                    location = location_models.Location.objects.create(**location_kwargs)
 
-                    if 'Zone_FAO' in location_def.keys() and location_def['Zone_FAO']['Name']:
-                        location.Zone_FAO = location_models.ZoneFAO.objects.get(Name=location_def['Zone_FAO']['Name'])
-                  
-                    if 'Ecoregion_WWF' in location_def.keys() and location_def['Ecoregion_WWF']['Name']:
-                        location.Ecoregion_WWF = location_models.EcoregionWWF.objects.get(Name=location_def['Ecoregion_WWF']['Name'])
-                   
-                    if 'Ecoregion_Udvardy' in location_def.keys() and location_def['Ecoregion_Udvardy']['Name']:
-                        location.Ecoregion_Udvardy = location_models.EcoregionUdvardy.objects.get(Name=location_def['Ecoregion_Udvardy']['Name'])
-                   
-                    if 'Zone_Holdridge' in location_def.keys() and location_def['Zone_Holdridge']['Name']:
-                        location.Zone_Holdridge = location_models.ZoneHoldridge.objects.get(Name=location_def['Zone_Holdridge']['Name'])
-
-                    if 'Division_Bailey' in location_def.keys() and location_def['Division_Bailey']['Name']:
-                        location.Division_Bailey = location_models.DivisionBailey.objects.get(Name=location_def['Division_Bailey']['Name'])
+            if location_data:
+                location_group, created = location_models.LocationGroup.objects.get_or_create(
+                    Dataset=self.context['dataset'],
+                    Dataset_Location_group_ID=location_data['Location_group_ID']
+                    )
+                instance.Location_group = location_group
+                # First time we have seen this location group so we save all the details
+                # otherwise we assume that it's repeated data of the same group
+                if created:
+                    # Since the location group is m2m, we need to save a copy of it
+                    # before adding any biomes, country, etc...
+                    location_group.save()
                     
-                    if 'Country_3166_3' in location_def.keys() and location_def['Country_3166_3']:
-                        location.Country = location_models.Country.objects.get(Iso3166a3=location_def['Country_3166_3'])
-                    elif 'Country' in location_def.keys() and location_def['Country']['Formal_name']:
-                        location.Country = location_models.Country.objects.get(Formal_name=location_def['Country']['Formal_name'])
+                    for location_def in location_data['Locations']:
 
-                    if 'Vegetation_type' in location_def.keys() and location_def['Vegetation_type']['Name']:
-                        location.Vegetation_type = location_models.VegetationType.objects.get(Name=location_def['Vegetation_type']['Name'])
+                        relational_kwargs = ['Vegetation_type', 'Country', 'Country_3166_3', 
+                                             'Division_Bailey', 'Ecoregion_Udvardy', 'Ecoregion_WWF', 'Zone_FAO', 'Zone_Holdridge']
+                        location_kwargs = {}
+                        for key in location_def.keys():
+                            if key not in relational_kwargs:
+                                location_kwargs[key] = location_def[key]
+
+                        location = location_models.Location.objects.create(**location_kwargs)
+
+                        if 'Zone_FAO' in location_def.keys() and location_def['Zone_FAO']['Name']:
+                            location.Zone_FAO = location_models.ZoneFAO.objects.get(Name=location_def['Zone_FAO']['Name'])
+                      
+                        if 'Ecoregion_WWF' in location_def.keys() and location_def['Ecoregion_WWF']['Name']:
+                            location.Ecoregion_WWF = location_models.EcoregionWWF.objects.get(Name=location_def['Ecoregion_WWF']['Name'])
                        
-                    location.save()
-                    location_group.Locations.add(location)
-           
-        instance.Reference = source_models.Reference.objects.get_or_create(**reference_data)[0]
+                        if 'Ecoregion_Udvardy' in location_def.keys() and location_def['Ecoregion_Udvardy']['Name']:
+                            location.Ecoregion_Udvardy = location_models.EcoregionUdvardy.objects.get(Name=location_def['Ecoregion_Udvardy']['Name'])
+                       
+                        if 'Zone_Holdridge' in location_def.keys() and location_def['Zone_Holdridge']['Name']:
+                            location.Zone_Holdridge = location_models.ZoneHoldridge.objects.get(Name=location_def['Zone_Holdridge']['Name'])
 
-        if 'dataset' in self.context.keys():
-            instance.Dataset = self.context['dataset']
-            self.context['dataset'].Records_imported += 1
-            self.context['dataset'].save()
-        instance.save()
+                        if 'Division_Bailey' in location_def.keys() and location_def['Division_Bailey']['Name']:
+                            location.Division_Bailey = location_models.DivisionBailey.objects.get(Name=location_def['Division_Bailey']['Name'])
+                        
+                        if 'Country_3166_3' in location_def.keys() and location_def['Country_3166_3']:
+                            location.Country = location_models.Country.objects.get(Iso3166a3=location_def['Country_3166_3'])
+                        elif 'Country' in location_def.keys() and location_def['Country']['Formal_name']:
+                            location.Country = location_models.Country.objects.get(Formal_name=location_def['Country']['Formal_name'])
+
+                        if 'Vegetation_type' in location_def.keys() and location_def['Vegetation_type']['Name']:
+                            location.Vegetation_type = location_models.VegetationType.objects.get(Name=location_def['Vegetation_type']['Name'])
+                           
+                        location.save()
+                        location_group.Locations.add(location)
+               
+            instance.Reference = source_models.Reference.objects.get_or_create(**reference_data)[0]
+
+            if 'dataset' in self.context.keys():
+                instance.Dataset = self.context['dataset']
+                self.context['dataset'].Records_imported += 1
+                self.context['dataset'].save()
+            instance.save()
 
         return instance
 

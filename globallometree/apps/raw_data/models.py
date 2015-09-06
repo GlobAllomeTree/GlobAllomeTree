@@ -117,11 +117,6 @@ class RawData(LinkedBaseModel, ComponentBaseModel):
         help_text="Total biomass of the tree in kg (aboveground + belowground)",
         db_column="tot_biomass_kg")
 
-    Remark = models.TextField(
-        null=True, blank=True)
-
-    Contact = models.CharField(
-        null=True, blank=True, max_length=255)
 
     def get_serializer_class(self):
         from globallometree.apps.api import RawDataSerializer

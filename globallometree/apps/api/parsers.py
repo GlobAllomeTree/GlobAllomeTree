@@ -28,6 +28,16 @@ class CSVParser(BaseParser):
         self.data_type = data_type
 
 
+    def ensure_local_name_in_list(self,species_local_name, species_groups, definition_index, Species_group_ID):
+        found = False
+        for local_name in species_groups[Species_group_ID][definition_index]['Species_local_names']:
+            if local_name["Local_name"] == species_local_name["Local_name"] and \
+               local_name["Language_iso_639"] == species_local_name["Language_iso_639"] and \
+               local_name["Local_name_latin"] == species_local_name["Local_name_latin"]:
+                found = True
+        if not found:
+            species_groups[Species_group_ID][definition_index]['Species_local_names'].append(species_local_name)
+
     def parse(self, stream, media_type=None, parser_context=None):
         parser_context = parser_context or {}
        
@@ -84,8 +94,15 @@ class CSVParser(BaseParser):
             'Genus',
             'Species',
             'Family',
-            'Author',
-            'Year',
+            'Species_local_name',
+            'Species_local_name_latin',
+            'Species_local_name_iso',
+            'Species_local_name_alt',
+            'Species_local_name_alt_latin',
+            'Species_local_name_alt_iso',
+            'Species_author',
+            'Reference_author',
+            'Reference_year',
             'Reference',
             'Family',
             'Genus',
@@ -105,6 +122,7 @@ class CSVParser(BaseParser):
         # A single record is represented by seeral csv row
         # Each csv row might add a species definition, a new location, or a new species local name
 
+
         rows = []
         for line in universal_newlines(stream):
             row = unicode(line, 'utf8').split('\t')
@@ -118,7 +136,6 @@ class CSVParser(BaseParser):
 
         for row in rows:
             row_data = dict(zip(header, row))
-
 
             for key in row_data.keys():
                 row_data[key] = row_data[key].strip()
@@ -181,18 +198,55 @@ class CSVParser(BaseParser):
                 'Family': row_data.pop("Family"),
                 'Genus': row_data.pop("Genus"),
                 'Species': row_data.pop("Species"),
-                'Subspecies': row_data.pop("Subspecies")
+                'Subspecies': row_data.pop("Subspecies"),
+                'Species_author': row_data.pop("Species_author"),
+                'Species_local_names' : []
             }
 
             if not Species_group_ID in species_groups.keys():
                 species_groups[Species_group_ID] = []
 
-            if not species_definition in species_groups[Species_group_ID]:
-                species_groups[Species_group_ID].append(species_definition)
+            definition_index = None
+            for index, sd in enumerate(species_groups[Species_group_ID]):
+                if sd['Family'] == species_definition['Family'] and \
+                   sd['Genus'] == species_definition['Genus'] and \
+                   sd['Species'] == species_definition['Species'] and \
+                   sd['Genus'] == species_definition['Genus'] and \
+                   sd['Species_author'] == species_definition['Species_author']:
+                    definition_index = index
 
+            if definition_index is None:
+                species_groups[Species_group_ID].append(species_definition)
+                definition_index = len(species_groups[Species_group_ID]) - 1
+
+            if row_data['Species_local_name']:
+                species_local_name = {
+                    "Local_name" : row_data.pop('Species_local_name'),
+                    "Language_iso_639" : row_data.pop('Species_local_name_iso'),
+                    "Local_name_latin": row_data.pop('Species_local_name_latin')
+                }
+
+                self.ensure_local_name_in_list(species_local_name = species_local_name,
+                                               species_groups = species_groups,
+                                               definition_index = definition_index,
+                                               Species_group_ID = Species_group_ID)
+
+            if row_data['Species_local_name_alt']:
+                species_local_name = {
+                    "Local_name" : row_data.pop('Species_local_name_alt'),
+                    "Language_iso_639" : row_data.pop('Species_local_name_alt_iso'),
+                    "Local_name_latin": row_data.pop('Species_local_name_alt_latin')
+                }
+
+                self.ensure_local_name_in_list(species_local_name = species_local_name,
+                                               species_groups = species_groups,
+                                               definition_index = definition_index,
+                                               Species_group_ID = Species_group_ID)
+
+            
             row_data['Reference'] = {
-                "Author": row_data.pop("Author"), 
-                "Year": row_data.pop("Year"), 
+                "Author": row_data.pop("Reference_author"), 
+                "Year": row_data.pop("Reference_year"), 
                 "Reference": row_data.pop("Reference")
             }
 

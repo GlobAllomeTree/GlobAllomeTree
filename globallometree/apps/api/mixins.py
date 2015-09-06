@@ -11,7 +11,7 @@ class NameQueryMixin(object):
             if q, all tags that contain q
             else, all tags
         """
-        queryset = self.queryset
+        queryset = self.queryset.order_by('Name')
         query = self.request.QUERY_PARAMS.get('q', None)
         unique_name = self.request.QUERY_PARAMS.get('unique_name', False)
         if query is not None:

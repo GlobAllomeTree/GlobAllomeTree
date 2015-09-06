@@ -76,6 +76,17 @@ class LinkedBaseModel(BaseModel):
         db_column="elasticsearch_doc_hash"
         )
 
+    Remark = models.TextField(
+        null=True, 
+        blank=True
+        )
+
+    Contact = models.CharField(
+        null=True, 
+        blank=True, 
+        max_length=255
+        )
+
     class Meta:
         abstract = True
 

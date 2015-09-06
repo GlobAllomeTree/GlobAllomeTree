@@ -65,6 +65,8 @@ class WoodDensityIndex(MappingType, Indexable):
                 }
             }
 
+        mapping['properties'].update(estype_linked_model)
+
         return mapping
 
 

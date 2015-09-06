@@ -41,21 +41,26 @@ class Command(BaseCommand):
             if len(datasets_to_import) > 0:
                 dataset = datasets_to_import[0]
 
-        if dataset is not None:     
-            print "Beginning import for dataset %s" % dataset
+        if dataset is not None:   
+
+            if dataset.Records_imported > 0:
+                print "Continuing import for dataset '%s' from record %s" % (dataset,dataset.Records_imported + 1)
+            else:
+                print "Beginning import for dataset '%s'" % dataset
             dataset.Locked = True
             dataset.save()
-            
-            data = json.loads(dataset.Data_as_json)
+            try:
+                data = json.loads(dataset.Data_as_json)
 
-            if limit:
-                data = data[dataset.Records_imported:dataset.Records_imported + limit]
+                if limit:
+                    data = data[dataset.Records_imported:dataset.Records_imported + limit]
+                else:
+                    data = data[dataset.Records_imported:]
 
-            SerializerClass = Serializers[dataset.Data_type] 
-            serializer = SerializerClass(data=data, many=True, context={'dataset': dataset})
-            if serializer.is_valid(): # Must call is valid before calling save
-                
-                try:
+                SerializerClass = Serializers[dataset.Data_type] 
+                serializer = SerializerClass(data=data, many=True, context={'dataset': dataset})
+                if serializer.is_valid(): # Must call is valid before calling save
+
                     serializer.save()                  
                     # records imported gets augmented inside the serializer 
                     if dataset.Records_imported == dataset.Record_count:
@@ -63,18 +68,20 @@ class Command(BaseCommand):
                         dataset.Imported = True
                     dataset.Locked = False
                     dataset.save()
-                except:
-                    dataset.Import_error = True
-                    dataset.Import_error_details = traceback.format_exc()
-                    dataset.Marked_for_import = False
-                    dataset.Locked = False
-                    dataset.save()
-                    raise 
-            else:
-                raise Exception("The dataset could not be validated and was not imported.") 
+                  
+                else:
+                    raise Exception("The dataset could not be validated and was not imported.") 
+            except:
+                import pdb; pdb.set_trace()
+                dataset.Import_error = True
+                dataset.Import_error_details = traceback.format_exc()
+                dataset.Marked_for_import = False
+                dataset.Locked = False
+                dataset.save()
+                raise 
 
         else:
-            print "No datasets marked for import"
+            print "No datasets marked for import, or any marked datasets have import errors"
         
 
 

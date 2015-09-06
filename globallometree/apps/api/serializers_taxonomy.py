@@ -3,11 +3,12 @@ from globallometree.apps.taxonomy import models
 
 
 class SpeciesLocalNameSerializer(serializers.ModelSerializer):
-    Language_iso_639 = fields.CharField(source="Language_iso_639_3")
-    Local_name_ID = fields.CharField(source="Species_local_name_ID")
+    Language_iso_639 = fields.CharField(source="Language_iso_639_3", required=False)
+    Local_name_ID = fields.CharField(source="Species_local_name_ID", read_only=True, required=False)
     class Meta:
         model = models.SpeciesLocalName
         fields = ('Local_name', 'Language_iso_639', 'Local_name_latin', 'Local_name_ID')
+
 
 
 class FamilySerializer(serializers.ModelSerializer):
@@ -96,6 +97,18 @@ class SubspeciesSerializer(serializers.ModelSerializer):
                   'Subspecies_ID',
                   )
 
+class SpeciesAuthorField(serializers.Field):
+    """
+    Color objects are serialized into 'rgb(#, #, #)' notation.
+    """
+    def to_representation(self, obj):
+        return "rgb(%d, %d, %d)" % (obj.red, obj.green, obj.blue)
+
+    def to_internal_value(self, data):
+        data = data.strip('rgb(').rstrip(')')
+        red, green, blue = [int(col) for col in data.split(',')]
+        return Color(red, green, blue)
+
 
 class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
     """
@@ -119,16 +132,15 @@ class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
     Genus_ID = fields.IntegerField(required=False,allow_null=True, source='Genus.pk')
     Species_ID = fields.IntegerField(required=False,allow_null=True, source='Species.pk')
     Subspecies_ID = fields.IntegerField(required=False,allow_null=True, source='Subspecies.pk')
-    Species_author = fields.SerializerMethodField()
+    Species_author = fields.CharField(required=False,allow_null=True)
 
     def get_Species_author(self, obj):
-        if obj.Subspecies and obj.Subspecies.Author:
-            return obj.Subspecies.Author
-        elif obj.Species and obj.Species.Author:
-            return obj.Species.Author
+        if self.Subspecies and self.Subspecies.Species_author:
+            return self.Subspecies.Species_author
+        elif self.Species and self.Species.Species_author:
+            return self.Species_author
         else:
             return None
-
 
     class Meta:
          model = models.SpeciesDefinition
@@ -196,6 +208,20 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
                     Genus=species_def['db_genus'],
                     Name=species_def['Species']['Name'])
                 species_def['Species_ID'] = species_def['db_species'].pk
+
+                if len(species_def['Species']['Local_names']):
+                    for index, sln in enumerate(species_def['Species']['Local_names']):
+                        species_def['Species']['Local_names'][index]['db_local_name'] = None
+                        try:
+                            species_def['Species']['Local_names'][index]['db_local_name'] = \
+                                models.SpeciesLocalName.objects.get(
+                                    Species=species_def['db_species'],
+                                    Local_name=sln['Local_name'],
+                                    Local_name_latin=sln['Local_name_latin'],
+                                    Language_iso_639_3=sln['Language_iso_639_3'])
+                        except:
+                            pass
+
             except models.Species.DoesNotExist:
                 pass
 
@@ -210,5 +236,6 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
             except models.Subspecies.DoesNotExist:
                 pass
 
-        return species_def
+        import pdb; pdb.set_trace()
 
+        return species_def

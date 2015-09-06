@@ -91,7 +91,9 @@ class SpeciesLocalName(BaseModel):
     Language_iso_639_3 = models.CharField(
         max_length=3, 
         help_text="The ISO 639-3 Language Code for the language",
-        db_column="language_iso_639_3"
+        db_column="language_iso_639_3",
+        null=True,
+        blank=True
     )
 
     class Meta:
@@ -123,7 +125,7 @@ class SpeciesDefinition(BaseModel):
 
         return scientific_name
 
-    def Author(self):
+    def Species_author(self):
         if self.Subspecies and self.Subspecies.Author:
             return self.Subspecies.Author
         elif self.Species and self.Species.Author:

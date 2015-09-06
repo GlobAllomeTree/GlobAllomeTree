@@ -6,6 +6,16 @@ from django.contrib import admin
 from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.db import models, router, transaction
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
+from django.contrib.admin.utils import unquote 
+from django.utils.encoding import force_text
+
+# (
+#     NestedObjects, flatten_fieldsets, get_deleted_objects,
+#     lookup_needs_distinct, model_format_dict, quote, 
+# )
 
 from globallometree.apps.api.serializers import (
     AllometricEquationSerializer,
@@ -20,6 +30,11 @@ from .data_tools import(
     Parsers,
     validate_data_file
 )
+
+
+csrf_protect_m = method_decorator(csrf_protect)
+TO_FIELD_VAR = '_to_field'
+IS_POPUP_VAR = '_popup'
 
 class DatasetForm(forms.ModelForm):
    
@@ -54,11 +69,12 @@ class DatasetForm(forms.ModelForm):
 
 class DatasetAdmin(admin.ModelAdmin):
     actions = ['run_import']
-    list_display = ('Title',  'Imported', 'Marked_for_import', 'Import_error', 'Record_count', 'Records_imported', 'User', 'Data_type',  'Data_license', 'Created')
+    list_display = ('Dataset_ID', 'Title',  'Imported', 'Marked_for_import', 'Import_error', 'Record_count', 'Records_imported', 'User', 'Data_type',  'Data_license', 'Created')
     search_fields  = ['Title', 'Description']
     raw_id_fields = ('User',)
     exclude = ('Data_as_json',)
     form = DatasetForm
+    delete_confirmation_template = 'data_sharing/admin_confirm_delete.html'
         
     def get_form(self, request, obj=None, **kwargs):
         form = super(DatasetAdmin, self).get_form(request, obj, **kwargs)
@@ -108,6 +124,63 @@ class DatasetAdmin(admin.ModelAdmin):
                 },
                 context_instance=RequestContext(request)
             )
+
+
+    @csrf_protect_m
+    @transaction.atomic
+    def delete_view(self, request, object_id, extra_context=None):
+        "The 'delete' admin view for this model."
+        opts = self.model._meta
+        app_label = opts.app_label
+
+        to_field = request.POST.get(TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR))
+        if to_field and not self.to_field_allowed(request, to_field):
+            raise DisallowedModelAdminToField("The field %s cannot be referenced." % to_field)
+
+        obj = self.get_object(request, unquote(object_id), to_field)
+
+        if not self.has_delete_permission(request, obj):
+            raise PermissionDenied
+
+        if obj is None:
+            raise Http404(
+                '%(name)s object with primary key %(key)r does not exist.' %
+                {'name': force_text(opts.verbose_name), 'key': escape(object_id)}
+            )
+
+        using = router.db_for_write(self.model)
+
+        if request.POST:  # The user has already confirmed the deletion.
+
+            obj_display = force_text(obj)
+            attr = str(to_field) if to_field else opts.pk.attname
+            obj_id = obj.serializable_value(attr)
+            self.log_deletion(request, obj, obj_display)
+            self.delete_model(request, obj)
+
+            return self.response_delete(request, obj_display, obj_id)
+
+        object_name = force_text(opts.verbose_name)
+
+        
+        title = "Are you sure?"
+
+        context = dict(
+            self.admin_site.each_context(request),
+            title=title,
+            object_name=object_name,
+            object=obj,
+            opts=opts,
+            app_label=app_label,
+            preserved_filters=self.get_preserved_filters(request),
+            is_popup=(IS_POPUP_VAR in request.POST or
+                      IS_POPUP_VAR in request.GET),
+            to_field=to_field,
+        )
+        context.update(extra_context or {})
+
+        return self.render_delete_form(request, context)
+
 
     def run_import(self, request, queryset):
         import_confirmed = request.POST.get('run', False)

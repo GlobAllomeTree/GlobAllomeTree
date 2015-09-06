@@ -95,3 +95,16 @@ estype_species_group = {
                             "Species_group_ID": estype_long
                         }
                     }
+
+
+estype_linked_model = {
+            "Reference": estype_reference,
+            "Dataset": estype_object,
+            "Remark": estype_string_analyzed,
+            "Contact": estype_string_analyzed,
+            "Tree_type": estype_string_not_analyzed,
+            "Species_group" : estype_species_group,
+            "Location_group" : estype_location_group,
+            "Contributor": estype_string_not_analyzed,
+            "Operator": estype_string_not_analyzed
+            }

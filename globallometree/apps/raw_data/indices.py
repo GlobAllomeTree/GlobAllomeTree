@@ -58,10 +58,10 @@ class RawDataIndex(MappingType, Indexable):
                 "ABG_kg": estype_float,
                 "BGB_kg": estype_float,
                 "Tot_Biomass_kg": estype_float,
-                "Remark": estype_string_analyzed,
-                "Contact": estype_string_analyzed
                 }
             }
+
+        mapping['properties'].update(estype_linked_model)
 
         return mapping
 

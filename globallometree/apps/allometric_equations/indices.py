@@ -45,11 +45,9 @@ class AllometricEquationIndex(MappingType, Indexable):
                     "Bt": estype_boolean,
                     "Contributor": estype_string_not_analyzed,
                     "Corrected_for_bias": estype_boolean,
-                    "Dataset": estype_long,
                     "Equation": estype_string_not_analyzed,
                     "F": estype_boolean,
                     "L": estype_boolean,
-                    "Location_group": estype_location_group,
                     "Max_X": estype_float,
                     "Min_X": estype_float,
                     "Max_Z": estype_float,
@@ -57,19 +55,16 @@ class AllometricEquationIndex(MappingType, Indexable):
                     "Output": estype_string_not_analyzed,
                     "Output_TR": estype_string_not_analyzed,
                     "Population": estype_string_not_analyzed,
-                    "Tree_type": estype_string_not_analyzed,
                     "R2": estype_float,
                     "R2_Adjusted": estype_float,
                     "RMSE": estype_float,
                     "SEE": estype_float,
                     "Rb": estype_boolean,
-                    "Reference": estype_long,
                     "Rf": estype_boolean,
                     "Rm": estype_boolean,
                     "S": estype_boolean,
                     "Sample_size": estype_string_not_analyzed,
                     "Segmented_equation": estype_boolean,
-                    "Species_group": estype_species_group,
                     "Stump_height": estype_float,
                     "Top_dob" : estype_float,
                     "Substitute_equation": estype_string_not_analyzed,
@@ -79,11 +74,12 @@ class AllometricEquationIndex(MappingType, Indexable):
                     "Unit_Y": estype_string_not_analyzed,
                     "Veg_Component": estype_string_not_analyzed,
                     "X": estype_string_not_analyzed,
-                    "Reference": estype_reference,
-                    "Dataset": estype_object
+                    
                 }
             }
         
+        mapping['properties'].update(estype_linked_model)
+
         return mapping
 
     @classmethod
