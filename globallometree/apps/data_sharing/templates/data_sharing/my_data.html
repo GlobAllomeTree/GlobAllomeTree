@@ -38,12 +38,12 @@
          	    			<td> {{ dataset.get_Data_type_display }} </td>
          	    			<td> {% if dataset.Imported %} Yes {% else %} No {% endif %} </td>
          	    			<td> {{ dataset.Data_license.Title }} </td>
-         	    			<td> <a href="/data/sharing/datasets/{{ dataset.Dataset_ID }}/"
+         	    			<td> <a href="/data/sharing/datasets/{{ dataset.ID_Dataset }}/"
       					        class="btn btn-default btn-xs"> 		
       							View Dataset							
       						</a>
       						{% if dataset.is_editable %}
-      						<a href="/data/sharing/datasets/{{ dataset.Dataset_ID }}/edit/"		
+      						<a href="/data/sharing/datasets/{{ dataset.ID_Dataset }}/edit/"		
       					        class="btn btn-success btn-xs"> 		
       							Edit							
       						</a>
@@ -115,7 +115,7 @@
       	    		<td>{{ request_made_by_user.Dataset.Title }}</td>
                   <td>{{ request_made_by_user.Dataset.get_Data_type_display }}</td>
       	    		<td>{{ request_made_by_user.get_Agreement_status_display }}</td>
-                  <td> <a href="/data/sharing/datasets/{{ request_made_by_user.Dataset.Dataset_ID }}/"         
+                  <td> <a href="/data/sharing/datasets/{{ request_made_by_user.Dataset.ID_Dataset }}/"         
                           class="btn btn-default btn-xs">      
                         View dataset                   
                      </a></td>

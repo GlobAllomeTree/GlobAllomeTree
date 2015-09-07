@@ -113,19 +113,19 @@ def upload_data(request):
                     dataset.save()
 
                     return HttpResponseRedirect(
-                        reverse("data-sharing-upload-confirm", kwargs={'Dataset_ID':dataset.pk}) 
+                        reverse("data-sharing-upload-confirm", kwargs={'ID_Dataset':dataset.pk}) 
                     )
 
             elif(submission_method == 'document'):
                 dataset = form.save()
                 return HttpResponseRedirect(
-                    reverse("data-sharing-upload-confirm", kwargs={'Dataset_ID':dataset.pk}) 
+                    reverse("data-sharing-upload-confirm", kwargs={'ID_Dataset':dataset.pk}) 
                 )
 
             elif(submission_method == 'editor'):
                 dataset = form.save()
                 return HttpResponseRedirect(
-                    reverse("dataset-edit", kwargs={'Dataset_ID':dataset.pk}) 
+                    reverse("dataset-edit", kwargs={'ID_Dataset':dataset.pk}) 
                 )
 
     else:
@@ -144,8 +144,8 @@ def upload_data(request):
     )
 
 @login_required(login_url='/accounts/login/')
-def dataset_detail(request, Dataset_ID):
-    dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
+def dataset_detail(request, ID_Dataset):
+    dataset = get_object_or_404(Dataset, ID_Dataset=ID_Dataset)
     notify = None
 
     try:
@@ -183,22 +183,22 @@ def dataset_detail(request, Dataset_ID):
 
 
 @login_required(login_url='/accounts/login/')
-def dataset_edit(request, Dataset_ID):
-    dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
+def dataset_edit(request, ID_Dataset):
+    dataset = get_object_or_404(Dataset, ID_Dataset=ID_Dataset)
     assert (dataset.User.pk == request.user.pk) \
         or request.user.is_staff
     return render_to_response(
         "data_sharing/dataset_edit.html",
         {
-          'Dataset_ID': Dataset_ID,
+          'ID_Dataset': ID_Dataset,
         },
         context_instance=RequestContext(request)
     )
 
 
 @login_required(login_url='/accounts/login/')
-def upload_confirm(request, Dataset_ID):
-    dataset = get_object_or_404(Dataset, Dataset_ID=Dataset_ID)
+def upload_confirm(request, ID_Dataset):
+    dataset = get_object_or_404(Dataset, ID_Dataset=ID_Dataset)
     assert dataset.User.pk == request.user.pk
     dataset_serialized = DatasetSerializer(dataset).data
     return render_to_response(
@@ -206,7 +206,7 @@ def upload_confirm(request, Dataset_ID):
         {
           'dataset': dataset_serialized,
           'dataset_url': reverse("data-sharing-dataset-detail", 
-                            kwargs={'Dataset_ID':dataset.pk}) 
+                            kwargs={'ID_Dataset':dataset.pk}) 
 
         },
         context_instance=RequestContext(request)
@@ -251,9 +251,9 @@ def my_data(request):
 
 
 @login_required(login_url='/accounts/login/')
-def agreement(request, Data_sharing_agreement_ID):
+def agreement(request, ID_Data_sharing_agreement):
     data_sharing_agreement = get_object_or_404(DataSharingAgreement,
-         Data_sharing_agreement_ID=Data_sharing_agreement_ID)
+         ID_Data_sharing_agreement=ID_Data_sharing_agreement)
 
     show_response_form = False
     if request.user == data_sharing_agreement.Dataset.User \

@@ -52,7 +52,7 @@ window.app.searchManager.config.rangeFilterKeys = [
 	];
 
 window.app.searchManager.config.indexName = 'wooddensity';
-window.app.searchManager.config.sortField = 'Wood_density_ID';
+window.app.searchManager.config.sortField = 'ID_WD';
 window.app.listController.config.recordLinkPrefix = 'wood-densities';
 window.app.listController.config.recordReadableType = 'Wood Density';
 window.app.listController.config.customListTemplate = '\
@@ -60,7 +60,7 @@ window.app.listController.config.customListTemplate = '\
   <dd>{{ Density_g_cm3 }}</dd>';
 
 window.app.listController.config.getRecordContext = function (data) {
-	data['ID'] = data['Wood_density_ID'];
+	data['ID'] = data['ID_WD'];
 	return data;
 }
 

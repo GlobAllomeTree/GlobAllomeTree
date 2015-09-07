@@ -28,15 +28,15 @@ class CSVParser(BaseParser):
         self.data_type = data_type
 
 
-    def ensure_local_name_in_list(self,species_local_name, species_groups, definition_index, Species_group_ID):
+    def ensure_local_name_in_list(self,species_local_name, species_groups, definition_index, ID_Species_group):
         found = False
-        for local_name in species_groups[Species_group_ID][definition_index]['Species_local_names']:
+        for local_name in species_groups[ID_Species_group][definition_index]['Species_local_names']:
             if local_name["Local_name"] == species_local_name["Local_name"] and \
                local_name["Language_iso_639"] == species_local_name["Language_iso_639"] and \
                local_name["Local_name_latin"] == species_local_name["Local_name_latin"]:
                 found = True
         if not found:
-            species_groups[Species_group_ID][definition_index]['Species_local_names'].append(species_local_name)
+            species_groups[ID_Species_group][definition_index]['Species_local_names'].append(species_local_name)
 
     def parse(self, stream, media_type=None, parser_context=None):
         parser_context = parser_context or {}
@@ -44,25 +44,26 @@ class CSVParser(BaseParser):
 
         primary_key_fields = {
             'raw_data': 'Raw_data_ID',
-            'biomass_expansion': 'Biomass_expansion_factor_ID', 
-            'wood_density': 'Wood_density_ID',
-            'allometric_equations': 'Allometric_equation_ID' 
+            'biomass_expansion': 'ID_BEF', 
+            'wood_density': 'ID_WD',
+            'allometric_equations': 'ID_AE' 
         }
 
         convert_v1_headers = {
             'Author': 'Reference_author',               
             'Year': 'Reference_year',      
-            'ID_Location': 'Location_ID',
-            'Group_Location': 'Location_group_ID',
+            'ID_Location': 'ID_Location',
+            'Group_Location': 'ID_Location_group',
             'Biome_FAO': 'Zone_FAO',
             'Biome_UDVARDY': 'Ecoregion_Udvardy',
             'Biome_WWF': 'Ecoregion_WWF',
             'Division_BAILEY': 'Division_Bailey',
             'Biome_HOLDRIDGE': 'Zone_Holdridge',
-            'ID_Species': 'Species_ID',
-            'ID_Group': 'Species_group_ID',
+            'ID_Species': 'ID_Species',
+            'ID_Group': 'ID_Species_group',
             'Name_operator': 'Operator',
-            'ID_Equation': 'Allometric_equation_ID'
+            'ID_AE': 'ID_AE',
+            'ID_WD': 'ID_WD'
         }
 
         id_field = primary_key_fields[self.data_type]
@@ -86,11 +87,11 @@ class CSVParser(BaseParser):
             'Location',
             'Contributor',
             'Operator',
-            'Location_group_ID',
+            'ID_Location_group',
             'Population',
             'Ecosystem',
             'Continent',
-            'Species_group_ID',
+            'ID_Species_group',
             'Genus',
             'Species',
             'Family',
@@ -152,20 +153,20 @@ class CSVParser(BaseParser):
                 if not key in row_data.keys():
                     row_data[key] = None;
 
-            if not row_data['Location_group_ID']:
-                row_data['Location_group_ID'] = next_location_auto_id
+            if not row_data['ID_Location_group']:
+                row_data['ID_Location_group'] = next_location_auto_id
                 next_location_auto_id += 1
 
-            if not row_data['Species_group_ID']:
-                row_data['Species_group_ID'] = next_species_auto_id
+            if not row_data['ID_Species_group']:
+                row_data['ID_Species_group'] = next_species_auto_id
                 next_species_auto_id += 1
 
             if not id_field in row_data.keys() or not row_data[id_field]:
                 row_data[id_field] = next_record_auto_id
                 next_record_auto_id += 1
 
-            Location_group_ID = row_data['Location_group_ID']
-            Species_group_ID = row_data['Species_group_ID']
+            ID_Location_group = row_data['ID_Location_group']
+            ID_Species_group = row_data['ID_Species_group']
             Record_ID = row_data[id_field]
 
             if row_data['Family'] is None: row_data['Family'] = 'Unknown'
@@ -188,11 +189,11 @@ class CSVParser(BaseParser):
                 'Longitude': row_data.pop("Longitude")
             }
 
-            if not Location_group_ID in location_groups.keys():
-                location_groups[Location_group_ID] = []
+            if not ID_Location_group in location_groups.keys():
+                location_groups[ID_Location_group] = []
 
-            if not location_definition in location_groups[Location_group_ID]:
-                location_groups[Location_group_ID].append(location_definition)
+            if not location_definition in location_groups[ID_Location_group]:
+                location_groups[ID_Location_group].append(location_definition)
 
             species_definition =    {
                 'Family': row_data.pop("Family"),
@@ -203,11 +204,11 @@ class CSVParser(BaseParser):
                 'Species_local_names' : []
             }
 
-            if not Species_group_ID in species_groups.keys():
-                species_groups[Species_group_ID] = []
+            if not ID_Species_group in species_groups.keys():
+                species_groups[ID_Species_group] = []
 
             definition_index = None
-            for index, sd in enumerate(species_groups[Species_group_ID]):
+            for index, sd in enumerate(species_groups[ID_Species_group]):
                 if sd['Family'] == species_definition['Family'] and \
                    sd['Genus'] == species_definition['Genus'] and \
                    sd['Species'] == species_definition['Species'] and \
@@ -216,8 +217,8 @@ class CSVParser(BaseParser):
                     definition_index = index
 
             if definition_index is None:
-                species_groups[Species_group_ID].append(species_definition)
-                definition_index = len(species_groups[Species_group_ID]) - 1
+                species_groups[ID_Species_group].append(species_definition)
+                definition_index = len(species_groups[ID_Species_group]) - 1
 
             if row_data['Species_local_name']:
                 species_local_name = {
@@ -229,7 +230,7 @@ class CSVParser(BaseParser):
                 self.ensure_local_name_in_list(species_local_name = species_local_name,
                                                species_groups = species_groups,
                                                definition_index = definition_index,
-                                               Species_group_ID = Species_group_ID)
+                                               ID_Species_group = ID_Species_group)
 
             if row_data['Species_local_name_alt']:
                 species_local_name = {
@@ -241,7 +242,7 @@ class CSVParser(BaseParser):
                 self.ensure_local_name_in_list(species_local_name = species_local_name,
                                                species_groups = species_groups,
                                                definition_index = definition_index,
-                                               Species_group_ID = Species_group_ID)
+                                               ID_Species_group = ID_Species_group)
 
             
             row_data['Reference'] = {
@@ -258,16 +259,16 @@ class CSVParser(BaseParser):
             row_data = records.pop(record_key)
 
             row_data['Location_group'] = {
-                'Group' : location_groups[row_data['Location_group_ID']],
-                'Location_group_ID' : row_data['Location_group_ID']
+                'Group' : location_groups[row_data['ID_Location_group']],
+                'ID_Location_group' : row_data['ID_Location_group']
             }
-            row_data.pop('Location_group_ID')
+            row_data.pop('ID_Location_group')
 
             row_data['Species_group'] = {
-                'Group' : species_groups[row_data['Species_group_ID']],
-                'Species_group_ID' : row_data['Species_group_ID']
+                'Group' : species_groups[row_data['ID_Species_group']],
+                'ID_Species_group' : row_data['ID_Species_group']
             }
-            row_data.pop('Species_group_ID')
+            row_data.pop('ID_Species_group')
 
             data.append(row_data)
 

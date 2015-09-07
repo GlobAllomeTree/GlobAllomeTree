@@ -32,19 +32,19 @@ class LinkedBaseModel(BaseModel):
         'taxonomy.SpeciesGroup',
         null=True, 
         blank=True,
-        db_column='species_group_id')
+        db_column='id_species_group')
 
     Location_group = models.ForeignKey(
         'locations.LocationGroup',
         null=True, 
         blank=True,
-        db_column='location_group_id')
+        db_column='id_location_group')
 
     Reference = models.ForeignKey(
         'source.Reference', 
         blank=True, 
         null=True,
-        db_column='reference_id')
+        db_column='id_reference')
 
     Operator = models.ForeignKey(
         'source.Operator', 
@@ -64,7 +64,7 @@ class LinkedBaseModel(BaseModel):
         null=True, 
         blank=True,
         help_text="The Dataset that this raw data record came from",
-        db_column="dataset_id"
+        db_column="id_dataset"
         )
 
     Elasticsearch_doc_hash = models.CharField(

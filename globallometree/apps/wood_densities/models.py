@@ -10,7 +10,7 @@ from globallometree.apps.search_helpers.models import LinkedBaseModel
 
 class WoodDensity(LinkedBaseModel):
 
-    Wood_density_ID = models.AutoField(primary_key=True, db_column="wood_density_id")
+    ID_WD = models.AutoField(primary_key=True, db_column="id_wd")
 
     H_tree_avg = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,
@@ -138,6 +138,16 @@ class WoodDensity(LinkedBaseModel):
         db_column="bark_distance")
 
 
+    Convert_BD = models.DecimalField(
+        null=True, blank=True, max_digits=16, decimal_places=10,
+        help_text="0.861*Density if density is at 10 to 18%",
+        db_column="convert_bd")
+
+    CV = models.IntegerField(
+        null=True, blank=True,
+        help_text="SD/Density if Density is an average",
+        db_column="cv")
+
     #Formulas
     #Convert BD  Formula decimal 0.861*Density if density is at 10 to 18%  IF(BB2="BD",ROUND(BA2,3),IF(0.1<=BB2,IF(BB2<=0.18,ROUND(BA2*0.861,3),"NA"),"NA"))
     #CV Formula SD/Density if Density is an average Formula: IF(BH2="NA","NA",BH2/BA2)
@@ -151,10 +161,10 @@ class WoodDensity(LinkedBaseModel):
         return WoodDensityIndex
 
     def get_absolute_url(self):
-        return '/data/wood_densities/%s' % self.Wood_density_ID
+        return '/data/wood_densities/%s' % self.ID_WD
 
     def __unicode__(self):
-        return 'Wood Density %s' % self.Wood_density_ID
+        return 'Wood Density %s' % self.ID_WD
 
     class Meta:
         verbose_name = 'Wood Density'

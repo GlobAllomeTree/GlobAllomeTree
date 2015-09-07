@@ -18,7 +18,7 @@ from globallometree.apps.search_helpers.models import BaseModel, LinkedBaseModel
 
 
 class Population(BaseModel):
-    Population_ID = models.AutoField(primary_key=True, db_column="population_id")
+    ID_Population = models.AutoField(primary_key=True, db_column="id_population")
     Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
 
     def __unicode__(self):
@@ -30,7 +30,7 @@ class Population(BaseModel):
 
 
 class TreeType(BaseModel):
-    Tree_type_ID = models.AutoField(primary_key=True, db_column="tree_type_id")
+    ID_Tree_type = models.AutoField(primary_key=True, db_column="id_tree_type")
     Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
 
     def __unicode__(self):
@@ -42,7 +42,7 @@ class TreeType(BaseModel):
 
 
 class AllometricEquation(LinkedBaseModel, ComponentBaseModel):
-    Allometric_equation_ID = models.AutoField(primary_key=True, db_column="allometric_equation_id")
+    ID_AE = models.AutoField(primary_key=True, db_column="id_ae")
    
     U = models.CharField(max_length=20, null=True, blank=True, db_column="u")
     Unit_U = models.CharField(max_length=20, null=True, blank=True, db_column="unit_u")
@@ -103,8 +103,8 @@ class AllometricEquation(LinkedBaseModel, ComponentBaseModel):
     Segmented_equation = models.NullBooleanField(db_column="segmented_equation")
     Sample_size = models.CharField(max_length=150, null=True, blank=True, db_column="sample_size")
 
-    Population = models.ForeignKey(Population, blank=True, null=True, db_column="population_id")
-    Tree_type = models.ForeignKey(TreeType, blank=True, null=True, db_column="tree_type_id")
+    Population = models.ForeignKey(Population, blank=True, null=True, db_column="id_population")
+    Tree_type = models.ForeignKey(TreeType, blank=True, null=True, db_column="id_tree_type")
 
     def components_string(self):
         c_string = ''
@@ -125,7 +125,7 @@ class AllometricEquation(LinkedBaseModel, ComponentBaseModel):
         return AllometricEquationIndex
 
     def __unicode__(self):
-        return u"Equation %s: %s" % (self.Allometric_equation_ID, self.Equation)
+        return u"Equation %s: %s" % (self.ID_AE, self.Equation)
 
     def save(self, *args, **kwargs):
         if not self.Substitute_equation and self.Equation:

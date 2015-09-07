@@ -36,7 +36,7 @@ class WoodDensityIndex(MappingType, Indexable):
 
         mapping = {
             "properties": {
-                    "Wood_density_ID": estype_long,
+                    "ID_WD": estype_long,
                     "H_tree_avg": estype_float,
                     "H_tree_min": estype_float,
                     "H_tree_max": estype_float,

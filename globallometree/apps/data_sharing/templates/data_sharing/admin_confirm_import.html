@@ -5,7 +5,7 @@
     <div style="width:930px;margin:10px auto;padding:15px;background-color:#fff;border-radius:3px; border: 1px solid #ddd;">
 	    <form style="float:right;" method="post">
 	   	    <input type="hidden" name="action" value="run_import">
-	    	<input type="hidden" name="dataset_id" value="{{dataset.pk}}">
+	    	<input type="hidden" name="id_dataset" value="{{dataset.pk}}">
 	   	    <input type="hidden" name="_selected_action" value="{{dataset.pk}}">
 	    	<input type="hidden" name="run" value="1">
 	    	{% csrf_token %}

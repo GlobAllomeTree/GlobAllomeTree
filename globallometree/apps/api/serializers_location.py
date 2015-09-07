@@ -9,37 +9,37 @@ from globallometree.apps.api.validators import ValidRelatedField
 class ZoneFAOSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ZoneFAO
-        fields = ('Zone_FAO_ID', 'Name',)
+        fields = ('ID_Zone_FAO', 'Name',)
 
 
 class EcoregionUdvardySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EcoregionUdvardy
-        fields = ('Ecoregion_Udvardy_ID', 'Name',)
+        fields = ('ID_Ecoregion_Udvardy', 'Name',)
 
 
 class EcoregionWWFSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EcoregionWWF
-        fields = ('Ecoregion_WWF_ID', 'Name',)
+        fields = ('id_ecoregion_wwf', 'Name',)
 
 
 class ZoneHoldridgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ZoneHoldridge
-        fields = ('Zone_Holdridge_ID','Name',)
+        fields = ('ID_Zone_Holdridge','Name',)
 
 
 class DivisionBaileySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DivisionBailey
-        fields = ('Division_Bailey_ID', 'Name',)
+        fields = ('ID_Division_Bailey', 'Name',)
 
 
 class VegetationTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.VegetationType
-        fields = ('Vegetation_type_ID', 'Name',)
+        fields = ('ID_Vegetation_type', 'Name',)
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -136,41 +136,41 @@ class LocationSerializer(serializers.ModelSerializer):
 
     # IDs are read only since we are not trusting them at the moment
     # They could be ids internal to a single dataset or study
-    Country_ID = fields.IntegerField(
-        source="Country.Country_ID", 
+    ID_Country = fields.IntegerField(
+        source="Country.ID_Country", 
         read_only=True
         )
 
-    Continent_ID = fields.IntegerField(
-        source="Country.Continent.Continent_ID", 
+    ID_Continent = fields.IntegerField(
+        source="Country.Continent.ID_Continent", 
         read_only=True
         ) 
 
-    Zone_FAO_ID = fields.IntegerField(
-        source="Zone_FAO.Zone_FAO_ID", 
+    ID_Zone_FAO = fields.IntegerField(
+        source="Zone_FAO.ID_Zone_FAO", 
         read_only=True
         )
-    Ecoregion_Udvardy_ID = fields.IntegerField(
-        source="Ecoregion_Udvardy.Ecoregion_Udvardy_ID", 
+    ID_Ecoregion_Udvardy = fields.IntegerField(
+        source="Ecoregion_Udvardy.ID_Ecoregion_Udvardy", 
         read_only=True)
 
-    Ecoregion_WWF_ID = fields.IntegerField(
-        source="Ecoregion_WWF.Ecoregion_WWF_ID",
+    id_ecoregion_wwf = fields.IntegerField(
+        source="Ecoregion_WWF.id_ecoregion_wwf",
         read_only=True
         )    
-    Division_Bailey_ID = fields.IntegerField(
-        source="Division_Bailey.Division_Bailey_ID", 
+    ID_Division_Bailey = fields.IntegerField(
+        source="Division_Bailey.ID_Division_Bailey", 
         read_only=True
         ) 
-    Zone_Holdridge_ID = fields.IntegerField(
-        source="Zone_Holdridge.Zone_Holdridge_ID",
+    ID_Zone_Holdridge = fields.IntegerField(
+        source="Zone_Holdridge.ID_Zone_Holdridge",
         read_only=True) 
-    Vegetation_type_ID = fields.IntegerField(
-        source="Vegetation_type.Vegetation_type_ID", 
+    ID_Vegetation_type = fields.IntegerField(
+        source="Vegetation_type.ID_Vegetation_type", 
         read_only=True) 
 
-    Biome_local_ID = fields.IntegerField(
-        source="Biome_local.Biome_local_ID", 
+    ID_Biome_local = fields.IntegerField(
+        source="Biome_local.ID_Biome_local", 
         read_only=True) 
 
     # Serializer fields are always read only
@@ -195,7 +195,7 @@ class LocationSerializer(serializers.ModelSerializer):
         model = models.Location
         
         fields = (
-            "Location_ID",
+            "ID_Location",
             "Location_name",
             "Plot_name",
             "Plot_size_m2",
@@ -217,26 +217,26 @@ class LocationSerializer(serializers.ModelSerializer):
             "Latitude",
             "Longitude",
             "LatLonString",
-            "Vegetation_type_ID",
-            "Zone_FAO_ID",
-            "Ecoregion_Udvardy_ID",
-            "Zone_Holdridge_ID", 
-            "Ecoregion_WWF_ID",
-            "Division_Bailey_ID", 
-            "Country_ID",
-            "Continent_ID",
-            "Biome_local_ID",
+            "ID_Vegetation_type",
+            "ID_Zone_FAO",
+            "ID_Ecoregion_Udvardy",
+            "ID_Zone_Holdridge", 
+            "id_ecoregion_wwf",
+            "ID_Division_Bailey", 
+            "ID_Country",
+            "ID_Continent",
+            "ID_Biome_local",
             )
 
 
 class LocationGroupSerializer(serializers.ModelSerializer):
 
     Group = LocationSerializer(many=True, source="Locations")
-    Location_group_ID = fields.IntegerField()
+    ID_Location_group = fields.IntegerField()
 
     class Meta:
         model = models.LocationGroup
-        fields = ('Location_group_ID', 'Group',)
+        fields = ('ID_Location_group', 'Group',)
 
      
 class ContinentSerializer(serializers.ModelSerializer):
@@ -251,4 +251,4 @@ class CountrySerializer(serializers.ModelSerializer):
     Continent = fields.CharField(source="Continent.Name")
     class Meta:
         model = models.Country
-        fields = ('Country_ID', 'Name', 'Code', 'Continent')   
+        fields = ('ID_Country', 'Name', 'Code', 'Continent')   

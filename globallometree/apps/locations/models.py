@@ -2,7 +2,7 @@ from django.db import models
 from globallometree.apps.search_helpers.models import BaseModel
 
 class Continent(BaseModel):
-    Continent_ID = models.AutoField(primary_key=True, db_column="continent_id")
+    ID_Continent = models.AutoField(primary_key=True, db_column="id_continent")
     Code = models.CharField(max_length=2, db_column="code")
     Name = models.CharField(max_length=100, db_column="name")
 
@@ -14,7 +14,7 @@ class Continent(BaseModel):
 
 
 class Country(BaseModel):
-    Country_ID = models.AutoField(primary_key=True, db_column="country_id")
+    ID_Country = models.AutoField(primary_key=True, db_column="id_country")
     Common_name = models.CharField(max_length=159, blank=True, db_column="common_name")
     Formal_name = models.CharField(max_length=159, blank=True, db_column="formal_name")
     Common_name_fr = models.CharField(max_length=159, blank=True, db_column="common_name_fr")
@@ -22,7 +22,7 @@ class Country(BaseModel):
     Iso3166a2 = models.CharField(max_length=6, blank=True, db_column="iso3166a2")
     Iso3166a3 = models.CharField(max_length=9, blank=True, db_column="iso3166a3")
     Iso3166n3 = models.IntegerField(null=True, blank=True, db_column="iso3166n3")
-    Continent = models.ForeignKey(Continent, blank=True, null=True, db_column="continent_id")
+    Continent = models.ForeignKey(Continent, blank=True, null=True, db_column="id_continent")
     Centroid_latitude = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=5, db_column="centroid_latitude")
     Centroid_longitude = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=5, db_column="centroid_longitude")
 
@@ -37,7 +37,7 @@ class Country(BaseModel):
 
 
 class ZoneFAO(BaseModel):
-    Zone_FAO_ID = models.AutoField(primary_key=True, db_column="zone_fao_id")
+    ID_Zone_FAO = models.AutoField(primary_key=True, db_column="id_zone_fao")
     Name = models.CharField(max_length=200,  db_column="name")
 
     def __unicode__(self):
@@ -52,7 +52,7 @@ class ZoneFAO(BaseModel):
 
 
 class BiomeLocal(BaseModel):
-    Biome_local_ID = models.AutoField(primary_key=True, db_column="biome_local_id")
+    ID_Biome_local = models.AutoField(primary_key=True, db_column="id_biome_local")
     Reference = models.CharField(max_length=200,  db_column="reference")
     Name = models.CharField(max_length=200,  db_column="name")
 
@@ -67,7 +67,7 @@ class BiomeLocal(BaseModel):
 
 
 class EcoregionUdvardy(BaseModel):
-    Ecoregion_Udvardy_ID = models.AutoField(primary_key=True, db_column="ecoregion_udvardy_id")
+    ID_Ecoregion_Udvardy = models.AutoField(primary_key=True, db_column="id_ecoregion_udvardy")
     Name = models.CharField(max_length=200, db_column="name")
 
     def __unicode__(self):
@@ -81,7 +81,7 @@ class EcoregionUdvardy(BaseModel):
 
 
 class EcoregionWWF(BaseModel):
-    Ecoregion_WWF_ID = models.AutoField(primary_key=True, db_column="ecoregion_wwf_id")
+    id_ecoregion_wwf = models.AutoField(primary_key=True, db_column="id_ecoregion_wwf")
     Name = models.CharField(max_length=200, db_column="name")
 
     def __unicode__(self):
@@ -95,7 +95,7 @@ class EcoregionWWF(BaseModel):
 
 
 class DivisionBailey(BaseModel):
-    Division_Bailey_ID = models.AutoField(primary_key=True, db_column="division_bailey_id")
+    ID_Division_Bailey = models.AutoField(primary_key=True, db_column="id_division_bailey")
     Name = models.CharField(max_length=200, db_column="name")
 
     def __unicode__(self):
@@ -109,7 +109,7 @@ class DivisionBailey(BaseModel):
 
 
 class ZoneHoldridge(BaseModel):
-    Zone_Holdridge_ID = models.AutoField(primary_key=True, db_column="zone_holdridge_id")
+    ID_Zone_Holdridge = models.AutoField(primary_key=True, db_column="id_zone_holdridge")
     Name = models.CharField(max_length=200, db_column="name")
 
     def __unicode__(self):
@@ -123,7 +123,7 @@ class ZoneHoldridge(BaseModel):
 
 
 class VegetationType(BaseModel):
-    Vegetation_type_ID = models.AutoField(primary_key=True, db_column="vegetation_type_id")
+    ID_Vegetation_type = models.AutoField(primary_key=True, db_column="id_vegetation_type")
     Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
 
     def __unicode__(self):
@@ -135,7 +135,7 @@ class VegetationType(BaseModel):
 
 
 class Location(BaseModel):
-    Location_ID = models.AutoField(primary_key=True, db_column="location_id")
+    ID_Location = models.AutoField(primary_key=True, db_column="id_location")
     Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
     Plot_name = models.CharField(
         max_length=30,
@@ -155,20 +155,20 @@ class Location(BaseModel):
     Commune = models.CharField(max_length=255, blank=True, null=True, db_column="commune")
     Province = models.CharField(max_length=255, blank=True, null=True, db_column="province")
     Region = models.CharField(max_length=255, blank=True, null=True, db_column="region")
-    Country = models.ForeignKey(Country, blank=True, null=True, db_column="country_id")
+    Country = models.ForeignKey(Country, blank=True, null=True, db_column="id_country")
     Latitude = models.DecimalField(
         null=True, blank=True, max_digits=12, decimal_places=9, db_column="latitude"
     )
     Longitude = models.DecimalField(
         null=True, blank=True, max_digits=12, decimal_places=9, db_column="longitude"
     )
-    Zone_FAO = models.ForeignKey(ZoneFAO, blank=True, null=True, db_column="zone_fao_id")
-    Ecoregion_Udvardy = models.ForeignKey(EcoregionUdvardy, blank=True, null=True, db_column="ecoregion_udvardy_id")
-    Ecoregion_WWF = models.ForeignKey(EcoregionWWF, blank=True, null=True, db_column="ecoregion_wwf_id")
-    Division_Bailey = models.ForeignKey(DivisionBailey, blank=True, null=True, db_column="division_bailey_id")
-    Zone_Holdridge = models.ForeignKey(ZoneHoldridge, blank=True, null=True, db_column="zone_holdridge_id")
-    Vegetation_type =  models.ForeignKey(VegetationType, blank=True, null=True, db_column="vegetation_type_id")
-    Biome_local =  models.ForeignKey(BiomeLocal, blank=True, null=True, db_column="biome_local_id")
+    Zone_FAO = models.ForeignKey(ZoneFAO, blank=True, null=True, db_column="id_zone_fao")
+    Ecoregion_Udvardy = models.ForeignKey(EcoregionUdvardy, blank=True, null=True, db_column="id_ecoregion_udvardy")
+    Ecoregion_WWF = models.ForeignKey(EcoregionWWF, blank=True, null=True, db_column="id_ecoregion_wwf")
+    Division_Bailey = models.ForeignKey(DivisionBailey, blank=True, null=True, db_column="id_division_bailey")
+    Zone_Holdridge = models.ForeignKey(ZoneHoldridge, blank=True, null=True, db_column="id_zone_holdridge")
+    Vegetation_type =  models.ForeignKey(VegetationType, blank=True, null=True, db_column="id_vegetation_type")
+    Biome_local =  models.ForeignKey(BiomeLocal, blank=True, null=True, db_column="id_biome_local")
 
     def __unicode__(self):
         if self.Name:
@@ -177,27 +177,27 @@ class Location(BaseModel):
             return 'Location %s' % self.pk
 
     class Meta:
-        ordering = ('Location_ID',)
+        ordering = ('ID_Location',)
         db_table = 'locations_location'
 
 
 class LocationGroup(BaseModel):
 
-    Location_group_ID = models.AutoField(primary_key=True, db_column="location_group_id")
+    ID_Location_group = models.AutoField(primary_key=True, db_column="id_location_group")
 
     Dataset = models.ForeignKey(
         'data_sharing.Dataset',
         blank = True,
         null = True,
         help_text = "If group was created from a dataset, the dataset id",
-        db_column="dataset_id"
+        db_column="id_dataset"
         )
 
-    Dataset_Location_group_ID = models.IntegerField(
+    Dataset_ID_Location_group = models.IntegerField(
         blank = True,
         null = True,
         help_text = "If group was created from a dataset, references the local group id in the source dataset",
-        db_column="dataset_location_group_id"
+        db_column="dataset_id_location_group"
         )
 
     Name = models.CharField(

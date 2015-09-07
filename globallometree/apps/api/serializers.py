@@ -60,7 +60,7 @@ class ReferenceSerializer(serializers.ModelSerializer):
     Year = fields.SerializerMethodField()
     class Meta:
         model = source_models.Reference
-        fields = ('Author', 'Year', 'Reference', 'Reference_ID')
+        fields = ('Author', 'Year', 'Reference', 'ID_Reference')
 
     def get_Year(self, obj):
         #Trim 1986b to be 1986
@@ -93,7 +93,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             ModelClass = self.Meta.model
             instance = ModelClass.objects.create(**validated_data)
 
-            species_data['Species_group_ID'] = species_data['Species_group_ID'] + 13
+            species_data['ID_Species_group'] = species_data['ID_Species_group'] + 13
 
             if contributor_data and contributor_data['Name']:
                 instance.Contributor = source_models.Institution.objects.get_or_create(Name=contributor_data['Name'])[0]
@@ -104,7 +104,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             if species_data:
                 species_group, created = taxonomy_models.SpeciesGroup.objects.get_or_create(
                     Dataset=self.context['dataset'],
-                    Dataset_Species_group_ID=species_data['Species_group_ID']
+                    ID_Dataset_Species_group=species_data['ID_Species_group']
                     )
 
                 instance.Species_group = species_group
@@ -182,7 +182,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             if location_data:
                 location_group, created = location_models.LocationGroup.objects.get_or_create(
                     Dataset=self.context['dataset'],
-                    Dataset_Location_group_ID=location_data['Location_group_ID']
+                    Dataset_ID_Location_group=location_data['ID_Location_group']
                     )
                 instance.Location_group = location_group
                 # First time we have seen this location group so we save all the details

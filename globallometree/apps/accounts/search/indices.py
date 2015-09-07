@@ -37,7 +37,7 @@ class UserProfileIndex(MappingType, Indexable):
                 'Name' :  estype_string_not_analyzed,
                 'Institution_name' : estype_string_not_analyzed,
                 'Country' : estype_string_not_analyzed,
-                "Country_ID": estype_long,
+                "ID_Country": estype_long,
                 'Country_3166_3' :  estype_string_not_analyzed,
                 "Latitude": estype_float,
                 "Longitude": estype_float,

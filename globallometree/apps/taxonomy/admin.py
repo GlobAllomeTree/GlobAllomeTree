@@ -14,12 +14,12 @@ from globallometree.apps.taxonomy.models import (
 
 
 class FamilyAdmin(admin.ModelAdmin):
-    list_display = ('Family_ID', 'Name', 'Modified')
+    list_display = ('ID_Family', 'Name', 'Modified')
     search_fields  = ('Name',)
 
 
 class GenusAdmin(admin.ModelAdmin):
-    list_display = ('Genus_ID', 'Name', 'Family',  'Modified')
+    list_display = ('ID_Genus', 'Name', 'Family',  'Modified')
     search_fields  = ('Name','Family__Name', )
     read_only_fields = ('Created', 'Modified')
 
@@ -37,14 +37,14 @@ class SpeciesLocalNameInline(admin.TabularInline):
 
 class SubspeciesAdmin(ImproveRawIdFieldsForm):
     raw_id_fields = ('Species',)
-    list_display = ('Subspecies_ID', 'Name', 'Species', 'Author', 'Modified')
+    list_display = ('ID_Subspecies', 'Name', 'Species', 'Author', 'Modified')
     search_fields  = ('Name','Species__Genus__Family__Name', 'Species__Genus__Name', 'Species__Name' )
     read_only_fields = ('created', 'modified')
 
 
 class SpeciesAdmin(ImproveRawIdFieldsForm):
     raw_id_fields = ('Genus',)
-    list_display = ('Species_ID', 'Name', 'Genus', 'Author', 'Modified')
+    list_display = ('ID_Species', 'Name', 'Genus', 'Author', 'Modified')
     search_fields  = ('Name','Genus__Family__Name', 'Genus__Name', )
     read_only_fields = ('Created', 'Modified')
     inlines = (SpeciesLocalNameInline,)
@@ -66,10 +66,10 @@ class SpeciesDefinitionInline(admin.TabularInline):
 class SpeciesDefinitionAdmin(ImproveRawIdFieldsForm):
     read_only_fields = ('Created', 'Modified')
     raw_id_fields = ( 'Family', 'Genus', 'Species', 'Subspecies')
-    list_display = ('Species_definition_ID', '__unicode__', 'Family', 'Genus', 'Species', 'Subspecies')
+    list_display = ('ID_Species_definition', '__unicode__', 'Family', 'Genus', 'Species', 'Subspecies')
 
 class SpeciesGroupAdmin(admin.ModelAdmin):
-    list_display = ('Species_group_ID', 'Name', 'Modified')
+    list_display = ('ID_Species_group', 'Name', 'Modified')
     search_fields  = ('Name', )
     read_only_fields = ('Created', 'Modified')
     fields = ('Name', )

@@ -4,7 +4,7 @@ from globallometree.apps.taxonomy import models
 
 class SpeciesLocalNameSerializer(serializers.ModelSerializer):
     Language_iso_639 = fields.CharField(source="Language_iso_639_3", required=False)
-    Local_name_ID = fields.CharField(source="Species_local_name_ID", read_only=True, required=False)
+    Local_name_ID = fields.CharField(source="ID_Local_name", read_only=True, required=False)
     class Meta:
         model = models.SpeciesLocalName
         fields = ('Local_name', 'Language_iso_639', 'Local_name_latin', 'Local_name_ID')
@@ -16,19 +16,19 @@ class FamilySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Family
-        fields = ('Family', 'Family_ID', )
+        fields = ('Family', 'ID_Family', )
 
 
 class GenusSerializer(serializers.ModelSerializer):
     Genus = fields.CharField(source="Name")
     Family = fields.CharField(source="Family.Name")
 
-    Genus_ID = fields.IntegerField()
-    Family_ID = fields.IntegerField(source="Family.Family_ID")
+    ID_Genus = fields.IntegerField()
+    ID_Family = fields.IntegerField(source="Family.ID_Family")
     
     class Meta:
         model = models.Genus
-        fields = ('Family', 'Genus', 'Family_ID', 'Genus_ID')
+        fields = ('Family', 'Genus', 'ID_Family', 'ID_Genus')
 
 
 class SpeciesSerializer(serializers.ModelSerializer):
@@ -40,8 +40,8 @@ class SpeciesSerializer(serializers.ModelSerializer):
         many = True,
         source = 'Local_names'
         )
-    Genus_ID = fields.IntegerField(source="Genus.Genus_ID")
-    Family_ID = fields.IntegerField(source="Genus.Family.Family_ID")
+    ID_Genus = fields.IntegerField(source="Genus.ID_Genus")
+    ID_Family = fields.IntegerField(source="Genus.Family.ID_Family")
     Species_author = fields.CharField(source="Author")
 
     class Meta:
@@ -51,9 +51,9 @@ class SpeciesSerializer(serializers.ModelSerializer):
                   'Species',
                   'Species_author',
                   'Species_local_names',
-                  'Family_ID',
-                  'Genus_ID',
-                  'Species_ID',
+                  'ID_Family',
+                  'ID_Genus',
+                  'ID_Species',
                   'Species_author'
                   )
 
@@ -67,9 +67,9 @@ class SubspeciesSerializer(serializers.ModelSerializer):
         required=False,
         source = 'Species.Local_names'
         )
-    Species_ID = fields.IntegerField(source="Species.Species_ID")
-    Family_ID = fields.IntegerField(source="Species.Genus.Family.Family_ID")
-    Genus_ID = fields.IntegerField(source="Species.Genus.Genus_ID")
+    ID_Species = fields.IntegerField(source="Species.ID_Species")
+    ID_Family = fields.IntegerField(source="Species.Genus.Family.ID_Family")
+    ID_Genus = fields.IntegerField(source="Species.Genus.ID_Genus")
 
     Subspecies = fields.CharField(source="Name")
   
@@ -91,10 +91,10 @@ class SubspeciesSerializer(serializers.ModelSerializer):
                   'Subspecies',
                   'Species_author',
                   'Species_local_names',
-                  'Family_ID',
-                  'Genus_ID',
-                  'Species_ID',
-                  'Subspecies_ID',
+                  'ID_Family',
+                  'ID_Genus',
+                  'ID_Species',
+                  'ID_Subspecies',
                   )
 
 
@@ -118,10 +118,10 @@ class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
 
     Scientific_name = fields.CharField(read_only=True, allow_null=True)
 
-    Family_ID = fields.IntegerField(required=False,allow_null=True, source='Family.pk')
-    Genus_ID = fields.IntegerField(required=False,allow_null=True, source='Genus.pk')
-    Species_ID = fields.IntegerField(required=False,allow_null=True, source='Species.pk')
-    Subspecies_ID = fields.IntegerField(required=False,allow_null=True, source='Subspecies.pk')
+    ID_Family = fields.IntegerField(required=False,allow_null=True, source='Family.pk')
+    ID_Genus = fields.IntegerField(required=False,allow_null=True, source='Genus.pk')
+    ID_Species = fields.IntegerField(required=False,allow_null=True, source='Species.pk')
+    ID_Subspecies = fields.IntegerField(required=False,allow_null=True, source='Subspecies.pk')
    
 
     def get_Species_author(self, obj):
@@ -142,10 +142,10 @@ class SpeciesDefinitionSerializer((serializers.ModelSerializer)):
             'Species_author',
             'Species_local_names',
             'Scientific_name',
-            'Family_ID',
-            'Genus_ID',
-            'Species_ID',
-            'Subspecies_ID'
+            'ID_Family',
+            'ID_Genus',
+            'ID_Species',
+            'ID_Subspecies'
             )
 
 
@@ -153,20 +153,20 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
     # Note that the Group is returned from a method on 
     # the SpeciesGroup model
     Group = SpeciesDefinitionSerializer(many=True, source='Species_definitions')
-    Species_group_ID = fields.IntegerField()
+    ID_Species_group = fields.IntegerField()
     
     class Meta: 
         model = models.SpeciesGroup
-        fields = ('Species_group_ID', 'Group')
+        fields = ('ID_Species_group', 'Group')
 
   
     @staticmethod       
     def match_species_def_to_db(species_def):
         # Don't trust the ids we were given
-        species_def['Family_ID'] = None
-        species_def['Species_ID'] = None
-        species_def['Genus_ID'] = None
-        species_def['Subspecies_ID'] = None
+        species_def['ID_Family'] = None
+        species_def['ID_Species'] = None
+        species_def['ID_Genus'] = None
+        species_def['ID_Subspecies'] = None
 
         species_def['db_family'] = None
         species_def['db_genus'] = None
@@ -176,7 +176,7 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
         # Family and Genus are required by the parser
         try:
             species_def['db_family'] = models.Family.objects.get(Name=species_def['Family']['Name'])
-            species_def['Family_ID'] = species_def['db_family'].pk
+            species_def['ID_Family'] = species_def['db_family'].pk
         except models.Family.DoesNotExist:
             pass
             
@@ -187,7 +187,7 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
                     Family=species_def['db_family'],
                     Name=species_def['Genus']['Name']
                     )
-                species_def['Genus_ID'] = species_def['db_genus'].pk
+                species_def['ID_Genus'] = species_def['db_genus'].pk
             except models.Genus.DoesNotExist:
                 pass
                 
@@ -197,7 +197,7 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
                 species_def['db_species'] = models.Species.objects.get(
                     Genus=species_def['db_genus'],
                     Name=species_def['Species']['Name'])
-                species_def['Species_ID'] = species_def['db_species'].pk
+                species_def['ID_Species'] = species_def['db_species'].pk
 
                 if len(species_def['Species']['Local_names']):
                     for index, sln in enumerate(species_def['Species']['Local_names']):

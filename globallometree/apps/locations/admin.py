@@ -16,7 +16,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ('Location_ID', 'Name', 'Region', 'Country', 'Latitude', 'Longitude', 'Zone_FAO','Modified')
+    list_display = ('ID_Location', 'Name', 'Region', 'Country', 'Latitude', 'Longitude', 'Zone_FAO','Modified')
     list_filter  = ('Country',)
     search_fields = ('Name', 'Region')
 
@@ -38,7 +38,7 @@ class VegetationTypeAdmin(admin.ModelAdmin):
 
 
 class LocationGroupAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Dataset', 'Dataset_Location_group_ID', 'Modified')
+    list_display = ('Name', 'Dataset', 'Dataset_ID_Location_group', 'Modified')
     list_filter  = ('Dataset',)
     search_fields = ('Name',)
     exclude = ('Locations',)

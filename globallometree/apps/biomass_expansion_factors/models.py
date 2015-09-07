@@ -9,7 +9,7 @@ from globallometree.apps.search_helpers.models import LinkedBaseModel
 
 class BiomassExpansionFactor(LinkedBaseModel):
 
-    Biomass_expansion_factor_ID = models.AutoField(primary_key=True, db_column="biomass_expansion_factor_id")
+    ID_BEF = models.AutoField(primary_key=True, db_column="id_bef")
 
     Growing_stock = models.DecimalField(
         null=True, blank=True, max_digits=16, decimal_places=10,

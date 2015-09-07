@@ -7,17 +7,17 @@ from globallometree.apps.data_sharing.models import Dataset
 class TaxonomyModel(BaseModel):
     TPL_Status = models.CharField(max_length=80, blank=True, null=True, db_column="tpl_status")
     TPL_Confidence_level = models.CharField(max_length=10, blank=True, null=True, db_column="tpl_confidence_level")
-    TPL_ID = models.CharField(max_length=40, blank=True, null=True, db_column="tpl_ip")
+    TPL_ID = models.CharField(max_length=40, blank=True, null=True, db_column="tpl_id")
     class Meta:
         abstract = True
 
 class Family(TaxonomyModel):
-    Family_ID = models.AutoField(primary_key=True, db_column="family_id")
+    ID_Family = models.AutoField(primary_key=True, db_column="id_family")
     Name = models.CharField(max_length=120, null=True, blank=True, db_column="name")
 
     class Meta:
         verbose_name_plural = 'Families'
-        ordering = ('Family_ID',)
+        ordering = ('ID_Family',)
         db_table = 'taxonomy_family'
         
     def __unicode__(self):
@@ -25,13 +25,13 @@ class Family(TaxonomyModel):
 
 
 class Genus(TaxonomyModel):
-    Genus_ID = models.AutoField(primary_key=True, db_column="genus_id")
+    ID_Genus = models.AutoField(primary_key=True, db_column="id_genus")
     Name  = models.CharField(max_length=120, db_column="name")
-    Family = models.ForeignKey(Family, db_column="family_id")
+    Family = models.ForeignKey(Family, db_column="id_family")
 
     class Meta:
         verbose_name_plural = 'Genera'
-        ordering = ('Genus_ID',)
+        ordering = ('ID_Genus',)
         db_table = 'taxonomy_genus'
 
     def __unicode__(self):
@@ -39,14 +39,14 @@ class Genus(TaxonomyModel):
  
 
 class Species(TaxonomyModel):
-    Species_ID = models.AutoField(primary_key=True, db_column="species_id")
+    ID_Species = models.AutoField(primary_key=True, db_column="id_species")
     Name = models.CharField(max_length=120, db_column="name")
-    Genus = models.ForeignKey(Genus, db_column="genus_id")
+    Genus = models.ForeignKey(Genus, db_column="id_genus")
     Author = models.CharField(max_length=120, db_column="author", blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Species'
-        ordering = ('Species_ID',)
+        ordering = ('ID_Species',)
         db_table = 'taxonomy_species'
 
     def __unicode__(self):
@@ -54,14 +54,14 @@ class Species(TaxonomyModel):
 
 
 class Subspecies(TaxonomyModel):
-    Subspecies_ID = models.AutoField(primary_key=True, db_column="subspecies_id")
+    ID_Subspecies = models.AutoField(primary_key=True, db_column="id_subspecies")
     Name = models.CharField(max_length=120, db_column="name")
-    Species = models.ForeignKey(Species, db_column="species_id")
+    Species = models.ForeignKey(Species, db_column="id_species")
     Author = models.CharField(max_length=120, db_column="author", blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Subspecies'
-        ordering = ('Subspecies_ID',)
+        ordering = ('ID_Subspecies',)
         db_table = 'taxonomy_subspecies'
 
     def __unicode__(self):
@@ -70,9 +70,9 @@ class Subspecies(TaxonomyModel):
 
 class SpeciesLocalName(BaseModel):
 
-    Species_local_name_ID = models.AutoField(primary_key=True, db_column="species_local_name_id")
+    ID_Local_name = models.AutoField(primary_key=True, db_column="id_local_name")
     
-    Species = models.ForeignKey(Species, related_name="Local_names", db_column="species_id")
+    Species = models.ForeignKey(Species, related_name="Local_names", db_column="id_species")
 
     Local_name = models.CharField(
         max_length=120,
@@ -98,15 +98,15 @@ class SpeciesLocalName(BaseModel):
 
     class Meta:
         db_table = "taxonomy_species_local_name"
-        ordering = ("Species_local_name_ID",)
+        ordering = ("ID_Local_name",)
 
 
 class SpeciesDefinition(BaseModel):
-    Species_definition_ID = models.AutoField(primary_key=True, db_column="species_definition_id")
-    Family = models.ForeignKey(Family, db_column="family_id")
-    Genus = models.ForeignKey(Genus, blank=True, null=True, db_column="genus_id")
-    Species = models.ForeignKey(Species, blank=True, null=True, db_column="species_id")
-    Subspecies = models.ForeignKey(Subspecies, blank=True, null=True, db_column="subspecies_id")
+    ID_Species_definition = models.AutoField(primary_key=True, db_column="id_species_definition")
+    Family = models.ForeignKey(Family, db_column="id_family")
+    Genus = models.ForeignKey(Genus, blank=True, null=True, db_column="id_genus")
+    Species = models.ForeignKey(Species, blank=True, null=True, db_column="id_species")
+    Subspecies = models.ForeignKey(Subspecies, blank=True, null=True, db_column="subid_species")
 
     def Scientific_name(self):
         scientific_name = ''
@@ -140,14 +140,14 @@ class SpeciesDefinition(BaseModel):
 
     class Meta:
         db_table = "taxonomy_species_definition"
-        ordering = ("Species_definition_ID",)
+        ordering = ("ID_Species_definition",)
 
 
 class SpeciesGroup(BaseModel):
 
-    Species_group_ID = models.AutoField(
+    ID_Species_group = models.AutoField(
         primary_key=True,
-        db_column="species_group_id"
+        db_column="id_species_group"
         )
 
     Dataset = models.ForeignKey(
@@ -155,14 +155,14 @@ class SpeciesGroup(BaseModel):
         blank = True,
         null = True,
         help_text = "If group was created from a dataset, the dataset id",
-        db_column="dataset_id"
+        db_column="id_dataset"
         )
 
-    Dataset_Species_group_ID = models.IntegerField(
+    ID_Dataset_Species_group = models.IntegerField(
         blank = True,
         null = True,
         help_text = "If group was created from a dataset, references the local group id in the source dataset",
-        db_column="dataset_species_group_id"
+        db_column="dataset_id_species_group"
     )
 
     Name = models.CharField(
@@ -181,7 +181,7 @@ class SpeciesGroup(BaseModel):
 
     class Meta:
         db_table = "taxonomy_species_group"
-        ordering = ('Species_group_ID',)
+        ordering = ('ID_Species_group',)
 
     def save(self, *args, **kwargs):
 

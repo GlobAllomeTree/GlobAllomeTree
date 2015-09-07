@@ -19,9 +19,9 @@ class TreeTypeAdmin(admin.ModelAdmin):
 
 class AllometricEquationAdmin(ImproveRawIdFieldsForm):
     raw_id_fields = ('Species_group','Location_group','Reference')
-    list_display = ("Allometric_equation_ID", 'Equation', 'Modified')
-    ordering = ("Allometric_equation_ID",)
-    search_fields  = ("Allometric_equation_ID",)
+    list_display = ("ID_AE", 'Equation', 'Modified')
+    ordering = ("ID_AE",)
+    search_fields  = ("ID_AE",)
     
     fieldsets = [
         ('Identification',   {'fields': [

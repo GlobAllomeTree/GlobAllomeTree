@@ -3,7 +3,7 @@ from globallometree.apps.search_helpers.models import BaseModel
 
 
 class Reference(BaseModel):
-    Reference_ID = models.AutoField(primary_key=True, db_column="reference_id")
+    ID_Reference = models.AutoField(primary_key=True, db_column="id_reference")
     Author = models.CharField(max_length=200, null=True, blank=True, db_column="author")
     Year = models.CharField(max_length=12, null=True, blank=True, db_column="year")
     Reference = models.TextField(null=True, blank=True, db_column="reference")

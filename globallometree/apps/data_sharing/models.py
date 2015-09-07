@@ -23,7 +23,7 @@ class DataLicense(BaseModel):
         ('none', 'No expiry'),
         )
 
-    Data_license_ID = models.AutoField(primary_key=True, db_column="data_license_id")
+    ID_Data_license = models.AutoField(primary_key=True, db_column="id_data_license")
 
     Title = models.CharField(
         verbose_name='License Title',
@@ -155,7 +155,7 @@ class DataLicense(BaseModel):
 
 class Dataset(BaseModel):
 
-    Dataset_ID = models.AutoField(primary_key=True, db_column="dataset_id")
+    ID_Dataset = models.AutoField(primary_key=True, db_column="id_dataset")
 
     User = models.ForeignKey(
         User,
@@ -221,7 +221,7 @@ class Dataset(BaseModel):
 
     Data_license = models.ForeignKey(
         DataLicense,
-        db_column="data_license_id",
+        db_column="id_data_license",
         verbose_name = 'License',
     )
 
@@ -280,7 +280,7 @@ class DataSharingAgreement(BaseModel):
         ('denied', "Denied")
         )
 
-    Data_sharing_agreement_ID = models.AutoField(primary_key=True, db_column="data_sharing_agreement_id")
+    ID_Data_sharing_agreement = models.AutoField(primary_key=True, db_column="id_data_sharing_agreement")
 
     User = models.ForeignKey(
         User,
@@ -289,7 +289,7 @@ class DataSharingAgreement(BaseModel):
     )
 
     Dataset = models.ForeignKey(
-        Dataset, db_column="dataset_id")
+        Dataset, db_column="id_dataset")
 
     Agreement_status = models.CharField(
         max_length=15,

@@ -76,7 +76,7 @@ def restrict_access(record, index_name, user):
         try:
             data_sharing_agreement = DataSharingAgreement.objects.get(
                 User=user,
-                Dataset_id = record['Dataset']['Dataset_ID']
+                Dataset_id = record['Dataset']['ID_Dataset']
                 )
             if data_sharing_agreement.Agreement_status == 'granted':
                 record['Dataset']['User_has_access'] = True
@@ -88,7 +88,7 @@ def restrict_access(record, index_name, user):
             # If the dataset belongs to the user, then return true
             dataset = Dataset.objects.get(
                 User=user,
-                pk=record['Dataset']['Dataset_ID']
+                pk=record['Dataset']['ID_Dataset']
                 )
             record['Dataset']['User_has_access'] = True
             return record
@@ -118,14 +118,14 @@ def summarize_data(data):
         record = data[r_i]
         for sp_i in range(0, len(record['Species_group']['Group'])):
             species_def = record['Species_group']['Group'][sp_i]
-            if species_def['Family'] and not species_def['Family_ID']:
+            if species_def['Family'] and not species_def['ID_Family']:
                 new_record = {
                     "Family": species_def['Family']
                 }
                 if new_record not in new_families:
                     new_families.append(new_record)
 
-            if species_def['Genus'] and not species_def['Genus_ID']:
+            if species_def['Genus'] and not species_def['ID_Genus']:
                 new_record = {
                     "Family": species_def['Family'],
                     "Genus": species_def['Genus']
@@ -133,7 +133,7 @@ def summarize_data(data):
                 if new_record not in new_genera:
                     new_genera.append(new_record)
 
-            if species_def['Species'] and not species_def['Species_ID']: 
+            if species_def['Species'] and not species_def['ID_Species']: 
                 new_record= {
                     "Family": species_def['Family'],
                     "Genus": species_def['Genus'],
@@ -142,7 +142,7 @@ def summarize_data(data):
                 if new_record not in new_species:
                     new_species.append(new_record)
 
-            if species_def['Subspecies'] and not species_def['Subspecies_ID']: 
+            if species_def['Subspecies'] and not species_def['ID_Subspecies']: 
                 new_record = {
                     "Family": species_def['Family'],
                     "Genus": species_def['Genus'],
@@ -278,27 +278,27 @@ def match_data_to_database(data):
         record = data[r_i]
         for sp_i in range(0, len(record['Species_group']['Group'])):
             species_def = record['Species_group']['Group'][sp_i]
-            record['Species_group']['Group'][sp_i] = match_or_clean_species_ids(species_def)
+            record['Species_group']['Group'][sp_i] = match_or_clean_id_speciess(species_def)
         data[r_i] = record
         
     return data
 
-def match_or_clean_species_ids(species_def):
+def match_or_clean_id_speciess(species_def):
 
     db_family = None
     db_genus = None
     db_species = None
     db_subspecies = None
 
-    species_def['Family_ID'] = None
-    species_def['Species_ID'] = None
-    species_def['Genus_ID'] = None
-    species_def['Subspecies_ID'] = None
+    species_def['ID_Family'] = None
+    species_def['ID_Species'] = None
+    species_def['ID_Genus'] = None
+    species_def['ID_Subspecies'] = None
 
     # Family and Genus are required by the parser
     try:
         db_family = Family.objects.get(Name=species_def['Family'])
-        species_def['Family_ID'] = db_family.pk
+        species_def['ID_Family'] = db_family.pk
     except Family.DoesNotExist:
         pass
         
@@ -309,7 +309,7 @@ def match_or_clean_species_ids(species_def):
                 Family=db_family,
                 Name=species_def['Genus']
                 )
-            species_def['Genus_ID'] = db_genus.pk
+            species_def['ID_Genus'] = db_genus.pk
         except Genus.DoesNotExist:
             pass
             
@@ -319,7 +319,7 @@ def match_or_clean_species_ids(species_def):
             db_species = Species.objects.get(
                 Genus=db_genus,
                 Name=species_def['Species'])
-            species_def['Species_ID'] = db_species.pk
+            species_def['ID_Species'] = db_species.pk
         except Species.DoesNotExist:
             pass
 

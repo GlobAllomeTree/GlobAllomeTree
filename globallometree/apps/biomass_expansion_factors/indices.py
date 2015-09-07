@@ -36,7 +36,7 @@ class BiomassExpansionFactorIndex(MappingType, Indexable):
 
         mapping = {
             "properties": {
-                "Biomass_expansion_factor_ID": estype_long,
+                "ID_BEF": estype_long,
                 "Growing_stock": estype_float,
                 "Aboveground_biomass": estype_float,
                 "Net_annual_increment": estype_float,

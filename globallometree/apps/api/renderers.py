@@ -113,11 +113,11 @@ class CSVRenderer(BaseRenderer):
                     'Reference_author': reference['Author'],
                     'Reference_year': reference['Year'],
                     'Reference': reference['Reference'],
-                   # 'Reference_ID': reference['Reference_ID']
+                   # 'ID_Reference': reference['ID_Reference']
                     })
 
             # Direct call to the species group api endpoint
-            if 'Species_group_ID' in line.keys():
+            if 'ID_Species_group' in line.keys():
                 self.add_species_definition_headers()
                 for item in line.pop('Group'):
                     nested_rows_added = True
@@ -127,13 +127,13 @@ class CSVRenderer(BaseRenderer):
             if 'Species_group' in line.keys():
                 self.add_species_definition_headers()
                 species_group = line.pop('Species_group')
-                line.update({'Species_group_ID': species_group.pop('Species_group_ID')})
+                line.update({'ID_Species_group': species_group.pop('ID_Species_group')})
                 for item in species_group.pop('Group'):
                     nested_rows_added = True
                     rows += self.get_species_definition_rows(dict(item), line)
 
             # Direct call to the location group api endpoint
-            if 'Location_group_ID' in line.keys():
+            if 'ID_Location_group' in line.keys():
                 self.add_location_headers()
                 for item in line.pop('Group'):
                     nested_rows_added = True
@@ -143,7 +143,7 @@ class CSVRenderer(BaseRenderer):
             if 'Location_group' in line.keys():
                 self.add_location_headers()
                 location_group = line.pop('Location_group')
-                line.update({'Location_group_ID': location_group.pop('Location_group_ID')})
+                line.update({'ID_Location_group': location_group.pop('ID_Location_group')})
                 for item in location_group.pop('Group'):
                     nested_rows_added = True
                     rows += self.get_location_rows(dict(item), line)
@@ -197,16 +197,16 @@ class CSVRenderer(BaseRenderer):
                         'Species_local_name': local_name['Local_name'], 
                         'Species_local_name_iso': local_name['Language_iso_639'], 
                         'Species_local_name_latin': local_name['Local_name_latin'], 
-                        'Species_local_name_ID': local_name['Local_name_ID'], 
+                        'ID_Local_name': local_name['Local_name_ID'], 
                     })
                 rows.append(row)
 
         return rows
 
     def add_location_headers(self):
-        if 'Location_ID' not in self.headers:
+        if 'ID_Location' not in self.headers:
             self.headers += [
-                               # "Location_ID",
+                               # "ID_Location",
                                 "Location_name",
                                 "Plot_name",
                                 "Plot_size_m2",
@@ -226,14 +226,14 @@ class CSVRenderer(BaseRenderer):
                                 "Latitude",
                                 "Longitude",
                                 #"LatLonString",
-                                #"Zone_FAO_ID",
-                                #"Ecoregion_Udvardy_ID",
-                                #"Zone_Holdridge_ID",
-                                #"Ecoregion_WWF_ID",
-                                #"Division_Bailey_ID",
-                                #"Country_ID",
-                                #"Continent_ID",
-                                #"Vegetation_type_ID"
+                                #"ID_Zone_FAO",
+                                #"ID_Ecoregion_Udvardy",
+                                #"ID_Zone_Holdridge",
+                                #"id_ecoregion_wwf",
+                                #"ID_Division_Bailey",
+                                #"ID_Country",
+                                #"ID_Continent",
+                                #"ID_Vegetation_type"
                                ]
 
     def add_species_definition_headers(self):
@@ -244,10 +244,10 @@ class CSVRenderer(BaseRenderer):
                            'Species',
                            'Subspecies',
                            'Species_author', 
-                           #'Family_ID', 
-                           #'Genus_ID',
-                           #'Species_ID', 
-                           #'Subspecies_ID'
+                           #'ID_Family', 
+                           #'ID_Genus',
+                           #'ID_Species', 
+                           #'ID_Subspecies'
                            ]
         self.add_species_local_name_headers()
 
@@ -257,7 +257,7 @@ class CSVRenderer(BaseRenderer):
                            'Species_local_name', 
                            'Species_local_name_iso', 
                            'Species_local_name_latin', 
-                           #'Species_local_name_ID',
+                           #'ID_Local_name',
                            ]
 
     def add_reference_headers(self):
@@ -266,6 +266,6 @@ class CSVRenderer(BaseRenderer):
                 'Reference_author',
                 'Reference_year',
                 'Reference',
-                #'Reference_ID',
+                #'ID_Reference',
                 ]
 

@@ -29,36 +29,36 @@ estype_reference = {
                     "properties": {
                         "Author": estype_string_not_analyzed,
                         "Reference": estype_string_not_analyzed,
-                        "Reference_ID": estype_long,
+                        "ID_Reference": estype_long,
                         "Year": estype_long
                         }
                     }
 
 estype_location_group = {
                             "properties": {
-                                "Location_group_ID": estype_long,
+                                "ID_Location_group": estype_long,
                                 "Group": {
                                     "properties": {
                                         "Zone_FAO": estype_string_not_analyzed,
-                                        "Zone_FAO_ID": estype_string_not_analyzed,
+                                        "ID_Zone_FAO": estype_string_not_analyzed,
                                         "Zone_Holdridge": estype_string_not_analyzed,
-                                        "Zone_Holdridge_ID": estype_string_not_analyzed,
+                                        "ID_Zone_Holdridge": estype_string_not_analyzed,
                                         "Ecoregion_Udvardy": estype_string_not_analyzed,
-                                        "Ecoregion_Udvardy_ID": estype_long,
+                                        "ID_Ecoregion_Udvardy": estype_long,
                                         "Ecoregion_WWF": estype_string_not_analyzed,
-                                        "Ecoregion_WWF_ID": estype_long,
+                                        "id_ecoregion_wwf": estype_long,
                                         "Biome_local": estype_string_not_analyzed,
                                         "Biome_local_reference": estype_string_not_analyzed,
-                                        "Biome_local_ID": estype_long,
+                                        "ID_Biome_local": estype_long,
                                         "Country": estype_string_not_analyzed,
                                         "Country_3166_3" : estype_string_not_analyzed,
-                                        "Country_ID": estype_long,
+                                        "ID_Country": estype_long,
                                         "Division_Bailey": estype_string_not_analyzed,
-                                        "Division_Bailey_ID": estype_long,
+                                        "ID_Division_Bailey": estype_long,
                                         "Latitude": estype_float,
                                         "Longitude": estype_float,
                                         "LatLonString": estype_string_not_analyzed,
-                                        "Location_ID": estype_long,
+                                        "ID_Location": estype_long,
                                         "Name": estype_string_not_analyzed,
                                         "Geohash": estype_geopoint_geohash,
                                         "Plot_name": estype_string_not_analyzed,
@@ -75,11 +75,11 @@ estype_species_group = {
                                 "properties": {
                                     "Scientific_name" : estype_string_not_analyzed,
                                     "Family": estype_string_not_analyzed,
-                                    "Family_ID": estype_long,
+                                    "ID_Family": estype_long,
                                     "Genus": estype_string_not_analyzed,
-                                    "Genus_ID": estype_long,
+                                    "ID_Genus": estype_long,
                                     "Species": estype_string_not_analyzed,
-                                    "Species_ID": estype_long,
+                                    "ID_Species": estype_long,
                                     "Subspecies": estype_string_not_analyzed,
                                     "Species_author": estype_string_not_analyzed,
                                     "Species_local_names": { 
@@ -92,7 +92,7 @@ estype_species_group = {
                                     },
                                 }
                             },
-                            "Species_group_ID": estype_long
+                            "ID_Species_group": estype_long
                         }
                     }
 

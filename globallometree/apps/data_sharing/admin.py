@@ -69,7 +69,7 @@ class DatasetForm(forms.ModelForm):
 
 class DatasetAdmin(admin.ModelAdmin):
     actions = ['run_import']
-    list_display = ('Dataset_ID', 'Title',  'Imported', 'Marked_for_import', 'Import_error', 'Record_count', 'Records_imported', 'User', 'Data_type',  'Data_license', 'Created')
+    list_display = ('ID_Dataset', 'Title',  'Imported', 'Marked_for_import', 'Import_error', 'Record_count', 'Records_imported', 'User', 'Data_type',  'Data_license', 'Created')
     search_fields  = ['Title', 'Description']
     raw_id_fields = ('User',)
     exclude = ('Data_as_json',)
@@ -185,7 +185,7 @@ class DatasetAdmin(admin.ModelAdmin):
     def run_import(self, request, queryset):
         import_confirmed = request.POST.get('run', False)
         if import_confirmed:
-            dataset = models.Dataset.objects.get(pk=request.POST.get('dataset_id'))
+            dataset = models.Dataset.objects.get(pk=request.POST.get('id_dataset'))
         else:
             #Make sure that there are some selected rows 
             n = queryset.count()
