@@ -51,6 +51,7 @@ class DatasetForm(forms.ModelForm):
    def clean(self):
         if 'Uploaded_dataset_file' in self.cleaned_data.keys() and \
         self.cleaned_data['Uploaded_dataset_file'] is not None and \
+        'Data_type' in self.cleaned_data.keys() and \
         not hasattr(self.cleaned_data['Uploaded_dataset_file'], '_committed'):
                 data, data_errors = validate_data_file(
                     self.cleaned_data['Uploaded_dataset_file'], 

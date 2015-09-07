@@ -60,7 +60,6 @@ class Command(BaseCommand):
                 SerializerClass = Serializers[dataset.Data_type] 
                 serializer = SerializerClass(data=data, many=True, context={'dataset': dataset})
                 if serializer.is_valid(): # Must call is valid before calling save
-
                     serializer.save()                  
                     # records imported gets augmented inside the serializer 
                     if dataset.Records_imported == dataset.Record_count:
@@ -72,7 +71,6 @@ class Command(BaseCommand):
                 else:
                     raise Exception("The dataset could not be validated and was not imported.") 
             except:
-                import pdb; pdb.set_trace()
                 dataset.Import_error = True
                 dataset.Import_error_details = traceback.format_exc()
                 dataset.Marked_for_import = False

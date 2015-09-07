@@ -189,13 +189,13 @@ def record_by_id_pdf_view(request, id, model_class,
             path = os.path.join(settings.PROJECT_PATH, 'templates', 'static') +  uri[7:]
         return path
 
-    buffer = StringIO.StringIO()
-    pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")),
-                      buffer,
-                      link_callback=fetch_resources)
+    result = StringIO.StringIO()
+    pisa.pisaDocument(
 
-    pdf = buffer.getvalue()
-    buffer.close()
+        StringIO.StringIO(html.encode("UTF-8")), result, encoding='UTF-8',link_callback=fetch_resources)
+
+    pdf = result.getvalue()
+    result.close()
     
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(content_type='application/pdf')

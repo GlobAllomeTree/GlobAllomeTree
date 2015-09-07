@@ -99,10 +99,10 @@ class LinkedModelSerializer(serializers.ModelSerializer):
 
             ModelClass = self.Meta.model
 
-            if validated_data['TreeType']['Name']:
-                validated_data['TreeType'] = search_helper_models.TreeType.objects.get(Name=validated_data['TreeType']['Name'])
+            if validated_data['Tree_type']['Name']:
+                validated_data['Tree_type'] = search_helper_models.TreeType.objects.get(Name=validated_data['Tree_type']['Name'])
             else:
-                validated_data['TreeType'] = None
+                validated_data['Tree_type'] = None
 
             instance = ModelClass.objects.create(**validated_data)
 

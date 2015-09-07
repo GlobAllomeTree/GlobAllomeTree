@@ -3,8 +3,8 @@ from globallometree.apps.taxonomy import models
 
 
 class SpeciesLocalNameSerializer(serializers.ModelSerializer):
-    Language_iso_639 = fields.CharField(source="Language_iso_639_3", required=False)
-    Local_name_ID = fields.CharField(source="ID_Local_name", read_only=True, required=False)
+    Language_iso_639 = fields.CharField(source="Language_iso_639_3", required=False, allow_null=True)
+    Local_name_ID = fields.CharField(source="ID_Local_name", read_only=True)
     class Meta:
         model = models.SpeciesLocalName
         fields = ('Local_name', 'Language_iso_639', 'Local_name_latin', 'Local_name_ID')
@@ -226,6 +226,5 @@ class SpeciesGroupSerializer(serializers.ModelSerializer):
             except models.Subspecies.DoesNotExist:
                 pass
 
-        import pdb; pdb.set_trace()
 
         return species_def

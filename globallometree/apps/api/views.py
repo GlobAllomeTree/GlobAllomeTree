@@ -34,9 +34,12 @@ from globallometree.apps.taxonomy.models import (
 
 from globallometree.apps.allometric_equations.models import (
     Population, 
-    TreeType, 
     AllometricEquation
 	)	
+
+from globallometree.apps.base.models import (
+    TreeType
+    )
 
 from globallometree.apps.wood_densities.models import (
     WoodDensity

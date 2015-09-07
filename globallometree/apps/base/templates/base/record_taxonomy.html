@@ -28,7 +28,17 @@
                         <td >{{ species_def.Subspecies }}</td>
                         <td >{{ species_def.Species_author }}</td>
                         <td >{% for local_name in species_def.Species_local_names %}
-                                {{ local_name.Local_name}} <span style="color:#999;padding-left:10px">{{ local_name.Local_name_latin}} ({{ local_name.Language_iso_639 }}) </span><br>
+                                {{ local_name.Local_name}} <span style="color:#999;padding-left:10px">
+
+                                {% if local_name.Local_name_latin %}
+                                    {{ local_name.Local_name_latin}}
+                                {% endif %}
+                                
+                                {% if local_name.Language_iso_639 %}
+                                    ({{ local_name.Language_iso_639 }}) 
+                                {% endif %}
+
+                                 </span><br>
                              {% endfor %}
                         </td>
                         </tr>
