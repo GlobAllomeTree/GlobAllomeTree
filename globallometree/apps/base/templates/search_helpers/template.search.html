@@ -4,24 +4,24 @@
 {% block add_to_header %}
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
-    <link rel="stylesheet" href="{% static 'search_helpers/css/search.css' %}" />
+    <link rel="stylesheet" href="{% static 'base/css/search.css' %}" />
     <link rel="stylesheet" href="{% static 'css/typeahead.css' %}" />
 
 {% endblock %}
 
 {% block script %}
-    {% include 'search_helpers/search_app_config.html' %}
+    {% include 'base/search_app_config.html' %}
 
-    <script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
+    <script src="{% static 'base/js/elastic.min.js' %}"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
 
-    <script src="{% static 'search_helpers/js/geohash.js' %}"></script>
-    <script src="{% static 'search_helpers/js/typeahead.js' %}"></script>
+    <script src="{% static 'base/js/geohash.js' %}"></script>
+    <script src="{% static 'base/js/typeahead.js' %}"></script>
 
-    <script src="{% static 'search_helpers/js/search.js' %}"></script>
-    <script src="{% static 'search_helpers/js/list.js' %}"></script>
-    <script src="{% static 'search_helpers/js/map.js' %}"></script>
+    <script src="{% static 'base/js/search.js' %}"></script>
+    <script src="{% static 'base/js/list.js' %}"></script>
+    <script src="{% static 'base/js/map.js' %}"></script>
 
     <script src="{% static configuration_js_file %}"></script>
 
@@ -167,7 +167,7 @@
         				<div id="map"></div>
         			</div>
                     <div class="tab-pane" id="search-summary">
-                        {% include 'search_helpers/search_summary.html'%}
+                        {% include 'base/search_summary.html'%}
                     </div>
                 </div>
         	</div>	

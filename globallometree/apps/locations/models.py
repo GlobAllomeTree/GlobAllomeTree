@@ -1,5 +1,5 @@
 from django.db import models
-from globallometree.apps.search_helpers.models import BaseModel
+from globallometree.apps.base.models import BaseModel
 
 class Continent(BaseModel):
     ID_Continent = models.AutoField(primary_key=True, db_column="id_continent")
@@ -137,23 +137,6 @@ class VegetationType(BaseModel):
 class Location(BaseModel):
     ID_Location = models.AutoField(primary_key=True, db_column="id_location")
     Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
-    Plot_name = models.CharField(
-        max_length=30,
-        help_text="name or id of the plot in the study, or data import",
-        blank=True,
-        null=True,
-        db_column="plot_name"
-        )
-    Plot_size_m2 = models.DecimalField(
-        blank=True,
-        null=True,
-        decimal_places=2,
-        max_digits=10,
-        help_text="size of the plot in m2",
-        db_column="plot_size_m2"
-        )
-    Commune = models.CharField(max_length=255, blank=True, null=True, db_column="commune")
-    Province = models.CharField(max_length=255, blank=True, null=True, db_column="province")
     Region = models.CharField(max_length=255, blank=True, null=True, db_column="region")
     Country = models.ForeignKey(Country, blank=True, null=True, db_column="id_country")
     Latitude = models.DecimalField(

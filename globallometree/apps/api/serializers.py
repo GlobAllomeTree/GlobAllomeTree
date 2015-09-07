@@ -13,7 +13,7 @@ from globallometree.apps.raw_data import models as raw_data_models
 from globallometree.apps.biomass_expansion_factors import models as biomass_expansion_factors_models
 from globallometree.apps.locations import models as location_models
 from globallometree.apps.taxonomy import models as taxonomy_models
-
+from globallometree.apps.base import models as search_helper_models
 
 from globallometree.apps.api.serializers_location import (
     ZoneFAOSerializer, 
@@ -79,6 +79,13 @@ class LinkedModelSerializer(serializers.ModelSerializer):
     Contributor = fields.CharField(source='Contributor.Name', allow_null=True, required=False)
     Operator = fields.CharField(source='Operator.Name', allow_null=True, required=False)
 
+    Tree_type = fields.CharField(
+        source='Tree_type.Name', 
+        allow_null=True,
+        validators=[ValidRelatedField(model=search_helper_models.TreeType, 
+                                      field_name="Name")]
+        )
+
     def __init__(self, *args, **kwargs):
         super(LinkedModelSerializer, self).__init__(*args, **kwargs)
 
@@ -91,6 +98,12 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             operator_data = validated_data.pop('Operator')
 
             ModelClass = self.Meta.model
+
+            if validated_data['TreeType']['Name']:
+                validated_data['TreeType'] = search_helper_models.TreeType.objects.get(Name=validated_data['TreeType']['Name'])
+            else:
+                validated_data['TreeType'] = None
+
             instance = ModelClass.objects.create(**validated_data)
 
             species_data['ID_Species_group'] = species_data['ID_Species_group'] + 13
@@ -265,10 +278,6 @@ class AllometricEquationSerializer(LinkedModelSerializer):
         else:
             validated_data['Population'] = None
 
-        if validated_data['Tree_type']['Name']:
-            validated_data['Tree_type'] = allometric_equation_models.TreeType.objects.get(Name=validated_data['Tree_type']['Name'])
-        else:
-            validated_data['Tree_type'] = None
 
         return super(AllometricEquationSerializer, self).create(validated_data)
 
@@ -276,13 +285,6 @@ class AllometricEquationSerializer(LinkedModelSerializer):
         source='Population.Name', 
         allow_null=True,
         validators=[ValidRelatedField(model=allometric_equation_models.Population, 
-                                      field_name="Name")]
-        )
-
-    Tree_type = fields.CharField(
-        source='Tree_type.Name', 
-        allow_null=True,
-        validators=[ValidRelatedField(model=allometric_equation_models.TreeType, 
                                       field_name="Name")]
         )
 

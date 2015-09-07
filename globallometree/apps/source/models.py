@@ -1,5 +1,5 @@
 from django.db import models
-from globallometree.apps.search_helpers.models import BaseModel
+from globallometree.apps.base.models import BaseModel
 
 
 class Reference(BaseModel):
@@ -17,7 +17,7 @@ class Reference(BaseModel):
 
 
 class Institution(BaseModel):
-    Institution_ID = models.AutoField(primary_key=True, db_column="institution_id")
+    ID_Institution = models.AutoField(primary_key=True, db_column="id_institution")
     Name = models.CharField(max_length=150, null=True, blank=True, db_column="name")
 
     class Meta:
@@ -30,9 +30,9 @@ class Institution(BaseModel):
 
 class Operator(BaseModel):
     """Operator is at least used for the wood density database"""
-    Operator_ID = models.AutoField(primary_key=True, db_column="operator_id")
+    ID_Operator = models.AutoField(primary_key=True, db_column="id_operator")
     Name = models.CharField(max_length=200, db_column="name")
-    Institution = models.ForeignKey(Institution, db_column="institution_id")
+    Institution = models.ForeignKey(Institution, db_column="id_institution")
 
     class Meta:
         ordering = ('Name',)

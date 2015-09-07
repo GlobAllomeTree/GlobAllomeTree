@@ -74,7 +74,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'sekizai.context_processors.sekizai',
                 'cms.context_processors.cms_settings',
-                'globallometree.apps.search_helpers.context_processors.template_settings'
+                'globallometree.apps.base.context_processors.template_settings'
 
             )
     }
@@ -139,7 +139,7 @@ INSTALLED_APPS = (
 
     # project globallometree.apps
     'globallometree.apps.accounts',
-    'globallometree.apps.search_helpers',
+    'globallometree.apps.base',
     'globallometree.apps.source',
     'globallometree.apps.data_sharing',
     'globallometree.apps.community',

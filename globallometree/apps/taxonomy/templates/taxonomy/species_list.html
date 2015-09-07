@@ -2,8 +2,8 @@
 {% load staticfiles %}
 
 {% block script %}
-	<script src="{% static 'search_helpers/js/elastic.min.js' %}"></script>
-	{% include 'search_helpers/search_app_config.html' %}
+	<script src="{% static 'base/js/elastic.min.js' %}"></script>
+	{% include 'base/search_app_config.html' %}
 	<script type="text/javascript">
 
 	var getAggregationRequest = function () {

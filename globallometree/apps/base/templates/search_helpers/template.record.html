@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block script %}	
-    {% include 'search_helpers/record_map_script.html' %}
+    {% include 'base/record_map_script.html' %}
 {% endblock %}
 
 {% block content %}
@@ -28,10 +28,10 @@
     </div>        
           
     {% include record_content_template %}
-    {% include 'search_helpers/record_taxonomy.html' %}
-    {% include 'search_helpers/record_locations.html' %}
-    {% include 'search_helpers/record_reference.html' %}
-    {% include 'search_helpers/record_contributor.html' %}
-    {% include 'search_helpers/record_dataset.html' %}
+    {% include 'base/record_taxonomy.html' %}
+    {% include 'base/record_locations.html' %}
+    {% include 'base/record_reference.html' %}
+    {% include 'base/record_contributor.html' %}
+    {% include 'base/record_dataset.html' %}
     
 {% endblock %}

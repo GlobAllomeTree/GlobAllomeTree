@@ -4,7 +4,7 @@ from globallometree.apps.raw_data.models import (
     RawData
     )
 
-from globallometree.apps.search_helpers.forms import LinkedModelSearchForm, ComponentSearchForm
+from globallometree.apps.base.forms import LinkedModelSearchForm, ComponentSearchForm
 
 
 class RawDataSearchForm(LinkedModelSearchForm, ComponentSearchForm):

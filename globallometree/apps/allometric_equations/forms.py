@@ -5,7 +5,7 @@ from globallometree.apps.allometric_equations.models import (
     Population 
     )
 
-from globallometree.apps.search_helpers.forms import LinkedModelSearchForm, ComponentSearchForm
+from globallometree.apps.base.forms import LinkedModelSearchForm, ComponentSearchForm
 
 
 class AllometricEquationSearchForm(LinkedModelSearchForm, ComponentSearchForm):

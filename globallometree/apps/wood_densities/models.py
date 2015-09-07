@@ -5,7 +5,7 @@ getcontext().prec = 10
 from django.db import models
 from django.contrib.auth.models import User
 
-from globallometree.apps.search_helpers.models import LinkedBaseModel
+from globallometree.apps.base.models import LinkedBaseModel
 
 
 class WoodDensity(LinkedBaseModel):

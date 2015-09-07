@@ -4,8 +4,8 @@ from .models import AllometricEquation
 from .forms import AllometricEquationSearchForm
 
 from globallometree.apps.api.serializers import AllometricEquationSerializer
-from globallometree.apps.search_helpers.views import LinkedModelSearchView
-from globallometree.apps.search_helpers.views import (
+from globallometree.apps.base.views import LinkedModelSearchView
+from globallometree.apps.base.views import (
     record_by_id_view, 
     record_by_id_pdf_view,
     export_view

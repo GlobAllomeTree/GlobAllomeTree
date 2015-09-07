@@ -27,6 +27,20 @@ class ComponentBaseModel(models.Model):
     class Meta:
         abstract = True
 
+
+class TreeType(BaseModel):
+    ID_Tree_type = models.AutoField(primary_key=True, db_column="id_tree_type")
+    Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
+
+    def __unicode__(self):
+        return self.Name
+
+    class Meta:
+        ordering = ('Name',)
+        db_table = 'tree_type'
+
+
+
 class LinkedBaseModel(BaseModel):
     Species_group = models.ForeignKey(
         'taxonomy.SpeciesGroup',
@@ -50,14 +64,14 @@ class LinkedBaseModel(BaseModel):
         'source.Operator', 
         blank=True, 
         null=True,
-        db_column='operator_id'
+        db_column='id_operator'
         )
 
     Contributor = models.ForeignKey(
         'source.Institution', 
         blank=True, 
         null=True,
-        db_column='contributor_id')
+        db_column='id_contributor')
 
     Dataset = models.ForeignKey(
         'data_sharing.Dataset',
@@ -66,6 +80,9 @@ class LinkedBaseModel(BaseModel):
         help_text="The Dataset that this raw data record came from",
         db_column="id_dataset"
         )
+
+    Tree_type = models.ForeignKey(TreeType, blank=True, null=True, db_column="id_tree_type")
+
 
     Elasticsearch_doc_hash = models.CharField(
         help_text="The hash of the denormalized version of this model in elasticsearch, used for knowing if the es index needs to be updated or not",

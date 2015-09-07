@@ -4,8 +4,8 @@ from .models import BiomassExpansionFactor
 from .forms import BiomassExpansionFactorSearchForm
 
 from globallometree.apps.api.serializers import BiomassExpansionFactorSerializer
-from globallometree.apps.search_helpers.views import LinkedModelSearchView
-from globallometree.apps.search_helpers.views import (
+from globallometree.apps.base.views import LinkedModelSearchView
+from globallometree.apps.base.views import (
     record_by_id_view, 
     record_by_id_pdf_view,
     export_view

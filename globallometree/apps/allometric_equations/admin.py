@@ -4,16 +4,12 @@ from django.template import RequestContext
 
 
 from globallometree.apps.allometric_equations.models import (
-    AllometricEquation, Population, TreeType
+    AllometricEquation, Population
 )
 
-from globallometree.apps.search_helpers.admin_helpers import ImproveRawIdFieldsForm
+from globallometree.apps.base.admin_helpers import ImproveRawIdFieldsForm
 
 class PopulationAdmin(admin.ModelAdmin):
-    list_display = ('Name', )
-
-
-class TreeTypeAdmin(admin.ModelAdmin):
     list_display = ('Name', )
 
 
@@ -48,6 +44,4 @@ class AllometricEquationAdmin(ImproveRawIdFieldsForm):
 
 
 admin.site.register(AllometricEquation, AllometricEquationAdmin)
-admin.site.register(TreeType, TreeTypeAdmin)
 admin.site.register(Population, PopulationAdmin)
-

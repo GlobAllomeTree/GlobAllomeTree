@@ -72,8 +72,6 @@ class CSVParser(BaseParser):
         # that is required, we set to null so that it isn't required to 
         # guess what fields are present and which aren't
         defaults_to_null = [
-            'Plot_name',
-            'Plot_size_m2',
             'Zone_Holdridge',
             'Ecoregion_Udvardy',
             'Zone_FAO',
@@ -174,8 +172,6 @@ class CSVParser(BaseParser):
             if row_data['Species'] is None: row_data['Species'] = 'unknown'
 
             location_definition =  {
-                'Plot_name': row_data.pop("Plot_name"),
-                'Plot_size_m2': row_data.pop("Plot_size_m2"),
                 'Zone_Holdridge': row_data.pop("Zone_Holdridge"),       
                 'Zone_FAO': row_data.pop("Zone_FAO"),
                 'Ecoregion_WWF': row_data.pop("Ecoregion_WWF"),

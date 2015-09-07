@@ -14,7 +14,7 @@ from globallometree.apps.locations.models import (
     Country, Location, LocationGroup, ZoneFAO, EcoregionUdvardy, 
     EcoregionWWF, DivisionBailey, ZoneHoldridge
 )
-from globallometree.apps.search_helpers.models import BaseModel, LinkedBaseModel, ComponentBaseModel
+from globallometree.apps.base.models import BaseModel, LinkedBaseModel, ComponentBaseModel
 
 
 class Population(BaseModel):
@@ -28,17 +28,6 @@ class Population(BaseModel):
         ordering = ('Name',)
         db_table = 'allometric_equation_population'
 
-
-class TreeType(BaseModel):
-    ID_Tree_type = models.AutoField(primary_key=True, db_column="id_tree_type")
-    Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
-
-    def __unicode__(self):
-        return self.Name
-
-    class Meta:
-        ordering = ('Name',)
-        db_table = 'allometric_equation_tree_type'
 
 
 class AllometricEquation(LinkedBaseModel, ComponentBaseModel):
@@ -104,7 +93,6 @@ class AllometricEquation(LinkedBaseModel, ComponentBaseModel):
     Sample_size = models.CharField(max_length=150, null=True, blank=True, db_column="sample_size")
 
     Population = models.ForeignKey(Population, blank=True, null=True, db_column="id_population")
-    Tree_type = models.ForeignKey(TreeType, blank=True, null=True, db_column="id_tree_type")
 
     def components_string(self):
         c_string = ''

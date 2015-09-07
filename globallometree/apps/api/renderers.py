@@ -208,10 +208,6 @@ class CSVRenderer(BaseRenderer):
             self.headers += [
                                # "ID_Location",
                                 "Location_name",
-                                "Plot_name",
-                                "Plot_size_m2",
-                                "Commune",
-                                "Province",
                                 "Region",
                                 "Country",
                                 "Country_3166_3",

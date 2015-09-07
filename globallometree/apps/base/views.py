@@ -27,7 +27,7 @@ from globallometree.apps.accounts.mixins import RestrictedPageMixin
 from globallometree.apps.api import Renderers
 
 class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
-    template_name = 'search_helpers/template.search.html'
+    template_name = 'base/template.search.html'
 
     def get_context_data(self, **kwargs):
         context = super(LinkedModelSearchView, self).get_context_data(**kwargs)
@@ -154,7 +154,7 @@ def record_by_id_view(request, id, api_path, model_class,
     record = model_class.objects.get(pk=id)
 
     return render_to_response(
-        'search_helpers/template.record.html', 
+        'base/template.record.html', 
         context_instance = RequestContext(
             request, {
                 'record': record.serialize(request=request),
@@ -173,7 +173,7 @@ def record_by_id_pdf_view(request, id, model_class,
         record_content_template, record_title, record_url):
     record = model_class.objects.get(pk=id)
 
-    template = get_template('search_helpers/template.record.pdf.html')
+    template = get_template('base/template.record.pdf.html')
    
     html = template.render(Context({
         'record': record.serialize(request=request),

@@ -1129,8 +1129,6 @@
 
     fields: [
       {name: "Location_name",   options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Location name"}},
-      {name: "Commune",         options: {type: "char", maxLength: 255, blank: true, nullable: true}},
-      {name: "Province",        options: {type: "char", maxLength: 255, blank: true, nullable: true}},
       {name: "Region",          options: {type: "char", maxLength: 255, blank: true, nullable: true}},
       {name: "Country",         options: {type: "ajaxSelect", url: "/api/v1/countries/" }},
       {name: "Zone_FAO",       options: {type: "ajaxSelect", url: "/api/v1/biomes-fao/", blank: true, nullable: true, label: "Biome (FAO)"}},
@@ -1139,7 +1137,6 @@
       {name: "Division_BAILEY", options: {type: "ajaxSelect", url: "/api/v1/divisions-bailey/", blank: true, nullable: true, label: "Division (BAILEY)"}},
       {name: "Zone_Holdridge", options: {type: "char", blank: true, nullable: true, label: "Biome (HOLDRIDGE)"}},
       {name: "Vegetation_type",     options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Forest type"}},
-      {name: "Plot_name",       options: {type: "char", maxLength: 30, label: "Plot name"}}
     ],
 
     // **Description:**

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from globallometree.apps.search_helpers.admin_helpers import ImproveRawIdFieldsForm
+from globallometree.apps.base.admin_helpers import ImproveRawIdFieldsForm
 
 from globallometree.apps.taxonomy.models import (
     Family, 

@@ -6,7 +6,7 @@ from django.conf import settings
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 from globallometree.apps.raw_data.models import RawData
-from globallometree.apps.search_helpers.estypes import *
+from globallometree.apps.base.estypes import *
 from globallometree.apps.api.serializers import RawDataSerializer
 from globallometree.apps.api.renderers import JSONRenderer
 

@@ -4,7 +4,7 @@ from globallometree.apps.biomass_expansion_factors.models import (
     BiomassExpansionFactor
     )
 
-from globallometree.apps.search_helpers.forms import LinkedModelSearchForm
+from globallometree.apps.base.forms import LinkedModelSearchForm
 
 class BiomassExpansionFactorSearchForm(LinkedModelSearchForm):
 

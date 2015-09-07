@@ -61,8 +61,6 @@ estype_location_group = {
                                         "ID_Location": estype_long,
                                         "Name": estype_string_not_analyzed,
                                         "Geohash": estype_geopoint_geohash,
-                                        "Plot_name": estype_string_not_analyzed,
-                                        "Plot_size_m2": estype_long,
                                     }
                                 }
                             }

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from globallometree.apps.raw_data.models import RawData
 
-from globallometree.apps.search_helpers.admin_helpers import ImproveRawIdFieldsForm
+from globallometree.apps.base.admin_helpers import ImproveRawIdFieldsForm
 
 
 class RawDataAdmin(ImproveRawIdFieldsForm):
