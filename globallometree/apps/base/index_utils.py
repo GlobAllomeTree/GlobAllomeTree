@@ -36,8 +36,9 @@ def remap(index_cls):
 class RemapIndexCommand(BaseCommand):
     args = '<no arguments>'
 
+
     def __init__(self, *args, **kwargs):
-        self.help = 'Remaps an index: %s' % self.index_cls.__name__
+        self.help = 'Deletes all associated data from elasticsearch and adds a new mapping for index: %s' % self.index_cls.__name__
         return super(RemapIndexCommand, self).__init__(*args, **kwargs)
 
     def handle(self,*args, **options):

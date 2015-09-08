@@ -249,7 +249,6 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                 self.context['dataset'].Records_imported += 1
                 self.context['dataset'].save()
             instance.save()
-
         return instance
 
 

@@ -7,8 +7,8 @@ gettext = lambda s: s
 PROJECT_PATH = os.path.join(os.path.dirname(__file__))
 BASE_PATH = os.path.abspath(os.path.join(PROJECT_PATH, '../'))
 
-DEBUG = True
-TEMPLATE_DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ('globallometree.org',
                  'www.globallometree.org',
