@@ -34,7 +34,8 @@ class CSVParser(BaseParser):
             'Zone_FAO': {},
             'Ecoregion_WWF': {},
             'Division_Bailey': {},
-            'Country': {}
+            'Country': {},
+            'Zone_Holdridge' : {}
             }
 
         conversion_files =  {
@@ -42,7 +43,8 @@ class CSVParser(BaseParser):
             'Zone_FAO': 'apps/api/resources/conversions_fao.csv' ,
             'Ecoregion_WWF': 'apps/api/resources/conversions_wwf.csv',
             'Division_Bailey': 'apps/api/resources/conversions_bailey.csv',
-            'Country': 'apps/api/resources/conversions_country.csv'
+            'Country': 'apps/api/resources/conversions_country.csv',
+            'Zone_Holdridge':'apps/api/resources/conversions_holdridge.csv',
             }
 
         for conversion_key in conversion_files.keys():
