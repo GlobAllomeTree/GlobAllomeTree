@@ -37,7 +37,6 @@ class AllometricEquationIndex(MappingType, Indexable):
         mapping = {
             "properties": {
                     "ID_AE": estype_long,
-                    "ID_AE_original": estype_long,
                     "B": estype_boolean,
                     "Bd": estype_boolean,
                     "Bg": estype_boolean,

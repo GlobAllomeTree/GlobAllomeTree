@@ -212,8 +212,13 @@ window.app.listController = function () {
 			context['recordLinkPrefix'] = config['recordLinkPrefix'];
 			context['recordReadableType'] = config['recordReadableType'];
 
-			context['showDatasetLink'] = ! data['Dataset']['User_has_access']; 
-			context['datasetLink'] = data['Dataset']['Dataset_url'];
+			try {
+				context['showDatasetLink'] = ! data['Dataset']['User_has_access']; 
+				context['datasetLink'] = data['Dataset']['Dataset_url'];
+			} catch (e) {
+				context['showDatasetLink'] = false; 
+				context['datasetLink'] = '';
+			}
 
 			$resultsList.append(Mustache.render(getResultTemplate(), context));	
 		}

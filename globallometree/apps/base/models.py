@@ -40,7 +40,6 @@ class TreeType(BaseModel):
         db_table = 'tree_type'
 
 
-
 class LinkedBaseModel(BaseModel):
     Species_group = models.ForeignKey(
         'taxonomy.SpeciesGroup',
@@ -124,9 +123,9 @@ class LinkedBaseModel(BaseModel):
         type_name = IndexClass.get_mapping_type_name()
         es = get_es()
         if add:
-            es.create(index=index, doc_type=type_name, body={'doc':document}, id=self.pk)
+            es.create(index=index, doc_type=type_name, body=document, id=self.pk)
         else:
-            es.update(index=index, doc_type=type_name, body={'doc':document}, id=self.pk)
+            es.update(index=index, doc_type=type_name, body=document, id=self.pk)
 
         self.update_elasticsearch_doc_hash(document)
 

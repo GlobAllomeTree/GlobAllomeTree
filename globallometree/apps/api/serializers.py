@@ -13,7 +13,7 @@ from globallometree.apps.raw_data import models as raw_data_models
 from globallometree.apps.biomass_expansion_factors import models as biomass_expansion_factors_models
 from globallometree.apps.locations import models as location_models
 from globallometree.apps.taxonomy import models as taxonomy_models
-from globallometree.apps.base import models as search_helper_models
+from globallometree.apps.base import models as base_models
 
 from globallometree.apps.api.serializers_location import (
     ZoneFAOSerializer, 
@@ -82,7 +82,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
     Tree_type = fields.CharField(
         source='Tree_type.Name', 
         allow_null=True,
-        validators=[ValidRelatedField(model=search_helper_models.TreeType, 
+        validators=[ValidRelatedField(model=base_models.TreeType, 
                                       field_name="Name")]
         )
 
@@ -100,7 +100,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             ModelClass = self.Meta.model
 
             if validated_data['Tree_type']['Name']:
-                validated_data['Tree_type'] = search_helper_models.TreeType.objects.get(Name=validated_data['Tree_type']['Name'])
+                validated_data['Tree_type'] = base_models.TreeType.objects.get(Name=validated_data['Tree_type']['Name'])
             else:
                 validated_data['Tree_type'] = None
 
@@ -287,12 +287,6 @@ class AllometricEquationSerializer(LinkedModelSerializer):
         validators=[ValidRelatedField(model=allometric_equation_models.Population, 
                                       field_name="Name")]
         )
-
-    def get_fields(self, *args, **kwargs):
-        fields = super(AllometricEquationSerializer, self).get_fields(*args, **kwargs)
-        fields['Population'].choices = [pop.Name for pop in allometric_equation_models.Population.objects.all()]
-        fields['Tree_type'].choices = [tt.Name for tt in allometric_equation_models.TreeType.objects.all()]
-        return fields
 
     class Meta:
         model = allometric_equation_models.AllometricEquation

@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from rest_framework.parsers import BaseParser
 from rest_framework.exceptions import ParseError
@@ -27,6 +29,29 @@ class CSVParser(BaseParser):
     def __init__(self, data_type):
         self.data_type = data_type
 
+        self.conversions =   {
+            'Ecoregion_Udvardy': {},
+            'Zone_FAO': {},
+            'Ecoregion_WWF': {},
+            'Division_Bailey': {},
+            'Country': {}
+            }
+
+        conversion_files =  {
+            'Ecoregion_Udvardy': 'apps/api/resources/conversions_udvardy.csv',
+            'Zone_FAO': 'apps/api/resources/conversions_fao.csv' ,
+            'Ecoregion_WWF': 'apps/api/resources/conversions_wwf.csv',
+            'Division_Bailey': 'apps/api/resources/conversions_bailey.csv',
+            'Country': 'apps/api/resources/conversions_country.csv'
+            }
+
+        for conversion_key in conversion_files.keys():
+
+            conversion_file = open(os.path.join(settings.PROJECT_PATH, conversion_files[conversion_key]), "r")
+            for line in universal_newlines(conversion_file):
+                from_val, to_val = line.split(';')
+                self.conversions[conversion_key][from_val] = to_val
+
 
     def ensure_local_name_in_list(self,species_local_name, species_groups, definition_index, ID_Species_group):
         found = False
@@ -38,12 +63,12 @@ class CSVParser(BaseParser):
         if not found:
             species_groups[ID_Species_group][definition_index]['Species_local_names'].append(species_local_name)
 
+
     def parse(self, stream, media_type=None, parser_context=None):
         parser_context = parser_context or {}
        
-
         primary_key_fields = {
-            'raw_data': 'Raw_data_ID',
+            'raw_data': 'ID_RD',
             'biomass_expansion': 'ID_BEF', 
             'wood_density': 'ID_WD',
             'allometric_equations': 'ID_AE' 
@@ -52,18 +77,14 @@ class CSVParser(BaseParser):
         convert_v1_headers = {
             'Author': 'Reference_author',               
             'Year': 'Reference_year',      
-            'ID_Location': 'ID_Location',
             'Group_Location': 'ID_Location_group',
             'Biome_FAO': 'Zone_FAO',
             'Biome_UDVARDY': 'Ecoregion_Udvardy',
             'Biome_WWF': 'Ecoregion_WWF',
             'Division_BAILEY': 'Division_Bailey',
             'Biome_HOLDRIDGE': 'Zone_Holdridge',
-            'ID_Species': 'ID_Species',
             'ID_Group': 'ID_Species_group',
             'Name_operator': 'Operator',
-            'ID_AE': 'ID_AE',
-            'ID_WD': 'ID_WD'
         }
 
         id_field = primary_key_fields[self.data_type]
@@ -121,7 +142,6 @@ class CSVParser(BaseParser):
         # A single record is represented by seeral csv row
         # Each csv row might add a species definition, a new location, or a new species local name
 
-
         rows = []
         for line in universal_newlines(stream):
             row = unicode(line, 'utf8').split('\t')
@@ -138,13 +158,18 @@ class CSVParser(BaseParser):
 
             for key in row_data.keys():
                 row_data[key] = row_data[key].strip()
+
+                if key in self.conversions.keys() and \
+                  row_data[key] in self.conversions[key].keys():
+                    row_data[key] = self.conversions[key][row_data[key]]
+
                 if row_data[key] in ['NA', 'na', 'sp.', "", "None"]:
                     row_data[key] = None
                     
-                if row_data[key] in ['TRUE', 'True', 'true', "YES", "Yes", "yes"]:
+                elif row_data[key] in ['TRUE', 'True', 'true', "YES", "Yes", "yes"]:
                     row_data[key] = True
                 
-                if row_data[key] in ['FALSE', 'False', 'false', "NO", "No", "no"]:
+                elif row_data[key] in ['FALSE', 'False', 'false', "NO", "No", "no"]:
                     row_data[key] = False
 
             for key in defaults_to_null:

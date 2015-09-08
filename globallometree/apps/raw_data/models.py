@@ -9,7 +9,7 @@ from globallometree.apps.base.models import LinkedBaseModel, ComponentBaseModel
 
 class RawData(LinkedBaseModel, ComponentBaseModel):
 
-    Raw_data_ID = models.AutoField(primary_key=True, db_column="raw_data_id")
+    ID_RD = models.AutoField(primary_key=True, db_column="id_rd")
 
 
     DBH_cm = models.DecimalField(

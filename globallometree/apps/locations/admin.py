@@ -11,8 +11,9 @@ class ContinentAdmin(admin.ModelAdmin):
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('Common_name', 'Common_name_fr', 'Iso3166a2', 'Continent', 'Centroid_longitude', 'Centroid_latitude')
+    list_display = ('Formal_name', 'Common_name', 'Common_name_fr', 'Iso3166a2', 'Continent', 'Centroid_longitude', 'Centroid_latitude')
     list_filter  = ('Continent', )
+    search_fields = ('Formal_name', 'Common_name', 'Common_name_fr', 'Formal_name_fr','Iso3166a2',)
 
 
 class LocationAdmin(admin.ModelAdmin):

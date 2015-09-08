@@ -36,7 +36,7 @@ class RawDataIndex(MappingType, Indexable):
 
         mapping = {
             "properties": {
-                "Raw_data_ID": estype_long,
+                "ID_RD": estype_long,
                 "DBH_cm": estype_float,
                 "H_m": estype_float,
                 "CD_m": estype_float,

@@ -58,6 +58,7 @@ window.app.listController.config.getRecordContext = function (data) {
 	} else {
 		data['Output'] = '';
 	}
+	debugger;
 	return data;
 }
 

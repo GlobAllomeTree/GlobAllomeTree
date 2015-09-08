@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('Elasticsearch_doc_hash', models.CharField(db_column=b'elasticsearch_doc_hash', max_length=255, blank=True, help_text=b'The hash of the denormalized version of this model in elasticsearch, used for knowing if the es index needs to be updated or not', null=True, verbose_name=b'Elasticsearch document md5 hash')),
                 ('Remark', models.TextField(null=True, blank=True)),
                 ('Contact', models.CharField(max_length=255, null=True, blank=True)),
-                ('Raw_data_ID', models.AutoField(serialize=False, primary_key=True, db_column=b'raw_data_id')),
+                ('ID_RD', models.AutoField(serialize=False, primary_key=True, db_column=b'id_rd')),
                 ('DBH_cm', models.DecimalField(db_column=b'dbh_cm', decimal_places=10, max_digits=16, blank=True, help_text=b'Diameter at breast height of the tree in centimeters', null=True)),
                 ('H_m', models.DecimalField(db_column=b'h_m', decimal_places=10, max_digits=16, blank=True, help_text=b'Total height of the tree in meters', null=True)),
                 ('CD_m', models.DecimalField(db_column=b'cd_m', decimal_places=10, max_digits=16, blank=True, help_text=b'Crown diameter of the tree in meters', null=True)),

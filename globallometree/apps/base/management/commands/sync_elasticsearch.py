@@ -12,9 +12,15 @@ from globallometree.apps.raw_data.indices import RawDataIndex
 from globallometree.apps.biomass_expansion_factors.indices import BiomassExpansionFactorIndex
 
 class Command(BaseCommand):
-    help = 'Fully synchronizes the elasticsearch indices from the postgresql database'
+    help = 'Fully synchronizes the elasticsearch indices from the postgresql database\n (optional arg: allometricequation, biomassexpansionfactor, rawdata, or wooddensity)'
+    args = '<type name (optional allometricequation, biomassexpansionfactor, rawdata, or wooddensity)>'
 
     def handle(self,*args, **options):
+
+        if len(args) == 1:
+            limit_type_name = args[0]
+        else:
+            limit_type_name = None
 
         index_classes = (
             AllometricEquationIndex,
@@ -34,6 +40,10 @@ class Command(BaseCommand):
             index_name = index_cls.get_index()
             model = index_cls.get_model()
             type_name = index_cls.get_mapping_type_name()
+
+            if limit_type_name is not None and type_name != limit_type_name:
+                continue
+
             searcher = index_cls.search()
             valid_id_list = []
             i = 0
@@ -56,7 +66,6 @@ class Command(BaseCommand):
                     updated += 1
                 else:
                     skipped += 1
-
 
             
             # Handle deletions
