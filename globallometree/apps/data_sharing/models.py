@@ -1,6 +1,8 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from globallometree.apps.base.models import BaseModel
+from django.core.files.base import ContentFile
 
 class DataLicense(BaseModel):
 
@@ -207,10 +209,12 @@ class Dataset(BaseModel):
         db_column="data_type"
     )
 
-    Data_as_json = models.TextField(
+    Data_as_json_file = models.FileField(
+        upload_to = "data_json",
+        verbose_name='The document converted into json format',
         blank=True,
         null=True,
-        db_column="data_as_json"
+        db_column="data_as_json_file"
     )
 
     Record_count = models.IntegerField(
@@ -256,6 +260,24 @@ class Dataset(BaseModel):
         blank=True,
         null=True
     )
+
+    @property
+    def Data_as_json(self):
+        if not hasattr(self, '_data_as_json'):
+            self._data_as_json = self.Data_as_json_file.read()
+        return self._data_as_json
+
+    @Data_as_json.setter
+    def Data_as_json(self, value):
+        self._data_as_json_changed = True
+        self._data_as_json = value
+
+    def save(self, *args, **kwargs):
+        super(Dataset, self).save(*args, **kwargs)
+        if hasattr(self, '_data_as_json_changed') and self._data_as_json_changed:
+            content = ContentFile(self._data_as_json)
+            self._data_as_json_changed = False
+            self.Data_as_json_file.save('data_json/dataset_%s.json' % self.pk, content)
 
     def is_editable(self):
         if self.Data_type == 'allometric_equations' and not self.Imported:
