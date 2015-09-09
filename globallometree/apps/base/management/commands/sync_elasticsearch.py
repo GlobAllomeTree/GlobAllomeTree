@@ -37,7 +37,6 @@ class Command(BaseCommand):
             skipped = 0
             created = 0
             deleted = 0
-            errors = 0
             index_name = index_cls.get_index()
             model = index_cls.get_model()
             type_name = index_cls.get_mapping_type_name()
@@ -95,5 +94,5 @@ class Command(BaseCommand):
             index_client = elasticsearch.client.IndicesClient(es)
             index_client.flush(index=index_name)
 
-            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s, Errors %sax' % (type_name, updated, skipped, created, deleted, errors)
+            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s' % (type_name, updated, skipped, created, deleted)
 
