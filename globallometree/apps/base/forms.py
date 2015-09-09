@@ -114,7 +114,7 @@ class LinkedModelSearchForm(forms.Form):
     Point_Distance = forms.DecimalField(required=False, label='Distance From Center Point in Kilometers')
 
     # Reference Tab
-    Author = forms.CharField(required=False, label='Author')
-    Year = forms.CharField(required=False, label='Year')
+    Reference_author = forms.CharField(required=False, label='Author')
+    Reference_year = forms.CharField(required=False, label='Year')
     Reference = forms.CharField(required=False, label='Reference') 
 

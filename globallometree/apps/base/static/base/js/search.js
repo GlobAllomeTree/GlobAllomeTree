@@ -9,6 +9,7 @@ window.app.searchManager = function (){
 	var searchDict;
 
 	var baseTermFilterKeys = [
+			'Family',
 			'Genus',
 			'Species',
 			'Country',
@@ -17,9 +18,9 @@ window.app.searchManager = function (){
 			'Zone_FAO',
 			'Ecoregion_WWF',
 			'Division_Bailey',
-			'Author',
+			'Reference_author',
 			'Reference',
-			'Year'];
+			'Reference_year'];
 
 	// Simple term filters which can be string or boolean mapping types
 	// When boolean 0,f alse, off, no and and empty string are false 

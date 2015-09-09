@@ -3,11 +3,11 @@
         <br>
         <h3 class="section-header">Reference</h3>
         {% if record.Reference %} 
-        <table class="table">
-            <tr><th> Reference: </th><td> {{ record.Reference.Reference }} </td></tr>
-            <tr><th> Author: </th><td> {{ record.Reference.Author }} </td></tr>
-            <tr><th> Year: </th><td> {{ record.Reference.Year }} </td></tr>
-        </table>
+            <table class="table">
+                <tr><th> Reference: </th><td> {{ record.Reference.Reference }} </td></tr>
+                <tr><th> Author: </th><td> {{ record.Reference.Author }} </td></tr>
+                <tr><th> Year: </th><td> {{ record.Reference.Year }} </td></tr>
+            </table>
         {% else %}
             <p>No reference specified.</p>
         {% endif %}

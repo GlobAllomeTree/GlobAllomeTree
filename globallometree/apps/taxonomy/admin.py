@@ -44,10 +44,11 @@ class SubspeciesAdmin(ImproveRawIdFieldsForm):
 
 class SpeciesAdmin(ImproveRawIdFieldsForm):
     raw_id_fields = ('Genus',)
-    list_display = ('ID_Species', 'Name', 'Genus', 'Author', 'Modified')
+    list_display = ('ID_Species', 'Name', 'Genus', 'Genus', 'Author', 'Modified')
     search_fields  = ('Name','Genus__Family__Name', 'Genus__Name', )
     read_only_fields = ('Created', 'Modified')
     inlines = (SpeciesLocalNameInline,)
+    list_filter  = ('Genus__Family__Name', )
 
 
 class SpeciesDefinitionInline(admin.TabularInline):
