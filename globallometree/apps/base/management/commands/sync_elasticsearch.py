@@ -37,6 +37,7 @@ class Command(BaseCommand):
             skipped = 0
             created = 0
             deleted = 0
+            errors = 0
             index_name = index_cls.get_index()
             model = index_cls.get_model()
             type_name = index_cls.get_mapping_type_name()
@@ -50,23 +51,25 @@ class Command(BaseCommand):
 
             # Handle additions and updates
             for obj in index_cls.get_indexable().iterator():
+                try:
+                    valid_id_list.append(obj.pk)
+                    current_document = index_cls.extract_document(obj=obj)
+                    current_doc_hash = hashlib.md5(json.dumps(current_document)).hexdigest()
+                    old_doc_hash = obj.Elasticsearch_doc_hash
+                    search_results = searcher.filter(_id=obj.pk)
+                    obj_updated = False
 
-                valid_id_list.append(obj.pk)
-                current_document = index_cls.extract_document(obj=obj)
-                current_doc_hash = hashlib.md5(json.dumps(current_document)).hexdigest()
-                old_doc_hash = obj.Elasticsearch_doc_hash
-                search_results = searcher.filter(_id=obj.pk)
-                obj_updated = False
-
-                if len(search_results) == 0:
-                    obj.update_index(add=True, document=current_document)
-                    created += 1
-                elif current_doc_hash != old_doc_hash:
-                    obj.update_index(add=False, document=current_document)
-                    updated += 1
-                else:
-                    skipped += 1
-
+                    if len(search_results) == 0:
+                        obj.update_index(add=True, document=current_document)
+                        created += 1
+                    elif current_doc_hash != old_doc_hash:
+                        obj.update_index(add=False, document=current_document)
+                        updated += 1
+                    else:
+                        skipped += 1
+                except:
+                    print 'Failed %s' % obj.pk
+                    errors +=1
             
             # Handle deletions
             # Looks at all the records in elasticsearch, if there are any that should not be there, delete them
@@ -93,5 +96,5 @@ class Command(BaseCommand):
             index_client = elasticsearch.client.IndicesClient(es)
             index_client.flush(index=index_name)
 
-            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s' % (type_name, updated, skipped, created, deleted)
+            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s, Errors %s' % (type_name, updated, skipped, created, deleted, errors)
 
