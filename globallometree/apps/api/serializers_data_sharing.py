@@ -36,5 +36,5 @@ class DatasetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.Dataset
-        exclude = ('Created', 'Modified', 'User', 'Uploaded_dataset_file', 'Imported', 'Data_as_json')
-        read_only_fields = ('Data_license', 'Data_type_text', 'Record_count', 'Imported')
+        fields = ('Title', 'Dataset_url', 'Description', 'User', 'Imported', 'Data_type_text', 'Record_count', 'Data_license')
+        read_only_fields = ('Data_license', 'Data_type_text', 'Record_count', 'Imported', 'User')
