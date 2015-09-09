@@ -6,8 +6,10 @@
 		<img src="{{ object.image.url }}" alt="{{ object.title }}"/>
 	{% if link %}</a>{% endif %}
 {% endif %}
+{% autoescape off %}{
 {% if object.description %}
-<p>{{ object.description }}</p>
+{{ object.description }}
 {% endif %}
+{% endautoescape %}
 {% if link %}<a href="{{ link }}" class="btn btn-success pull-right">{{ object.link_text }} &#187;</a>{% endif %}
 </div>
