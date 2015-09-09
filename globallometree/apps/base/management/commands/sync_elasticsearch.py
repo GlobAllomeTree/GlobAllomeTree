@@ -68,8 +68,7 @@ class Command(BaseCommand):
                     else:
                         skipped += 1
                 except:
-                    print 'Failed %s' % obj.pk
-                    errors +=1
+                    raise
             
             # Handle deletions
             # Looks at all the records in elasticsearch, if there are any that should not be there, delete them
@@ -96,5 +95,5 @@ class Command(BaseCommand):
             index_client = elasticsearch.client.IndicesClient(es)
             index_client.flush(index=index_name)
 
-            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s, Errors %s' % (type_name, updated, skipped, created, deleted, errors)
+            print '%s: Updated %s, Skipped %s, Created %s, Deleted %s, Errors %sax' % (type_name, updated, skipped, created, deleted, errors)
 
