@@ -36,15 +36,10 @@ class DivisionBaileySerializer(serializers.ModelSerializer):
         fields = ('ID_Division_Bailey', 'Name',)
 
 
-class VegetationTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.VegetationType
-        fields = ('ID_Vegetation_type', 'Name',)
-
 
 class LocationSerializer(serializers.ModelSerializer):
  
-    Location_name = fields.CharField(
+    Location = fields.CharField(
         source="Name", 
         allow_null=True,
         required=False,
@@ -104,27 +99,6 @@ class LocationSerializer(serializers.ModelSerializer):
                                      field_name="Name")]
         )
 
-    Biome_local = fields.CharField(
-        source="Biome_local.Name", 
-        allow_null=True,
-        required=False,
-        max_length=200
-        )
-
-    Biome_local_reference = fields.CharField(
-        source="Biome_local.Reference", 
-        allow_null=True,
-        required=False,
-        max_length=200
-        )
-
-    Vegetation_type = fields.CharField(
-        source="Vegetation_type.Name", 
-        allow_null=True,
-        required=False,
-        validators=[ValidRelatedField(model=models.VegetationType, 
-                                     field_name="Name")]
-        )
 
     Country_3166_3 = fields.CharField(
         source="Country.Iso3166a3", 
@@ -154,8 +128,8 @@ class LocationSerializer(serializers.ModelSerializer):
         source="Ecoregion_Udvardy.ID_Ecoregion_Udvardy", 
         read_only=True)
 
-    id_ecoregion_wwf = fields.IntegerField(
-        source="Ecoregion_WWF.id_ecoregion_wwf",
+    ID_Ecoregion_WWF = fields.IntegerField(
+        source="Ecoregion_WWF.ID_Ecoregion_WWF",
         read_only=True
         )    
     ID_Division_Bailey = fields.IntegerField(
@@ -169,9 +143,6 @@ class LocationSerializer(serializers.ModelSerializer):
         source="Vegetation_type.ID_Vegetation_type", 
         read_only=True) 
 
-    ID_Biome_local = fields.IntegerField(
-        source="Biome_local.ID_Biome_local", 
-        read_only=True) 
 
     # Serializer fields are always read only
     Geohash = fields.SerializerMethodField()
@@ -196,7 +167,7 @@ class LocationSerializer(serializers.ModelSerializer):
         
         fields = (
             "ID_Location",
-            "Location_name",
+            "Location",
             "Region",
             "Country",
             "Country_3166_3",
@@ -207,8 +178,6 @@ class LocationSerializer(serializers.ModelSerializer):
             "Ecoregion_Udvardy", 
             "Ecoregion_WWF",
             "Division_Bailey",
-            "Biome_local",
-            "Biome_local_reference",
             "Geohash", 
             "Latitude",
             "Longitude",
@@ -217,11 +186,10 @@ class LocationSerializer(serializers.ModelSerializer):
             "ID_Zone_FAO",
             "ID_Ecoregion_Udvardy",
             "ID_Zone_Holdridge", 
-            "id_ecoregion_wwf",
+            "ID_Ecoregion_WWF",
             "ID_Division_Bailey", 
             "ID_Country",
             "ID_Continent",
-            "ID_Biome_local",
             )
 
 

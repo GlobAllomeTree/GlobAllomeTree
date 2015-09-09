@@ -207,7 +207,7 @@ class CSVRenderer(BaseRenderer):
         if 'ID_Location' not in self.headers:
             self.headers += [
                                # "ID_Location",
-                                "Location_name",
+                                "Location",
                                 "Region",
                                 "Country",
                                 "Country_3166_3",
@@ -225,7 +225,7 @@ class CSVRenderer(BaseRenderer):
                                 #"ID_Zone_FAO",
                                 #"ID_Ecoregion_Udvardy",
                                 #"ID_Zone_Holdridge",
-                                #"id_ecoregion_wwf",
+                                #"id_Ecoregion_WWF",
                                 #"ID_Division_Bailey",
                                 #"ID_Country",
                                 #"ID_Continent",

@@ -2,7 +2,7 @@ from django.contrib import admin
 from globallometree.apps.locations.models import (
     Continent, Country, Location, LocationGroup,
     ZoneFAO, EcoregionUdvardy, EcoregionWWF, DivisionBailey, 
-    ZoneHoldridge, VegetationType, BiomeLocal)
+    ZoneHoldridge)
 
 from django.utils.safestring import mark_safe
 
@@ -32,10 +32,6 @@ class LocationInline(admin.TabularInline):
             return mark_safe(u'<a href="/admin/locations/location/%s/">Edit Location</a>' % instance.location.pk)
         else:
             return ''
-
-
-class VegetationTypeAdmin(admin.ModelAdmin):
-    list_display = ('Name',)
 
 
 class LocationGroupAdmin(admin.ModelAdmin):
@@ -68,17 +64,12 @@ class ZoneHoldridgeAdmin(admin.ModelAdmin):
     list_display = ('Name', )    
 
 
-class BiomeLocalAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Reference') 
-
 admin.site.register(Continent, ContinentAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(LocationGroup, LocationGroupAdmin)
-admin.site.register(BiomeLocal, BiomeLocalAdmin)
 admin.site.register(ZoneFAO, ZoneFAOAdmin)
 admin.site.register(EcoregionUdvardy, EcoregionUdvardyAdmin)
 admin.site.register(EcoregionWWF, EcoregionWWFAdmin)
 admin.site.register(DivisionBailey, DivisionBaileyAdmin)
 admin.site.register(ZoneHoldridge, ZoneHoldridgeAdmin)
-admin.site.register(VegetationType, VegetationTypeAdmin)

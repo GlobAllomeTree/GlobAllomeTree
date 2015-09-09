@@ -1128,7 +1128,7 @@
     },
 
     fields: [
-      {name: "Location_name",   options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Location name"}},
+      {name: "Location",   options: {type: "char", maxLength: 255, nullable: true, blank: true, label: "Location name"}},
       {name: "Region",          options: {type: "char", maxLength: 255, blank: true, nullable: true}},
       {name: "Country",         options: {type: "ajaxSelect", url: "/api/v1/countries/" }},
       {name: "Zone_FAO",       options: {type: "ajaxSelect", url: "/api/v1/biomes-fao/", blank: true, nullable: true, label: "Biome (FAO)"}},

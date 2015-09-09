@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from globallometree.apps.taxonomy.models import Subspecies, Species, Family, Genus, SpeciesGroup
-from globallometree.apps.allometric_equations.models import AllometricEquation, Population, TreeType
+from globallometree.apps.allometric_equations.models import AllometricEquation, Population
 from globallometree.apps.locations.models import ZoneFAO, EcoregionUdvardy, EcoregionWWF, DivisionBailey, ZoneHoldridge
-from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup, VegetationType
+from globallometree.apps.locations.models import Location, Country, Continent, LocationGroup
 from globallometree.apps.source.models import Reference, Institution
 from globallometree.apps.data_sharing.models import Dataset
-
+from globallometree.apps.identification.models import TreeType, VegetationType
 from globallometree.apps.wood_densities.models import WoodDensity
 
 

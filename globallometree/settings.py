@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'globallometree.apps.journals',
     'globallometree.apps.taxonomy',
     'globallometree.apps.locations',
+    'globallometree.apps.identification',
     'globallometree.apps.allometric_equations',
     'globallometree.apps.raw_data',
     'globallometree.apps.wood_densities',

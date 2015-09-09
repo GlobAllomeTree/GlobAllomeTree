@@ -76,19 +76,6 @@ class CSVParser(BaseParser):
             'allometric_equations': 'ID_AE' 
         }
 
-        convert_v1_headers = {
-            'Author': 'Reference_author',               
-            'Year': 'Reference_year',      
-            'Group_Location': 'ID_Location_group',
-            'Biome_FAO': 'Zone_FAO',
-            'Biome_UDVARDY': 'Ecoregion_Udvardy',
-            'Biome_WWF': 'Ecoregion_WWF',
-            'Division_BAILEY': 'Division_Bailey',
-            'Biome_HOLDRIDGE': 'Zone_Holdridge',
-            'ID_Group': 'ID_Species_group',
-            'Name_operator': 'Operator',
-        }
-
         id_field = primary_key_fields[self.data_type]
 
         # Anything in either location groups or species groups
@@ -143,15 +130,13 @@ class CSVParser(BaseParser):
 
         rows = []
         for line in universal_newlines(stream):
-            row = unicode(line, 'utf8').split('\t')
+            # Fix escaped quotes
+            line = unicode(line, 'utf8').replace('""', '"')
+            row = line.split('\t')
             rows.append(row)
         
         header = rows.pop(0)
         
-        for index, item in enumerate(header):
-            if item in convert_v1_headers.keys():
-                header[index] = convert_v1_headers[item]
-
         for row in rows:
             row_data = dict(zip(header, row))
 
@@ -204,7 +189,7 @@ class CSVParser(BaseParser):
                 'Country': row_data.pop("Country"),
                 'Region': row_data.pop("Region"),
                 'Vegetation_type': row_data.pop("Vegetation_type"),
-                'Location_name': row_data.pop("Location"),
+                'Location': row_data.pop("Location"),
                 'Latitude': row_data.pop("Latitude"),
                 'Longitude': row_data.pop("Longitude")
             }

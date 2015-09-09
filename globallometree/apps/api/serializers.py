@@ -13,7 +13,7 @@ from globallometree.apps.raw_data import models as raw_data_models
 from globallometree.apps.biomass_expansion_factors import models as biomass_expansion_factors_models
 from globallometree.apps.locations import models as location_models
 from globallometree.apps.taxonomy import models as taxonomy_models
-from globallometree.apps.base import models as base_models
+from globallometree.apps.identification import models as identification_models
 
 from globallometree.apps.api.serializers_location import (
     ZoneFAOSerializer, 
@@ -21,7 +21,6 @@ from globallometree.apps.api.serializers_location import (
     EcoregionWWFSerializer, 
     DivisionBaileySerializer, 
     ZoneHoldridgeSerializer,
-    VegetationTypeSerializer,
     LocationSerializer,
     LocationGroupSerializer,
     ContinentSerializer,
@@ -41,6 +40,11 @@ from globallometree.apps.api.serializers_data_sharing import (
     DataLicenseSerializer,
     DatasetSerializer,
     )
+
+from globallometree.apps.api.serializers_identification import (
+     VegetationTypeSerializer,
+     TreeTypeSerializer
+     )
 
 from globallometree.apps.api.validators import ValidRelatedField
 
@@ -82,7 +86,14 @@ class LinkedModelSerializer(serializers.ModelSerializer):
     Tree_type = fields.CharField(
         source='Tree_type.Name', 
         allow_null=True,
-        validators=[ValidRelatedField(model=base_models.TreeType, 
+        validators=[ValidRelatedField(model=identification_models.TreeType, 
+                                      field_name="Name")]
+        )
+
+    Vegetation_type = fields.CharField(
+        source='Vegetation_type.Name', 
+        allow_null=True,
+        validators=[ValidRelatedField(model=identification_models.VegetationType, 
                                       field_name="Name")]
         )
 
@@ -100,9 +111,16 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             ModelClass = self.Meta.model
 
             if validated_data['Tree_type']['Name']:
-                validated_data['Tree_type'] = base_models.TreeType.objects.get(Name=validated_data['Tree_type']['Name'])
+                validated_data['Tree_type'] = identification_models.TreeType.objects.get(Name=validated_data['Tree_type']['Name'])
             else:
                 validated_data['Tree_type'] = None
+
+            if validated_data['Vegetation_type']['Name']:
+                validated_data['Vegetation_type'] = identification_models.VegetationType.objects.get(Name=validated_data['Vegetation_type']['Name'])
+            else:
+                validated_data['Vegetation_type'] = None
+
+                   
 
             instance = ModelClass.objects.create(**validated_data)
 
@@ -236,9 +254,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                         elif 'Country' in location_def.keys() and location_def['Country']['Formal_name']:
                             location.Country = location_models.Country.objects.get(Formal_name=location_def['Country']['Formal_name'])
 
-                        if 'Vegetation_type' in location_def.keys() and location_def['Vegetation_type']['Name']:
-                            location.Vegetation_type = location_models.VegetationType.objects.get(Name=location_def['Vegetation_type']['Name'])
-                           
+                        
                         location.save()
                         location_group.Locations.add(location)
                

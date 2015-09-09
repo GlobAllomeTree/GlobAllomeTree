@@ -50,22 +50,6 @@ class ZoneFAO(BaseModel):
         db_table = 'locations_zone_fao'
 
 
-
-class BiomeLocal(BaseModel):
-    ID_Biome_local = models.AutoField(primary_key=True, db_column="id_biome_local")
-    Reference = models.CharField(max_length=200,  db_column="reference")
-    Name = models.CharField(max_length=200,  db_column="name")
-
-    def __unicode__(self):
-        return self.Name
-
-    class Meta:
-        verbose_name = 'Local Biome'
-        verbose_name_plural = 'Local Biomes'
-        ordering = ('Name',)
-        db_table = 'locations_biome_local'
-
-
 class EcoregionUdvardy(BaseModel):
     ID_Ecoregion_Udvardy = models.AutoField(primary_key=True, db_column="id_ecoregion_udvardy")
     Name = models.CharField(max_length=200, db_column="name")
@@ -81,7 +65,7 @@ class EcoregionUdvardy(BaseModel):
 
 
 class EcoregionWWF(BaseModel):
-    id_ecoregion_wwf = models.AutoField(primary_key=True, db_column="id_ecoregion_wwf")
+    ID_Ecoregion_WWF = models.AutoField(primary_key=True, db_column="id_ecoregion_wwf")
     Name = models.CharField(max_length=200, db_column="name")
 
     def __unicode__(self):
@@ -122,16 +106,6 @@ class ZoneHoldridge(BaseModel):
         db_table = 'locations_zone_holdridge'
 
 
-class VegetationType(BaseModel):
-    ID_Vegetation_type = models.AutoField(primary_key=True, db_column="id_vegetation_type")
-    Name = models.CharField(max_length=255, null=True, blank=True, db_column="name")
-
-    def __unicode__(self):
-        return self.Name
-
-    class Meta:
-        ordering = ('Name',)
-        db_table = 'locations_vegetation_type'
 
 
 class Location(BaseModel):
@@ -150,8 +124,6 @@ class Location(BaseModel):
     Ecoregion_WWF = models.ForeignKey(EcoregionWWF, blank=True, null=True, db_column="id_ecoregion_wwf")
     Division_Bailey = models.ForeignKey(DivisionBailey, blank=True, null=True, db_column="id_division_bailey")
     Zone_Holdridge = models.ForeignKey(ZoneHoldridge, blank=True, null=True, db_column="id_zone_holdridge")
-    Vegetation_type =  models.ForeignKey(VegetationType, blank=True, null=True, db_column="id_vegetation_type")
-    Biome_local =  models.ForeignKey(BiomeLocal, blank=True, null=True, db_column="id_biome_local")
 
     def __unicode__(self):
         if self.Name:

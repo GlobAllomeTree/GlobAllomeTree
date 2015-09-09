@@ -99,7 +99,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('Created', models.DateTimeField(auto_now_add=True, db_column=b'created')),
                 ('Modified', models.DateTimeField(auto_now=True, verbose_name=b'Last modified', db_column=b'modified')),
-                ('id_ecoregion_wwf', models.AutoField(serialize=False, primary_key=True, db_column=b'id_ecoregion_wwf')),
+                ('ID_Ecoregion_WWF', models.AutoField(serialize=False, primary_key=True, db_column=b'id_ecoregion_wwf')),
                 ('Name', models.CharField(max_length=200, db_column=b'name')),
             ],
             options={

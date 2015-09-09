@@ -7,8 +7,7 @@ from globallometree.apps.locations.models import (
     EcoregionWWF, 
     DivisionBailey, 
     ZoneHoldridge,
-    VegetationType,
-    BiomeLocal
+    VegetationType
 )
 
 COMPONENT_CHOICES = (
@@ -47,8 +46,6 @@ class LinkedModelSearchForm(forms.Form):
             ('Population','Population'),
             ('Country','Country'),
             ('Vegetation_type','Vegetation Type'),
-            ('Biome_local','Local Biome'),
-
         ):
             if select_name == 'Country':
                 choices = [('', '')] + list(Country.objects.all().values_list(
@@ -78,11 +75,7 @@ class LinkedModelSearchForm(forms.Form):
                 choices = [('', '')] + list(VegetationType.objects.all().values_list(
                     'Name', 'Name'
                 ))  
-            elif select_name == 'Biome_local':
-                choices = [('', '')] + list(BiomeLocal.objects.all().values_list(
-                    'Name', 'Name'
-                ))  
-
+     
             self.fields[select_name] = forms.ChoiceField(
                 choices=choices, required=False, label=select_label
             )

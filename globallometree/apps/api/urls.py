@@ -16,6 +16,7 @@ from globallometree.apps.api.views import (
 	ContinentViewSet, 
 	CountryViewSet, 
 	VegetationTypeViewSet,
+	TreeTypeViewSet,
 	ZoneFAOViewSet, 
 	EcoregionUdvardyViewSet, 
 	EcoregionWWFViewSet, 
@@ -59,6 +60,8 @@ router.register(r'ecoregions-udvardy', EcoregionUdvardyViewSet)
 router.register(r'ecoregions-wwf', EcoregionWWFViewSet)
 router.register(r'life-zones-holdridge', ZoneHoldridgeViewSet)
 router.register(r'divisions-bailey', DivisionBaileyViewSet)
+router.register(r'vegetation-types', VegetationTypeViewSet)
+router.register(r'tree-types', TreeTypeViewSet)
 
 #router.register(r'data-sharing-agreements',DataLicenseViewSet)
 router.register(r'datasets',DatasetViewSet)

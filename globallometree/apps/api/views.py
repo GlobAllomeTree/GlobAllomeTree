@@ -63,8 +63,12 @@ from globallometree.apps.locations.models import (
     ZoneHoldridge, 
     LocationGroup, 
     Location, 
-    VegetationType,
 	)
+
+from globallometree.apps.identification.models import (
+    TreeType,
+    VegetationType,
+    )
 
 from globallometree.apps.api.serializers import (
     AllometricEquationSerializer,
@@ -89,7 +93,6 @@ from globallometree.apps.api.serializers_location import (
     EcoregionWWFSerializer, 
     DivisionBaileySerializer, 
     ZoneHoldridgeSerializer,
-    VegetationTypeSerializer,
     LocationSerializer,
     LocationGroupSerializer,
     ContinentSerializer,
@@ -106,6 +109,10 @@ from globallometree.apps.api.serializers_taxonomy import (
     SpeciesGroupSerializer,
     )
 
+from globallometree.apps.api.serializers_identification import (
+    TreeTypeSerializer,
+    VegetationTypeSerializer
+    )
 
 class ReferenceViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -189,6 +196,13 @@ class VegetationTypeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
     """
     queryset = VegetationType.objects.all()
     serializer_class = VegetationTypeSerializer
+
+
+class TreeTypeViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    """
+    queryset = TreeType.objects.all()
+    serializer_class = TreeTypeSerializer
 
 
 class ZoneFAOViewSet(NameQueryMixin, viewsets.ReadOnlyModelViewSet):
