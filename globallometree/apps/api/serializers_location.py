@@ -172,7 +172,6 @@ class LocationSerializer(serializers.ModelSerializer):
             "Country",
             "Country_3166_3",
             "Continent", 
-            "Vegetation_type",
             "Zone_FAO",
             "Zone_Holdridge", 
             "Ecoregion_Udvardy", 

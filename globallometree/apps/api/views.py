@@ -37,10 +37,6 @@ from globallometree.apps.allometric_equations.models import (
     AllometricEquation
 	)	
 
-from globallometree.apps.base.models import (
-    TreeType
-    )
-
 from globallometree.apps.wood_densities.models import (
     WoodDensity
 	)

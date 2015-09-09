@@ -76,7 +76,14 @@ class DatasetAdmin(admin.ModelAdmin):
     exclude = ('Data_as_json',)
     form = DatasetForm
     delete_confirmation_template = 'data_sharing/admin_confirm_delete.html'
-        
+      
+    def get_actions(self, request):
+        actions = super( DatasetAdmin, self).get_actions(request)
+       
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
     def get_form(self, request, obj=None, **kwargs):
         form = super(DatasetAdmin, self).get_form(request, obj, **kwargs)
         # Keep a reference to the form so that we can use it later

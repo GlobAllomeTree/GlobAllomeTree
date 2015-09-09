@@ -6,9 +6,15 @@ from globallometree.apps.locations.models import (
     EcoregionUdvardy, 
     EcoregionWWF, 
     DivisionBailey, 
-    ZoneHoldridge,
+    ZoneHoldridge
+)
+
+from globallometree.apps.identification.models import (
+    TreeType,
     VegetationType
 )
+
+
 
 COMPONENT_CHOICES = (
             ('', ''),
@@ -46,6 +52,7 @@ class LinkedModelSearchForm(forms.Form):
             ('Population','Population'),
             ('Country','Country'),
             ('Vegetation_type','Vegetation Type'),
+            ('Tree_type','Tree Type'),
         ):
             if select_name == 'Country':
                 choices = [('', '')] + list(Country.objects.all().values_list(
@@ -72,6 +79,10 @@ class LinkedModelSearchForm(forms.Form):
                     'Name', 'Name'
                 ))  
             elif select_name == 'Vegetation_type':
+                choices = [('', '')] + list(VegetationType.objects.all().values_list(
+                    'Name', 'Name'
+                ))  
+            elif select_name == 'Tree_type':
                 choices = [('', '')] + list(VegetationType.objects.all().values_list(
                     'Name', 'Name'
                 ))  

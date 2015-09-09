@@ -114,7 +114,8 @@ class CSVParser(BaseParser):
             'Genus',
             'Species',
             'Subspecies',
-            'Tree_type'
+            'Tree_type',
+            'Vegetation_type',
         ]
 
         next_record_auto_id = 10000000
@@ -188,7 +189,6 @@ class CSVParser(BaseParser):
                 'Division_Bailey': row_data.pop('Division_Bailey'),
                 'Country': row_data.pop("Country"),
                 'Region': row_data.pop("Region"),
-                'Vegetation_type': row_data.pop("Vegetation_type"),
                 'Location': row_data.pop("Location"),
                 'Latitude': row_data.pop("Latitude"),
                 'Longitude': row_data.pop("Longitude")
@@ -236,19 +236,6 @@ class CSVParser(BaseParser):
                                                species_groups = species_groups,
                                                definition_index = definition_index,
                                                ID_Species_group = ID_Species_group)
-
-            if row_data['Species_local_name_alt']:
-                species_local_name = {
-                    "Local_name" : row_data.pop('Species_local_name_alt'),
-                    "Language_iso_639" : row_data.pop('Species_local_name_alt_iso'),
-                    "Local_name_latin": row_data.pop('Species_local_name_alt_latin')
-                }
-
-                self.ensure_local_name_in_list(species_local_name = species_local_name,
-                                               species_groups = species_groups,
-                                               definition_index = definition_index,
-                                               ID_Species_group = ID_Species_group)
-
             
             row_data['Reference'] = {
                 "Author": row_data.pop("Reference_author"), 
