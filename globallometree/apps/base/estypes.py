@@ -98,6 +98,7 @@ estype_linked_model = {
             "Remark": estype_string_analyzed,
             "Contact": estype_string_analyzed,
             "Tree_type": estype_string_not_analyzed,
+            "Vegetation_type": estype_string_not_analyzed,
             "Species_group" : estype_species_group,
             "Location_group" : estype_location_group,
             "Contributor": estype_string_not_analyzed,

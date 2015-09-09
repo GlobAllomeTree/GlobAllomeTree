@@ -278,12 +278,12 @@ def match_data_to_database(data):
         record = data[r_i]
         for sp_i in range(0, len(record['Species_group']['Group'])):
             species_def = record['Species_group']['Group'][sp_i]
-            record['Species_group']['Group'][sp_i] = match_or_clean_id_speciess(species_def)
+            record['Species_group']['Group'][sp_i] = match_or_clean_id_species(species_def)
         data[r_i] = record
         
     return data
 
-def match_or_clean_id_speciess(species_def):
+def match_or_clean_id_species(species_def):
 
     db_family = None
     db_genus = None
