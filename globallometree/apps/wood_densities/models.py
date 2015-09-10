@@ -13,62 +13,62 @@ class WoodDensity(LinkedBaseModel):
     ID_WD = models.AutoField(primary_key=True, db_column="id_wd")
 
     H_tree_avg = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Average height of tree measured",
         db_column="h_tree_avg")
 
     H_tree_min = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Min of trees' height measured if several trees where sampled",
         db_column="h_tree_min")
 
     H_tree_max = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Max of trees' height measured if several trees where sampled",
         db_column="h_tree_max")
 
     DBH_tree_avg = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Average DBH of tree measured",
         db_column="dbh_tree_avg")
 
     DBH_tree_min = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Min of trees' DBH measured if several trees where sampled",
         db_column="dbh_tree_min")
 
     DBH_tree_max = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Max of trees' DBH measured if several trees where sampled",
         db_column="dbh_tree_max")
 
     m_WD = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Wood mass measured",
         db_column="m_wd")
 
     MC_m = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Moisture content of the wood during measurement, ex: (%) 0, 12, 15, Sat for saturation",
         db_column="mc_m")
 
     V_WD = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Wood volume measured",
         db_column="v_md")
 
     MC_V= models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Moisture content of the wood during measurement, ex: (%) 0, 12, 15, Sat for saturation",
         db_column="mc_v")
 
     CR = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Coefficient of retraction (%/%)",
         db_column="cr")
 
     FSP = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Fiber saturation point (%)",
         db_column="fsp")
 
@@ -113,38 +113,38 @@ class WoodDensity(LinkedBaseModel):
         db_column="number_of_trees")
 
     SD = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Standard Deviation",
         db_column="sd")
 
     Min = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Min of WD in g.cm-3",
         db_column="min")
 
     Max = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Max of WD in g.cm-3",
         db_column="max")
 
     H_measure = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Height where WD sample was collected",
         db_column="h_measure")
 
     Bark_distance = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=3,
         help_text="Distance where the WD was collected",
         db_column="bark_distance")
 
 
     Convert_BD = models.DecimalField(
-        null=True, blank=True, max_digits=16, decimal_places=10,
+        null=True, blank=True, max_digits=10, decimal_places=5,
         help_text="0.861*Density if density is at 10 to 18%",
         db_column="convert_bd")
 
-    CV = models.IntegerField(
-        null=True, blank=True,
+    CV = models.DecimalField(
+        null=True, blank=True, max_digits=10, decimal_places=5,
         help_text="SD/Density if Density is an average",
         db_column="cv")
 
