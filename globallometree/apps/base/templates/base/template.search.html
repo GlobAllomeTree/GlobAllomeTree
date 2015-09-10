@@ -146,6 +146,7 @@
                         </div>
                     <form>
                 </div>
+                {% include 'base/search_summary.html'%}
         		<ul id="results-tab" class="nav nav-tabs">
         			<li class="active">
         				<a href="#results-list" data-toggle="tab"><span class="glyphicon glyphicon-list"></span> Results List</a>
@@ -153,9 +154,6 @@
         			<li>
         				<a id="list-tab" href="#results-map" data-toggle="tab"><span class="glyphicon glyphicon-globe"></span> Map View</a>
         			</li>
-                    <li>
-                        <a href="#search-summary" data-toggle="tab"><span class="glyphicon  glyphicon-stats"></span> Search  Summary</a>
-                    </li>
         		</ul>
         		
         		<div class="tab-content">
@@ -166,9 +164,6 @@
         			<div class="tab-pane" id="results-map">
         				<div id="map"></div>
         			</div>
-                    <div class="tab-pane" id="search-summary">
-                        {% include 'base/search_summary.html'%}
-                    </div>
                 </div>
         	</div>	
         {% else %}
