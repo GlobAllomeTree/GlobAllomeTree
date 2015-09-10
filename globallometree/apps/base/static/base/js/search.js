@@ -20,7 +20,9 @@ window.app.searchManager = function (){
 			'Division_Bailey',
 			'Reference_author',
 			'Reference',
-			'Reference_year'];
+			'Reference_year',
+			'Tree_type',
+			'Population_type'];
 
 	// Simple term filters which can be string or boolean mapping types
 	// When boolean 0,f alse, off, no and and empty string are false 
