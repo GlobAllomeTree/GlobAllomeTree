@@ -67,6 +67,7 @@ class Command(BaseCommand):
                     else:
                         skipped += 1
                 except:
+                    print "Error indexing document %s ID %s" % (type_name, obj.pk)
                     raise
             
             # Handle deletions
