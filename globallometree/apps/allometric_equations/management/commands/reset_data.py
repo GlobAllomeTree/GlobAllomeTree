@@ -11,13 +11,10 @@ from globallometree.apps.wood_densities.models import WoodDensity
 
 
 class Command(BaseCommand):
-    help = 'Cleans out all data from new normalized globallometree.apps'
+    help = 'WARNING! DELETES DATA! Cleans out data from globallometree import'
 
     def handle(self,*args, **options):
 
-        if not settings.DEBUG:
-            print "Holy *&$#$, don't do it!"
-            return
 
         AllometricEquation.objects.all().delete()
         WoodDensity.objects.all().delete()
