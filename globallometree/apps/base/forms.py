@@ -83,7 +83,7 @@ class LinkedModelSearchForm(forms.Form):
                     'Name', 'Name'
                 ))  
             elif select_name == 'Tree_type':
-                choices = [('', '')] + list(VegetationType.objects.all().values_list(
+                choices = [('', '')] + list(TreeType.objects.all().values_list(
                     'Name', 'Name'
                 ))  
      

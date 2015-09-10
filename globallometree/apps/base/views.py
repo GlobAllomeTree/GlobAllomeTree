@@ -91,7 +91,6 @@ class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
             return []
         #Send search fields to the the sqs.filter
         for field in self.form.cleaned_data:
-        
             if field in ['order_by','Point_Latitude', 'Point_Longitude']:
                 continue
 

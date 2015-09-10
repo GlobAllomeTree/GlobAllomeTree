@@ -22,7 +22,7 @@ window.app.searchManager = function (){
 			'Reference',
 			'Reference_year',
 			'Tree_type',
-			'Population_type'];
+			'Vegetation_type'];
 
 	// Simple term filters which can be string or boolean mapping types
 	// When boolean 0,f alse, off, no and and empty string are false 
