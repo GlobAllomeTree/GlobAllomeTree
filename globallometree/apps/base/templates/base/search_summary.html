@@ -1,26 +1,28 @@
-<div class="row" style="background-color:#eee;border-radius:2px;border:1px solid #EAF1F4;margin-bottom:20px;">
-  <div class="col-lg-6">
+<div class="row" style="background-color:#eee;border:1px solid #ddd;border-radius:4px;margin:0px 1px 20px 1px;">
+ 
+    <div class="col-lg-6">
 
-   <h4>Result count: <span id="summary-results-total"></span> </h4>
-   <br><br>
-  
-  </div>
-
-  <div class="col-lg-6">
+     <h4>Result count: <span id="summary-results-total"></span> </h4>
+     <br><br>
     
-    <h4> Search criteria</h4>
-    {% if current_search_summary %}
-      <p><a href="?">Clear all search criteria</a></p>
+    </div>
 
-      <dl class="dl-horizontal"> 
-       {% for item in current_search_summary %}
-          <dt>{{item.field}}</dt>
-          <dd>{{item.search_value|truncatechars:48 }} <a style="float:right" href="{{item.clear_link}}">clear</a></dd>
-            
-       {% endfor %}
-      </dl>
-    {% else %}
-      <p>No criteria - All results are shown</p>
-    {% endif %}
-  </div>
+    <div class="col-lg-6">
+      
+      <h4> Search criteria</h4>
+      {% if current_search_summary %}
+        <p><a href="?">Clear all search criteria</a></p>
+
+        <dl class="dl-horizontal"> 
+         {% for item in current_search_summary %}
+            <dt>{{item.field}}</dt>
+            <dd>{{item.search_value|truncatechars:48 }} <a style="float:right" href="{{item.clear_link}}">clear</a></dd>
+              
+         {% endfor %}
+        </dl>
+      {% else %}
+        <p>No criteria - All results are shown</p>
+      {% endif %}
+    </div>
+
 </div>
