@@ -1,5 +1,6 @@
 import json
 import hashlib
+import time
 
 import elasticsearch
 from django.conf import settings
@@ -17,6 +18,7 @@ class Command(BaseCommand):
 
     def handle(self,*args, **options):
 
+        start_time = time.time()
         if len(args) == 1:
             limit_type_name = args[0]
         else:
@@ -106,4 +108,4 @@ class Command(BaseCommand):
             index_client.flush(index=index_name)
 
             print '%s: Updated %s, Skipped %s, Created %s, Deleted %s' % (type_name, updated, skipped, created, deleted)
-
+            print("%f Seconds" % (time.time() - start_time))
