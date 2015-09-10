@@ -14,7 +14,7 @@ class PopulationAdmin(admin.ModelAdmin):
 
 
 class AllometricEquationAdmin(ImproveRawIdFieldsForm):
-    raw_id_fields = ('Species_group','Location_group','Reference')
+    raw_id_fields = ('Species_group','Location_group','Source')
     list_display = ("ID_AE", 'Equation', 'Modified')
     ordering = ("ID_AE",)
     search_fields  = ("ID_AE",)
@@ -38,7 +38,7 @@ class AllometricEquationAdmin(ImproveRawIdFieldsForm):
         ('Allometry', {'fields': [
             'Age', 'Equation','Substitute_equation', 'Ratio_equation', 'Segmented_equation'
         ]}),
-        ('Reference', {'fields': ['Reference']}),
+        ('Reference', {'fields': ['Source']}),
         ('Dataset', {'fields': ['Dataset']}),
     ]
 

@@ -237,9 +237,9 @@ class CSVParser(BaseParser):
                                                definition_index = definition_index,
                                                ID_Species_group = ID_Species_group)
             
-            row_data['Reference'] = {
-                "Author": row_data.pop("Reference_author"), 
-                "Year": row_data.pop("Reference_year"), 
+            row_data['Source'] = {
+                "Reference_author": row_data.pop("Reference_author"), 
+                "Reference_year": row_data.pop("Reference_year"), 
                 "Reference": row_data.pop("Reference")
             }
 

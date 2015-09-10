@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self,*args, **options):
 
-        start_time = time.time()
+        
         if len(args) == 1:
             limit_type_name = args[0]
         else:
@@ -36,7 +36,7 @@ class Command(BaseCommand):
 
         limit_reached = False
         for index_cls in index_classes:
-
+            start_time = time.time()
             if limit_reached:
                 break
 

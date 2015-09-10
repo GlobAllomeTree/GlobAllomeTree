@@ -41,7 +41,7 @@ class LinkedBaseModel(BaseModel):
         blank=True,
         db_column='id_location_group')
 
-    Reference = models.ForeignKey(
+    Source = models.ForeignKey(
         'source.Reference', 
         blank=True, 
         null=True,

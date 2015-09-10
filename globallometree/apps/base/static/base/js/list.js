@@ -55,6 +55,9 @@ window.app.listController = function () {
 								  <dt><small>Reference</small></dt>					\
 								  <dd><small>{{{Reference}}}&nbsp;</small></dd>	    \
 										  								 			\
+								  <dt><small>Reference Year</small></dt>			\
+								  <dd><small>{{{Year}}}&nbsp;</small></dd>	        \
+										  								 			\
 								  <dt><small>FAO Biomes</small></dt>				\
 								  <dd><small>{{{Zone_FAO}}}&nbsp;</small></dd>   	\
 								 													\
@@ -204,9 +207,11 @@ window.app.listController = function () {
 			}
 
 			try {
-				context['Reference'] = data['Reference']['Reference'];
+				context['Reference'] = data['Source']['Reference'];
+				context['Year'] = data['Source']['Reference_year'];
 			} catch (e) {
 				context['Reference'] = '';
+				context['Year'] = '';
 			}
 
 			context['recordLinkPrefix'] = config['recordLinkPrefix'];

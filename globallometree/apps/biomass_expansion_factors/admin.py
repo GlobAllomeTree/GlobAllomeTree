@@ -5,7 +5,7 @@ from globallometree.apps.base.admin_helpers import ImproveRawIdFieldsForm
 
 
 class BiomassExpansionFactorAdmin(ImproveRawIdFieldsForm):
-    raw_id_fields = ('Species_group', 'Location_group', 'Reference')
+    raw_id_fields = ('Species_group', 'Location_group', 'Source')
     list_display = ('ID_BEF', 'Modified')
     ordering = ("ID_BEF",)
     search_fields  = ('ID_BEF',)

@@ -27,10 +27,10 @@ estype_object =  {"type" : "object"}
 
 estype_reference = {
                     "properties": {
-                        "Author": estype_string_not_analyzed,
                         "Reference": estype_string_not_analyzed,
-                        "ID_Reference": estype_long,
-                        "Year": estype_long
+                        "Reference_author": estype_string_not_analyzed,
+                        "Reference_year": estype_long,
+                        "ID_Reference": estype_long
                         }
                     }
 

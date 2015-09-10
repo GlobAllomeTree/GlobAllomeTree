@@ -163,7 +163,7 @@
             "_type",
             "_id",
             "Contributor",
-            "Reference.Reference"
+            "Source.Reference"
           ],
           "highlight": [],
           "sortable": false,

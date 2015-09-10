@@ -61,16 +61,18 @@ class PopulationSerializer(serializers.ModelSerializer):
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
+    Reference_year = fields.CharField(source='Year', allow_null=True, required=False)
+    Reference_author = fields.CharField(source='Author', allow_null=True, required=False)
     class Meta:
         model = source_models.Reference
-        fields = ('Author', 'Year', 'Reference', 'ID_Reference')
+        fields = ('Reference_author', 'Reference_year', 'Reference', 'ID_Reference')
 
 
 class LinkedModelSerializer(serializers.ModelSerializer):
     Species_group = SpeciesGroupSerializer(many=False, required=False)
     Location_group = LocationGroupSerializer(many=False, required=False)
     Dataset = DatasetSerializer(many=False, read_only=True)
-    Reference = ReferenceSerializer(many=False, required=False)
+    Source = ReferenceSerializer(many=False, required=False)
     Contributor = fields.CharField(source='Contributor.Name', allow_null=True, required=False)
     Operator = fields.CharField(source='Operator.Name', allow_null=True, required=False)
 
@@ -95,7 +97,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             species_data = validated_data.pop('Species_group')
             location_data = validated_data.pop('Location_group')
-            reference_data = validated_data.pop('Reference')
+            reference_data = validated_data.pop('Source')
             contributor_data = validated_data.pop('Contributor')
             operator_data = validated_data.pop('Operator')
 
@@ -110,8 +112,6 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                 validated_data['Vegetation_type'] = identification_models.VegetationType.objects.get(Name=validated_data['Vegetation_type']['Name'])
             else:
                 validated_data['Vegetation_type'] = None
-
-                   
 
             instance = ModelClass.objects.create(**validated_data)
 
@@ -248,8 +248,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                         
                         location.save()
                         location_group.Locations.add(location)
-               
-            instance.Reference = source_models.Reference.objects.get_or_create(**reference_data)[0]
+            instance.Source = source_models.Reference.objects.get_or_create(**reference_data)[0]
 
             if 'dataset' in self.context.keys():
                 instance.Dataset = self.context['dataset']
@@ -257,7 +256,6 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                 self.context['dataset'].save()
             instance.save()
         return instance
-
 
     def to_representation(self, obj):
         # Here we figure out if the user has access to this data object
@@ -270,6 +268,7 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             return restrict_access(record, self.elasticsearch_index_name, self.context['request'].user)
         else:
             return record
+
 
 class AllometricEquationSerializer(LinkedModelSerializer):
     elasticsearch_index_name = 'allometricequation'
