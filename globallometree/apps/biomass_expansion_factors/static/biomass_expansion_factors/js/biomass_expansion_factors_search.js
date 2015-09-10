@@ -24,7 +24,7 @@ window.app.searchManager.config.rangeFilterKeys = [
 window.app.searchManager.config.indexName = 'biomassexpansionfactor';
 
 window.app.listController.config.recordLinkPrefix = 'biomass-expansion-factors';
-window.app.searchManager.config.sortField = 'Biomass_ezpansion_factor_ID';
+window.app.searchManager.config.sortField = 'ID_BEF';
 window.app.listController.config.recordReadableType = 'Biomass Expansion Factor';
 window.app.listController.config.customListTemplate = '\
   <dt><small>Biomass Expansion Factor </small></dt>					   \
