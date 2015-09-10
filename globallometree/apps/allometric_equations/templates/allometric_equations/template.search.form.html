@@ -36,11 +36,13 @@
     	       <p class="search-help-text">
                     Search allometric equations by tree type and population. <br>
                     Example searches: 
-                       <a href="?Population=STAND">Population: STAND</a>
+                       <a href="?Population=STAND">Population: Stand</a>
                 </p>
                 <div class="row">
                     <div class="col-lg-6">
                         {{ form.Population|as_crispy_field }}
+                        {{ form.Tree_type|as_crispy_field }}
+                        {{ form.Vegetation_type|as_crispy_field }}
                     </div>
                 </div>
             </div>

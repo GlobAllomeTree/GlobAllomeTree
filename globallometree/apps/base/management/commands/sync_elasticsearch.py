@@ -32,7 +32,12 @@ class Command(BaseCommand):
         #Get an instance of the elasticsearch python wrapper
         es = get_es()
 
+        limit_reached = False
         for index_cls in index_classes:
+
+            if limit_reached:
+                break
+
             updated = 0
             skipped = 0
             created = 0
@@ -69,9 +74,11 @@ class Command(BaseCommand):
                     print "Error indexing document %s ID %s" % (type_name, obj.pk)
                     raise
 
-                if updated == 2000 or created == 2000:
-                    print "Created or updated 2000 records. Please run again to continue the sync"
+                if updated + created >= 1000:
+                    print "Created or updated batch of 1000 records. Please run again to continue the sync"
+                    limit_reached = True
                     break
+                    
             
             # Handle deletions
             # Looks at all the records in elasticsearch, if there are any that should not be there, delete them
