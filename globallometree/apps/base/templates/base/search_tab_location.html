@@ -30,15 +30,15 @@
     <h3>Geographic Location</h3>
     <p>Note that when you search by precise location on the map, records that do not have a latitude and longitude specified will not be displayed.</p>
      <div class="row">
-        <!--
-        <div class="col-lg-6">
+        
+        <div class="col-lg-6" style="position:absolute;visibility:hidden;">
             <h4>By Latitude and Longitude</h4>
             {{ form.Min_Latitude|as_crispy_field }}
             {{ form.Max_Latitude|as_crispy_field }}
             {{ form.Min_Longitude|as_crispy_field }}
             {{ form.Max_Longitude|as_crispy_field }}
         </div>
-        -->
+        
         <div class="col-lg-6">
             <h4>Search within Distance from Point</h4>
             {{ form.Point_Latitude|as_crispy_field }} 
