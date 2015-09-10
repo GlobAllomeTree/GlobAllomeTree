@@ -113,17 +113,17 @@ class WoodDensity(LinkedBaseModel):
         db_column="number_of_trees")
 
     SD = models.DecimalField(
-        null=True, blank=True, max_digits=10, decimal_places=3,
+        null=True, blank=True, max_digits=8, decimal_places=2,
         help_text="Standard Deviation",
         db_column="sd")
 
     Min = models.DecimalField(
-        null=True, blank=True, max_digits=10, decimal_places=3,
+        null=True, blank=True, max_digits=8, decimal_places=2,
         help_text="Min of WD in g.cm-3",
         db_column="min")
 
     Max = models.DecimalField(
-        null=True, blank=True, max_digits=10, decimal_places=3,
+        null=True, blank=True, max_digits=8, decimal_places=2,
         help_text="Max of WD in g.cm-3",
         db_column="max")
 
@@ -144,7 +144,7 @@ class WoodDensity(LinkedBaseModel):
         db_column="convert_bd")
 
     CV = models.DecimalField(
-        null=True, blank=True, max_digits=10, decimal_places=5,
+        null=True, blank=True, max_digits=8, decimal_places=2,
         help_text="SD/Density if Density is an average",
         db_column="cv")
 
