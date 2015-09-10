@@ -61,18 +61,9 @@ class PopulationSerializer(serializers.ModelSerializer):
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
-    Year = fields.SerializerMethodField()
     class Meta:
         model = source_models.Reference
         fields = ('Author', 'Year', 'Reference', 'ID_Reference')
-
-    def get_Year(self, obj):
-        #Trim 1986b to be 1986
-        #Maybe reference should have a Year and Year_string attribute?
-        if obj.Year and len(obj.Year) > 4: 
-            return obj.Year[0:4]
-        else:
-            return obj.Year
 
 
 class LinkedModelSerializer(serializers.ModelSerializer):
