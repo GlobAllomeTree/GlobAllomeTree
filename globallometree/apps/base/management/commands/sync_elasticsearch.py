@@ -76,8 +76,8 @@ class Command(BaseCommand):
                     print "Error indexing document %s ID %s" % (type_name, obj.pk)
                     raise
 
-                if updated + created >= 1000:
-                    print "Created or updated batch of 1000 records. Please run again to continue the sync"
+                if updated + created >= 2500:
+                    print "Created or updated batch of 2500 records. Please run again to continue the sync"
                     limit_reached = True
                     break
                     
