@@ -46,7 +46,6 @@ class Command(BaseCommand):
 
             searcher = index_cls.search()
             valid_id_list = []
-            i = 0
 
             # Handle additions and updates
             for obj in index_cls.get_indexable().iterator():
@@ -69,6 +68,10 @@ class Command(BaseCommand):
                 except:
                     print "Error indexing document %s ID %s" % (type_name, obj.pk)
                     raise
+
+                if updated == 2000 or created == 2000:
+                    print "Created or updated 2000 records. Please run again to continue the sync"
+                    break
             
             # Handle deletions
             # Looks at all the records in elasticsearch, if there are any that should not be there, delete them
