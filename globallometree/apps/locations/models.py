@@ -114,10 +114,10 @@ class Location(BaseModel):
     Region = models.CharField(max_length=255, blank=True, null=True, db_column="region")
     Country = models.ForeignKey(Country, blank=True, null=True, db_column="id_country")
     Latitude = models.DecimalField(
-        null=True, blank=True, max_digits=8, decimal_places=5, db_column="latitude"
+        null=True, blank=True, max_digits=14, decimal_places=9, db_column="latitude"
     )
     Longitude = models.DecimalField(
-        null=True, blank=True, max_digits=8, decimal_places=5, db_column="longitude"
+        null=True, blank=True, max_digits=14, decimal_places=9, db_column="longitude"
     )
     Zone_FAO = models.ForeignKey(ZoneFAO, blank=True, null=True, db_column="id_zone_fao")
     Ecoregion_Udvardy = models.ForeignKey(EcoregionUdvardy, blank=True, null=True, db_column="id_ecoregion_udvardy")
