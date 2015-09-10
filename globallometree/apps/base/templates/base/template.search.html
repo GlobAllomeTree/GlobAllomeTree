@@ -128,7 +128,9 @@
 		
     	{% if form_is_valid %}
             <div id="search-results">
-        		<!-- Result Tabs -->
+        		
+                {% include 'base/search_summary.html'%}
+                <!-- Result Tabs -->
                 <div style="float:right;"> 
                     <form action='export/' id="export-form" method="POST">
                         {% csrf_token %}
@@ -146,7 +148,6 @@
                         </div>
                     <form>
                 </div>
-                {% include 'base/search_summary.html'%}
         		<ul id="results-tab" class="nav nav-tabs">
         			<li class="active">
         				<a href="#results-list" data-toggle="tab"><span class="glyphicon glyphicon-list"></span> Results List</a>
