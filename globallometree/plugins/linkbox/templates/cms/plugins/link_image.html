@@ -1,4 +1,4 @@
-<div class="linked-image">
+<div class="linked-image" style="text-align:center; margin:25px 10px">
 	{% if link %}<a href="{{ link }}" target="{{ object.target }}">{% endif %}
 
 	<img src="{{ object.image.url }}" alt="{{ object.title }}"/>
@@ -8,14 +8,14 @@
 	{% autoescape off %}
 
 		{% if link %}
-			<a class="linked-image-link-text" href="{{ link }}" target="{{ object.target }}">
+			<p><a class="linked-image-link-text" href="{{ link }}" target="{{ object.target }}">
 
-			{% elif object.title %}
+			{% if object.title %}
 				{{ object.title }}
 			{% else %}
 				{{ object.link_text }}
 			{% endif %}
-			</a>
+			</a></p>
 
 		{% else %}
 			<h4>{{ object.title }}</h4>
