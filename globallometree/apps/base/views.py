@@ -210,6 +210,7 @@ def export_view(request, doc_type, filename, serializer):
     query = json.loads(request.POST.get('query'))
     extension = request.POST.get('extension')
     assert query.keys() == [u'sort', u'query', u'from']
+    query['size'] = 1000000
     es = get_es(urls=settings.ES_URLS)
     result = es.search(doc_type=doc_type, body=query)
     data = []
