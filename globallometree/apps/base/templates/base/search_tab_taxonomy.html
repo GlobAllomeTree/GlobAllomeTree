@@ -9,9 +9,10 @@
     </p>
     <div class="row">
         <div class="col-lg-6">
-      
-            {{ form.Family|as_crispy_field }}
-       
+            <div style="position:absolute;visibility:hidden;">
+                {{ form.Family|as_crispy_field }}
+            </div>
+
             {{ form.Genus|as_crispy_field }}
        
             {{ form.Species|as_crispy_field }}

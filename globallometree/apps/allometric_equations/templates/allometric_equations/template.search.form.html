@@ -9,7 +9,7 @@
             
             <li><a href="#components" data-toggle="tab">Components</a></li>
             <li><a href="#input_output" data-toggle="tab">Input/Output</a></li>
-            <li><a href="#allometry" data-toggle="tab">Allometry</a></li>
+            <!--<li><a href="#allometry" data-toggle="tab">Allometry</a></li>-->
             <li><a href="#taxonomy" data-toggle="tab">Taxonomy</a></li>
             <li><a href="#location" data-toggle="tab">Location</a></li>
             <li><a href="#reference" data-toggle="tab">Reference</a></li>
@@ -61,38 +61,14 @@
                        <a href="?Unit_X=cm&amp;Min_X__gte=10&amp;Min_X__lte=50">Unit X: cm + Min X From: 10 + Min X To: 50</a>
                 </p>
                 <div class="row smallInputs">
+                  
                     <div class="col-lg-3">
-                        {{ form.U|as_crispy_field }}
-                        {{ form.V|as_crispy_field }}
-                        {{ form.W|as_crispy_field }}
-                        {{ form.X|as_crispy_field }}
-                        {{ form.Z|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-3">
-                        {{ form.Unit_U|as_crispy_field }}
-                        {{ form.Unit_V|as_crispy_field }}
-                        {{ form.Unit_W|as_crispy_field }}
-                        {{ form.Unit_X|as_crispy_field }}
-                        {{ form.Unit_Y|as_crispy_field }}
-                        {{ form.Unit_Z|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-3">
-                        {{ form.Min_X__gte|as_crispy_field }}
-                        {{ form.Max_X__gte|as_crispy_field }}
-                        {{ form.Min_Z__gte|as_crispy_field }}
-                        {{ form.Max_Z__gte|as_crispy_field }}
                         {{ form.Output|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-3">
-                        {{ form.Min_X__lte|as_crispy_field }}
-                        {{ form.Max_X__lte|as_crispy_field }}
-                        {{ form.Min_Z__lte|as_crispy_field }}
-                        {{ form.Max_Z__lte|as_crispy_field }}
                     </div>
                 </div>
             </div>
      
-    
+            <!--
             <div class="tab-pane" id="allometry">
                 <p class="search-help-text">
                     Search inside the equation <br>
@@ -106,6 +82,7 @@
                     </div>
                 </div>  
             </div>
+            -->
         </div>
       
         {{ form.order_by }} 

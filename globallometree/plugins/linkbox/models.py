@@ -19,11 +19,11 @@ class LinkBox(CMSPlugin):
 
     title = models.CharField("Title", max_length=255)
     image = models.ImageField("Image", upload_to='linkbox', blank=True, null=True)
-    link_text = models.CharField("Link text", max_length=255, blank=True, null=True, help_text=_("Text to use for the link."))
+    link_text = models.CharField("Link/Button text", max_length=255, blank=True, null=True, help_text=_("Text to use for the link."))
     page_link = models.ForeignKey(
         Page, 
         verbose_name=_("page"), 
-        help_text=_("If present image will be clickable"), 
+        help_text=_("If set the link will automatically goto this page"), 
         blank=True, 
         null=True, 
         limit_choices_to={'publisher_is_draft': True}
