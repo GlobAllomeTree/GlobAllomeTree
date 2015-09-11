@@ -12,73 +12,73 @@ class WoodDensitySearchForm(LinkedModelSearchForm):
         super(WoodDensitySearchForm, self).__init__(*args, **kwargs)
 
     H_tree_avg__gte = forms.DecimalField(required=False,
-        label='H tree avg From')
+        label='From')
     H_tree_avg__lte = forms.DecimalField(required=False,
-        label='H tree avg To')
+        label='To')
 
     H_tree_min__gte = forms.DecimalField(required=False,
-        label='H tree min From')
+        label='From')
     H_tree_min__lte = forms.DecimalField(required=False,
-        label='H tree min To')
+        label='To')
 
     H_tree_max__gte = forms.DecimalField(required=False,
-        label='H tree max From')
+        label='From')
     H_tree_max__lte = forms.DecimalField(required=False,
-        label='H tree max To')
+        label='To')
 
     DBH_tree_min__gte = forms.DecimalField(required=False,
-        label='DBH tree avg From')
+        label='From')
     DBH_tree_min__lte = forms.DecimalField(required=False,
-        label='DBH tree avg To')
+        label='To')
 
     DBH_tree_max__gte = forms.DecimalField(required=False,
-        label='DBH tree min From')
+        label='From')
     DBH_tree_max__lte = forms.DecimalField(required=False,
-        label='DBHH tree min To')
+        label='To')
 
     DBH_tree_avg__gte = forms.DecimalField(required=False,
-        label='DBH tree max From')
+        label='From')
     DBH_tree_avg__lte = forms.DecimalField(required=False,
-        label='DBHH tree max To')
+        label='To')
 
     m_WD__gte = forms.DecimalField(required=False,
-        label='Wood mass measured From')
+        label='From')
     m_WD__lte = forms.DecimalField(required=False,
-        label='Wood mass measured To')
+        label='To')
 
     MC_m__gte = forms.DecimalField(required=False,
-        label='Moisture content while measuring From')
+        label='From')
     MC_m__lte = forms.DecimalField(required=False,
-        label='Moisture content while measuring To')
+        label='To')
 
     V_WD__gte = forms.DecimalField(required=False,
-        label='Wood volume measured From')
+        label='From')
     V_WD__lte = forms.DecimalField(required=False,
-        label='Wood volume measured To')
+        label='To')
 
     MC_V__gte = forms.DecimalField(required=False,
-        label='Moisture content while measuring From')
+        label='From')
     MC_V__lte = forms.DecimalField(required=False,
-        label='Moisture content while measuring To')
+        label='To')
 
     CR__gte = forms.DecimalField(required=False,
-        label='Coefficient of retraction From')
+        label='From')
     CR__lte = forms.DecimalField(required=False,
-        label='Coefficient of retraction To')
+        label='To')
 
     FSP__gte = forms.DecimalField(required=False,
-        label='Fiber saturation point From')
+        label='From')
     FSP__lte = forms.DecimalField(required=False,
-        label='Fiber saturation point To')
+        label='To')
 
     Methodology = forms.CharField(required=False, label='Methodology')
 
     Bark = forms.NullBooleanField(required=False, label='Bark included')
 
     Density_g_cm3__gte = forms.DecimalField(required=False,
-        label='Wood density From')
+        label='From')
     Density_g_cm3__lte = forms.DecimalField(required=False,
-        label='Wood density To')
+        label='To')
 
     MC_Density = forms.CharField(required=False, label='Moisture Content Code')
 
@@ -87,36 +87,36 @@ class WoodDensitySearchForm(LinkedModelSearchForm):
     Data_type = forms.CharField(required=False, label='Data type')
 
     Samples_per_tree__gte = forms.IntegerField(required=False,
-        label='Samples per tree From')
+        label='From')
     Samples_per_tree__lte = forms.IntegerField(required=False,
-        label='Samples per tree To')
+        label='To')
 
     Number_of_trees__gte = forms.IntegerField(required=False,
-        label='Number of trees From')
+        label='From')
     Number_of_trees__lte = forms.IntegerField(required=False,
-        label='Number of trees To')
+        label='To')
 
     SD__gte = forms.DecimalField(required=False,
-        label='Standard deviation From')
+        label='From')
     SD__lte = forms.DecimalField(required=False,
-        label='Standard deviation To')
+        label='To')
 
     Min__gte = forms.DecimalField(required=False,
-        label='Min of WD From')
+        label='From')
     Min__lte = forms.DecimalField(required=False,
-        label='Min of WD To')
+        label='To')
 
     Max__gte = forms.DecimalField(required=False,
-        label='Max of WD From')
+        label='From')
     Max__lte = forms.DecimalField(required=False,
-        label='Max of WD To')
+        label='To')
 
     H_measure__gte = forms.DecimalField(required=False,
-        label='Height of sample From')
+        label='From')
     H_measure__lte = forms.DecimalField(required=False,
-        label='Height of sample To')
+        label='To')
 
     Bark_distance__gte = forms.DecimalField(required=False,
-        label='Distance where WD collected From')
+        label='From')
     Bark_distance__lte = forms.DecimalField(required=False,
-        label='Distance where WD collected To')
+        label='To')
