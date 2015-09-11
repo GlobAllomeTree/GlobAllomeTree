@@ -225,6 +225,12 @@ window.app.listController = function () {
 				context['datasetLink'] = '';
 			}
 
+			try {
+				context['Density_g_cm3'] = Number(context['Density_g_cm3']).toFixed(3)
+			} catch(e) {
+
+			}
+
 			$resultsList.append(Mustache.render(getResultTemplate(), context));	
 		}
 	}
