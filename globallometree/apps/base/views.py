@@ -215,7 +215,6 @@ def export_view(request, doc_type, filename, serializer):
     result = es.search(doc_type=doc_type, body=query)
     data = []
     for hit in result['hits']['hits']:
-        #del hit['_source']['key that isn't wanted]
         data.append(hit['_source'])
     rendered_data = Renderers[extension]().render(data)
 
