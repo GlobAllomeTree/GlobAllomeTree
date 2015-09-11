@@ -302,9 +302,9 @@ header h1 {
 
 .variable-label {
 	font-weight:normal;
-	padding-left:20px;
+	padding-left:8px;
 	font-size:14px;
-	color:#aaa;
+	color:#999;
 }
 
 .search-form-row-label {

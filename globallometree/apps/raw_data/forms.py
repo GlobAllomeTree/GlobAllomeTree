@@ -13,18 +13,18 @@ class RawDataSearchForm(LinkedModelSearchForm, ComponentSearchForm):
         super(RawDataSearchForm, self).__init__(*args, **kwargs)
 
     H_m__gte = forms.DecimalField(required=False,
-        label='Tree Height From (m)')
+        label='From')
     H_m__lte = forms.DecimalField(required=False,
-        label='Tree Height To (m)')
+        label='To')
 
     DBH_cm__gte = forms.DecimalField(required=False,
-        label='Diameter From (cm)')
+        label='From')
     DBH_cm__lte = forms.DecimalField(required=False,
-        label='Diameter To (cm)')
+        label='To')
 
     Volume_m3__gte = forms.DecimalField(required=False,
-        label='Volume From (m<sup>3</sup>)')
+        label='From')
     Volume_m3__lte = forms.DecimalField(required=False,
-        label='Volume To (m<sup>3</sup>)')
+        label='To')
 
   
