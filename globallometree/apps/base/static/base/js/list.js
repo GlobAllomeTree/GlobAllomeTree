@@ -231,6 +231,12 @@ window.app.listController = function () {
 
 			}
 
+			try {
+				context['BEF'] = Number(context['BEF']).toFixed(3)
+			} catch(e) {
+
+			}
+
 			$resultsList.append(Mustache.render(getResultTemplate(), context));	
 		}
 	}
