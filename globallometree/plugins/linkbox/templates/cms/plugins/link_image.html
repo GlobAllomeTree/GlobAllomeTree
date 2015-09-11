@@ -8,8 +8,16 @@
 	{% autoescape off %}
 
 		{% if link %}
-			<a class="linked-image-link-text" href="{{ link }}" target="{{ object.target }}">{{ object.link_text }}</a>
-		{% elif object.title %}
+			<a class="linked-image-link-text" href="{{ link }}" target="{{ object.target }}">
+
+			{% elif object.title %}
+				{{ object.title }}
+			{% else %}
+				{{ object.link_text }}
+			{% endif %}
+			</a>
+
+		{% else %}
 			<h4>{{ object.title }}</h4>
 		{% endif %}
 
