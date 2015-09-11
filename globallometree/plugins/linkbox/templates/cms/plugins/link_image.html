@@ -8,7 +8,7 @@
 	{% autoescape off %}
 
 		{% if link %}
-			<p><a class="linked-image-link-text" href="{{ link }}" target="{{ object.target }}" style="color:#888;">
+			<p><a class="linked-image-link-text" href="{{ link }}" target="{{ object.target }}" style="color:#999;font-size:80%">
 
 			{% if object.title %}
 				{{ object.title }}
@@ -18,7 +18,7 @@
 			</a></p>
 
 		{% else %}
-			<h4>{{ object.title }}</h4>
+			<p>{{ object.title }}</p>
 		{% endif %}
 
 		{% if object.description %}{{ object.description }}{% endif %}
