@@ -6,7 +6,7 @@ from .models import LinkBox
 class LinkBoxPlugin(CMSPluginBase):
     model = LinkBox
     name = _("Link box")
-    render_template = "cms/plugins/link_box.html"
+    
     
     def render(self, context, instance, placeholder):
         if instance.url:
@@ -23,4 +23,7 @@ class LinkBoxPlugin(CMSPluginBase):
 
         return context 
  
+    def get_render_template(self, context, instance, placeholder ):
+        return instance.template
+
 plugin_pool.register_plugin(LinkBoxPlugin)

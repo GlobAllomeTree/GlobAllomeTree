@@ -1,0 +1,18 @@
+<div class="linked-image">
+	{% if link %}<a href="{{ link }}" target="{{ object.target }}">{% endif %}
+
+	<img src="{{ object.image.url }}" alt="{{ object.title }}"/>
+
+	{% if link %}</a>{% endif %}
+
+	{% autoescape off %}
+
+		{% if link %}
+			<a class="linked-image-link-text" href="{{ link }}" target="{{ object.target }}">{{ object.link_text }}</a>
+		{% elif object.title %}
+			<h4>{{ object.title }}</h4>
+		{% endif %}
+
+		{% if object.description %}{{ object.description }}{% endif %}
+	{% endautoescape %}
+</div>

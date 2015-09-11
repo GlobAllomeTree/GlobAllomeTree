@@ -1,13 +1,12 @@
-{% load i18n %}
 <div class="well clearfix">
 <h4>{{ object.title }}</h4>
 {% if object.image %}
-	{% if link %}<a href="{{ link }}">{% endif %}
+	{% if link %}<a href="{{ link }}" target="{{ object.target }}">{% endif %}
 		<img src="{{ object.image.url }}" alt="{{ object.title }}"/>
 	{% if link %}</a>{% endif %}
 {% endif %}
 {% autoescape off %}
 {% if object.description %}{{ object.description }}{% endif %}
 {% endautoescape %}
-{% if link %}<a href="{{ link }}" class="btn btn-success pull-right">{{ object.link_text }} &#187;</a>{% endif %}
+{% if link %}<a href="{{ link }}" class="btn btn-success pull-right" target="{{ object.target }}">{{ object.link_text }} &#187;</a>{% endif %}
 </div>
