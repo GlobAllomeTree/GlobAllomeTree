@@ -64,7 +64,10 @@ def restrict_access(record, index_name, user):
     if not index_name in restricted_keys.keys():
         return record
 
-    if 'Dataset' not in record.keys() or not record['Dataset']:
+    if 'Dataset' not in record.keys() \
+      or not record['Dataset']
+      or 'ID_Dataset' not in record['Dataset'].keys() \
+      or not record['Dataset']['ID_Dataset']:
         return record
 
     license = record['Dataset']['Data_license']
