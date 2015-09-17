@@ -36,5 +36,5 @@ class DatasetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.Dataset
-        fields = ('Title', 'Dataset_url', 'Description', 'User', 'Imported', 'Data_type_text', 'Record_count', 'Data_license')
+        fields = ('ID_Dataset', 'Title', 'Dataset_url', 'Description', 'User', 'Imported', 'Data_type_text', 'Record_count', 'Data_license')
         read_only_fields = ('Data_license', 'Data_type_text', 'Record_count', 'Imported', 'User')
