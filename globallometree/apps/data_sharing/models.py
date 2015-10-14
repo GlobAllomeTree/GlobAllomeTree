@@ -179,7 +179,7 @@ class Dataset(BaseModel):
 
     Uploaded_dataset_file = models.FileField(
         upload_to = "data_sharing",
-        verbose_name='Structured dataset file (csv, json, xml)',
+        verbose_name='Structured dataset file (txt, json, xml)',
         blank=True,
         null=True,
         help_text="The structure must match the GlobAllomeTree API structure. Samples may be found on the right.",

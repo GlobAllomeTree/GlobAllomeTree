@@ -1,8 +1,11 @@
 import os
+import re
 
 from django.conf import settings
 from rest_framework.parsers import BaseParser
 from rest_framework.exceptions import ParseError
+
+tab_re = re.compile('\t')
 
 def universal_newlines(stream):
     for intermediate_line in stream:
@@ -23,7 +26,7 @@ class CSVParser(BaseParser):
     The parser assumes the first line contains the column names.
     """
 
-    media_type = 'text/csv'
+    media_type = 'text/txt'
 
 
     def __init__(self, data_type):
@@ -130,12 +133,15 @@ class CSVParser(BaseParser):
         # Each csv row might add a species definition, a new location, or a new species local name
 
         rows = []
-        for line in universal_newlines(stream):
+
+        for line in unicode(stream.read(), 'utf16').splitlines():
             # Fix escaped quotes
-            line = unicode(line, 'utf8').replace('""', '"')
-            row = line.split('\t')
-            rows.append(row)
-        
+            line = line.replace('""', '"')
+            # Ignore empty lines
+            if not tab_re.match(line):
+                row = line.split('\t')
+                rows.append(row)
+
         header = rows.pop(0)
         
         for row in rows:

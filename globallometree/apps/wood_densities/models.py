@@ -147,11 +147,7 @@ class WoodDensity(LinkedBaseModel):
         null=True, blank=True, max_digits=8, decimal_places=3,
         help_text="SD/Density if Density is an average",
         db_column="cv")
-
-    #Formulas
-    #Convert BD  Formula decimal 0.861*Density if density is at 10 to 18%  IF(BB2="BD",ROUND(BA2,3),IF(0.1<=BB2,IF(BB2<=0.18,ROUND(BA2*0.861,3),"NA"),"NA"))
-    #CV Formula SD/Density if Density is an average Formula: IF(BH2="NA","NA",BH2/BA2)
-
+  
     def get_serializer_class(self):
         from globallometree.apps.api import WoodDensitySerializer
         return WoodDensitySerializer

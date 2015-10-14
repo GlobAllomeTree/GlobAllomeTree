@@ -245,7 +245,7 @@ def validate_records(data, SerializerClass):
 def validate_data_file(data_file, data_type):
     """
         Processes an uploaded file with validation, returns data and errors
-        The file may me in xml, csv, or json format
+        The file may me in xml, txt, or json format
         It could contain allometric equations, wood densities
         raw_data or biomass expansion factors
     """
@@ -254,7 +254,7 @@ def validate_data_file(data_file, data_type):
     ParserClass = Parsers[extension]
     SerializerClass = Serializers[data_type]
     
-    if extension == '.csv':
+    if extension == '.txt':
         parser = ParserClass(data_type=data_type)
     else:
         parser = ParserClass()

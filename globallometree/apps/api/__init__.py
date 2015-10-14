@@ -28,12 +28,12 @@ Serializers = {
 Parsers = {
                 '.json': JSONParser,
                 '.xml': XMLParser,
-                '.csv': CSVParser
+                '.txt': CSVParser
             }
 
 Renderers = {
 				 '.json': JSONRenderer,
 			     '.xml': XMLRenderer,
-			     '.csv': CSVRenderer
+			     '.txt': CSVRenderer
 			}
 

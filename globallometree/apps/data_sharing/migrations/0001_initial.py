@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                 ('Modified', models.DateTimeField(auto_now=True, verbose_name=b'Last modified', db_column=b'modified')),
                 ('ID_Dataset', models.AutoField(serialize=False, primary_key=True, db_column=b'id_dataset')),
                 ('Title', models.CharField(max_length=100, verbose_name=b'Dataset Title', db_column=b'title')),
-                ('Uploaded_dataset_file', models.FileField(db_column=b'uploaded_dataset_file', upload_to=b'data_sharing', blank=True, help_text=b'The structure must match the GlobAllomeTree API structure. Samples may be found on the right.', null=True, verbose_name=b'Structured dataset file (csv, json, xml)')),
+                ('Uploaded_dataset_file', models.FileField(db_column=b'uploaded_dataset_file', upload_to=b'data_sharing', blank=True, help_text=b'The structure must match the GlobAllomeTree API structure. Samples may be found on the right.', null=True, verbose_name=b'Structured dataset file (txt, json, xml)')),
                 ('Uploaded_source_document', models.FileField(db_column=b'uploaded_source_document', upload_to=b'data_sharing', blank=True, help_text=b'The source document can be a pdf, excel file, word document or other with data in any format.', null=True, verbose_name=b'Source document with data in any format')),
                 ('Description', models.TextField(null=True, verbose_name=b'Brief description', db_column=b'description', blank=True)),
                 ('Data_type', models.CharField(max_length=100, verbose_name=b'Type', db_column=b'data_type', choices=[(b'raw_data', b'Raw Data'), (b'biomass_expansion', b'Biomass Expansion Factors'), (b'wood_density', b'Wood Density Data'), (b'allometric_equations', b'Allometric Equations')])),

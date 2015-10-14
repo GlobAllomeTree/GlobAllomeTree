@@ -52,8 +52,8 @@
                     $('#export-form').submit();
                 }
 
-                $('#export-csv').click(function() {
-                    $('#export-extension').val('.csv');
+                $('#export-txt').click(function() {
+                    $('#export-extension').val('.txt');
                     submitExportForm();
                 });
 
@@ -141,7 +141,7 @@
                             <span class="glyphicon glyphicon-download"></span> Export Results <span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu" role="menu">
-                            <li><a href="#" id="export-csv">Download CSV</a></li>
+                            <li><a href="#" id="export-txt">Download TXT (Tab Delimited UTF-16)</a></li>
                             <li><a href="#" id="export-json">Download JSON</a></li>
                             <li><a href="#" id="export-xml">Download XML</a></li>
                           </ul>
