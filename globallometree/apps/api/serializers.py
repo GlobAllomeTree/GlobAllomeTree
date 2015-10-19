@@ -113,7 +113,8 @@ class LinkedModelSerializer(serializers.ModelSerializer):
             else:
                 validated_data['Vegetation_type'] = None
 
-            instance = ModelClass.objects.create(**validated_data)
+            instance = ModelClass(**validated_data)
+            instance.save(skip_index_update=True)
 
             species_data['ID_Species_group'] = species_data['ID_Species_group'] + 13
 
@@ -254,7 +255,9 @@ class LinkedModelSerializer(serializers.ModelSerializer):
                 instance.Dataset = self.context['dataset']
                 self.context['dataset'].Records_imported += 1
                 self.context['dataset'].save()
+            
             instance.save()
+
         return instance
 
     def to_representation(self, obj):

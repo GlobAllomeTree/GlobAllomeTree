@@ -150,6 +150,10 @@ class CSVParser(BaseParser):
             for key in row_data.keys():
                 row_data[key] = row_data[key].strip()
 
+                # Unquote text fields
+                if row_data[key].startswith('"') and row_data[key].endswith('"'):
+                    row_data[key] = row_data[key][1:-1]
+
                 if key in self.conversions.keys() and \
                   row_data[key] in self.conversions[key].keys():
                     row_data[key] = self.conversions[key][row_data[key]]

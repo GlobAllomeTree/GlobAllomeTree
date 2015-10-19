@@ -3,6 +3,8 @@ import json
 from django.db import models
 from elasticutils.contrib.django import get_es
 
+import inspect
+
 class BaseModel(models.Model):
     Created = models.DateTimeField(auto_now_add=True, db_column='created')
     Modified = models.DateTimeField(auto_now=True, verbose_name="Last modified", db_column='modified')
@@ -29,6 +31,8 @@ class ComponentBaseModel(models.Model):
 
 
 class LinkedBaseModel(BaseModel):
+
+
     Species_group = models.ForeignKey(
         'taxonomy.SpeciesGroup',
         null=True, 
@@ -112,33 +116,45 @@ class LinkedBaseModel(BaseModel):
             context['request'] = request
         serialized_data = SerializerClass(self, context=context).data
         return serialized_data 
-
-    
-    def update_index(self, add=True, document=None):
+   
+    def update_index(self, document=None):
         IndexClass = self.get_index_class()
+
         if document is None:
             document = IndexClass.extract_document(obj=self)
+
+        new_hash = self.get_hash(document)
+        if new_hash != self.Elasticsearch_doc_hash:
+            self.Elasticsearch_doc_hash = new_hash
+            self.save(skip_index_update=True)
+
+        searcher = IndexClass.search()
         index = IndexClass.get_index()
         type_name = IndexClass.get_mapping_type_name()
         es = get_es()
-        if add:
+
+        search_results = searcher.filter(_id=self.pk)
+
+        if len(search_results) == 0:    
             es.create(index=index, doc_type=type_name, body=document, id=self.pk)
         else:
             es.update(index=index, doc_type=type_name, body=document, id=self.pk)
 
-        self.update_elasticsearch_doc_hash(document)
-
-    def update_elasticsearch_doc_hash(self, document):
-        new_hash = hashlib.md5(json.dumps(document)).hexdigest()
-        if new_hash != self.Elasticsearch_doc_hash:
-            self.Elasticsearch_doc_hash = new_hash
-            self.save()
-
+    def get_hash(self, document):
+        return hashlib.md5(json.dumps(document)).hexdigest()
 
     def remove_from_index(self):
         IndexClass = self.get_index_class()
-        document = IndexClass.extract_document(obj=self)
         index = IndexClass.get_index()
         type_name = IndexClass.get_mapping_type_name()
         es = get_es()
         es.delete(index=index, doc_type=type_name, id=self.pk)
+
+    def save(self, *args, **kwargs):
+        skip_index_update = kwargs.pop('skip_index_update', False)
+        super(LinkedBaseModel, self).save(*args, **kwargs)
+        if not skip_index_update:
+            IndexClass = self.get_index_class()
+            document = IndexClass.extract_document(obj=self)
+            if self.Elasticsearch_doc_hash != self.get_hash(document):
+                self.update_index(document=document) 

@@ -65,10 +65,10 @@ class Command(BaseCommand):
                     obj_updated = False
 
                     if len(search_results) == 0:
-                        obj.update_index(add=True, document=current_document)
+                        obj.update_index(document=current_document)
                         created += 1
                     elif current_doc_hash != old_doc_hash:
-                        obj.update_index(add=False, document=current_document)
+                        obj.update_index(document=current_document)
                         updated += 1
                     else:
                         skipped += 1

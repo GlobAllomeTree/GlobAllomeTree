@@ -313,13 +313,25 @@ def match_or_clean_id_species(species_def):
             species_def['ID_Genus'] = db_genus.pk
         except Genus.DoesNotExist:
             pass
-            
+     
+    
+    species_author = None
+    subspecies_author = None
+
+    if 'Species_author' in species_def.keys() and species_def['Species_author'] is not None:
+        if 'Subspecies' in species_def.keys() and species_def['Subspecies'] is not None:
+            subspecies_author = species_def['Species_author']
+        else:
+            species_author = species_def['Species_author']
+
+
     # If we have the genus in our db, we try to find the species id
     if db_genus and 'Species' in species_def.keys():
         try:
             db_species = Species.objects.get(
                 Genus=db_genus,
-                Name=species_def['Species'])
+                Name=species_def['Species'],
+                Author=species_author)
             species_def['ID_Species'] = db_species.pk
         except Species.DoesNotExist:
             pass
@@ -327,7 +339,7 @@ def match_or_clean_id_species(species_def):
     # If we have the species in our db, we try to find the subspecies id
     if db_species and 'Subspecies' in species_def.keys():
         try:
-            db_subspecies = Subspecies.objects.get(Name=species_def['Subspecies'])
+            db_subspecies = Subspecies.objects.get(Name=species_def['Subspecies'], Author=subspecies_author)
             species_def['Subpsecies_ID'] = db_species.pk
         except Subspecies.DoesNotExist:
             pass
