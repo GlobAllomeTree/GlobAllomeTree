@@ -93,9 +93,7 @@ class LinkedModelSearchForm(forms.Form):
 
     #Full Text
     q = forms.CharField(required=False, label='Keyword')
-    
-    #Ordering and paging
-    order_by = forms.CharField(required=False, widget=forms.HiddenInput())
+  
     
     #Taxonomy Fields
     Family        = forms.CharField(required=False, label='Family')
