@@ -15,10 +15,15 @@ from globallometree.apps.locations.models import Country
 # Monkey patch the User class for django 1.6
 def get_profile(self):
     if not hasattr(self, 'profile'):
-        try:
-            self.profile = self.userprofile_set.all()[0]
-        except AttributeError:
-            self.profile = UserProfile(user=self)
+        profiles = self.userprofile_set.all()
+        if len(profiles) == 0:
+            profile = UserProfile(
+                user=self,
+                )
+            profile.save()
+            self.profile = profile
+        else:
+            self.profile = profiles[0]
     return self.profile
 User.get_profile = get_profile
 

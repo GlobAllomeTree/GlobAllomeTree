@@ -1,4 +1,5 @@
 import codecs
+from django.db import models
 from rest_framework.renderers import *
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.renderers import JSONRenderer
@@ -38,6 +39,54 @@ class CSVRenderer(BaseRenderer):
     format = 'txt'
     charset = 'utf-16-le'
 
+    shared_headers = ["Vegetation_type",
+                         "Tree_type",
+                       # "ID_Location",
+                        "Location",
+                        "Region",
+                        "Country",
+                        "Country_3166_3",
+                        "Continent",
+                        "Zone_FAO",
+                        "Zone_Holdridge",
+                        "Ecoregion_Udvardy",
+                        "Ecoregion_WWF",
+                        "Division_Bailey",
+                        #"Geohash",
+                        "Latitude",
+                        "Longitude",
+                        #"LatLonString",
+                        #"ID_Zone_FAO",
+                        #"ID_Ecoregion_Udvardy",
+                        #"ID_Zone_Holdridge",
+                        #"id_Ecoregion_WWF",
+                        #"ID_Division_Bailey",
+                        #"ID_Country",
+                        #"ID_Continent",
+                        #"ID_Vegetation_type",
+                       'Family',
+                       'Genus',
+                       'Species',
+                       'Subspecies',
+                       'Species_author', 
+                       #'ID_Family', 
+                       #'ID_Genus',
+                       #'ID_Species', 
+                       #'ID_Subspecies',
+                       'Species_local_name', 
+                       'Species_local_name_iso', 
+                       'Species_local_name_latin', 
+                       #'ID_Local_name',
+                       'Reference_author',
+                       'Reference_year',
+                       'Reference',
+                       #'ID_Reference',
+                       'Operator',
+                       'Contributor',
+                       'Remark',
+                       'Contact'
+                    ]
+
     def __init__(self, *args, **kwargs):
         self.headers = []
         return super(CSVRenderer, self).__init__(*args, **kwargs)
@@ -58,8 +107,7 @@ class CSVRenderer(BaseRenderer):
         elif isinstance(data, dict):
             data = [data]
 
-        self.add_unique_headers(data[0])
-        self.add_shared_headers()
+        self.add_headers(data[0])
        
         table = self.tablize(data)
 
@@ -174,8 +222,16 @@ class CSVRenderer(BaseRenderer):
         return rows
 
 
-    def add_unique_headers(self, sample_record):
-        skip_headers = ['Group', 
+    def add_headers(self, sample_record):
+
+        # Add the headers in a logical way
+        
+        component_headers =  ['B','Bd', 'Bg', 'Bt', 'L', 'Rb', 'Rf', 'Rm', 'S', 'T', 'F' ]
+        record_keys = sample_record.keys()
+
+        skip_headers = (self.shared_headers + 
+                        component_headers +
+                       ['Group', 
                         'Species_local_names',
                         'Species_group',
                         'Reference',
@@ -183,64 +239,32 @@ class CSVRenderer(BaseRenderer):
                         'Dataset',
                         'LatLonString',
                         'Geohash',
-                        'Source'
-                        ]
+                        'Source',
+                        'Created',
+                        'Modified',
+                        'Elasticsearch_doc_hash',  
+                        ])
 
-        for key in sample_record.keys():
-                if key not in self.headers and key not in skip_headers:
-                    self.headers.append(key)
+        if 'ID_AE' in record_keys:
+            model = models.get_model('allometric_equations', 'AllometricEquation')
+        elif 'ID_WD' in record_keys:
+            model = models.get_model('wood_densities', 'WoodDensity')
+        elif 'ID_RD' in record_keys:
+            model = models.get_model('raw_data', 'RawData')  
+        elif 'ID_BME' in record_keys:
+            model = models.get_model('biomass_expansion_factors', 'BiomassExpansionFactor')   
 
-    def add_shared_headers(self):
-        self.headers += [
-                       # "ID_Location",
-                        "Location",
-                        "Region",
-                        "Country",
-                        "Country_3166_3",
-                        "Continent",
-                        "Zone_FAO",
-                        "Zone_Holdridge",
-                        "Ecoregion_Udvardy",
-                        "Ecoregion_WWF",
-                        "Division_Bailey",
-                        "Vegetation_type",
-                        #"Geohash",
-                        "Latitude",
-                        "Longitude",
-                        #"LatLonString",
-                        #"ID_Zone_FAO",
-                        #"ID_Ecoregion_Udvardy",
-                        #"ID_Zone_Holdridge",
-                        #"id_Ecoregion_WWF",
-                        #"ID_Division_Bailey",
-                        #"ID_Country",
-                        #"ID_Continent",
-                        #"ID_Vegetation_type"
-                       ]
 
-        self.headers += [
-                       'Family',
-                       'Genus',
-                       'Species',
-                       'Subspecies',
-                       'Species_author', 
-                       #'ID_Family', 
-                       #'ID_Genus',
-                       #'ID_Species', 
-                       #'ID_Subspecies'
-                       ]
+        for field in model._meta.fields:
+            if field.name not in skip_headers:
+                self.headers.append(field.name)
 
-        self.headers += [
-                       'Species_local_name', 
-                       'Species_local_name_iso', 
-                       'Species_local_name_latin', 
-                       #'ID_Local_name',
-                       ]
+        has_components = True
+        for field in component_headers:
+            if field not in record_keys:
+                has_components = False
+        if has_components:
+            self.headers += component_headers
 
-        self.headers += [
-            'Reference_author',
-            'Reference_year',
-            'Reference',
-            #'ID_Reference',
-            ]
+        self.headers += self.shared_headers
 

@@ -149,7 +149,7 @@ window.app.mapController = function() {
 			//marker.geohash = geohash_aggs[i].key;
 			//marker.geohashContentLoaded = false;
 			marker.aggType = 'country';
-			marker.country = centroid['common_name'];
+			marker.country = centroid['formal_name'];
 			marker.aggregation = country_aggs[i];
 			marker.docCount = totalDocs;
 			marker.setZIndexOffset(500);
@@ -451,7 +451,7 @@ window.app.mapController = function() {
 		html += '<p style="margin-top:0px;">Geohash: ' + marker.geohash + '<br>';
 		html += 'Latitude: ' + geohashBounds['latitude'][0] + ' to ' + geohashBounds['latitude'][1] + '<br>';
 		html += 'Longitude: ' + geohashBounds['longitude'][0] + ' to ' + geohashBounds['longitude'][1] + '<br>';
-		html += '<a href="' + geohashedLink +'">Redo search to view just these records &gt;&gt;</a></p>';
+		html += '<a href="' + geohashedLink +'">Refine search to view just these records &gt;&gt;</a></p>';
 		popup.setContent(html);
 		
 	}
@@ -465,8 +465,13 @@ window.app.mapController = function() {
 		//grab the country value that was patched onto the marker
 		var country =  marker.country;
 		var html = getMarkerSummaryHTML(marker.aggregation);
+
+		var countryLink = window.app.searchManager.getLink({Country : country});
+
 		html += '<h5>Summary Area</h5>';
 		html += '<p style="margin-top:0px;"> Country summary for <strong>' + country + '</strong>.<br>';
+		html += '<a href="' + countryLink +'">Refine search to view just these records &gt;&gt;</a></p>';
+
 		popup.setContent(html);
 	}
 

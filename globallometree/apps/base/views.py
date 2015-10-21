@@ -59,7 +59,7 @@ class LinkedModelSearchView(RestrictedPageMixin, TemplateView):
                 countries[country.Iso3166a3.lower()] = {
                     'latitude' : str(country.Centroid_latitude),
                     'longitude' : str(country.Centroid_longitude),
-                    'common_name' : str(country.Common_name)
+                    'formal_name' : str(country.Formal_name)
                 }
             else:
                 print "MISSING COUNTRY 3166 3 for Country %s!" % country.common_name
@@ -210,7 +210,7 @@ def export_view(request, doc_type, filename, serializer):
     query = json.loads(request.POST.get('query'))
     extension = request.POST.get('extension')
     assert query.keys() == [u'sort', u'query', u'from']
-    query['size'] = 1000
+    query['size'] = 1000000
     es = get_es(urls=settings.ES_URLS)
     result = es.search(doc_type=doc_type, body=query)
     data = []

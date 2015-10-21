@@ -114,7 +114,7 @@ class MyProfileDetailView(DetailView):
     context_object_name = 'userprofile'
 
     def get_absolute_url(self):
-        return reverse('myprofile_detail', kwargs={'pk': self.pk})
+        return reverse('userprofile_detail')
 
     def dispatch(self, request, *args, **kwargs):
         """Overriding to ensure PK is present"""
