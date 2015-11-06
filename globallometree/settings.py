@@ -11,9 +11,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ('globallometree.org',
-                 'www.globallometree.org',
-                 'localhost',
-                 'globallometree-dev.orangutaninteractive.com')
+                 'www.globallometree.org')
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -173,12 +171,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, "templates", "static"),
 )
-
-
-#Encoding used for export and import of data for Allometric Equations
-DATA_EXPORT_ENCODING = 'cp1252'
-DATA_EXPORT_ENCODING_NAME = 'Windows-1252'
-
 
 
 #elasticutils django contrib settings
