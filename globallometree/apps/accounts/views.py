@@ -10,7 +10,7 @@ from . import models
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.core.mail import mail_managers
+from django.core.mail import send_mail
 from rest_framework.authtoken.models import Token
 from django.views.generic import DetailView, UpdateView
 from .models import UserProfile
@@ -54,7 +54,7 @@ def register(request):
                                               )
             user_profile.save()
              
-            mail_managers('GlobAllomeTree New User "%s" requires approval' % user.username,
+            send_mail('GlobAllomeTree New User "%s" requires approval' % user.username,
                       """
 Dear GlobAllomeTree Admin,
 
@@ -73,7 +73,9 @@ http://www.globallometree.org/admin/accounts/userprofile/%s/
                                               
 
 """ % (user.id, user.get_profile().id), 
-                     fail_silently=False)
+        'noreply@globallometree.org',
+         [settings.MANAGER_EMAIL,],
+         fail_silently=False)
             
             return HttpResponseRedirect('/accounts/approval-pending/')
     else:
