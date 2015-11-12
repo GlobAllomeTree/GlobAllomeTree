@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
 from django.core import urlresolvers
+from django.contrib.auth.models import User
 
 from . import models
 
@@ -19,5 +21,29 @@ class UserProfileAdmin(admin.ModelAdmin):
     user_link.allow_tags = True
 
 
-   
+class CustomUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'institution', 'country', 'date_joined', 'profile' )
+
+    def institution(self, obj):
+        return obj.get_profile().institution_name
+
+    def country(self, obj):
+        if obj.get_profile().location_country:
+            return obj.get_profile().location_country.Formal_name
+        else:
+            return obj.get_profile().country
+
+
+
+    def profile(self, obj):
+        return '<a href="/admin/accounts/userprofile/%s/">Profile&nbsp;&gt;</a>'
+
+    profile.allow_tags = True
+
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)   
 admin.site.register(models.UserProfile, UserProfileAdmin)
+
+
