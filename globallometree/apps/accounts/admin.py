@@ -34,7 +34,7 @@ class CustomUserAdmin(UserAdmin):
             return obj.get_profile().country
 
     def profile(self, obj):
-        return '<a href="/admin/accounts/userprofile/%s/">Profile&nbsp;&gt;</a>' % obj.pk
+        return '<a href="/admin/accounts/userprofile/%s/">Profile&nbsp;&gt;</a>' % obj.get_profile().pk
 
     profile.allow_tags = True
 
