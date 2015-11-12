@@ -22,10 +22,16 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'institution', 'country', 'date_joined', 'profile' )
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'institution', 'institution_phone', 'subject' 'country', 'date_joined', 'profile' )
 
     def institution(self, obj):
         return obj.get_profile().institution_name
+
+    def institution_phone(self, obj):
+        return obj.get_profile().institution_phone
+
+    def subject(self, obj):
+        return obj.get_profile().field_subject
 
     def country(self, obj):
         if obj.get_profile().location_country:
