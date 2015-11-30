@@ -140,7 +140,7 @@ http://www.globallometree.org/accounts/login/
 
 
 @receiver(post_save, sender=User)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
+def user_changed(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.get_or_create(user=instance)
     UserChanged.objects.create(user=instance)
