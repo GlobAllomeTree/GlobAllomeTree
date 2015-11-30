@@ -143,4 +143,6 @@ http://www.globallometree.org/accounts/login/
 def user_changed(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.get_or_create(user=instance)
+    # The forum watches the user changed table and updates it's database
+    # of users
     UserChanged.objects.create(user=instance)
