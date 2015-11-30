@@ -179,10 +179,10 @@ class Dataset(BaseModel):
 
     Uploaded_dataset_file = models.FileField(
         upload_to = "data_sharing",
-        verbose_name='Structured dataset file (txt, json, xml)',
+        verbose_name='Structured dataset file in txt, xml, or json',
         blank=True,
         null=True,
-        help_text="The structure must match the GlobAllomeTree API structure. Samples may be found on the right.",
+        help_text="The structure must match the GlobAllomeTree API structure. UTF-16 Unicode (based on the Excel UTF-16 Unicode Text format) needs to be used for .txt files and UTF-8 needs to be used for .json and .xml files. ",
         db_column="uploaded_dataset_file"
     )
 

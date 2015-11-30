@@ -2,10 +2,11 @@
 
 from collections import OrderedDict
 from django.contrib.auth.models import User
-from django.db import transaction
+from django.db import transaction, models
 
 from rest_framework import serializers, fields
 
+from globallometree.apps.api.fields import RoundingDecimalField
 from globallometree.apps.source import models as source_models
 from globallometree.apps.allometric_equations import models as allometric_equation_models
 from globallometree.apps.wood_densities import models as wood_density_models 
@@ -14,6 +15,9 @@ from globallometree.apps.biomass_expansion_factors import models as biomass_expa
 from globallometree.apps.locations import models as location_models
 from globallometree.apps.taxonomy import models as taxonomy_models
 from globallometree.apps.identification import models as identification_models
+
+# Patch the model serializer class to use a rounding decimal field by default
+serializers.ModelSerializer.serializer_field_mapping[models.DecimalField] = RoundingDecimalField
 
 from globallometree.apps.api.serializers_location import (
     ZoneFAOSerializer, 
