@@ -26,6 +26,7 @@ urlpatterns = patterns(
     url(r'^data/search', RedirectView.as_view(url=reverse_lazy('equation_search'))),
     url(r'^data/submit-data/', RedirectView.as_view(url=reverse_lazy('equations_upload'))),
     
-    #cms urls LAST!
+    url(r'^google92eec5544d05de4e\.html$', lambda r: HttpResponse("google-site-verification: google92eec5544d05de4e.html", mimetype="text/plain")),
+    #cms urls must be the last line in urls, don't add urls after this!
     url(r'^', include('cms.urls')),
 )
