@@ -92,6 +92,7 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'globallometree.apps.accounts.middleware.RequireActiveUser'
 )
 
 ROOT_URLCONF = 'globallometree.urls'
